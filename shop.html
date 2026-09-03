@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Shop | THE COLLECTIVE.CO</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<!-- =========================
+     NAVIGATION
+========================= -->
+
+<nav>
+
+<a href="index.html">Home</a>
+
+<a href="shop.html">Shop</a>
+
+<a href="index.html">About</a>
+
+<a href="contact.html">Contact</a>
+
+<a href="#" id="categoryBtn">Category</a>
+
+<a href="profile.html">Profile</a>
+
+<!-- CART -->
+<button id="cartBtn" class="cart-button" type="button">
+    🛒 Cart <span id="cartCount">0</span>
+</button>
+
+
+</nav>
+
+<!-- =========================
+     CATEGORY MENU
+========================= -->
+
+<div
+    id="categoryMenu"
+    class="collective-categories"
+>
+</div>
+
+<!-- =========================
+     SHOP HEADER
+========================= -->
+
+<div class="shop-header">
+
+<h1>SHOP</h1>
+
+<div class="bear">🧸</div>
+
+<p>Find something you love.</p>
+
+<!-- SEARCH -->
+
+<div class="search-bar">
+
+    <input
+        type="text"
+        id="productSearch"
+        placeholder="Search products..."
+    >
+
+    <button
+        id="searchButton"
+        type="button"
+    >
+        🔍
+    </button>
+
+</div>
+
+
+</div>
+
+<!-- =========================
+     NO PRODUCTS MESSAGE
+========================= -->
+
+<p class="no-products">
+    No products found.
+</p>
+
+<!-- =========================
+     PRODUCTS
+========================= -->
+
+<div
+    class="product-grid"
+    id="productGrid"
+>
+</div>
+
+<!-- =========================
+     CART POPUP
+========================= -->
+
+<div id="cartPopup" class="cart-popup">
+
+
+<div class="cart-box">
+
+    <button
+        id="closeCart"
+        class="close-cart"
+        type="button"
+    >
+        ×
+    </button>
+
+    <h2>Your Cart</h2>
+
+    <div id="cartItems">
+        <p>Your cart is empty.</p>
+    </div>
+
+    <div class="cart-total">
+
+        <strong>
+            Total:
+        </strong>
+
+        <strong id="cartTotal">
+            ₦0
+        </strong>
+
+    </div>
+
+    <button
+        id="checkoutBtn"
+        class="checkout-button"
+        type="button"
+    >
+        CHECKOUT
+    </button>
+
+</div>
+
+
+</div>
+
+<!-- =========================
+     JAVASCRIPT
+========================= -->
+
+<script src="script.js"></script>
+
+</body>
+
+</html>

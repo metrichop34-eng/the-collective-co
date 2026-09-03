@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>THE COLLECTIVE.CO</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- NAVIGATION -->
+<nav>
+    <a href="index.html">Home</a>
+    <a href="shop.html">Shop</a>
+    <a href="#" id="aboutBtn">About</a>
+    <a href="contact.html" id="contactBtn">Contact</a>
+    <a href="profile.html">Profile</a>
+
+    <button id="accountBtn" class="account-button">
+        Account
+    </button>
+</nav>
+
+
+<!-- MAIN CONTENT -->
+<h1>THE COLLECTIVE.CO</h1>
+
+<p>Everything you love, all in one place.</p>
+
+<button class="shop-button" id="shopNowBtn">
+    SHOP NOW
+</button>
+
+
+<!-- ABOUT POPUP -->
+<div id="aboutPopup" class="about-popup">
+
+    <div class="about-box">
+
+        <button id="aboutClose" class="about-close">
+            ×
+        </button>
+
+        <h2>About THE COLLECTIVE.CO</h2>
+
+        <p>
+            Everything you love, all in one place.
+        </p>
+
+        <p>
+            THE COLLECTIVE.CO brings together beauty, fashion,
+            accessories, electronics and more in one place.
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- ACCOUNT POPUP -->
+<div id="accountPopup" class="account-popup">
+
+    <div class="account-box">
+
+        <button id="closeAccount" class="close-account">
+            ×
+        </button>
+
+        <h2>Welcome!</h2>
+
+        <p>Would you like to:</p>
+
+        <button id="signupTab" class="account-choice">
+            SIGN UP
+        </button>
+
+        <button id="loginTab" class="account-choice">
+            LOGIN
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- PAGE JAVASCRIPT -->
+<script>
+
+    /* SHOP NOW */
+    const shopNowBtn = document.getElementById("shopNowBtn");
+
+    if (shopNowBtn) {
+        shopNowBtn.addEventListener("click", function () {
+            window.location.href = "shop.html";
+        });
+    }
+
+
+    /* ABOUT */
+    const aboutBtn = document.getElementById("aboutBtn");
+    const aboutPopup = document.getElementById("aboutPopup");
+    const aboutClose = document.getElementById("aboutClose");
+
+    if (aboutBtn && aboutPopup) {
+        aboutBtn.addEventListener("click", function (event) {
+            event.preventDefault();
+            aboutPopup.style.display = "flex";
+        });
+    }
+
+    if (aboutClose && aboutPopup) {
+        aboutClose.addEventListener("click", function () {
+            aboutPopup.style.display = "none";
+        });
+    }
+
+    if (aboutPopup) {
+        aboutPopup.addEventListener("click", function (event) {
+            if (event.target === aboutPopup) {
+                aboutPopup.style.display = "none";
+            }
+        });
+    }
+
+
+    /* ACCOUNT */
+    const accountBtn = document.getElementById("accountBtn");
+    const accountPopup = document.getElementById("accountPopup");
+    const closeAccount = document.getElementById("closeAccount");
+
+    if (accountBtn && accountPopup) {
+        accountBtn.addEventListener("click", function () {
+            accountPopup.style.display = "flex";
+        });
+    }
+
+    if (closeAccount && accountPopup) {
+        closeAccount.addEventListener("click", function () {
+            accountPopup.style.display = "none";
+        });
+    }
+
+    if (accountPopup) {
+        accountPopup.addEventListener("click", function (event) {
+            if (event.target === accountPopup) {
+                accountPopup.style.display = "none";
+            }
+        });
+    }
+
+
+    /* SIGN UP */
+    const signupTab = document.getElementById("signupTab");
+
+    if (signupTab) {
+        signupTab.addEventListener("click", function () {
+            window.location.href = "signup.html";
+        });
+    }
+
+
+    /* LOGIN */
+    const loginTab = document.getElementById("loginTab");
+
+    if (loginTab) {
+        loginTab.addEventListener("click", function () {
+            window.location.href = "login.html";
+        });
+    }
+
+</script>
+
+</body>
+</html>
