@@ -1,1 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Free Gifts | THE COLLECTIVE.CO</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+
+        .free-gift-page {
+            width: 92%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 0 80px;
+        }
+
+        .free-gift-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .free-gift-header .profile-brand {
+            margin-bottom: 12px;
+        }
+
+        .free-gift-header h1 {
+            margin-bottom: 15px;
+        }
+
+        .free-gift-header p {
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        .gift-selection-info {
+            background: #E8F1F2;
+            border-radius: 22px;
+            padding: 25px;
+            margin-bottom: 35px;
+            text-align: center;
+        }
+
+        .gift-selection-info strong {
+            color: #304B52;
+            font-size: 18px;
+        }
+
+        .gift-selection-count {
+            margin-top: 8px;
+            color: #6F858A;
+            font-size: 15px;
+        }
+
+        .free-gift-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 22px;
+        }
+
+        .free-gift-product {
+            background: #FFFDF8;
+            border: 1px solid #DCEFF2;
+            border-radius: 22px;
+            padding: 20px;
+            text-align: center;
+            box-sizing: border-box;
+            transition: 0.2s ease;
+        }
+
+        .free-gift-product.selected {
+            border: 2px solid #304B52;
+            transform: translateY(-4px);
+        }
+
+        .free-gift-image {
+            width: 100%;
+            height: 200px;
+            border-radius: 15px;
+            background: #F2F2F2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 18px;
+            color: #6F858A;
+        }
+
+        .free-gift-product small {
+            color: #6F858A;
+            letter-spacing: 1px;
+        }
+
+        .free-gift-product h3 {
+            color: #304B52;
+            margin: 8px 0;
+            font-size: 19px;
+        }
+
+        .free-gift-price {
+            color: #304B52;
+            font-weight: bold;
+            font-size: 17px;
+            margin: 10px 0;
+        }
+
+        .free-gift-select {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 25px;
+            background: #304B52;
+            color: #FFFFFF;
+            cursor: pointer;
+            font-size: 13px;
+            letter-spacing: 1px;
+        }
+
+        .free-gift-select:hover {
+            opacity: 0.85;
+        }
+
+        .free-gift-select.remove {
+            background: #A8C9CE;
+            color: #304B52;
+        }
+
+        .back-profile {
+            display: inline-block;
+            margin-top: 40px;
+            padding: 12px 22px;
+            border: 1px solid #304B52;
+            border-radius: 25px;
+            color: #304B52;
+            text-decoration: none;
+            font-size: 13px;
+            letter-spacing: 1px;
+        }
+
+        .back-profile:hover {
+            background: #304B52;
+            color: #FFFFFF;
+        }
+
+        @media (max-width: 850px) {
+
+            .free-gift-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+        @media (max-width: 600px) {
+
+            .free-gift-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .free-gift-page {
+                width: 94%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<nav>
+
+    <a href="index.html">Home</a>
+
+    <a href="shop.html">Shop</a>
+
+    <a href="index.html">About</a>
+
+    <a href="contact.html">Contact</a>
+
+    <a href="shop.html">Category</a>
+
+    <a href="profile.html">Profile</a>
+
+</nav>
+
+
+<main class="free-gift-page">
+
+    <section class="free-gift-header">
+
+        <p class="profile-brand">
+            THE COLLECTIVE.CO
+        </p>
+
+        <h1 id="giftTitle">
+            FREE GIFT
+        </h1>
+
+        <p id="giftDescription">
+            Choose your free items below.
+        </p>
+
+    </section>
+
+
+    <section class="gift-selection-info">
+
+        <strong id="selectionRule">
+            Loading gift details...
+        </strong>
+
+        <div
+            class="gift-selection-count"
+            id="selectionCount"
+        >
+            0 selected
+        </div>
+
+    </section>
+
+
+    <section
+        class="free-gift-grid"
+        id="freeGiftGrid"
+    >
+    </section>
+
+
+    <a
+        href="profile.html"
+        class="back-profile"
+    >
+        ← BACK TO PROFILE
+    </a>
+
+</main>
+
+
+<script src="script.js"></script>
+
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        const params =
+            new URLSearchParams(
+                window.location.search
+            );
+
+        const gift =
+            params.get("gift");
+
+
+        const title =
+            document.getElementById(
+                "giftTitle"
+            );
+
+        const description =
+            document.getElementById(
+                "giftDescription"
+            );
+
+        const rule =
+            document.getElementById(
+                "selectionRule"
+            );
+
+        const count =
+            document.getElementById(
+                "selectionCount"
+            );
+
+        const grid =
+            document.getElementById(
+                "freeGiftGrid"
+            );
+
+
+        let maximumItems = 0;
+
+        let maximumPrice = 0;
+
+
+        // ==========================================
+       
