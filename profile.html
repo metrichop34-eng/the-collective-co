@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-
-<html>
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -11,8 +10,6 @@
 
 <body>
 
-<!-- NAVIGATION -->
-
 <nav>
     <a href="index.html">Home</a>
     <a href="shop.html">Shop</a>
@@ -22,33 +19,93 @@
     <a href="profile.html">Profile</a>
 </nav>
 
-<!-- PROFILE -->
+<main class="profile-page">
 
-<div class="shop-header">
+    <section class="profile-hero">
+        <p class="profile-brand">THE COLLECTIVE.CO</p>
+        <h1>MY PROFILE</h1>
+        <p id="profileGreeting">Welcome back.</p>
+    </section>
 
-<h1>PROFILE</h1>
+    <section class="profile-card account-card">
 
-<p>Welcome to your THE COLLECTIVE.CO profile.</p>
+        <div class="profile-avatar" id="profileInitial">U</div>
 
-<div class="product">
-    <h2>My Profile</h2>
+        <div class="account-info">
+            <p class="small-label">ACCOUNT</p>
+            <h2 id="profileName">My Profile</h2>
+            <p id="profileEmail">Your email</p>
+        </div>
 
-    <p>Your account information will appear here.</p>
+        <button class="logout-button" id="logoutBtn" type="button">
+            LOG OUT
+        </button>
 
-    <button class="shop-button" onclick="window.location.href='signup.html'">
-        SIGN UP
-    </button>
+    </section>
 
-    <button class="shop-button" onclick="window.location.href='login.html'">
-        LOGIN
-    </button>
-</div>
+    <section class="rewards-section">
 
-<br>
+        <div class="section-heading">
+            <p class="small-label">YOUR REWARDS</p>
+            <h2>POINTS & FREE GIFTS</h2>
+        </div>
 
-<a href="index.html">BACK HOME</a>
+        <div class="reward-grid">
 
-</div>
+            <div class="reward-card points-card">
+                <span class="reward-icon">✦</span>
+                <p class="card-label">MY POINTS</p>
+                <h3 id="profilePoints">0</h3>
+                <p>points available</p>
+            </div>
+
+            <div class="reward-card earn-card">
+                <span class="reward-icon">＋</span>
+                <p class="card-label">EARN POINTS</p>
+                <h3>1 POINT</h3>
+                <p>for every ₦1,000 spent</p>
+            </div>
+
+            <div class="reward-card gift-card">
+                <span class="reward-icon">🎁</span>
+                <p class="card-label">FREE GIFT 1</p>
+                <h3>5 FREE ITEMS</h3>
+                <p>Spend ₦50,000</p>
+                <span class="gift-status" id="gift1Status">
+                    NOT UNLOCKED
+                </span>
+            </div>
+
+            <div class="reward-card gift-card">
+                <span class="reward-icon">🎁</span>
+                <p class="card-label">FREE GIFT 2</p>
+                <h3>10 FREE ITEMS</h3>
+                <p>Spend ₦100,000</p>
+                <span class="gift-status" id="gift2Status">
+                    NOT UNLOCKED
+                </span>
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="profile-bottom">
+
+        <div>
+            <p class="small-label">THE COLLECTIVE.CO</p>
+            <p>Shop more. Earn more. Get rewarded.</p>
+        </div>
+
+        <a href="shop.html" class="shop-button">
+            SHOP NOW
+        </a>
+
+    </section>
+
+</main>
+
+<script src="script.js"></script>
 
 </body>
 </html>
