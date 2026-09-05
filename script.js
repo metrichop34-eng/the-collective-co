@@ -1092,10 +1092,30 @@ function savePoints(points) {
 }
 
 
+// Spend ₦1,000 = 1 point
 function calculatePoints(amount) {
 
     return Math.floor(
         Number(amount) / 1000
+    );
+
+}
+
+
+// 1 point = ₦100
+function pointsToNaira(points) {
+
+    return Number(points) * 100;
+
+}
+
+
+// Maximum 200 points can be used per order
+function getMaxPointsUsable(points) {
+
+    return Math.min(
+        Number(points) || 0,
+        200
     );
 
 }
@@ -1930,7 +1950,111 @@ function displayProducts() {
 
 
 // ======================================================
-// CHECKOUT
+// CHECKOUT MODAL
+// ======================================================
+
+function showCheckoutModal(content) {
+
+    const oldModal =
+        document.getElementById(
+            "collectiveCheckoutModal"
+        );
+
+
+    if (oldModal) {
+        oldModal.remove();
+    }
+
+
+    const modal =
+        document.createElement("div");
+
+
+    modal.id =
+        "collectiveCheckoutModal";
+
+
+    modal.style.position =
+        "fixed";
+
+    modal.style.inset =
+        "0";
+
+    modal.style.background =
+        "rgba(48,75,82,0.45)";
+
+    modal.style.display =
+        "flex";
+
+    modal.style.alignItems =
+        "center";
+
+    modal.style.justifyContent =
+        "center";
+
+    modal.style.zIndex =
+        "99999";
+
+    modal.style.padding =
+        "20px";
+
+
+    const box =
+        document.createElement("div");
+
+
+    box.style.background =
+        "#FFFDF8";
+
+    box.style.width =
+        "100%";
+
+    box.style.maxWidth =
+        "520px";
+
+    box.style.maxHeight =
+        "90vh";
+
+    box.style.overflowY =
+        "auto";
+
+    box.style.borderRadius =
+        "22px";
+
+    box.style.padding =
+        "30px";
+
+    box.style.boxSizing =
+        "border-box";
+
+    box.style.textAlign =
+        "center";
+
+    box.style.boxShadow =
+        "0 15px 45px rgba(0,0,0,0.18)";
+
+
+    box.innerHTML =
+        content;
+
+
+    modal.appendChild(
+        box
+    );
+
+
+    document.body.appendChild(
+        modal
+    );
+
+
+    return modal;
+
+}
+
+
+// ======================================================
+// CHECKOUT — START
 // ======================================================
 
 function checkout() {
@@ -1944,10 +2068,6 @@ function checkout() {
         return;
 
     }
-
-
-    const total =
-        getCartTotal();
 
 
     const loggedIn =
@@ -1976,9 +2096,798 @@ function checkout() {
     }
 
 
-    alert(
-        `Your order total is ₦${total.toLocaleString()}.\n\nCheckout payment details can be added here when your bank account details are ready.`
-    );
+    startCheckout();
+
+}
+
+
+// ======================================================
+// CHECKOUT — POINTS
+// ======================================================
+
+function startCheckout() {
+
+    const total =
+        getCartTotal();
+
+
+    const currentPoints =
+        getPoints();
+
+
+    // No points
+    if (currentPoints <= 0) {
+
+        showCustomerDetails(
+            total,
+            0
+        );
+
+        return;
+
+    }
+
+
+    const modal =
+        showCheckoutModal(`
+
+            <h2>
+                Do you want to use your points?
+            </h2>
+
+            <p>
+                You currently have
+                <strong>
+                    ${currentPoints} points
+                </strong>.
+            </p>
+
+            <p>
+                1 point = ₦100 discount.
+            </p>
+
+            <div style="
+                display:flex;
+                gap:12px;
+                justify-content:center;
+                margin-top:25px;
+                flex-wrap:wrap;
+            ">
+
+                <button
+                    id="usePointsYes"
+                    type="button"
+                    style="
+                        padding:13px 24px;
+                        border:0;
+                        border-radius:12px;
+                        cursor:pointer;
+                        background:#304B52;
+                        color:white;
+                        font-weight:bold;
+                    "
+                >
+                    YES
+                </button>
+
+
+                <button
+                    id="usePointsNo"
+                    type="button"
+                    style="
+                        padding:13px 24px;
+                        border:1px solid #304B52;
+                        border-radius:12px;
+                        cursor:pointer;
+                        background:white;
+                        color:#304B52;
+                        font-weight:bold;
+                    "
+                >
+                    NO
+                </button>
+
+            </div>
+
+        `);
+
+
+    document
+        .getElementById(
+            "usePointsYes"
+        )
+        .addEventListener(
+            "click",
+            function() {
+
+                showPointsInput(
+                    total,
+                    currentPoints
+                );
+
+            }
+        );
+
+
+    document
+        .getElementById(
+            "usePointsNo"
+        )
+        .addEventListener(
+            "click",
+            function() {
+
+                modal.remove();
+
+                showCustomerDetails(
+                    total,
+                    0
+                );
+
+            }
+        );
+
+}
+
+
+// ======================================================
+// ENTER POINTS TO USE
+// ======================================================
+
+function showPointsInput(
+    total,
+    currentPoints
+) {
+
+    const maximumPoints =
+        Math.min(
+            currentPoints,
+            200,
+            Math.floor(total / 100)
+        );
+
+
+    const modal =
+        showCheckoutModal(`
+
+            <h2>
+                How many points do you want to use?
+            </h2>
+
+            <p>
+                1 point = ₦100 discount.
+            </p>
+
+            <input
+                id="pointsToUse"
+                type="number"
+                min="1"
+                max="${maximumPoints}"
+                placeholder="Enter points"
+                style="
+                    width:100%;
+                    box-sizing:border-box;
+                    padding:14px;
+                    border:1px solid #C8D5D8;
+                    border-radius:12px;
+                    margin:15px 0 8px;
+                    font-size:16px;
+                    text-align:center;
+                "
+            >
+
+            <p style="
+                font-size:13px;
+                margin-bottom:20px;
+            ">
+                Maximum ${maximumPoints} points
+            </p>
+
+            <button
+                id="applyPoints"
+                type="button"
+                style="
+                    padding:13px 25px;
+                    border:0;
+                    border-radius:12px;
+                    cursor:pointer;
+                    background:#304B52;
+                    color:white;
+                    font-weight:bold;
+                "
+            >
+                APPLY POINTS
+            </button>
+
+        `);
+
+
+    document
+        .getElementById(
+            "applyPoints"
+        )
+        .addEventListener(
+            "click",
+            function() {
+
+                const input =
+                    document.getElementById(
+                        "pointsToUse"
+                    );
+
+
+                const points =
+                    Number(
+                        input.value
+                    );
+
+
+                if (
+                    !Number.isInteger(points) ||
+                    points < 1 ||
+                    points > maximumPoints
+                ) {
+
+                    alert(
+                        `Please enter between 1 and ${maximumPoints} points.`
+                    );
+
+                    return;
+
+                }
+
+
+                const discount =
+                    pointsToNaira(
+                        points
+                    );
+
+
+                const newTotal =
+                    Math.max(
+                        0,
+                        total - discount
+                    );
+
+
+                modal.remove();
+
+
+                showCustomerDetails(
+                    newTotal,
+                    points
+                );
+
+            }
+        );
+
+}
+
+
+// ======================================================
+// CUSTOMER DETAILS
+// ======================================================
+
+function showCustomerDetails(
+    total,
+    pointsUsed
+) {
+
+    const modal =
+        showCheckoutModal(`
+
+            <h2>
+                ENTER:
+            </h2>
+
+            <div style="
+                text-align:left;
+                margin-top:20px;
+            ">
+
+                <label>
+                    First name
+                </label>
+
+                <input
+                    id="checkoutFirstName"
+                    type="text"
+                    placeholder="First name"
+                    style="
+                        width:100%;
+                        box-sizing:border-box;
+                        padding:13px;
+                        margin:7px 0 15px;
+                        border:1px solid #C8D5D8;
+                        border-radius:10px;
+                    "
+                >
+
+
+                <label>
+                    Last name
+                </label>
+
+                <input
+                    id="checkoutLastName"
+                    type="text"
+                    placeholder="Last name"
+                    style="
+                        width:100%;
+                        box-sizing:border-box;
+                        padding:13px;
+                        margin:7px 0 15px;
+                        border:1px solid #C8D5D8;
+                        border-radius:10px;
+                    "
+                >
+
+
+                <label>
+                    House address
+                </label>
+
+                <input
+                    id="checkoutAddress"
+                    type="text"
+                    placeholder="House address"
+                    style="
+                        width:100%;
+                        box-sizing:border-box;
+                        padding:13px;
+                        margin:7px 0 15px;
+                        border:1px solid #C8D5D8;
+                        border-radius:10px;
+                    "
+                >
+
+
+                <label>
+                    Phone number
+                </label>
+
+                <input
+                    id="checkoutPhone"
+                    type="tel"
+                    placeholder="Phone number"
+                    style="
+                        width:100%;
+                        box-sizing:border-box;
+                        padding:13px;
+                        margin:7px 0 15px;
+                        border:1px solid #C8D5D8;
+                        border-radius:10px;
+                    "
+                >
+
+            </div>
+
+
+            <div style="
+                margin-top:10px;
+                padding:15px;
+                border-radius:12px;
+                background:#F7F4EE;
+            ">
+
+                <strong>
+                    Total:
+                    ₦${total.toLocaleString()}
+                </strong>
+
+                ${
+                    pointsUsed > 0
+                        ? `
+                            <br>
+                            <small>
+                                ${pointsUsed} points used
+                                —
+                                ₦${pointsToNaira(
+                                    pointsUsed
+                                ).toLocaleString()}
+                                discount
+                            </small>
+                          `
+                        : ""
+                }
+
+            </div>
+
+
+            <button
+                id="continueToTransfer"
+                type="button"
+                style="
+                    margin-top:20px;
+                    padding:14px 25px;
+                    border:0;
+                    border-radius:12px;
+                    cursor:pointer;
+                    background:#304B52;
+                    color:white;
+                    font-weight:bold;
+                    width:100%;
+                "
+            >
+                CONTINUE
+            </button>
+
+        `);
+
+
+    document
+        .getElementById(
+            "continueToTransfer"
+        )
+        .addEventListener(
+            "click",
+            function() {
+
+                const firstName =
+                    document
+                        .getElementById(
+                            "checkoutFirstName"
+                        )
+                        .value
+                        .trim();
+
+
+                const lastName =
+                    document
+                        .getElementById(
+                            "checkoutLastName"
+                        )
+                        .value
+                        .trim();
+
+
+                const address =
+                    document
+                        .getElementById(
+                            "checkoutAddress"
+                        )
+                        .value
+                        .trim();
+
+
+                const phone =
+                    document
+                        .getElementById(
+                            "checkoutPhone"
+                        )
+                        .value
+                        .trim();
+
+
+                if (
+                    !firstName ||
+                    !lastName ||
+                    !address ||
+                    !phone
+                ) {
+
+                    alert(
+                        "Please fill in all the fields."
+                    );
+
+                    return;
+
+                }
+
+
+                modal.remove();
+
+
+                showTransferConfirmation(
+                    total,
+                    pointsUsed,
+                    {
+                        firstName,
+                        lastName,
+                        address,
+                        phone
+                    }
+                );
+
+            }
+        );
+
+}
+
+
+// ======================================================
+// TRANSFER CONFIRMATION
+// ======================================================
+
+function showTransferConfirmation(
+    total,
+    pointsUsed,
+    customer
+) {
+
+    const modal =
+        showCheckoutModal(`
+
+            <h2>
+                Are you ready to transfer?
+            </h2>
+
+            <p>
+                Your total is:
+            </p>
+
+            <h2>
+                ₦${total.toLocaleString()}
+            </h2>
+
+
+            ${
+                pointsUsed > 0
+                    ? `
+                        <p>
+                            ${pointsUsed} points used
+                            —
+                            ₦${pointsToNaira(
+                                pointsUsed
+                            ).toLocaleString()}
+                            discount
+                        </p>
+                      `
+                    : ""
+            }
+
+
+            <p style="
+                font-size:14px;
+                margin-top:20px;
+            ">
+                Please transfer the exact amount
+                to one of the accounts below.
+            </p>
+
+
+            <div style="
+                background:#F7F4EE;
+                border-radius:15px;
+                padding:18px;
+                margin-top:20px;
+                text-align:left;
+            ">
+
+                <strong>
+                    GTBank (GTB)
+                </strong>
+
+                <p>
+                    Account Name:
+                    ADESANYA EYINJU CAYLA
+                </p>
+
+                <p>
+                    Account Number:
+                    0708648701
+                </p>
+
+            </div>
+
+
+            <div style="
+                font-weight:bold;
+                font-size:18px;
+                margin:15px 0;
+            ">
+                OR
+            </div>
+
+
+            <div style="
+                background:#F7F4EE;
+                border-radius:15px;
+                padding:18px;
+                text-align:left;
+            ">
+
+                <strong>
+                    SmartCash PSB
+                </strong>
+
+                <p>
+                    Account Name:
+                    Ololade Adesanya
+                </p>
+
+                <p>
+                    Account Number:
+                    9123930679
+                </p>
+
+            </div>
+
+
+            <button
+                id="paidButton"
+                type="button"
+                style="
+                    margin-top:22px;
+                    padding:14px 25px;
+                    border:0;
+                    border-radius:12px;
+                    cursor:pointer;
+                    background:#304B52;
+                    color:white;
+                    font-weight:bold;
+                    width:100%;
+                "
+            >
+                PAID
+            </button>
+
+        `);
+
+
+    document
+        .getElementById(
+            "paidButton"
+        )
+        .addEventListener(
+            "click",
+            function() {
+
+                const currentPoints =
+                    getPoints();
+
+
+                // Remove only the points used
+                if (pointsUsed > 0) {
+
+                    savePoints(
+                        Math.max(
+                            0,
+                            currentPoints -
+                                pointsUsed
+                        )
+                    );
+
+                    updatePointsDisplay();
+
+                }
+
+
+                const pendingOrder = {
+
+                    id:
+                        "ORDER-" +
+                        Date.now(),
+
+                    customer:
+                        customer,
+
+                    items:
+                        cart.map(
+                            item => ({
+                                ...item
+                            })
+                        ),
+
+                    originalTotal:
+                        getCartTotal(),
+
+                    pointsUsed:
+                        pointsUsed,
+
+                    total:
+                        total,
+
+                    status:
+                        "payment-checking",
+
+                    createdAt:
+                        new Date().toISOString()
+
+                };
+
+
+                localStorage.setItem(
+                    "collectivePendingOrder",
+                    JSON.stringify(
+                        pendingOrder
+                    )
+                );
+
+
+                localStorage.setItem(
+                    "collectiveOrderStatus",
+                    "payment-checking"
+                );
+
+
+                modal.remove();
+
+
+                showPaymentChecking();
+
+            }
+        );
+
+}
+
+
+// ======================================================
+// PAYMENT CHECKING SCREEN
+// ======================================================
+
+function showPaymentChecking() {
+
+    const modal =
+        showCheckoutModal(`
+
+            <div style="
+                padding:25px 10px;
+            ">
+
+                <div style="
+                    font-size:45px;
+                    margin-bottom:15px;
+                ">
+                    ⏳
+                </div>
+
+
+                <h2>
+                    Checking to see if money
+                    has been received
+                </h2>
+
+
+                <p>
+                    Please wait while your payment
+                    is being checked.
+                </p>
+
+
+                <p style="
+                    font-size:13px;
+                    margin-top:20px;
+                ">
+                    You can close this screen
+                    and return later.
+                </p>
+
+
+                <button
+                    id="closePaymentChecking"
+                    type="button"
+                    style="
+                        margin-top:20px;
+                        padding:12px 22px;
+                        border:1px solid #304B52;
+                        border-radius:12px;
+                        background:white;
+                        color:#304B52;
+                        cursor:pointer;
+                        font-weight:bold;
+                    "
+                >
+                    CLOSE
+                </button>
+
+            </div>
+
+        `);
+
+
+    document
+        .getElementById(
+            "closePaymentChecking"
+        )
+        .addEventListener(
+            "click",
+            function() {
+
+                modal.remove();
+
+            }
+        );
 
 }
 
