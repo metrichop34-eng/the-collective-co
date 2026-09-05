@@ -4,164 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Login | THE COLLECTIVE.CO</title>
-
     <link rel="stylesheet" href="style.css">
-
-    <style>
-        body {
-            margin: 0;
-            background: #f7f4ee;
-            color: #304b52;
-            font-family: Arial, sans-serif;
-        }
-
-        .auth-page {
-            min-height: calc(100vh - 70px);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 60px 20px;
-            box-sizing: border-box;
-        }
-
-        .auth-container {
-            width: 100%;
-            max-width: 460px;
-        }
-
-        .auth-brand {
-            text-align: center;
-            margin-bottom: 25px;
-        }
-
-        .auth-brand span {
-            font-size: 12px;
-            letter-spacing: 4px;
-            color: #6f858a;
-        }
-
-        .auth-brand h1 {
-            margin: 10px 0 8px;
-            font-size: 38px;
-            letter-spacing: 5px;
-            font-weight: 700;
-        }
-
-        .auth-brand p {
-            margin: 0;
-            color: #6f858a;
-        }
-
-        .auth-card {
-            background: rgba(255, 253, 248, 0.98);
-            border: 1px solid #dce8e8;
-            border-radius: 30px;
-            padding: 42px;
-            box-shadow: 0 20px 55px rgba(48, 75, 82, 0.10);
-        }
-
-        .auth-card h2 {
-            margin: 0 0 8px;
-            font-size: 25px;
-        }
-
-        .auth-subtitle {
-            margin: 0 0 28px;
-            color: #6f858a;
-            font-size: 14px;
-        }
-
-        .auth-field {
-            margin-bottom: 18px;
-        }
-
-        .auth-field label {
-            display: block;
-            margin-bottom: 8px;
-            font-size: 12px;
-            letter-spacing: 1.5px;
-            font-weight: bold;
-        }
-
-        .auth-field input {
-            width: 100%;
-            box-sizing: border-box;
-            padding: 15px 17px;
-            border: 1px solid #d5e1e1;
-            border-radius: 16px;
-            background: #ffffff;
-            color: #304b52;
-            outline: none;
-            font-size: 15px;
-            transition: 0.2s ease;
-        }
-
-        .auth-field input:focus {
-            border-color: #304b52;
-            box-shadow: 0 0 0 4px rgba(48, 75, 82, 0.08);
-        }
-
-        .auth-button {
-            width: 100%;
-            border: none;
-            border-radius: 18px;
-            padding: 16px;
-            background: #304b52;
-            color: white;
-            font-weight: bold;
-            letter-spacing: 2px;
-            cursor: pointer;
-            transition: 0.2s ease;
-        }
-
-        .auth-button:hover {
-            transform: translateY(-2px);
-            opacity: 0.92;
-        }
-
-        .auth-message {
-            min-height: 20px;
-            margin: 14px 0 0;
-            text-align: center;
-            font-size: 13px;
-        }
-
-        .auth-switch {
-            text-align: center;
-            margin: 25px 0 0;
-            color: #6f858a;
-            font-size: 14px;
-        }
-
-        .auth-switch a {
-            color: #304b52;
-            font-weight: bold;
-            text-decoration: none;
-        }
-
-        .auth-back {
-            display: block;
-            text-align: center;
-            margin-top: 22px;
-            color: #304b52;
-            text-decoration: none;
-            font-size: 13px;
-            letter-spacing: 1px;
-        }
-
-        @media (max-width: 600px) {
-            .auth-card {
-                padding: 30px 22px;
-                border-radius: 24px;
-            }
-
-            .auth-brand h1 {
-                font-size: 29px;
-            }
-        }
-    </style>
 </head>
 
 <body>
@@ -175,132 +19,57 @@
     <a href="profile.html">Profile</a>
 </nav>
 
-<main class="auth-page">
+<main>
 
-    <div class="auth-container">
+    <section class="shop-header">
+        <p class="bear">✦</p>
+        <h1>WELCOME BACK</h1>
+        <p>Sign in to your THE COLLECTIVE.CO account.</p>
+    </section>
 
-        <div class="auth-brand">
-            <span>THE COLLECTIVE.CO</span>
-            <h1>WELCOME BACK</h1>
-            <p>Your collection is waiting.</p>
-        </div>
+    <section class="auth-container">
 
-        <section class="auth-card">
+        <h2>LOGIN</h2>
 
-            <h2>LOGIN</h2>
+        <label for="loginEmail">Email</label>
+        <input
+            type="email"
+            id="loginEmail"
+            placeholder="Enter your email"
+            autocomplete="email"
+        >
 
-            <p class="auth-subtitle">
-                Sign in to access your profile, points and free gifts.
-            </p>
+        <label for="loginPassword">Password</label>
+        <input
+            type="password"
+            id="loginPassword"
+            placeholder="Enter your password"
+            autocomplete="current-password"
+        >
 
-            <div class="auth-field">
-                <label for="loginEmail">EMAIL</label>
+        <button type="button" id="loginBtn">
+            LOGIN
+        </button>
 
-                <input
-                    type="email"
-                    id="loginEmail"
-                    placeholder="Enter your email"
-                    autocomplete="email"
-                >
-            </div>
+        <p style="text-align:center; margin-top:20px; color:#71858a;">
+            Don't have an account?
+            <a href="signup.html" style="color:#304b52; font-weight:bold;">
+                SIGN UP
+            </a>
+        </p>
 
-            <div class="auth-field">
-                <label for="loginPassword">PASSWORD</label>
+    </section>
 
-                <input
-                    type="password"
-                    id="loginPassword"
-                    placeholder="Enter your password"
-                    autocomplete="current-password"
-                >
-            </div>
-
-            <button
-                type="button"
-                class="auth-button"
-                id="loginBtn"
-            >
-                LOGIN
-            </button>
-
-            <p
-                class="auth-message"
-                id="loginMessage"
-            ></p>
-
-            <p class="auth-switch">
-                Don't have an account?
-                <a href="signup.html">CREATE ONE</a>
-            </p>
-
-        </section>
-
-        <a href="index.html" class="auth-back">
+    <div style="text-align:center; margin:25px 0 60px;">
+        <a href="index.html"
+           style="color:#304b52; text-decoration:none; font-weight:bold;">
             ← BACK HOME
         </a>
-
     </div>
 
 </main>
 
 <script src="script.js"></script>
-
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-
-    const loginBtn = document.getElementById("loginBtn");
-    const emailInput = document.getElementById("loginEmail");
-    const passwordInput = document.getElementById("loginPassword");
-    const message = document.getElementById("loginMessage");
-
-    function loginUser() {
-
-        const email = emailInput.value.trim();
-        const password = passwordInput.value;
-
-        message.textContent = "";
-
-        if (!email || !password) {
-            message.textContent = "Please enter your email and password.";
-            return;
-        }
-
-        const savedUser = JSON.parse(
-            localStorage.getItem("collectiveUser") || "null"
-        );
-
-        if (!savedUser) {
-            message.textContent = "No account found. Please sign up first.";
-            return;
-        }
-
-        if (
-            email.toLowerCase() !== savedUser.email.toLowerCase() ||
-            password !== savedUser.password
-        ) {
-            message.textContent = "Incorrect email or password.";
-            return;
-        }
-
-        localStorage.setItem("collectiveLoggedIn", "true");
-
-        message.textContent = "Login successful!";
-
-        setTimeout(function () {
-            window.location.href = "profile.html";
-        }, 500);
-    }
-
-    loginBtn.addEventListener("click", loginUser);
-
-    passwordInput.addEventListener("keydown", function (event) {
-        if (event.key === "Enter") {
-            loginUser();
-        }
-    });
-
-});
-</script>
 
 </body>
 </html>
