@@ -417,5 +417,154 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
 
+    <script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const params = new URLSearchParams(window.location.search);
+    const giftNumber = params.get("gift") || "1";
+
+    const selectionRule = document.getElementById("selectionRule");
+    const selectionCount = document.getElementById("selectionCount");
+    const freeGiftGrid = document.getElementById("freeGiftGrid");
+
+    let maxGifts;
+    let priceLimit;
+    let requiredAmount;
+
+    if (giftNumber === "2") {
+        maxGifts = 10;
+        priceLimit = 10000;
+        requiredAmount = 100000;
+    } else {
+        maxGifts = 5;
+        priceLimit = 50000;
+        requiredAmount = 50000;
+    }
+
+    const totalSpent =
+        Number(localStorage.getItem("collectiveTotalSpent")) || 0;
+
+    const unlocked =
+        totalSpent >= requiredAmount ||
+        localStorage.getItem(
+            giftNumber === "2"
+                ? "collectiveGift2"
+                : "collectiveGift1"
+        ) === "true";
+
+    if (!unlocked) {
+        selectionRule.textContent =
+            `Spend ₦${requiredAmount.toLocaleString()} to unlock this gift.`;
+
+        selectionCount.textContent = "Gift locked.";
+
+        freeGiftGrid.innerHTML = `
+            <div class="product">
+                <h2>Gift Locked 🔒</h2>
+                <p>
+                    Spend ₦${requiredAmount.toLocaleString()}
+                    to unlock your free gifts.
+                </p>
+            </div>
+        `;
+
+        return;
+    }
+
+    selectionRule.textContent =
+        `Choose ${maxGifts} free gifts from products priced at ₦${priceLimit.toLocaleString()} or less.`;
+
+    let selectedGifts = [];
+
+    const selectionStorage =
+        giftNumber === "2"
+            ? "collectiveGift2Selections"
+            : "collectiveGift1Selections";
+
+    try {
+        selectedGifts =
+            JSON.parse(localStorage.getItem(selectionStorage)) || [];
+    } catch {
+        selectedGifts = [];
+    }
+
+    const eligibleProducts = productCatalog.filter(product => {
+        return Number(product.price) <= priceLimit;
+    });
+
+    function updateCount() {
+        selectionCount.textContent =
+            `${selectedGifts.length} / ${maxGifts} gifts selected`;
+    }
+
+    function renderProducts() {
+
+        freeGiftGrid.innerHTML = "";
+
+        eligibleProducts.forEach((product, index) => {
+
+            const id = `${giftNumber}-${index}`;
+
+            const selected = selectedGifts.includes(id);
+
+            const card = document.createElement("div");
+
+            card.className = "product";
+
+            card.innerHTML = `
+                <h2>${product.name}</h2>
+
+                <p>
+                    ${product.category || ""}
+                </p>
+
+                <p>
+                    ₦${Number(product.price).toLocaleString()}
+                </p>
+
+                <button class="shop-button">
+                    ${selected ? "✓ SELECTED" : "SELECT GIFT"}
+                </button>
+            `;
+
+            card.querySelector("button").addEventListener("click", () => {
+
+                if (selectedGifts.includes(id)) {
+
+                    selectedGifts =
+                        selectedGifts.filter(item => item !== id);
+
+                } else {
+
+                    if (selectedGifts.length >= maxGifts) {
+                        alert(
+                            `You can only choose ${maxGifts} free gifts.`
+                        );
+                        return;
+                    }
+
+                    selectedGifts.push(id);
+                }
+
+                localStorage.setItem(
+                    selectionStorage,
+                    JSON.stringify(selectedGifts)
+                );
+
+                updateCount();
+                renderProducts();
+            });
+
+            freeGiftGrid.appendChild(card);
+        });
+
+        updateCount();
+    }
+
+    renderProducts();
+
+});
+</script>
+
 </body>
 </html>
