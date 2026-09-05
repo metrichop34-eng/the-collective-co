@@ -4,218 +4,176 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Free Gifts | THE COLLECTIVE.CO</title>
-
     <link rel="stylesheet" href="style.css">
 
     <style>
-
-        body {
-            background: #f7f4ee;
-            color: #304b52;
-        }
-
         .free-gift-page {
-            width: 92%;
-            max-width: 1200px;
+            width: min(1150px, 92%);
             margin: 0 auto;
-            padding: 60px 0 80px;
+            padding-bottom: 70px;
         }
 
         .free-gift-header {
             text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .profile-brand {
-            color: #6f858a;
-            font-size: 12px;
-            letter-spacing: 4px;
+            padding: 55px 20px 35px;
         }
 
         .free-gift-header h1 {
+            color: #304b52;
             font-size: 42px;
             letter-spacing: 4px;
-            margin: 12px 0;
+            margin-bottom: 8px;
         }
 
-        .free-gift-header p:last-child {
-            color: #6f858a;
+        .free-gift-header p {
+            color: #71858a;
+            margin: 8px 0;
         }
 
-        .gift-selection-info {
-            background: #e8f1f2;
-            border: 1px solid #d6e6e8;
-            border-radius: 25px;
-            padding: 27px;
-            margin-bottom: 35px;
+        .gift-rule-box {
+            width: min(700px, 100%);
+            margin: 0 auto 30px;
+            padding: 20px;
+            background: #ffffff;
+            border: 1px solid #e4e9e8;
+            border-radius: 18px;
             text-align: center;
+            box-shadow: 0 8px 25px rgba(48, 75, 82, 0.07);
         }
 
-        .gift-selection-info strong {
+        #selectionRule {
             color: #304b52;
-            font-size: 18px;
+            font-weight: bold;
         }
 
-        .gift-selection-count {
-            margin-top: 9px;
-            color: #6f858a;
+        #selectionCount {
+            margin-top: 8px;
+            color: #71858a;
             font-size: 14px;
         }
 
         .free-gift-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: 22px;
         }
 
-        .free-gift-product {
-            background: #fffdf8;
-            border: 1px solid #dce8e8;
-            border-radius: 25px;
-            padding: 20px;
-            text-align: center;
-            box-sizing: border-box;
+        .free-gift-card {
+            background: #ffffff;
+            border: 1px solid #e4e9e8;
+            border-radius: 22px;
+            padding: 15px;
+            box-shadow: 0 8px 25px rgba(48, 75, 82, 0.07);
             transition: 0.25s ease;
         }
 
-        .free-gift-product:hover {
+        .free-gift-card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 15px 35px rgba(48, 75, 82, 0.09);
-        }
-
-        .free-gift-product.selected {
-            border: 2px solid #304b52;
-            box-shadow: 0 12px 30px rgba(48, 75, 82, 0.12);
+            box-shadow: 0 14px 32px rgba(48, 75, 82, 0.11);
         }
 
         .free-gift-image {
             width: 100%;
-            height: 190px;
-            border-radius: 18px;
-            background: #f0f3f1;
+            height: 210px;
+            border-radius: 17px;
+            background: #f2f5f3;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 18px;
-            color: #6f858a;
-            font-size: 13px;
-            letter-spacing: 1px;
-        }
-
-        .free-gift-product small {
-            color: #6f858a;
-            letter-spacing: 1px;
-            font-size: 11px;
-        }
-
-        .free-gift-product h3 {
-            color: #304b52;
-            margin: 8px 0;
-            font-size: 18px;
-        }
-
-        .free-gift-price {
-            color: #304b52;
-            font-weight: bold;
-            font-size: 15px;
-            margin: 10px 0 16px;
-        }
-
-        .free-gift-select {
-            width: 100%;
-            padding: 13px;
-            border: none;
-            border-radius: 25px;
-            background: #304b52;
-            color: #fff;
-            cursor: pointer;
-            font-size: 12px;
-            letter-spacing: 1.5px;
-            font-weight: bold;
-        }
-
-        .free-gift-select.remove {
-            background: #a8c9ce;
-            color: #304b52;
-        }
-
-        .gift-locked {
-            text-align: center;
-            background: #fffdf8;
-            border: 1px solid #dce8e8;
-            border-radius: 28px;
-            padding: 50px 25px;
-            max-width: 650px;
-            margin: 0 auto;
-        }
-
-        .gift-locked-icon {
-            font-size: 45px;
+            overflow: hidden;
             margin-bottom: 15px;
+            color: #8da0a4;
+            font-size: 13px;
+            text-align: center;
         }
 
-        .gift-locked h2 {
+        .free-gift-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .free-gift-card h3 {
+            color: #304b52;
+            margin-bottom: 5px;
+        }
+
+        .free-gift-card p {
+            color: #71858a;
+            font-size: 13px;
+            margin-bottom: 12px;
+        }
+
+        .gift-select-button {
+            width: 100%;
+            border: none;
+            padding: 12px;
+            border-radius: 13px;
+            background: #a8c9ce;
+            color: #203c43;
+            font-weight: bold;
+            transition: 0.25s ease;
+        }
+
+        .gift-select-button:hover {
+            background: #91b9bf;
+            transform: translateY(-2px);
+        }
+
+        .gift-select-button.selected {
+            background: #304b52;
+            color: #ffffff;
+        }
+
+        .gift-select-button:disabled {
+            cursor: not-allowed;
+            opacity: 0.55;
+            transform: none;
+        }
+
+        .gift-message {
+            text-align: center;
+            padding: 45px 20px;
+            background: #ffffff;
+            border: 1px solid #e4e9e8;
+            border-radius: 22px;
+            box-shadow: 0 8px 25px rgba(48, 75, 82, 0.07);
+        }
+
+        .gift-message h2 {
+            color: #304b52;
             margin-bottom: 10px;
         }
 
-        .gift-locked p {
-            color: #6f858a;
+        .gift-message p {
+            color: #71858a;
         }
 
-        .gift-confirm {
+        .gift-back {
             display: block;
-            width: 100%;
-            max-width: 400px;
+            width: fit-content;
             margin: 35px auto 0;
-            padding: 16px;
-            border: none;
-            border-radius: 25px;
-            background: #304b52;
-            color: white;
-            font-weight: bold;
-            letter-spacing: 1.5px;
-            cursor: pointer;
-        }
-
-        .back-profile {
-            display: inline-block;
-            margin-top: 40px;
-            padding: 12px 22px;
-            border: 1px solid #304b52;
-            border-radius: 25px;
             color: #304b52;
             text-decoration: none;
-            font-size: 13px;
-            letter-spacing: 1px;
-        }
-
-        .back-profile:hover {
-            background: #304b52;
-            color: #fff;
+            font-weight: bold;
         }
 
         @media (max-width: 850px) {
             .free-gift-grid {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: repeat(2, minmax(0, 1fr));
             }
         }
 
-        @media (max-width: 600px) {
+        @media (max-width: 550px) {
             .free-gift-grid {
                 grid-template-columns: 1fr;
             }
 
-            .free-gift-page {
-                width: 94%;
-            }
-
             .free-gift-header h1 {
-                font-size: 30px;
+                font-size: 32px;
             }
         }
-
     </style>
 </head>
 
@@ -230,417 +188,233 @@
     <a href="profile.html">Profile</a>
 </nav>
 
-
 <main class="free-gift-page">
 
     <section class="free-gift-header">
-
-        <p class="profile-brand">
-            THE COLLECTIVE.CO
-        </p>
-
-        <h1 id="giftTitle">
-            FREE GIFT
-        </h1>
-
-        <p id="giftDescription">
-            Choose your free items.
-        </p>
-
+        <p class="bear">✦</p>
+        <h1 id="giftTitle">FREE GIFT</h1>
+        <p id="giftDescription">Choose your free items below.</p>
     </section>
 
+    <div class="gift-rule-box">
+        <strong id="selectionRule">Loading gift details...</strong>
+        <div id="selectionCount">0 selected</div>
+    </div>
 
-    <section class="gift-selection-info">
+    <section id="freeGiftGrid" class="free-gift-grid"></section>
 
-        <strong id="selectionRule">
-            Loading...
-        </strong>
-
-        <div
-            class="gift-selection-count"
-            id="selectionCount"
-        >
-            0 selected
-        </div>
-
-    </section>
-
-
-    <section
-        class="free-gift-grid"
-        id="freeGiftGrid"
-    ></section>
-
-
-    <button
-        type="button"
-        class="gift-confirm"
-        id="confirmGifts"
-        style="display:none;"
-    >
-        CONFIRM FREE GIFTS
-    </button>
-
-
-    <a
-        href="profile.html"
-        class="back-profile"
-    >
+    <a href="profile.html" class="gift-back">
         ← BACK TO PROFILE
     </a>
 
 </main>
 
-
 <script src="script.js"></script>
 
-
 <script>
-
 document.addEventListener("DOMContentLoaded", function () {
 
-    const params =
-        new URLSearchParams(
-            window.location.search
-        );
+    const params = new URLSearchParams(window.location.search);
+    const giftNumber = params.get("gift") || "1";
 
-    const gift =
-        params.get("gift");
+    const title = document.getElementById("giftTitle");
+    const description = document.getElementById("giftDescription");
+    const rule = document.getElementById("selectionRule");
+    const count = document.getElementById("selectionCount");
+    const grid = document.getElementById("freeGiftGrid");
 
+    const totalSpent = Number(
+        localStorage.getItem("collectiveTotalSpent") || 0
+    );
 
-    const title =
-        document.getElementById("giftTitle");
+    let maximumItems = 0;
+    let requiredAmount = 0;
+    let storageKey = "";
 
-    const description =
-        document.getElementById("giftDescription");
-
-    const rule =
-        document.getElementById("selectionRule");
-
-    const count =
-        document.getElementById("selectionCount");
-
-    const grid =
-        document.getElementById("freeGiftGrid");
-
-    const confirmButton =
-        document.getElementById("confirmGifts");
-
-
-    const totalSpent =
-        Number(
-            localStorage.getItem(
-                "collectiveTotalSpent"
-            ) || "0"
-        );
-
-
-    let maximumItems;
-
-    let requiredAmount;
-
-
-    if (gift === "2") {
-
+    if (giftNumber === "2") {
         maximumItems = 10;
         requiredAmount = 100000;
+        storageKey = "collectiveGift2";
 
-        title.textContent =
-            "FREE GIFT 2";
-
+        title.textContent = "FREE GIFT 2";
         description.textContent =
-            "Choose up to 10 free items.";
-
+            "You unlocked the second reward tier. Choose your free items.";
+        rule.textContent =
+            "Choose up to 10 free items after spending ₦100,000.";
     } else {
-
         maximumItems = 5;
         requiredAmount = 50000;
+        storageKey = "collectiveGift1";
 
-        title.textContent =
-            "FREE GIFT 1";
-
+        title.textContent = "FREE GIFT 1";
         description.textContent =
-            "Choose up to 5 free items.";
-
+            "Choose your free items from the collection.";
+        rule.textContent =
+            "Choose up to 5 free items after spending ₦50,000.";
     }
-
-
-    rule.textContent =
-        `Spend ₦${requiredAmount.toLocaleString()} to unlock ${maximumItems} free items.`;
-
 
     if (totalSpent < requiredAmount) {
 
         grid.innerHTML = `
-
-            <div class="gift-locked">
-
-                <div class="gift-locked-icon">
-                    🎁
-                </div>
-
-                <h2>
-                    GIFT LOCKED
-                </h2>
-
+            <div class="gift-message" style="grid-column:1/-1;">
+                <h2>Not unlocked yet ✦</h2>
                 <p>
-                    You have spent
-                    ₦${totalSpent.toLocaleString()}.
+                    You have spent ₦${totalSpent.toLocaleString()}.
                 </p>
-
                 <p>
-                    Spend another
-                    ₦${(requiredAmount - totalSpent).toLocaleString()}
-                    to unlock this gift.
+                    Spend ₦${requiredAmount.toLocaleString()}
+                    to unlock this reward.
                 </p>
-
             </div>
-
         `;
+
+        count.textContent = "Reward locked";
 
         return;
     }
 
+    let savedSelections = [];
 
-    const giftCategories = [
-        "Skincare",
-        "Accessories",
-        "Clothing",
-        "Shoes"
-    ];
+    try {
+        savedSelections = JSON.parse(
+            localStorage.getItem(storageKey) || "[]"
+        );
 
-
-    let giftProducts = [];
-
-
-    if (typeof productCatalog !== "undefined") {
-
-        productCatalog.forEach(function (product) {
-
-            if (
-                giftCategories.includes(
-                    product.category
-                )
-            ) {
-
-                giftProducts.push(product);
-
-            }
-
-        });
-
+        if (!Array.isArray(savedSelections)) {
+            savedSelections = [];
+        }
+    } catch (error) {
+        savedSelections = [];
     }
-
-
-    if (giftProducts.length === 0) {
-
-        grid.innerHTML = `
-            <div class="gift-locked">
-                <div class="gift-locked-icon">🎁</div>
-                <h2>NO GIFTS AVAILABLE</h2>
-                <p>Please refresh the page and try again.</p>
-            </div>
-        `;
-
-        return;
-    }
-
-
-    const selectedGifts = [];
-
 
     function updateCount() {
-
         count.textContent =
-            `${selectedGifts.length} / ${maximumItems} selected`;
-
-
-        confirmButton.style.display =
-            selectedGifts.length === maximumItems
-                ? "block"
-                : "none";
-
+            savedSelections.length +
+            " / " +
+            maximumItems +
+            " selected";
     }
 
+    function saveSelections() {
+        localStorage.setItem(
+            storageKey,
+            JSON.stringify(savedSelections)
+        );
+    }
 
-    function createGiftCard(product, index) {
+    function renderProducts() {
 
-        const card =
-            document.createElement("div");
+        grid.innerHTML = "";
 
-        card.className =
-            "free-gift-product";
+        /*
+         * Use the product catalogue already loaded by script.js.
+         * This does NOT replace or modify your normal shop products.
+         */
+        const giftProducts =
+            typeof productCatalog !== "undefined"
+                ? productCatalog
+                : [];
 
+        if (!giftProducts.length) {
+            grid.innerHTML = `
+                <div class="gift-message" style="grid-column:1/-1;">
+                    <h2>Gift items are loading...</h2>
+                    <p>Please refresh the page.</p>
+                </div>
+            `;
+            return;
+        }
 
-        const price =
-            Number(product.min || 0);
+        giftProducts.forEach(function (product, index) {
 
+            const productId =
+                "gift-" +
+                String(index) +
+                "-" +
+                String(product.name || "item")
+                    .toLowerCase()
+                    .replace(/[^a-z0-9]+/g, "-");
 
-        card.innerHTML = `
+            const isSelected =
+                savedSelections.includes(productId);
 
-            <div class="free-gift-image">
-                FREE GIFT
-            </div>
+            const card = document.createElement("article");
+            card.className = "free-gift-card";
 
-            <small>
-                ${product.category.toUpperCase()}
-            </small>
+            const imageHTML = product.image
+                ? `<img src="${product.image}" alt="${product.name}">`
+                : `<span>THE COLLECTIVE.CO</span>`;
 
-            <h3>
-                ${product.name}
-            </h3>
+            card.innerHTML = `
+                <div class="free-gift-image">
+                    ${imageHTML}
+                </div>
 
-            <p class="free-gift-price">
-                ₦${price.toLocaleString()} value
-            </p>
+                <h3>${product.name}</h3>
 
-            <button
-                type="button"
-                class="free-gift-select"
-            >
-                SELECT
-            </button>
+                <p>
+                    ${product.category || "THE COLLECTIVE.CO"}
+                </p>
 
-        `;
+                <button
+                    type="button"
+                    class="gift-select-button ${isSelected ? "selected" : ""}"
+                    data-product-id="${productId}"
+                >
+                    ${isSelected ? "✓ SELECTED" : "SELECT GIFT"}
+                </button>
+            `;
 
+            const button =
+                card.querySelector(".gift-select-button");
 
-        const button =
-            card.querySelector(
-                ".free-gift-select"
-            );
+            button.addEventListener("click", function () {
 
+                const id = button.dataset.productId;
 
-        button.addEventListener(
-            "click",
-            function () {
+                if (savedSelections.includes(id)) {
 
-                const existingIndex =
-                    selectedGifts.findIndex(
-                        item =>
-                            item.index === index
-                    );
+                    savedSelections =
+                        savedSelections.filter(function (item) {
+                            return item !== id;
+                        });
 
+                    button.classList.remove("selected");
+                    button.textContent = "SELECT GIFT";
 
-                if (existingIndex !== -1) {
-
-                    selectedGifts.splice(
-                        existingIndex,
-                        1
-                    );
-
-                    card.classList.remove(
-                        "selected"
-                    );
-
-                    button.textContent =
-                        "SELECT";
-
-                    button.classList.remove(
-                        "remove"
-                    );
-
+                    saveSelections();
                     updateCount();
 
                     return;
                 }
 
-
-                if (
-                    selectedGifts.length >=
-                    maximumItems
-                ) {
-
+                if (savedSelections.length >= maximumItems) {
                     alert(
-                        `You can only select ${maximumItems} free items.`
+                        "You can only select " +
+                        maximumItems +
+                        " free items."
                     );
-
                     return;
                 }
 
+                savedSelections.push(id);
 
-                selectedGifts.push({
-                    index: index,
-                    name: product.name,
-                    category: product.category
-                });
+                button.classList.add("selected");
+                button.textContent = "✓ SELECTED";
 
-
-                card.classList.add(
-                    "selected"
-                );
-
-                button.textContent =
-                    "SELECTED ✓";
-
-                button.classList.add(
-                    "remove"
-                );
-
-
+                saveSelections();
                 updateCount();
+            });
 
-            }
-        );
+            grid.appendChild(card);
+        });
 
-
-        return card;
-
+        updateCount();
     }
 
-
-    giftProducts.forEach(
-        function (product, index) {
-
-            grid.appendChild(
-                createGiftCard(
-                    product,
-                    index
-                )
-            );
-
-        }
-    );
-
-
-    updateCount();
-
-
-    confirmButton.addEventListener(
-        "click",
-        function () {
-
-            if (
-                selectedGifts.length !==
-                maximumItems
-            ) {
-
-                return;
-            }
-
-
-            localStorage.setItem(
-                gift === "2"
-                    ? "collectiveSelectedGift2"
-                    : "collectiveSelectedGift1",
-                JSON.stringify(
-                    selectedGifts
-                )
-            );
-
-
-            alert(
-                "Your free gifts have been saved! 🎁"
-            );
-
-
-            window.location.href =
-                "profile.html";
-
-        }
-    );
+    renderProducts();
 
 });
-
 </script>
 
 </body>
