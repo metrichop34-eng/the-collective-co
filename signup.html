@@ -1,12 +1,167 @@
 <!DOCTYPE html>
-
-<html>
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Sign Up | THE COLLECTIVE.CO</title>
+
     <link rel="stylesheet" href="style.css">
+
+    <style>
+        body {
+            margin: 0;
+            background: #f7f4ee;
+            color: #304b52;
+            font-family: Arial, sans-serif;
+        }
+
+        .auth-page {
+            min-height: calc(100vh - 70px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 20px;
+            box-sizing: border-box;
+        }
+
+        .auth-container {
+            width: 100%;
+            max-width: 460px;
+        }
+
+        .auth-brand {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .auth-brand span {
+            font-size: 12px;
+            letter-spacing: 4px;
+            color: #6f858a;
+        }
+
+        .auth-brand h1 {
+            margin: 10px 0 8px;
+            font-size: 38px;
+            letter-spacing: 5px;
+            font-weight: 700;
+        }
+
+        .auth-brand p {
+            margin: 0;
+            color: #6f858a;
+        }
+
+        .auth-card {
+            background: rgba(255, 253, 248, 0.98);
+            border: 1px solid #dce8e8;
+            border-radius: 30px;
+            padding: 42px;
+            box-shadow: 0 20px 55px rgba(48, 75, 82, 0.10);
+        }
+
+        .auth-card h2 {
+            margin: 0 0 8px;
+            font-size: 25px;
+        }
+
+        .auth-subtitle {
+            margin: 0 0 28px;
+            color: #6f858a;
+            font-size: 14px;
+        }
+
+        .auth-field {
+            margin-bottom: 18px;
+        }
+
+        .auth-field label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 12px;
+            letter-spacing: 1.5px;
+            font-weight: bold;
+        }
+
+        .auth-field input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 15px 17px;
+            border: 1px solid #d5e1e1;
+            border-radius: 16px;
+            background: #ffffff;
+            color: #304b52;
+            outline: none;
+            font-size: 15px;
+            transition: 0.2s ease;
+        }
+
+        .auth-field input:focus {
+            border-color: #304b52;
+            box-shadow: 0 0 0 4px rgba(48, 75, 82, 0.08);
+        }
+
+        .auth-button {
+            width: 100%;
+            border: none;
+            border-radius: 18px;
+            padding: 16px;
+            background: #304b52;
+            color: white;
+            font-weight: bold;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .auth-button:hover {
+            transform: translateY(-2px);
+            opacity: 0.92;
+        }
+
+        .auth-message {
+            min-height: 20px;
+            margin: 14px 0 0;
+            text-align: center;
+            font-size: 13px;
+        }
+
+        .auth-switch {
+            text-align: center;
+            margin: 25px 0 0;
+            color: #6f858a;
+            font-size: 14px;
+        }
+
+        .auth-switch a {
+            color: #304b52;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .auth-back {
+            display: block;
+            text-align: center;
+            margin-top: 22px;
+            color: #304b52;
+            text-decoration: none;
+            font-size: 13px;
+            letter-spacing: 1px;
+        }
+
+        @media (max-width: 600px) {
+            .auth-card {
+                padding: 30px 22px;
+                border-radius: 24px;
+            }
+
+            .auth-brand h1 {
+                font-size: 29px;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -20,58 +175,221 @@
     <a href="profile.html">Profile</a>
 </nav>
 
-<div class="shop-header">
+<main class="auth-page">
 
-```
-<h1>SIGN UP</h1>
+    <div class="auth-container">
 
-<p>Create your THE COLLECTIVE.CO account.</p>
+        <div class="auth-brand">
+            <span>THE COLLECTIVE.CO</span>
+            <h1>JOIN THE COLLECTIVE</h1>
+            <p>Create your account and start earning.</p>
+        </div>
 
-<div class="product">
+        <section class="auth-card">
 
-    <h2>Create Account</h2>
+            <h2>CREATE ACCOUNT</h2>
 
-    <input
-        type="text"
-        id="signupName"
-        placeholder="Name"
-    >
+            <p class="auth-subtitle">
+                Save your rewards, points and free-gift progress.
+            </p>
 
-    <br><br>
+            <div class="auth-field">
+                <label for="signupName">NAME</label>
 
-    <input
-        type="email"
-        id="signupEmail"
-        placeholder="Email"
-    >
+                <input
+                    type="text"
+                    id="signupName"
+                    placeholder="Your name"
+                    autocomplete="name"
+                >
+            </div>
 
-    <br><br>
+            <div class="auth-field">
+                <label for="signupEmail">EMAIL</label>
 
-    <input
-        type="password"
-        id="signupPassword"
-        placeholder="Password"
-    >
+                <input
+                    type="email"
+                    id="signupEmail"
+                    placeholder="Your email"
+                    autocomplete="email"
+                >
+            </div>
 
-    <br><br>
+            <div class="auth-field">
+                <label for="signupPassword">PASSWORD</label>
 
-    <button class="shop-button" id="createAccountBtn">
-        CREATE ACCOUNT
-    </button>
+                <input
+                    type="password"
+                    id="signupPassword"
+                    placeholder="Create a password"
+                    autocomplete="new-password"
+                >
+            </div>
 
-    <p>
-        Already have an account?
-        <a href="login.html">LOGIN</a>
-    </p>
+            <button
+                type="button"
+                class="auth-button"
+                id="createAccountBtn"
+            >
+                CREATE ACCOUNT
+            </button>
 
-</div>
+            <p
+                class="auth-message"
+                id="signupMessage"
+            ></p>
 
-<br>
+            <p class="auth-switch">
+                Already have an account?
+                <a href="login.html">LOGIN</a>
+            </p>
 
-<a href="index.html">BACK HOME</a>
-```
+        </section>
 
-</div>
+        <a href="index.html" class="auth-back">
+            ← BACK HOME
+        </a>
+
+    </div>
+
+</main>
+
+<script src="script.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const createAccountBtn =
+        document.getElementById("createAccountBtn");
+
+    const nameInput =
+        document.getElementById("signupName");
+
+    const emailInput =
+        document.getElementById("signupEmail");
+
+    const passwordInput =
+        document.getElementById("signupPassword");
+
+    const message =
+        document.getElementById("signupMessage");
+
+
+    function createAccount() {
+
+        const name =
+            nameInput.value.trim();
+
+        const email =
+            emailInput.value.trim();
+
+        const password =
+            passwordInput.value;
+
+
+        message.textContent = "";
+
+
+        if (!name || !email || !password) {
+
+            message.textContent =
+                "Please fill in all the fields.";
+
+            return;
+        }
+
+
+        if (!email.includes("@")) {
+
+            message.textContent =
+                "Please enter a valid email.";
+
+            return;
+        }
+
+
+        if (password.length < 6) {
+
+            message.textContent =
+                "Password must be at least 6 characters.";
+
+            return;
+        }
+
+
+        const user = {
+            name: name,
+            email: email,
+            password: password
+        };
+
+
+        localStorage.setItem(
+            "collectiveUser",
+            JSON.stringify(user)
+        );
+
+
+        localStorage.setItem(
+            "collectiveLoggedIn",
+            "false"
+        );
+
+
+        localStorage.setItem(
+            "collectivePoints",
+            "0"
+        );
+
+
+        localStorage.setItem(
+            "collectiveTotalSpent",
+            "0"
+        );
+
+
+        localStorage.removeItem(
+            "collectiveGift1"
+        );
+
+        localStorage.removeItem(
+            "collectiveGift2"
+        );
+
+
+        message.textContent =
+            "Account created! Taking you to login...";
+
+
+        setTimeout(function () {
+
+            window.location.href =
+                "login.html";
+
+        }, 700);
+
+    }
+
+
+    createAccountBtn.addEventListener(
+        "click",
+        createAccount
+    );
+
+
+    passwordInput.addEventListener(
+        "keydown",
+        function (event) {
+
+            if (event.key === "Enter") {
+                createAccount();
+            }
+
+        }
+    );
+
+});
+</script>
 
 </body>
 </html>
