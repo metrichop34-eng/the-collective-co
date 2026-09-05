@@ -1,21 +1,29 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>THE COLLECTIVE.CO</title>
 
-    <meta name="google-site-verification" content="JOUP25pT9IB8epHfjOO6u6NXHKwzKivZdHbyCZkrK34" />
-    
+    <meta name="google-site-verification" content="JOUP25pT9IB8epHfjOO6u6NXHKwzKivZdHbyCZkrK34">
+
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<!-- NAVIGATION -->
+<!-- =========================
+     NAVIGATION
+========================= -->
+
 <nav>
     <a href="index.html">Home</a>
     <a href="shop.html">Shop</a>
+
     <a href="#" id="aboutBtn">About</a>
-    <a href="contact.html" id="contactBtn">Contact</a>
+
+    <a href="contact.html">Contact</a>
     <a href="profile.html">Profile</a>
 
     <button id="accountBtn" class="account-button">
@@ -24,17 +32,27 @@
 </nav>
 
 
-<!-- MAIN CONTENT -->
-<h1>THE COLLECTIVE.CO</h1>
+<!-- =========================
+     HOME
+========================= -->
 
-<p>Everything you love, all in one place.</p>
+<main class="hero">
 
-<button class="shop-button" id="shopNowBtn">
-    SHOP NOW
-</button>
+    <h1>THE COLLECTIVE.CO</h1>
+
+    <p>Everything you love, all in one place.</p>
+
+    <button class="shop-button" id="shopNowBtn">
+        SHOP NOW
+    </button>
+
+</main>
 
 
-<!-- ABOUT POPUP -->
+<!-- =========================
+     ABOUT POPUP
+========================= -->
+
 <div id="aboutPopup" class="about-popup">
 
     <div class="about-box">
@@ -59,7 +77,10 @@
 </div>
 
 
-<!-- ACCOUNT POPUP -->
+<!-- =========================
+     ACCOUNT POPUP
+========================= -->
+
 <div id="accountPopup" class="account-popup">
 
     <div class="account-box">
@@ -85,10 +106,14 @@
 </div>
 
 
-<!-- PAGE JAVASCRIPT -->
+<!-- =========================
+     HOME JAVASCRIPT
+========================= -->
+
 <script>
 
     /* SHOP NOW */
+
     const shopNowBtn = document.getElementById("shopNowBtn");
 
     if (shopNowBtn) {
@@ -99,75 +124,116 @@
 
 
     /* ABOUT */
+
     const aboutBtn = document.getElementById("aboutBtn");
     const aboutPopup = document.getElementById("aboutPopup");
     const aboutClose = document.getElementById("aboutClose");
 
     if (aboutBtn && aboutPopup) {
+
         aboutBtn.addEventListener("click", function (event) {
+
             event.preventDefault();
+
             aboutPopup.style.display = "flex";
+
         });
+
     }
 
     if (aboutClose && aboutPopup) {
+
         aboutClose.addEventListener("click", function () {
+
             aboutPopup.style.display = "none";
+
         });
+
     }
 
     if (aboutPopup) {
+
         aboutPopup.addEventListener("click", function (event) {
+
             if (event.target === aboutPopup) {
+
                 aboutPopup.style.display = "none";
+
             }
+
         });
+
     }
 
 
     /* ACCOUNT */
+
     const accountBtn = document.getElementById("accountBtn");
     const accountPopup = document.getElementById("accountPopup");
     const closeAccount = document.getElementById("closeAccount");
 
     if (accountBtn && accountPopup) {
+
         accountBtn.addEventListener("click", function () {
+
             accountPopup.style.display = "flex";
+
         });
+
     }
 
     if (closeAccount && accountPopup) {
+
         closeAccount.addEventListener("click", function () {
+
             accountPopup.style.display = "none";
+
         });
+
     }
 
     if (accountPopup) {
+
         accountPopup.addEventListener("click", function (event) {
+
             if (event.target === accountPopup) {
+
                 accountPopup.style.display = "none";
+
             }
+
         });
+
     }
 
 
     /* SIGN UP */
+
     const signupTab = document.getElementById("signupTab");
 
     if (signupTab) {
+
         signupTab.addEventListener("click", function () {
+
             window.location.href = "signup.html";
+
         });
+
     }
 
 
     /* LOGIN */
+
     const loginTab = document.getElementById("loginTab");
 
     if (loginTab) {
+
         loginTab.addEventListener("click", function () {
+
             window.location.href = "login.html";
+
         });
+
     }
 
 </script>
