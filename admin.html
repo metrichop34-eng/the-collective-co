@@ -1,0 +1,1633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin | THE COLLECTIVE.CO</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: #F7F4EE;
+    color: #304B52;
+    font-family: Arial, sans-serif;
+}
+
+/* =========================
+   ADMIN LOGIN
+========================= */
+
+.admin-login {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 25px;
+}
+
+.admin-login-box {
+    width: 100%;
+    max-width: 420px;
+    background: #FFFDF8;
+    border: 1px solid #DCEFF2;
+    border-radius: 28px;
+    padding: 45px 35px;
+    text-align: center;
+    box-shadow: 0 15px 40px rgba(48, 75, 82, 0.08);
+}
+
+.admin-login-box .logo {
+    font-size: 13px;
+    font-weight: bold;
+    letter-spacing: 4px;
+    color: #A8C9CE;
+    margin-bottom: 18px;
+}
+
+.admin-login-box h1 {
+    margin: 0 0 10px;
+    font-size: 34px;
+    letter-spacing: 2px;
+}
+
+.admin-login-box p {
+    color: #6F858A;
+    margin-bottom: 28px;
+}
+
+.admin-login-box input {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #A8C9CE;
+    border-radius: 12px;
+    background: #FFFDF8;
+    color: #304B52;
+    outline: none;
+    font-size: 15px;
+    text-align: center;
+}
+
+.admin-login-box input:focus {
+    border-color: #304B52;
+}
+
+.admin-login-box button {
+    width: 100%;
+    margin-top: 15px;
+    padding: 14px;
+    border: none;
+    border-radius: 25px;
+    background: #304B52;
+    color: white;
+    cursor: pointer;
+    letter-spacing: 1.5px;
+    font-weight: bold;
+}
+
+.admin-login-box button:hover {
+    opacity: .85;
+}
+
+.admin-error {
+    color: #A65D5D;
+    font-size: 13px;
+    margin-top: 15px;
+    display: none;
+}
+
+/* =========================
+   DASHBOARD
+========================= */
+
+.admin-dashboard {
+    display: none;
+    min-height: 100vh;
+}
+
+.admin-topbar {
+    background: #FFFDF8;
+    border-bottom: 1px solid #DCEFF2;
+    padding: 20px 35px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.admin-brand {
+    font-weight: bold;
+    letter-spacing: 3px;
+    font-size: 15px;
+}
+
+.admin-label {
+    color: #A8C9CE;
+    font-size: 11px;
+    letter-spacing: 2px;
+    margin-top: 5px;
+}
+
+.admin-logout {
+    border: 1px solid #304B52;
+    background: transparent;
+    color: #304B52;
+    padding: 10px 18px;
+    border-radius: 22px;
+    cursor: pointer;
+}
+
+.admin-layout {
+    display: flex;
+    min-height: calc(100vh - 82px);
+}
+
+/* =========================
+   SIDEBAR
+========================= */
+
+.admin-sidebar {
+    width: 230px;
+    background: #304B52;
+    padding: 30px 18px;
+}
+
+.admin-nav-button {
+    width: 100%;
+    padding: 14px 16px;
+    margin-bottom: 8px;
+    border: none;
+    border-radius: 12px;
+    background: transparent;
+    color: #FFFDF8;
+    text-align: left;
+    cursor: pointer;
+    font-size: 13px;
+    letter-spacing: 1px;
+}
+
+.admin-nav-button:hover,
+.admin-nav-button.active {
+    background: rgba(255,255,255,.13);
+}
+
+/* =========================
+   MAIN
+========================= */
+
+.admin-main {
+    flex: 1;
+    padding: 35px;
+    overflow-x: hidden;
+}
+
+.admin-section {
+    display: none;
+}
+
+.admin-section.active {
+    display: block;
+}
+
+.admin-section-header {
+    margin-bottom: 28px;
+}
+
+.admin-section-header h1 {
+    margin: 0 0 8px;
+    font-size: 34px;
+    letter-spacing: 2px;
+}
+
+.admin-section-header p {
+    margin: 0;
+    color: #6F858A;
+}
+
+/* =========================
+   STAT CARDS
+========================= */
+
+.admin-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-bottom: 30px;
+}
+
+.admin-stat {
+    background: #FFFDF8;
+    border: 1px solid #DCEFF2;
+    border-radius: 20px;
+    padding: 25px;
+}
+
+.admin-stat-label {
+    font-size: 11px;
+    color: #6F858A;
+    letter-spacing: 1.5px;
+    font-weight: bold;
+}
+
+.admin-stat-value {
+    font-size: 30px;
+    font-weight: bold;
+    margin-top: 12px;
+}
+
+/* =========================
+   PANELS
+========================= */
+
+.admin-panel {
+    background: #FFFDF8;
+    border: 1px solid #DCEFF2;
+    border-radius: 22px;
+    padding: 25px;
+    margin-bottom: 22px;
+}
+
+.admin-panel h2 {
+    margin-top: 0;
+    font-size: 20px;
+}
+
+/* =========================
+   ORDER
+========================= */
+
+.order-card {
+    border: 1px solid #DCEFF2;
+    border-radius: 18px;
+    padding: 20px;
+    margin-bottom: 15px;
+    background: #FDFBF6;
+}
+
+.order-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.order-id {
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.order-status {
+    display: inline-block;
+    padding: 7px 12px;
+    border-radius: 20px;
+    background: #E8F1F2;
+    color: #304B52;
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.order-info {
+    color: #6F858A;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.order-items {
+    margin-top: 15px;
+    padding: 15px;
+    border-radius: 12px;
+    background: #F7F4EE;
+}
+
+.order-total {
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 15px;
+}
+
+.admin-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.admin-action {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 20px;
+    background: #304B52;
+    color: white;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.admin-action.secondary {
+    background: #A8C9CE;
+    color: #304B52;
+}
+
+.admin-action.danger {
+    background: #E6C8C8;
+    color: #683D3D;
+}
+
+/* =========================
+   TABLE
+========================= */
+
+.admin-table-wrap {
+    overflow-x: auto;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.admin-table th,
+.admin-table td {
+    padding: 14px 10px;
+    border-bottom: 1px solid #DCEFF2;
+    text-align: left;
+    font-size: 13px;
+}
+
+.admin-table th {
+    color: #6F858A;
+    font-size: 11px;
+    letter-spacing: 1px;
+}
+
+/* =========================
+   EMPTY
+========================= */
+
+.admin-empty {
+    text-align: center;
+    padding: 45px 20px;
+    color: #6F858A;
+}
+
+/* =========================
+   PAYMENT BOX
+========================= */
+
+.payment-box {
+    background: #F7F4EE;
+    border-radius: 16px;
+    padding: 20px;
+    margin-top: 15px;
+}
+
+.payment-box strong {
+    display: block;
+    margin-bottom: 8px;
+}
+
+.payment-box p {
+    margin: 5px 0;
+    color: #6F858A;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 900px) {
+
+    .admin-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .admin-sidebar {
+        width: 190px;
+    }
+
+    .admin-main {
+        padding: 25px;
+    }
+}
+
+@media (max-width: 650px) {
+
+    .admin-layout {
+        flex-direction: column;
+    }
+
+    .admin-sidebar {
+        width: 100%;
+        display: flex;
+        overflow-x: auto;
+        gap: 8px;
+        padding: 12px;
+    }
+
+    .admin-nav-button {
+        min-width: max-content;
+        width: auto;
+        margin: 0;
+    }
+
+    .admin-main {
+        padding: 20px 15px;
+    }
+
+    .admin-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-topbar {
+        padding: 18px;
+    }
+
+    .admin-section-header h1 {
+        font-size: 27px;
+    }
+
+    .order-top {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- =========================
+     ADMIN LOGIN
+========================= -->
+
+<div class="admin-login" id="adminLogin">
+
+    <div class="admin-login-box">
+
+        <div class="logo">THE COLLECTIVE.CO</div>
+
+        <h1>ADMIN</h1>
+
+        <p>Enter your admin access code.</p>
+
+        <input
+            type="password"
+            id="adminPassword"
+            placeholder="Admin access code"
+        >
+
+        <button id="adminLoginButton">
+            ENTER DASHBOARD
+        </button>
+
+        <div class="admin-error" id="adminError">
+            Incorrect admin access code.
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     DASHBOARD
+========================= -->
+
+<div class="admin-dashboard" id="adminDashboard">
+
+    <header class="admin-topbar">
+
+        <div>
+            <div class="admin-brand">
+                THE COLLECTIVE.CO
+            </div>
+
+            <div class="admin-label">
+                ADMIN DASHBOARD
+            </div>
+        </div>
+
+        <button class="admin-logout" id="adminLogout">
+            LOG OUT
+        </button>
+
+    </header>
+
+
+    <div class="admin-layout">
+
+        <!-- SIDEBAR -->
+
+        <aside class="admin-sidebar">
+
+            <button class="admin-nav-button active" data-section="overview">
+                📊 OVERVIEW
+            </button>
+
+            <button class="admin-nav-button" data-section="orders">
+                🛍️ ORDERS
+            </button>
+
+            <button class="admin-nav-button" data-section="products">
+                📦 PRODUCTS
+            </button>
+
+            <button class="admin-nav-button" data-section="customers">
+                👤 CUSTOMERS
+            </button>
+
+            <button class="admin-nav-button" data-section="rewards">
+                🎁 REWARDS
+            </button>
+
+            <button class="admin-nav-button" data-section="payments">
+                💳 PAYMENTS
+            </button>
+
+        </aside>
+
+
+        <!-- MAIN -->
+
+        <main class="admin-main">
+
+
+            <!-- =========================
+                 OVERVIEW
+            ========================= -->
+
+            <section class="admin-section active" id="overview">
+
+                <div class="admin-section-header">
+                    <h1>OVERVIEW</h1>
+                    <p>Your store at a glance.</p>
+                </div>
+
+                <div class="admin-stats">
+
+                    <div class="admin-stat">
+                        <div class="admin-stat-label">
+                            ORDERS
+                        </div>
+
+                        <div class="admin-stat-value" id="statOrders">
+                            0
+                        </div>
+                    </div>
+
+                    <div class="admin-stat">
+                        <div class="admin-stat-label">
+                            PENDING PAYMENTS
+                        </div>
+
+                        <div class="admin-stat-value" id="statPending">
+                            0
+                        </div>
+                    </div>
+
+                    <div class="admin-stat">
+                        <div class="admin-stat-label">
+                            CUSTOMERS
+                        </div>
+
+                        <div class="admin-stat-value" id="statCustomers">
+                            0
+                        </div>
+                    </div>
+
+                    <div class="admin-stat">
+                        <div class="admin-stat-label">
+                            TOTAL SPENT
+                        </div>
+
+                        <div class="admin-stat-value" id="statRevenue">
+                            ₦0
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div class="admin-panel">
+
+                    <h2>Latest Order</h2>
+
+                    <div id="latestOrder">
+                        <div class="admin-empty">
+                            No orders yet.
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =========================
+                 ORDERS
+            ========================= -->
+
+            <section class="admin-section" id="orders">
+
+                <div class="admin-section-header">
+                    <h1>ORDERS</h1>
+                    <p>View and manage customer orders.</p>
+                </div>
+
+                <div id="ordersContainer"></div>
+
+            </section>
+
+
+            <!-- =========================
+                 PRODUCTS
+            ========================= -->
+
+            <section class="admin-section" id="products">
+
+                <div class="admin-section-header">
+                    <h1>PRODUCTS</h1>
+                    <p>Your current product catalogue.</p>
+                </div>
+
+                <div class="admin-panel">
+
+                    <div class="admin-table-wrap">
+
+                        <table class="admin-table">
+
+                            <thead>
+                                <tr>
+                                    <th>PRODUCT</th>
+                                    <th>CATEGORY</th>
+                                    <th>PRICE</th>
+                                    <th>STOCK</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="productsTable"></tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =========================
+                 CUSTOMERS
+            ========================= -->
+
+            <section class="admin-section" id="customers">
+
+                <div class="admin-section-header">
+                    <h1>CUSTOMERS</h1>
+                    <p>Customer information stored on this browser.</p>
+                </div>
+
+                <div class="admin-panel">
+
+                    <div class="admin-table-wrap">
+
+                        <table class="admin-table">
+
+                            <thead>
+                                <tr>
+                                    <th>NAME</th>
+                                    <th>EMAIL</th>
+                                    <th>POINTS</th>
+                                    <th>TOTAL SPENT</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="customersTable"></tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =========================
+                 REWARDS
+            ========================= -->
+
+            <section class="admin-section" id="rewards">
+
+                <div class="admin-section-header">
+                    <h1>REWARDS</h1>
+                    <p>Points and free gift information.</p>
+                </div>
+
+                <div class="admin-stats">
+
+                    <div class="admin-stat">
+                        <div class="admin-stat-label">
+                            CURRENT POINTS
+                        </div>
+
+                        <div class="admin-stat-value" id="rewardPoints">
+                            0
+                        </div>
+                    </div>
+
+                    <div class="admin-stat">
+                        <div class="admin-stat-label">
+                            TOTAL SPENT
+                        </div>
+
+                        <div class="admin-stat-value" id="rewardSpent">
+                            ₦0
+                        </div>
+                    </div>
+
+                    <div class="admin-stat">
+                        <div class="admin-stat-label">
+                            GIFT 1
+                        </div>
+
+                        <div class="admin-stat-value" id="rewardGift1">
+                            —
+                        </div>
+                    </div>
+
+                    <div class="admin-stat">
+                        <div class="admin-stat-label">
+                            GIFT 2
+                        </div>
+
+                        <div class="admin-stat-value" id="rewardGift2">
+                            —
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =========================
+                 PAYMENTS
+            ========================= -->
+
+            <section class="admin-section" id="payments">
+
+                <div class="admin-section-header">
+                    <h1>PAYMENTS</h1>
+                    <p>Payment details and pending transfers.</p>
+                </div>
+
+
+                <div class="admin-panel">
+
+                    <h2>Bank Details</h2>
+
+                    <div class="payment-box">
+
+                        <strong>GTBank (GTB)</strong>
+
+                        <p>
+                            Account Name:
+                            ADESANYA EYINJU CAYLA
+                        </p>
+
+                        <p>
+                            Account Number:
+                            0708648701
+                        </p>
+
+                    </div>
+
+
+                    <div class="payment-box">
+
+                        <strong>SmartCash PSB</strong>
+
+                        <p>
+                            Account Name:
+                            Ololade Adesanya
+                        </p>
+
+                        <p>
+                            Account Number:
+                            9123930679
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="admin-panel">
+
+                    <h2>Pending Payment</h2>
+
+                    <div id="pendingPayment">
+
+                        <div class="admin-empty">
+                            No pending payments.
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+        </main>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* ======================================================
+   ADMIN SETTINGS
+====================================================== */
+
+/*
+   IMPORTANT:
+   This is only a LOCAL browser admin gate.
+   It is NOT real server security because your current
+   website uses localStorage.
+
+   Change this code if you want your own admin code.
+*/
+
+const ADMIN_CODE = "COLLECTIVE2026";
+
+
+/* ======================================================
+   ELEMENTS
+====================================================== */
+
+const adminLogin = document.getElementById("adminLogin");
+const adminDashboard = document.getElementById("adminDashboard");
+const adminPassword = document.getElementById("adminPassword");
+const adminLoginButton = document.getElementById("adminLoginButton");
+const adminError = document.getElementById("adminError");
+
+
+/* ======================================================
+   LOGIN
+====================================================== */
+
+adminLoginButton.addEventListener("click", function () {
+
+    const enteredCode = adminPassword.value;
+
+    if (enteredCode === ADMIN_CODE) {
+
+        localStorage.setItem("collectiveAdminLoggedIn", "true");
+
+        adminLogin.style.display = "none";
+        adminDashboard.style.display = "block";
+
+        loadDashboard();
+
+    } else {
+
+        adminError.style.display = "block";
+
+    }
+
+});
+
+
+adminPassword.addEventListener("keydown", function(event) {
+
+    if (event.key === "Enter") {
+        adminLoginButton.click();
+    }
+
+});
+
+
+/* ======================================================
+   CHECK ADMIN LOGIN
+====================================================== */
+
+if (localStorage.getItem("collectiveAdminLoggedIn") === "true") {
+
+    adminLogin.style.display = "none";
+    adminDashboard.style.display = "block";
+
+}
+
+
+/* ======================================================
+   LOGOUT
+====================================================== */
+
+document.getElementById("adminLogout").addEventListener("click", function () {
+
+    localStorage.removeItem("collectiveAdminLoggedIn");
+
+    adminDashboard.style.display = "none";
+    adminLogin.style.display = "flex";
+
+    adminPassword.value = "";
+
+});
+
+
+/* ======================================================
+   NAVIGATION
+====================================================== */
+
+document.querySelectorAll(".admin-nav-button").forEach(function(button) {
+
+    button.addEventListener("click", function() {
+
+        document.querySelectorAll(".admin-nav-button")
+            .forEach(function(btn) {
+                btn.classList.remove("active");
+            });
+
+        document.querySelectorAll(".admin-section")
+            .forEach(function(section) {
+                section.classList.remove("active");
+            });
+
+        button.classList.add("active");
+
+        const sectionName = button.dataset.section;
+
+        document
+            .getElementById(sectionName)
+            .classList.add("active");
+
+        loadDashboard();
+
+    });
+
+});
+
+
+/* ======================================================
+   GET ORDER
+====================================================== */
+
+function getPendingOrder() {
+
+    return JSON.parse(
+        localStorage.getItem("collectivePendingOrder") || "null"
+    );
+
+}
+
+
+/* ======================================================
+   GET USER
+====================================================== */
+
+function getCustomer() {
+
+    return JSON.parse(
+        localStorage.getItem("collectiveUser") || "null"
+    );
+
+}
+
+
+/* ======================================================
+   MONEY
+====================================================== */
+
+function money(amount) {
+
+    return "₦" + Number(amount || 0).toLocaleString();
+
+}
+
+
+/* ======================================================
+   ORDER HTML
+====================================================== */
+
+function createOrderHTML(order) {
+
+    if (!order) {
+
+        return `
+            <div class="admin-empty">
+                No orders yet.
+            </div>
+        `;
+
+    }
+
+    const customer = order.customer || {};
+
+    const items = order.items || [];
+
+    let itemsHTML = "";
+
+    items.forEach(function(item) {
+
+        itemsHTML += `
+            <div>
+                <strong>${item.name}</strong>
+                × ${item.quantity}
+                ${item.color ? ` — ${item.color}` : ""}
+                <br>
+                ${money(item.price * item.quantity)}
+            </div>
+        `;
+
+    });
+
+
+    return `
+
+        <div class="order-card">
+
+            <div class="order-top">
+
+                <div class="order-id">
+                    ${order.id}
+                </div>
+
+                <div class="order-status">
+                    ${(order.status || "unknown").toUpperCase()}
+                </div>
+
+            </div>
+
+
+            <div class="order-info">
+
+                <strong>Customer</strong><br>
+
+                ${customer.firstName || ""}
+                ${customer.lastName || ""}<br>
+
+                ${customer.phone || "No phone"}<br>
+
+                ${customer.address || "No address"}
+
+            </div>
+
+
+            <div class="order-items">
+
+                <strong>Items</strong>
+
+                <br><br>
+
+                ${itemsHTML}
+
+            </div>
+
+
+            <div class="order-info">
+
+                <br>
+
+                Original total:
+                ${money(order.originalTotal)}
+
+                <br>
+
+                Points used:
+                ${order.pointsUsed || 0}
+
+            </div>
+
+
+            <div class="order-total">
+
+                ${money(order.total)}
+
+            </div>
+
+
+            <div class="admin-actions">
+
+                <button
+                    class="admin-action"
+                    onclick="approvePayment()"
+                >
+                    ✓ APPROVE PAYMENT
+                </button>
+
+                <button
+                    class="admin-action danger"
+                    onclick="rejectPayment()"
+                >
+                    REJECT
+                </button>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+/* ======================================================
+   LOAD DASHBOARD
+====================================================== */
+
+function loadDashboard() {
+
+    const order = getPendingOrder();
+    const customer = getCustomer();
+
+    let orderCount = order ? 1 : 0;
+
+    let pendingCount = 0;
+
+    if (
+        order &&
+        order.status === "payment-checking"
+    ) {
+        pendingCount = 1;
+    }
+
+
+    document.getElementById("statOrders")
+        .textContent = orderCount;
+
+
+    document.getElementById("statPending")
+        .textContent = pendingCount;
+
+
+    document.getElementById("statCustomers")
+        .textContent = customer ? 1 : 0;
+
+
+    document.getElementById("statRevenue")
+        .textContent = money(
+            order ? order.total : 0
+        );
+
+
+    /* LATEST ORDER */
+
+    document.getElementById("latestOrder")
+        .innerHTML = createOrderHTML(order);
+
+
+    /* ORDERS */
+
+    document.getElementById("ordersContainer")
+        .innerHTML = createOrderHTML(order);
+
+
+    /* CUSTOMER */
+
+    loadCustomer(customer);
+
+
+    /* PRODUCTS */
+
+    loadProducts();
+
+
+    /* REWARDS */
+
+    loadRewards();
+
+
+    /* PAYMENT */
+
+    document.getElementById("pendingPayment")
+        .innerHTML = createOrderHTML(
+            order &&
+            order.status === "payment-checking"
+                ? order
+                : null
+        );
+
+}
+
+
+/* ======================================================
+   CUSTOMER
+====================================================== */
+
+function loadCustomer(customer) {
+
+    const table =
+        document.getElementById("customersTable");
+
+
+    if (!customer) {
+
+        table.innerHTML = `
+            <tr>
+                <td colspan="4">
+                    No customers yet.
+                </td>
+            </tr>
+        `;
+
+        return;
+
+    }
+
+
+    const points =
+        Number(
+            localStorage.getItem("collectivePoints") || "0"
+        );
+
+
+    const spent =
+        Number(
+            localStorage.getItem("collectiveTotalSpent") || "0"
+        );
+
+
+    table.innerHTML = `
+
+        <tr>
+
+            <td>
+                ${customer.name || "Unknown"}
+            </td>
+
+            <td>
+                ${customer.email || "No email"}
+            </td>
+
+            <td>
+                ${points}
+            </td>
+
+            <td>
+                ${money(spent)}
+            </td>
+
+        </tr>
+
+    `;
+
+}
+
+
+/* ======================================================
+   PRODUCTS
+====================================================== */
+
+function loadProducts() {
+
+    const table =
+        document.getElementById("productsTable");
+
+
+    /*
+       These are the same catalogue products used by
+       your current script.js.
+    */
+
+    const products = [
+
+        ["Men's Perfume", "Skincare", "₦12,000 – ₦20,000", 10],
+        ["Body Butter", "Skincare", "₦5,000 – ₦9,500", 10],
+        ["Sunscreen", "Skincare", "₦4,000 – ₦9,000", 10],
+        ["Face Cleanser", "Skincare", "₦7,500 – ₦10,000", 10],
+        ["Body Scrub", "Skincare", "₦4,000 – ₦8,000", 10],
+        ["Face Serum", "Skincare", "₦1,500 – ₦4,500", 10],
+        ["Lip Mask", "Skincare", "₦1,000 – ₦3,000", 10],
+        ["Rhode Lip Gloss", "Skincare", "₦10,000 – ₦15,000", 10],
+        ["SHEGLAM Lip Gloss", "Skincare", "₦10,000 – ₦15,000", 10],
+        ["USHAS Lip Gloss", "Skincare", "₦10,000 – ₦15,000", 10],
+        ["Clear Normal Lip Gloss", "Skincare", "₦1,000 – ₦2,000", 10],
+        ["Lip Balm", "Skincare", "₦1,000 – ₦2,000", 10],
+        ["Shower Gel", "Skincare", "₦12,000", 10],
+        ["Men's Fragrance Perfume", "Skincare", "₦9,000 – ₦10,000", 10],
+        ["Women's Fragrance Perfume", "Skincare", "₦9,000 – ₦10,000", 10],
+        ["Body Lotion", "Skincare", "₦8,000 – ₦12,000", 10],
+        ["Face Moisturizer", "Skincare", "₦3,000 – ₦7,000", 10],
+        ["Face Toner", "Skincare", "₦6,500 – ₦10,000", 10],
+        ["Body Oil", "Skincare", "₦6,000 – ₦10,000", 10],
+        ["Face Mask", "Skincare", "₦1,000 – ₦4,500", 10],
+        ["Lip Oil", "Skincare", "₦1,000 – ₦2,000", 10],
+        ["Pimple Patch", "Skincare", "₦500 – ₦1,800", 10],
+
+        ["Bead Bracelet Set", "Accessories", "₦3,000 – ₦6,000", 10],
+        ["Masculine Chain Bracelet", "Accessories", "₦1,000 – ₦3,500", 10],
+        ["Chrome Heart Glasses", "Accessories", "₦15,000 – ₦20,000", 10],
+        ["Glasses", "Accessories", "₦2,000 – ₦5,000", 10],
+        ["Glasses Set of 3", "Accessories", "₦4,000 – ₦5,000", 10],
+        ["Glasses Set of 5", "Accessories", "₦5,000 – ₦10,000", 10],
+        ["Scrunchies", "Accessories", "₦1,200", 10],
+        ["Stanley Cup", "Accessories", "₦15,000", 10],
+        ["Body Floral Stanley Cup", "Accessories", "₦20,000", 10],
+        ["Headband", "Accessories", "₦1,600", 10],
+        ["Tote Bag", "Accessories", "₦10,000 – ₦20,000", 10],
+        ["Claw Clip", "Accessories", "₦2,000 – ₦2,500", 10],
+        ["Anklet", "Accessories", "₦1,000 – ₦2,000", 10],
+        ["Necklace", "Accessories", "₦1,000 – ₦3,500", 10],
+        ["Silver Bracelet", "Accessories", "₦3,500", 10],
+        ["Gold Bracelet", "Accessories", "₦3,500", 10],
+        ["Vacuum Cups", "Accessories", "₦10,000 – ₦20,000", 10],
+
+        ["Plain Tops", "Clothing", "₦6,500 – ₦8,000", 10],
+        ["Graphic Tops", "Clothing", "₦8,000 – ₦10,000", 10],
+        ["Tube Tops", "Clothing", "₦5,000 – ₦15,000", 10],
+        ["Jersey Tops", "Clothing", "₦8,500", 10],
+        ["Hoodies", "Clothing", "₦9,500 – ₦10,000", 10],
+        ["Zip-Up Hoodies", "Clothing", "₦9,000 – ₦15,000", 10],
+        ["Plain Sweatpants", "Clothing", "₦10,000", 10],
+        ["Leopard Sweatpants", "Clothing", "₦15,000", 10],
+        ["Designer Sweatpants", "Clothing", "₦20,000", 10],
+        ["Shorts", "Clothing", "₦10,000", 10],
+        ["Jean Bum Shorts", "Clothing", "₦5,000", 10],
+        ["Jeans", "Clothing", "₦10,000", 10],
+        ["Designed Jeans", "Clothing", "₦20,000", 10],
+        ["Bootcut Jeans", "Clothing", "₦10,000", 10],
+        ["Jeans Skirt", "Clothing", "₦6,500", 10],
+        ["Pleated Jeans Skirt", "Clothing", "₦6,000", 10],
+        ["Normal Shorts", "Clothing", "₦4,000", 10],
+
+        ["Shoes", "Shoes", "₦15,000 – ₦30,000", 10],
+        ["Adidas Sambas", "Shoes", "₦30,000 – ₦50,000", 10],
+        ["Adidas Campus", "Shoes", "₦30,000 – ₦50,000", 10],
+        ["Slides", "Shoes", "₦9,000", 10],
+        ["Crocs", "Shoes", "₦10,000", 10],
+        ["Loafers", "Shoes", "₦15,000 – ₦30,000", 10],
+        ["Clogs", "Shoes", "₦35,000 – ₦70,000", 10],
+        ["Timberland", "Shoes", "₦5,000 – ₦40,000", 10],
+        ["Vans", "Shoes", "₦5,000 – ₦40,000", 10],
+        ["Puma", "Shoes", "₦25,000 – ₦50,000", 10],
+
+        ["Hermes Bags", "Bags", "₦35,000 – ₦50,000", 10],
+        ["Mini Gucci Bags", "Bags", "₦20,000 – ₦50,000", 10],
+        ["Gucci Bags", "Bags", "₦35,000 – ₦60,000", 10],
+        ["Prada Bags", "Bags", "₦35,000 – ₦60,000", 10],
+        ["Dior Bags", "Bags", "₦35,000 – ₦70,000", 10],
+        ["Chanel Bags", "Bags", "₦45,000 – ₦70,000", 10],
+        ["Louis Vuitton Bags", "Bags", "₦25,000 – ₦70,000", 10],
+        ["Cartier Watches", "Bags", "₦20,000 – ₦35,000", 10],
+        ["Cartier Glasses", "Bags", "₦15,000 – ₦25,000", 10]
+
+    ];
+
+
+    table.innerHTML = "";
+
+    products.forEach(function(product) {
+
+        table.innerHTML += `
+
+            <tr>
+
+                <td>
+                    ${product[0]}
+                </td>
+
+                <td>
+                    ${product[1]}
+                </td>
+
+                <td>
+                    ${product[2]}
+                </td>
+
+                <td>
+                    ${product[3]}
+                </td>
+
+            </tr>
+
+        `;
+
+    });
+
+}
+
+
+/* ======================================================
+   REWARDS
+====================================================== */
+
+function loadRewards() {
+
+    const points =
+        Number(
+            localStorage.getItem("collectivePoints") || "0"
+        );
+
+
+    const spent =
+        Number(
+            localStorage.getItem("collectiveTotalSpent") || "0"
+        );
+
+
+    document.getElementById("rewardPoints")
+        .textContent = points;
+
+
+    document.getElementById("rewardSpent")
+        .textContent = money(spent);
+
+
+    document.getElementById("rewardGift1")
+        .textContent =
+        spent >= 50000
+            ? "UNLOCKED"
+            : "LOCKED";
+
+
+    document.getElementById("rewardGift2")
+        .textContent =
+        spent >= 100000
+            ? "UNLOCKED"
+            : "LOCKED";
+
+}
+
+
+/* ======================================================
+   APPROVE PAYMENT
+====================================================== */
+
+function approvePayment() {
+
+    const order = getPendingOrder();
+
+    if (!order) {
+
+        alert("There is no pending order.");
+
+        return;
+
+    }
+
+
+    /*
+       Payment approval means the transfer has been
+       checked by the store owner.
+    */
+
+    order.status = "paid";
+
+    localStorage.setItem(
+        "collectivePendingOrder",
+        JSON.stringify(order)
+    );
+
+    localStorage.setItem(
+        "collectiveOrderStatus",
+        "paid"
+    );
+
+
+    /* UPDATE TOTAL SPENT */
+
+    const oldSpent =
+        Number(
+            localStorage.getItem("collectiveTotalSpent") || "0"
+        );
+
+
+    const newSpent =
+        oldSpent + Number(order.total || 0);
+
+
+    localStorage.setItem(
+        "collectiveTotalSpent",
+        String(newSpent)
+    );
+
+
+    /* EARN POINTS */
+
+    const earned =
+        Math.floor(
+            Number(order.total || 0) / 1000
+        );
+
+
+    const oldPoints =
+        Number(
+            localStorage.getItem("collectivePoints") || "0"
+        );
+
+
+    /*
+       The points used during checkout have already
+       been deducted when the customer clicked PAID.
+       These are the new points earned from the purchase.
+    */
+
+    localStorage.setItem(
+        "collectivePoints",
+        String(oldPoints + earned)
+    );
+
+
+    /* UPDATE GIFTS */
+
+    if (newSpent >= 50000) {
+
+        localStorage.setItem(
+            "collectiveGift1",
+            "true"
+        );
+
+    }
+
+
+    if (newSpent >= 100000) {
+
+        localStorage.setItem(
+            "collectiveGift2",
+            "true"
+        );
+
+    }
+
+
+    alert("Payment approved successfully.");
+
+    loadDashboard();
+
+}
+
+
+/* ======================================================
+   REJECT PAYMENT
+====================================================== */
+
+function rejectPayment() {
+
+    const order = getPendingOrder();
+
+    if (!order) {
+
+        alert("There is no pending order.");
+
+        return;
+
+    }
+
+
+    const confirmed =
+        confirm(
+            "Reject this payment/order?"
+        );
+
+
+    if (!confirmed) return;
+
+
+    order.status = "payment-rejected";
+
+
+    localStorage.setItem(
+        "collectivePendingOrder",
+        JSON.stringify(order)
+    );
+
+
+    localStorage.setItem(
+        "collectiveOrderStatus",
+        "payment-rejected"
+    );
+
+
+    alert("Payment marked as rejected.");
+
+    loadDashboard();
+
+}
+
+
+/* ======================================================
+   INITIAL LOAD
+====================================================== */
+
+if (
+    localStorage.getItem(
+        "collectiveAdminLoggedIn"
+    ) === "true"
+) {
+
+    loadDashboard();
+
+}
+
+</script>
+
+</body>
+</html>
