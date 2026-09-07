@@ -1,1633 +1,1530 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin | THE COLLECTIVE.CO</title>
-
-<style>
-* {
-    box-sizing: border-box;
-}
-
-body {
-    margin: 0;
-    background: #F7F4EE;
-    color: #304B52;
-    font-family: Arial, sans-serif;
-}
-
-/* =========================
-   ADMIN LOGIN
-========================= */
-
-.admin-login {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 25px;
-}
-
-.admin-login-box {
-    width: 100%;
-    max-width: 420px;
-    background: #FFFDF8;
-    border: 1px solid #DCEFF2;
-    border-radius: 28px;
-    padding: 45px 35px;
-    text-align: center;
-    box-shadow: 0 15px 40px rgba(48, 75, 82, 0.08);
-}
-
-.admin-login-box .logo {
-    font-size: 13px;
-    font-weight: bold;
-    letter-spacing: 4px;
-    color: #A8C9CE;
-    margin-bottom: 18px;
-}
-
-.admin-login-box h1 {
-    margin: 0 0 10px;
-    font-size: 34px;
-    letter-spacing: 2px;
-}
-
-.admin-login-box p {
-    color: #6F858A;
-    margin-bottom: 28px;
-}
-
-.admin-login-box input {
-    width: 100%;
-    padding: 15px;
-    border: 1px solid #A8C9CE;
-    border-radius: 12px;
-    background: #FFFDF8;
-    color: #304B52;
-    outline: none;
-    font-size: 15px;
-    text-align: center;
-}
-
-.admin-login-box input:focus {
-    border-color: #304B52;
-}
-
-.admin-login-box button {
-    width: 100%;
-    margin-top: 15px;
-    padding: 14px;
-    border: none;
-    border-radius: 25px;
-    background: #304B52;
-    color: white;
-    cursor: pointer;
-    letter-spacing: 1.5px;
-    font-weight: bold;
-}
-
-.admin-login-box button:hover {
-    opacity: .85;
-}
-
-.admin-error {
-    color: #A65D5D;
-    font-size: 13px;
-    margin-top: 15px;
-    display: none;
-}
-
-/* =========================
-   DASHBOARD
-========================= */
-
-.admin-dashboard {
-    display: none;
-    min-height: 100vh;
-}
-
-.admin-topbar {
-    background: #FFFDF8;
-    border-bottom: 1px solid #DCEFF2;
-    padding: 20px 35px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 20px;
-}
-
-.admin-brand {
-    font-weight: bold;
-    letter-spacing: 3px;
-    font-size: 15px;
-}
-
-.admin-label {
-    color: #A8C9CE;
-    font-size: 11px;
-    letter-spacing: 2px;
-    margin-top: 5px;
-}
-
-.admin-logout {
-    border: 1px solid #304B52;
-    background: transparent;
-    color: #304B52;
-    padding: 10px 18px;
-    border-radius: 22px;
-    cursor: pointer;
-}
-
-.admin-layout {
-    display: flex;
-    min-height: calc(100vh - 82px);
-}
-
-/* =========================
-   SIDEBAR
-========================= */
-
-.admin-sidebar {
-    width: 230px;
-    background: #304B52;
-    padding: 30px 18px;
-}
-
-.admin-nav-button {
-    width: 100%;
-    padding: 14px 16px;
-    margin-bottom: 8px;
-    border: none;
-    border-radius: 12px;
-    background: transparent;
-    color: #FFFDF8;
-    text-align: left;
-    cursor: pointer;
-    font-size: 13px;
-    letter-spacing: 1px;
-}
-
-.admin-nav-button:hover,
-.admin-nav-button.active {
-    background: rgba(255,255,255,.13);
-}
-
-/* =========================
-   MAIN
-========================= */
-
-.admin-main {
-    flex: 1;
-    padding: 35px;
-    overflow-x: hidden;
-}
-
-.admin-section {
-    display: none;
-}
-
-.admin-section.active {
-    display: block;
-}
-
-.admin-section-header {
-    margin-bottom: 28px;
-}
-
-.admin-section-header h1 {
-    margin: 0 0 8px;
-    font-size: 34px;
-    letter-spacing: 2px;
-}
-
-.admin-section-header p {
-    margin: 0;
-    color: #6F858A;
-}
-
-/* =========================
-   STAT CARDS
-========================= */
-
-.admin-stats {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 18px;
-    margin-bottom: 30px;
-}
-
-.admin-stat {
-    background: #FFFDF8;
-    border: 1px solid #DCEFF2;
-    border-radius: 20px;
-    padding: 25px;
-}
-
-.admin-stat-label {
-    font-size: 11px;
-    color: #6F858A;
-    letter-spacing: 1.5px;
-    font-weight: bold;
-}
-
-.admin-stat-value {
-    font-size: 30px;
-    font-weight: bold;
-    margin-top: 12px;
-}
-
-/* =========================
-   PANELS
-========================= */
-
-.admin-panel {
-    background: #FFFDF8;
-    border: 1px solid #DCEFF2;
-    border-radius: 22px;
-    padding: 25px;
-    margin-bottom: 22px;
-}
-
-.admin-panel h2 {
-    margin-top: 0;
-    font-size: 20px;
-}
-
-/* =========================
-   ORDER
-========================= */
-
-.order-card {
-    border: 1px solid #DCEFF2;
-    border-radius: 18px;
-    padding: 20px;
-    margin-bottom: 15px;
-    background: #FDFBF6;
-}
-
-.order-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 15px;
-}
-
-.order-id {
-    font-weight: bold;
-    font-size: 15px;
-}
-
-.order-status {
-    display: inline-block;
-    padding: 7px 12px;
-    border-radius: 20px;
-    background: #E8F1F2;
-    color: #304B52;
-    font-size: 10px;
-    font-weight: bold;
-    letter-spacing: 1px;
-}
-
-.order-info {
-    color: #6F858A;
-    font-size: 14px;
-    line-height: 1.7;
-}
-
-.order-items {
-    margin-top: 15px;
-    padding: 15px;
-    border-radius: 12px;
-    background: #F7F4EE;
-}
-
-.order-total {
-    font-size: 20px;
-    font-weight: bold;
-    margin-top: 15px;
-}
-
-.admin-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 18px;
-}
-
-.admin-action {
-    padding: 10px 15px;
-    border: none;
-    border-radius: 20px;
-    background: #304B52;
-    color: white;
-    cursor: pointer;
-    font-size: 12px;
-}
-
-.admin-action.secondary {
-    background: #A8C9CE;
-    color: #304B52;
-}
-
-.admin-action.danger {
-    background: #E6C8C8;
-    color: #683D3D;
-}
-
-/* =========================
-   TABLE
-========================= */
-
-.admin-table-wrap {
-    overflow-x: auto;
-}
-
-.admin-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.admin-table th,
-.admin-table td {
-    padding: 14px 10px;
-    border-bottom: 1px solid #DCEFF2;
-    text-align: left;
-    font-size: 13px;
-}
-
-.admin-table th {
-    color: #6F858A;
-    font-size: 11px;
-    letter-spacing: 1px;
-}
-
-/* =========================
-   EMPTY
-========================= */
-
-.admin-empty {
-    text-align: center;
-    padding: 45px 20px;
-    color: #6F858A;
-}
-
-/* =========================
-   PAYMENT BOX
-========================= */
-
-.payment-box {
-    background: #F7F4EE;
-    border-radius: 16px;
-    padding: 20px;
-    margin-top: 15px;
-}
-
-.payment-box strong {
-    display: block;
-    margin-bottom: 8px;
-}
-
-.payment-box p {
-    margin: 5px 0;
-    color: #6F858A;
-}
-
-/* =========================
-   MOBILE
-========================= */
-
-@media (max-width: 900px) {
-
-    .admin-stats {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .admin-sidebar {
-        width: 190px;
-    }
-
-    .admin-main {
-        padding: 25px;
-    }
-}
-
-@media (max-width: 650px) {
-
-    .admin-layout {
-        flex-direction: column;
-    }
-
-    .admin-sidebar {
-        width: 100%;
-        display: flex;
-        overflow-x: auto;
-        gap: 8px;
-        padding: 12px;
-    }
-
-    .admin-nav-button {
-        min-width: max-content;
-        width: auto;
-        margin: 0;
-    }
-
-    .admin-main {
-        padding: 20px 15px;
-    }
-
-    .admin-stats {
-        grid-template-columns: 1fr;
-    }
-
-    .admin-topbar {
-        padding: 18px;
-    }
-
-    .admin-section-header h1 {
-        font-size: 27px;
-    }
-
-    .order-top {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-}
-</style>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Admin | THE COLLECTIVE.CO
+    </title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #F7F4EE;
+            color: #304B52;
+        }
+
+        /* =========================
+           NAVIGATION
+        ========================= */
+
+        nav {
+            background: #FFFDF8;
+            padding: 18px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            border-bottom: 1px solid #DCEFF2;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .admin-logo {
+            font-size: 20px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .admin-badge {
+            background: #DCEFF2;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        /* =========================
+           PAGE
+        ========================= */
+
+        .admin-container {
+            width: min(1200px, 94%);
+            margin: 35px auto;
+        }
+
+        .admin-header {
+            background: #FFFDF8;
+            border-radius: 24px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 30px rgba(48,75,82,0.08);
+        }
+
+        .admin-header h1 {
+            margin: 0 0 8px;
+            font-size: 32px;
+        }
+
+        .admin-header p {
+            margin: 0;
+            color: #6F858A;
+        }
+
+        /* =========================
+           STAT CARDS
+        ========================= */
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: #FFFDF8;
+            border-radius: 20px;
+            padding: 22px;
+            box-shadow: 0 8px 25px rgba(48,75,82,0.07);
+        }
+
+        .stat-card span {
+            display: block;
+            color: #6F858A;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .stat-card strong {
+            font-size: 28px;
+        }
+
+        /* =========================
+           CONTROLS
+        ========================= */
+
+        .controls {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .controls button {
+            border: 1px solid #304B52;
+            background: #FFFDF8;
+            color: #304B52;
+            padding: 11px 17px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .controls button.active,
+        .controls button:hover {
+            background: #304B52;
+            color: white;
+        }
+
+        /* =========================
+           ORDERS
+        ========================= */
+
+        #ordersContainer {
+            display: grid;
+            gap: 18px;
+        }
+
+        .order-card {
+            background: #FFFDF8;
+            border-radius: 22px;
+            padding: 24px;
+            box-shadow: 0 8px 30px rgba(48,75,82,0.08);
+        }
+
+        .order-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 18px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #DCEFF2;
+        }
+
+        .order-id {
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .order-date {
+            color: #6F858A;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .status {
+            padding: 8px 13px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            height: fit-content;
+        }
+
+        .status-checking {
+            background: #FFF3CD;
+            color: #856404;
+        }
+
+        .status-approved {
+            background: #DCEFF2;
+            color: #304B52;
+        }
+
+        .status-rejected {
+            background: #F8D7DA;
+            color: #842029;
+        }
+
+        .status-delivered {
+            background: #DCEFF2;
+            color: #304B52;
+        }
+
+        /* =========================
+           CUSTOMER
+        ========================= */
+
+        .customer-section {
+            background: #F7F4EE;
+            border-radius: 15px;
+            padding: 17px;
+            margin-bottom: 18px;
+        }
+
+        .customer-section h3 {
+            margin-top: 0;
+            font-size: 15px;
+        }
+
+        .customer-section p {
+            margin: 7px 0;
+            font-size: 14px;
+        }
+
+        /* =========================
+           PRODUCTS
+        ========================= */
+
+        .products-section {
+            margin-bottom: 18px;
+        }
+
+        .products-section h3 {
+            margin-bottom: 12px;
+        }
+
+        .order-product {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            padding: 12px 0;
+            border-bottom: 1px solid #E8F1F2;
+        }
+
+        .product-info strong {
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .product-info small {
+            color: #6F858A;
+        }
+
+        .product-price {
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        /* =========================
+           FREE GIFTS
+        ========================= */
+
+        .free-gifts-box {
+            background: #DCEFF2;
+            border-radius: 15px;
+            padding: 16px;
+            margin-bottom: 18px;
+        }
+
+        .free-gifts-box h3 {
+            margin-top: 0;
+        }
+
+        .gift-item {
+            padding: 7px 0;
+            font-size: 14px;
+        }
+
+        /* =========================
+           TOTAL
+        ========================= */
+
+        .order-total {
+            background: #F7F4EE;
+            padding: 18px;
+            border-radius: 15px;
+            margin-bottom: 18px;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 5px 0;
+        }
+
+        .grand-total {
+            font-size: 20px;
+            font-weight: bold;
+            padding-top: 12px;
+            margin-top: 8px;
+            border-top: 1px solid #DCEFF2;
+        }
+
+        /* =========================
+           ACTIONS
+        ========================= */
+
+        .order-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .order-actions button {
+            flex: 1;
+            min-width: 150px;
+            border: 0;
+            border-radius: 12px;
+            padding: 13px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .approve-button {
+            background: #304B52;
+            color: white;
+        }
+
+        .reject-button {
+            background: white;
+            color: #304B52;
+            border: 1px solid #304B52 !important;
+        }
+
+        .delivery-button {
+            background: #DCEFF2;
+            color: #304B52;
+        }
+
+        /* =========================
+           EMPTY
+        ========================= */
+
+        .empty-orders {
+            text-align: center;
+            background: #FFFDF8;
+            border-radius: 22px;
+            padding: 50px 25px;
+            color: #6F858A;
+        }
+
+        .empty-orders-icon {
+            font-size: 45px;
+            margin-bottom: 12px;
+        }
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 800px) {
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+        @media (max-width: 520px) {
+
+            nav {
+                padding: 15px;
+            }
+
+            .admin-container {
+                width: 92%;
+                margin: 20px auto;
+            }
+
+            .admin-header {
+                padding: 22px;
+            }
+
+            .admin-header h1 {
+                font-size: 25px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .stat-card {
+                padding: 16px;
+            }
+
+            .stat-card strong {
+                font-size: 22px;
+            }
+
+            .order-card {
+                padding: 18px;
+            }
+
+            .order-product {
+                align-items: flex-start;
+            }
+
+        }
+
+    </style>
+
 </head>
+
 
 <body>
 
-<!-- =========================
-     ADMIN LOGIN
-========================= -->
 
-<div class="admin-login" id="adminLogin">
+<nav>
 
-    <div class="admin-login-box">
+    <div class="admin-logo">
+        THE COLLECTIVE.CO
+    </div>
 
-        <div class="logo">THE COLLECTIVE.CO</div>
+    <div class="admin-badge">
+        ADMIN DASHBOARD
+    </div>
 
-        <h1>ADMIN</h1>
+</nav>
 
-        <p>Enter your admin access code.</p>
 
-        <input
-            type="password"
-            id="adminPassword"
-            placeholder="Admin access code"
+<main class="admin-container">
+
+
+    <section class="admin-header">
+
+        <h1>
+            Orders
+        </h1>
+
+        <p>
+            Manage customer orders and payment confirmations.
+        </p>
+
+    </section>
+
+
+    <!-- STATISTICS -->
+
+    <section class="stats">
+
+        <div class="stat-card">
+
+            <span>
+                TOTAL ORDERS
+            </span>
+
+            <strong id="totalOrders">
+                0
+            </strong>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <span>
+                PAYMENT CHECKING
+            </span>
+
+            <strong id="checkingOrders">
+                0
+            </strong>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <span>
+                APPROVED
+            </span>
+
+            <strong id="approvedOrders">
+                0
+            </strong>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <span>
+                TOTAL SALES
+            </span>
+
+            <strong id="totalSales">
+                ₦0
+            </strong>
+
+        </div>
+
+    </section>
+
+
+    <!-- FILTERS -->
+
+    <div class="controls">
+
+        <button
+            class="filter-button active"
+            data-filter="all"
         >
-
-        <button id="adminLoginButton">
-            ENTER DASHBOARD
+            ALL
         </button>
 
-        <div class="admin-error" id="adminError">
-            Incorrect admin access code.
-        </div>
+        <button
+            class="filter-button"
+            data-filter="payment-checking"
+        >
+            PAYMENT CHECKING
+        </button>
+
+        <button
+            class="filter-button"
+            data-filter="approved"
+        >
+            APPROVED
+        </button>
+
+        <button
+            class="filter-button"
+            data-filter="rejected"
+        >
+            REJECTED
+        </button>
 
     </div>
 
-</div>
 
+    <!-- ORDERS -->
 
-<!-- =========================
-     DASHBOARD
-========================= -->
+    <section id="ordersContainer"></section>
 
-<div class="admin-dashboard" id="adminDashboard">
 
-    <header class="admin-topbar">
-
-        <div>
-            <div class="admin-brand">
-                THE COLLECTIVE.CO
-            </div>
-
-            <div class="admin-label">
-                ADMIN DASHBOARD
-            </div>
-        </div>
-
-        <button class="admin-logout" id="adminLogout">
-            LOG OUT
-        </button>
-
-    </header>
-
-
-    <div class="admin-layout">
-
-        <!-- SIDEBAR -->
-
-        <aside class="admin-sidebar">
-
-            <button class="admin-nav-button active" data-section="overview">
-                📊 OVERVIEW
-            </button>
-
-            <button class="admin-nav-button" data-section="orders">
-                🛍️ ORDERS
-            </button>
-
-            <button class="admin-nav-button" data-section="products">
-                📦 PRODUCTS
-            </button>
-
-            <button class="admin-nav-button" data-section="customers">
-                👤 CUSTOMERS
-            </button>
-
-            <button class="admin-nav-button" data-section="rewards">
-                🎁 REWARDS
-            </button>
-
-            <button class="admin-nav-button" data-section="payments">
-                💳 PAYMENTS
-            </button>
-
-        </aside>
-
-
-        <!-- MAIN -->
-
-        <main class="admin-main">
-
-
-            <!-- =========================
-                 OVERVIEW
-            ========================= -->
-
-            <section class="admin-section active" id="overview">
-
-                <div class="admin-section-header">
-                    <h1>OVERVIEW</h1>
-                    <p>Your store at a glance.</p>
-                </div>
-
-                <div class="admin-stats">
-
-                    <div class="admin-stat">
-                        <div class="admin-stat-label">
-                            ORDERS
-                        </div>
-
-                        <div class="admin-stat-value" id="statOrders">
-                            0
-                        </div>
-                    </div>
-
-                    <div class="admin-stat">
-                        <div class="admin-stat-label">
-                            PENDING PAYMENTS
-                        </div>
-
-                        <div class="admin-stat-value" id="statPending">
-                            0
-                        </div>
-                    </div>
-
-                    <div class="admin-stat">
-                        <div class="admin-stat-label">
-                            CUSTOMERS
-                        </div>
-
-                        <div class="admin-stat-value" id="statCustomers">
-                            0
-                        </div>
-                    </div>
-
-                    <div class="admin-stat">
-                        <div class="admin-stat-label">
-                            TOTAL SPENT
-                        </div>
-
-                        <div class="admin-stat-value" id="statRevenue">
-                            ₦0
-                        </div>
-                    </div>
-
-                </div>
-
-
-                <div class="admin-panel">
-
-                    <h2>Latest Order</h2>
-
-                    <div id="latestOrder">
-                        <div class="admin-empty">
-                            No orders yet.
-                        </div>
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <!-- =========================
-                 ORDERS
-            ========================= -->
-
-            <section class="admin-section" id="orders">
-
-                <div class="admin-section-header">
-                    <h1>ORDERS</h1>
-                    <p>View and manage customer orders.</p>
-                </div>
-
-                <div id="ordersContainer"></div>
-
-            </section>
-
-
-            <!-- =========================
-                 PRODUCTS
-            ========================= -->
-
-            <section class="admin-section" id="products">
-
-                <div class="admin-section-header">
-                    <h1>PRODUCTS</h1>
-                    <p>Your current product catalogue.</p>
-                </div>
-
-                <div class="admin-panel">
-
-                    <div class="admin-table-wrap">
-
-                        <table class="admin-table">
-
-                            <thead>
-                                <tr>
-                                    <th>PRODUCT</th>
-                                    <th>CATEGORY</th>
-                                    <th>PRICE</th>
-                                    <th>STOCK</th>
-                                </tr>
-                            </thead>
-
-                            <tbody id="productsTable"></tbody>
-
-                        </table>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <!-- =========================
-                 CUSTOMERS
-            ========================= -->
-
-            <section class="admin-section" id="customers">
-
-                <div class="admin-section-header">
-                    <h1>CUSTOMERS</h1>
-                    <p>Customer information stored on this browser.</p>
-                </div>
-
-                <div class="admin-panel">
-
-                    <div class="admin-table-wrap">
-
-                        <table class="admin-table">
-
-                            <thead>
-                                <tr>
-                                    <th>NAME</th>
-                                    <th>EMAIL</th>
-                                    <th>POINTS</th>
-                                    <th>TOTAL SPENT</th>
-                                </tr>
-                            </thead>
-
-                            <tbody id="customersTable"></tbody>
-
-                        </table>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <!-- =========================
-                 REWARDS
-            ========================= -->
-
-            <section class="admin-section" id="rewards">
-
-                <div class="admin-section-header">
-                    <h1>REWARDS</h1>
-                    <p>Points and free gift information.</p>
-                </div>
-
-                <div class="admin-stats">
-
-                    <div class="admin-stat">
-                        <div class="admin-stat-label">
-                            CURRENT POINTS
-                        </div>
-
-                        <div class="admin-stat-value" id="rewardPoints">
-                            0
-                        </div>
-                    </div>
-
-                    <div class="admin-stat">
-                        <div class="admin-stat-label">
-                            TOTAL SPENT
-                        </div>
-
-                        <div class="admin-stat-value" id="rewardSpent">
-                            ₦0
-                        </div>
-                    </div>
-
-                    <div class="admin-stat">
-                        <div class="admin-stat-label">
-                            GIFT 1
-                        </div>
-
-                        <div class="admin-stat-value" id="rewardGift1">
-                            —
-                        </div>
-                    </div>
-
-                    <div class="admin-stat">
-                        <div class="admin-stat-label">
-                            GIFT 2
-                        </div>
-
-                        <div class="admin-stat-value" id="rewardGift2">
-                            —
-                        </div>
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <!-- =========================
-                 PAYMENTS
-            ========================= -->
-
-            <section class="admin-section" id="payments">
-
-                <div class="admin-section-header">
-                    <h1>PAYMENTS</h1>
-                    <p>Payment details and pending transfers.</p>
-                </div>
-
-
-                <div class="admin-panel">
-
-                    <h2>Bank Details</h2>
-
-                    <div class="payment-box">
-
-                        <strong>GTBank (GTB)</strong>
-
-                        <p>
-                            Account Name:
-                            ADESANYA EYINJU CAYLA
-                        </p>
-
-                        <p>
-                            Account Number:
-                            0708648701
-                        </p>
-
-                    </div>
-
-
-                    <div class="payment-box">
-
-                        <strong>SmartCash PSB</strong>
-
-                        <p>
-                            Account Name:
-                            Ololade Adesanya
-                        </p>
-
-                        <p>
-                            Account Number:
-                            9123930679
-                        </p>
-
-                    </div>
-
-                </div>
-
-
-                <div class="admin-panel">
-
-                    <h2>Pending Payment</h2>
-
-                    <div id="pendingPayment">
-
-                        <div class="admin-empty">
-                            No pending payments.
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-        </main>
-
-    </div>
-
-</div>
+</main>
 
 
 <script>
 
-/* ======================================================
-   ADMIN SETTINGS
-====================================================== */
-
-/*
-   IMPORTANT:
-   This is only a LOCAL browser admin gate.
-   It is NOT real server security because your current
-   website uses localStorage.
-
-   Change this code if you want your own admin code.
-*/
-
-const ADMIN_CODE = "COLLECTIVE2026";
+    let currentFilter = "all";
 
 
-/* ======================================================
-   ELEMENTS
-====================================================== */
+    /* =========================
+       GET ORDERS
+    ========================= */
 
-const adminLogin = document.getElementById("adminLogin");
-const adminDashboard = document.getElementById("adminDashboard");
-const adminPassword = document.getElementById("adminPassword");
-const adminLoginButton = document.getElementById("adminLoginButton");
-const adminError = document.getElementById("adminError");
+    function getOrders() {
 
+        try {
 
-/* ======================================================
-   LOGIN
-====================================================== */
+            const orders =
+                JSON.parse(
+                    localStorage.getItem(
+                        "collectiveOrders"
+                    ) || "[]"
+                );
 
-adminLoginButton.addEventListener("click", function () {
+            return Array.isArray(orders)
+                ? orders
+                : [];
 
-    const enteredCode = adminPassword.value;
+        } catch (error) {
 
-    if (enteredCode === ADMIN_CODE) {
+            return [];
 
-        localStorage.setItem("collectiveAdminLoggedIn", "true");
-
-        adminLogin.style.display = "none";
-        adminDashboard.style.display = "block";
-
-        loadDashboard();
-
-    } else {
-
-        adminError.style.display = "block";
+        }
 
     }
 
-});
 
+    /* =========================
+       SAVE ORDERS
+    ========================= */
 
-adminPassword.addEventListener("keydown", function(event) {
+    function saveOrders(orders) {
 
-    if (event.key === "Enter") {
-        adminLoginButton.click();
-    }
-
-});
-
-
-/* ======================================================
-   CHECK ADMIN LOGIN
-====================================================== */
-
-if (localStorage.getItem("collectiveAdminLoggedIn") === "true") {
-
-    adminLogin.style.display = "none";
-    adminDashboard.style.display = "block";
-
-}
-
-
-/* ======================================================
-   LOGOUT
-====================================================== */
-
-document.getElementById("adminLogout").addEventListener("click", function () {
-
-    localStorage.removeItem("collectiveAdminLoggedIn");
-
-    adminDashboard.style.display = "none";
-    adminLogin.style.display = "flex";
-
-    adminPassword.value = "";
-
-});
-
-
-/* ======================================================
-   NAVIGATION
-====================================================== */
-
-document.querySelectorAll(".admin-nav-button").forEach(function(button) {
-
-    button.addEventListener("click", function() {
-
-        document.querySelectorAll(".admin-nav-button")
-            .forEach(function(btn) {
-                btn.classList.remove("active");
-            });
-
-        document.querySelectorAll(".admin-section")
-            .forEach(function(section) {
-                section.classList.remove("active");
-            });
-
-        button.classList.add("active");
-
-        const sectionName = button.dataset.section;
-
-        document
-            .getElementById(sectionName)
-            .classList.add("active");
-
-        loadDashboard();
-
-    });
-
-});
-
-
-/* ======================================================
-   GET ORDER
-====================================================== */
-
-function getPendingOrder() {
-
-    return JSON.parse(
-        localStorage.getItem("collectivePendingOrder") || "null"
-    );
-
-}
-
-
-/* ======================================================
-   GET USER
-====================================================== */
-
-function getCustomer() {
-
-    return JSON.parse(
-        localStorage.getItem("collectiveUser") || "null"
-    );
-
-}
-
-
-/* ======================================================
-   MONEY
-====================================================== */
-
-function money(amount) {
-
-    return "₦" + Number(amount || 0).toLocaleString();
-
-}
-
-
-/* ======================================================
-   ORDER HTML
-====================================================== */
-
-function createOrderHTML(order) {
-
-    if (!order) {
-
-        return `
-            <div class="admin-empty">
-                No orders yet.
-            </div>
-        `;
+        localStorage.setItem(
+            "collectiveOrders",
+            JSON.stringify(orders)
+        );
 
     }
 
-    const customer = order.customer || {};
 
-    const items = order.items || [];
+    /* =========================
+       FORMAT MONEY
+    ========================= */
 
-    let itemsHTML = "";
+    function money(amount) {
 
-    items.forEach(function(item) {
+        return "₦" +
+            Number(
+                amount || 0
+            ).toLocaleString();
 
-        itemsHTML += `
-            <div>
-                <strong>${item.name}</strong>
-                × ${item.quantity}
-                ${item.color ? ` — ${item.color}` : ""}
-                <br>
-                ${money(item.price * item.quantity)}
-            </div>
-        `;
-
-    });
+    }
 
 
-    return `
+    /* =========================
+       FORMAT DATE
+    ========================= */
 
-        <div class="order-card">
+    function formatDate(date) {
+
+        if (!date) return "Unknown date";
+
+        const d =
+            new Date(date);
+
+        if (
+            Number.isNaN(
+                d.getTime()
+            )
+        ) {
+
+            return "Unknown date";
+
+        }
+
+        return d.toLocaleString();
+
+    }
+
+
+    /* =========================
+       STATUS
+    ========================= */
+
+    function statusLabel(status) {
+
+        if (
+            status ===
+            "payment-checking"
+        ) {
+
+            return "PAYMENT CHECKING";
+
+        }
+
+        if (
+            status ===
+            "approved"
+        ) {
+
+            return "APPROVED";
+
+        }
+
+        if (
+            status ===
+            "rejected"
+        ) {
+
+            return "REJECTED";
+
+        }
+
+        if (
+            status ===
+            "delivered"
+        ) {
+
+            return "DELIVERED";
+
+        }
+
+        return String(
+            status || "UNKNOWN"
+        ).toUpperCase();
+
+    }
+
+
+    function statusClass(status) {
+
+        if (
+            status ===
+            "payment-checking"
+        ) {
+
+            return "status-checking";
+
+        }
+
+        if (
+            status ===
+            "approved"
+        ) {
+
+            return "status-approved";
+
+        }
+
+        if (
+            status ===
+            "rejected"
+        ) {
+
+            return "status-rejected";
+
+        }
+
+        if (
+            status ===
+            "delivered"
+        ) {
+
+            return "status-delivered";
+
+        }
+
+        return "status-checking";
+
+    }
+
+
+    /* =========================
+       UPDATE STATISTICS
+    ========================= */
+
+    function updateStats(orders) {
+
+        const total =
+            orders.length;
+
+
+        const checking =
+            orders.filter(
+                order =>
+                    order.status ===
+                    "payment-checking"
+            ).length;
+
+
+        const approved =
+            orders.filter(
+                order =>
+                    order.status ===
+                        "approved" ||
+                    order.status ===
+                        "delivered"
+            ).length;
+
+
+        const sales =
+            orders
+                .filter(
+                    order =>
+                        order.status ===
+                            "approved" ||
+                        order.status ===
+                            "delivered"
+                )
+                .reduce(
+                    (
+                        total,
+                        order
+                    ) =>
+                        total +
+                        Number(
+                            order.total || 0
+                        ),
+                    0
+                );
+
+
+        document.getElementById(
+            "totalOrders"
+        ).textContent =
+            total;
+
+
+        document.getElementById(
+            "checkingOrders"
+        ).textContent =
+            checking;
+
+
+        document.getElementById(
+            "approvedOrders"
+        ).textContent =
+            approved;
+
+
+        document.getElementById(
+            "totalSales"
+        ).textContent =
+            money(sales);
+
+    }
+
+
+    /* =========================
+       RENDER ORDER
+    ========================= */
+
+    function renderOrder(order) {
+
+        const customer =
+            order.customer || {};
+
+
+        const items =
+            Array.isArray(
+                order.items
+            )
+                ? order.items
+                : [];
+
+
+        const paidItems =
+            items.filter(
+                item =>
+                    !item.isFreeGift
+            );
+
+
+        const freeGifts =
+            items.filter(
+                item =>
+                    item.isFreeGift
+            );
+
+
+        const orderCard =
+            document.createElement(
+                "article"
+            );
+
+
+        orderCard.className =
+            "order-card";
+
+
+        orderCard.innerHTML = `
 
             <div class="order-top">
 
-                <div class="order-id">
-                    ${order.id}
+                <div>
+
+                    <div class="order-id">
+
+                        ${order.id || "ORDER"}
+
+                    </div>
+
+                    <div class="order-date">
+
+                        ${formatDate(order.createdAt)}
+
+                    </div>
+
                 </div>
 
-                <div class="order-status">
-                    ${(order.status || "unknown").toUpperCase()}
+
+                <div
+                    class="status ${statusClass(order.status)}"
+                >
+
+                    ${statusLabel(order.status)}
+
                 </div>
 
             </div>
 
 
-            <div class="order-info">
+            <div class="customer-section">
 
-                <strong>Customer</strong><br>
+                <h3>
+                    CUSTOMER
+                </h3>
 
-                ${customer.firstName || ""}
-                ${customer.lastName || ""}<br>
+                <p>
+                    <strong>Name:</strong>
+                    ${customer.firstName || ""}
+                    ${customer.lastName || ""}
+                </p>
 
-                ${customer.phone || "No phone"}<br>
+                <p>
+                    <strong>Phone:</strong>
+                    ${customer.phone || "Not provided"}
+                </p>
 
-                ${customer.address || "No address"}
+                <p>
+                    <strong>Address:</strong>
+                    ${customer.address || "Not provided"}
+                </p>
+
+            </div>
+
+
+            <div class="products-section">
+
+                <h3>
+                    PRODUCTS
+                </h3>
+
+
+                ${
+                    paidItems.length
+                        ? paidItems.map(
+                            item => `
+
+                                <div class="order-product">
+
+                                    <div class="product-info">
+
+                                        <strong>
+                                            ${item.name || "Product"}
+                                        </strong>
+
+                                        <small>
+
+                                            Quantity:
+                                            ${item.quantity || 1}
+
+                                            ${
+                                                item.color
+                                                    ? ` • Shade: ${item.color}`
+                                                    : ""
+                                            }
+
+                                        </small>
+
+                                    </div>
+
+
+                                    <div class="product-price">
+
+                                        ${money(
+                                            Number(item.price || 0) *
+                                            Number(item.quantity || 1)
+                                        )}
+
+                                    </div>
+
+                                </div>
+
+                            `
+                        ).join("")
+                        : `
+                            <p>
+                                No paid products.
+                            </p>
+                          `
+                }
 
             </div>
 
 
-            <div class="order-items">
+            ${
+                freeGifts.length
+                    ? `
 
-                <strong>Items</strong>
+                        <div class="free-gifts-box">
 
-                <br><br>
+                            <h3>
+                                🎁 FREE GIFTS
+                            </h3>
 
-                ${itemsHTML}
+                            ${freeGifts.map(
+                                gift => `
 
-            </div>
+                                    <div class="gift-item">
 
+                                        ${gift.name || "Gift"}
+                                        — ₦0
 
-            <div class="order-info">
+                                    </div>
 
-                <br>
+                                `
+                            ).join("")}
 
-                Original total:
-                ${money(order.originalTotal)}
+                        </div>
 
-                <br>
-
-                Points used:
-                ${order.pointsUsed || 0}
-
-            </div>
+                      `
+                    : ""
+            }
 
 
             <div class="order-total">
 
-                ${money(order.total)}
+                <div class="total-row">
+
+                    <span>
+                        Shopping total
+                    </span>
+
+                    <strong>
+                        ${money(
+                            order.originalTotal
+                        )}
+                    </strong>
+
+                </div>
+
+
+                <div class="total-row">
+
+                    <span>
+                        Points used
+                    </span>
+
+                    <strong>
+                        ${order.pointsUsed || 0}
+                    </strong>
+
+                </div>
+
+
+                <div class="total-row grand-total">
+
+                    <span>
+                        CUSTOMER TOTAL
+                    </span>
+
+                    <strong>
+                        ${money(order.total)}
+                    </strong>
+
+                </div>
 
             </div>
 
 
-            <div class="admin-actions">
+            <div class="order-actions">
 
-                <button
-                    class="admin-action"
-                    onclick="approvePayment()"
-                >
-                    ✓ APPROVE PAYMENT
-                </button>
+                ${
+                    order.status ===
+                    "payment-checking"
+                        ? `
 
-                <button
-                    class="admin-action danger"
-                    onclick="rejectPayment()"
-                >
-                    REJECT
-                </button>
+                            <button
+                                class="approve-button"
+                                data-action="approve"
+                                data-id="${order.id}"
+                            >
+                                ✓ APPROVE PAYMENT
+                            </button>
+
+                            <button
+                                class="reject-button"
+                                data-action="reject"
+                                data-id="${order.id}"
+                            >
+                                ✕ REJECT PAYMENT
+                            </button>
+
+                          `
+                        : ""
+                }
+
+
+                ${
+                    order.status ===
+                    "approved"
+                        ? `
+
+                            <button
+                                class="delivery-button"
+                                data-action="delivered"
+                                data-id="${order.id}"
+                            >
+                                📦 MARK DELIVERED
+                            </button>
+
+                          `
+                        : ""
+                }
 
             </div>
 
-        </div>
-
-    `;
-
-}
-
-
-/* ======================================================
-   LOAD DASHBOARD
-====================================================== */
-
-function loadDashboard() {
-
-    const order = getPendingOrder();
-    const customer = getCustomer();
-
-    let orderCount = order ? 1 : 0;
-
-    let pendingCount = 0;
-
-    if (
-        order &&
-        order.status === "payment-checking"
-    ) {
-        pendingCount = 1;
-    }
-
-
-    document.getElementById("statOrders")
-        .textContent = orderCount;
-
-
-    document.getElementById("statPending")
-        .textContent = pendingCount;
-
-
-    document.getElementById("statCustomers")
-        .textContent = customer ? 1 : 0;
-
-
-    document.getElementById("statRevenue")
-        .textContent = money(
-            order ? order.total : 0
-        );
-
-
-    /* LATEST ORDER */
-
-    document.getElementById("latestOrder")
-        .innerHTML = createOrderHTML(order);
-
-
-    /* ORDERS */
-
-    document.getElementById("ordersContainer")
-        .innerHTML = createOrderHTML(order);
-
-
-    /* CUSTOMER */
-
-    loadCustomer(customer);
-
-
-    /* PRODUCTS */
-
-    loadProducts();
-
-
-    /* REWARDS */
-
-    loadRewards();
-
-
-    /* PAYMENT */
-
-    document.getElementById("pendingPayment")
-        .innerHTML = createOrderHTML(
-            order &&
-            order.status === "payment-checking"
-                ? order
-                : null
-        );
-
-}
-
-
-/* ======================================================
-   CUSTOMER
-====================================================== */
-
-function loadCustomer(customer) {
-
-    const table =
-        document.getElementById("customersTable");
-
-
-    if (!customer) {
-
-        table.innerHTML = `
-            <tr>
-                <td colspan="4">
-                    No customers yet.
-                </td>
-            </tr>
         `;
 
-        return;
+
+        return orderCard;
 
     }
 
 
-    const points =
-        Number(
-            localStorage.getItem("collectivePoints") || "0"
+    /* =========================
+       RENDER ALL ORDERS
+    ========================= */
+
+    function renderOrders() {
+
+        const container =
+            document.getElementById(
+                "ordersContainer"
+            );
+
+
+        const orders =
+            getOrders();
+
+
+        updateStats(
+            orders
         );
 
 
-    const spent =
-        Number(
-            localStorage.getItem("collectiveTotalSpent") || "0"
+        let filtered =
+            orders;
+
+
+        if (
+            currentFilter !==
+            "all"
+        ) {
+
+            filtered =
+                orders.filter(
+                    order =>
+                        order.status ===
+                        currentFilter
+                );
+
+        }
+
+
+        container.innerHTML =
+            "";
+
+
+        if (
+            filtered.length ===
+            0
+        ) {
+
+            container.innerHTML = `
+
+                <div class="empty-orders">
+
+                    <div class="empty-orders-icon">
+                        📦
+                    </div>
+
+                    <h2>
+                        No orders here
+                    </h2>
+
+                    <p>
+                        Orders will appear here
+                        when customers place them.
+                    </p>
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+        /*
+         * Newest orders first.
+         */
+
+        filtered
+            .slice()
+            .reverse()
+            .forEach(
+                order => {
+
+                    container.appendChild(
+                        renderOrder(order)
+                    );
+
+                }
+            );
+
+    }
+
+
+    /* =========================
+       APPROVE / REJECT / DELIVER
+    ========================= */
+
+    document.addEventListener(
+        "click",
+        function(event) {
+
+            const button =
+                event.target.closest(
+                    "button[data-action]"
+                );
+
+
+            if (!button) return;
+
+
+            const action =
+                button.dataset.action;
+
+
+            const id =
+                button.dataset.id;
+
+
+            const orders =
+                getOrders();
+
+
+            const order =
+                orders.find(
+                    item =>
+                        item.id === id
+                );
+
+
+            if (!order) {
+
+                alert(
+                    "Order could not be found."
+                );
+
+                return;
+
+            }
+
+
+            /* APPROVE */
+
+            if (
+                action ===
+                "approve"
+            ) {
+
+                const confirmApproval =
+                    confirm(
+                        "Approve this payment?"
+                    );
+
+
+                if (
+                    !confirmApproval
+                ) {
+
+                    return;
+
+                }
+
+
+                order.status =
+                    "approved";
+
+
+                /*
+                 * Add the qualifying paid
+                 * shopping amount to total spent.
+                 */
+
+                const oldSpent =
+                    Number(
+                        localStorage.getItem(
+                            "collectiveTotalSpent"
+                        ) || "0"
+                    );
+
+
+                const qualifyingSpend =
+                    Number(
+                        order.qualifyingSpend ||
+                        order.originalTotal ||
+                        0
+                    );
+
+
+                localStorage.setItem(
+                    "collectiveTotalSpent",
+                    String(
+                        oldSpent +
+                        qualifyingSpend
+                    )
+                );
+
+
+                /*
+                 * Award points based on
+                 * the paid shopping amount.
+                 */
+
+                const oldPoints =
+                    Number(
+                        localStorage.getItem(
+                            "collectivePoints"
+                        ) || "0"
+                    );
+
+
+                const earnedPoints =
+                    Math.floor(
+                        qualifyingSpend /
+                        1000
+                    );
+
+
+                localStorage.setItem(
+                    "collectivePoints",
+                    String(
+                        oldPoints +
+                        earnedPoints
+                    )
+                );
+
+
+                saveOrders(
+                    orders
+                );
+
+
+                /*
+                 * Clear customer's current
+                 * cart on this browser.
+                 */
+
+                localStorage.removeItem(
+                    "collectiveCart"
+                );
+
+
+                /*
+                 * Clear selected gifts after
+                 * the order has been approved.
+                 */
+
+                localStorage.removeItem(
+                    "collectiveSelectedFreeGifts"
+                );
+
+
+                localStorage.removeItem(
+                    "collectiveGiftCheckoutStarted"
+                );
+
+
+                localStorage.setItem(
+                    "collectiveOrderStatus",
+                    "approved"
+                );
+
+
+                alert(
+                    "Payment approved successfully."
+                );
+
+
+                renderOrders();
+
+                return;
+
+            }
+
+
+            /* REJECT */
+
+            if (
+                action ===
+                "reject"
+            ) {
+
+                const confirmReject =
+                    confirm(
+                        "Reject this payment?"
+                    );
+
+
+                if (
+                    !confirmReject
+                ) {
+
+                    return;
+
+                }
+
+
+                order.status =
+                    "rejected";
+
+
+                saveOrders(
+                    orders
+                );
+
+
+                localStorage.setItem(
+                    "collectiveOrderStatus",
+                    "rejected"
+                );
+
+
+                alert(
+                    "Payment rejected."
+                );
+
+
+                renderOrders();
+
+                return;
+
+            }
+
+
+            /* DELIVERED */
+
+            if (
+                action ===
+                "delivered"
+            ) {
+
+                const confirmDelivered =
+                    confirm(
+                        "Mark this order as delivered?"
+                    );
+
+
+                if (
+                    !confirmDelivered
+                ) {
+
+                    return;
+
+                }
+
+
+                order.status =
+                    "delivered";
+
+
+                saveOrders(
+                    orders
+                );
+
+
+                renderOrders();
+
+            }
+
+        }
+    );
+
+
+    /* =========================
+       FILTER BUTTONS
+    ========================= */
+
+    document
+        .querySelectorAll(
+            ".filter-button"
+        )
+        .forEach(
+            button => {
+
+                button.addEventListener(
+                    "click",
+                    function() {
+
+                        document
+                            .querySelectorAll(
+                                ".filter-button"
+                            )
+                            .forEach(
+                                btn =>
+                                    btn.classList
+                                        .remove(
+                                            "active"
+                                        )
+                            );
+
+
+                        button.classList.add(
+                            "active"
+                        );
+
+
+                        currentFilter =
+                            button.dataset.filter;
+
+
+                        renderOrders();
+
+                    }
+                );
+
+            }
         );
 
 
-    table.innerHTML = `
+    /* =========================
+       START
+    ========================= */
 
-        <tr>
-
-            <td>
-                ${customer.name || "Unknown"}
-            </td>
-
-            <td>
-                ${customer.email || "No email"}
-            </td>
-
-            <td>
-                ${points}
-            </td>
-
-            <td>
-                ${money(spent)}
-            </td>
-
-        </tr>
-
-    `;
-
-}
-
-
-/* ======================================================
-   PRODUCTS
-====================================================== */
-
-function loadProducts() {
-
-    const table =
-        document.getElementById("productsTable");
+    renderOrders();
 
 
     /*
-       These are the same catalogue products used by
-       your current script.js.
-    */
+     * Refresh automatically so the
+     * dashboard notices new orders.
+     */
 
-    const products = [
-
-        ["Men's Perfume", "Skincare", "₦12,000 – ₦20,000", 10],
-        ["Body Butter", "Skincare", "₦5,000 – ₦9,500", 10],
-        ["Sunscreen", "Skincare", "₦4,000 – ₦9,000", 10],
-        ["Face Cleanser", "Skincare", "₦7,500 – ₦10,000", 10],
-        ["Body Scrub", "Skincare", "₦4,000 – ₦8,000", 10],
-        ["Face Serum", "Skincare", "₦1,500 – ₦4,500", 10],
-        ["Lip Mask", "Skincare", "₦1,000 – ₦3,000", 10],
-        ["Rhode Lip Gloss", "Skincare", "₦10,000 – ₦15,000", 10],
-        ["SHEGLAM Lip Gloss", "Skincare", "₦10,000 – ₦15,000", 10],
-        ["USHAS Lip Gloss", "Skincare", "₦10,000 – ₦15,000", 10],
-        ["Clear Normal Lip Gloss", "Skincare", "₦1,000 – ₦2,000", 10],
-        ["Lip Balm", "Skincare", "₦1,000 – ₦2,000", 10],
-        ["Shower Gel", "Skincare", "₦12,000", 10],
-        ["Men's Fragrance Perfume", "Skincare", "₦9,000 – ₦10,000", 10],
-        ["Women's Fragrance Perfume", "Skincare", "₦9,000 – ₦10,000", 10],
-        ["Body Lotion", "Skincare", "₦8,000 – ₦12,000", 10],
-        ["Face Moisturizer", "Skincare", "₦3,000 – ₦7,000", 10],
-        ["Face Toner", "Skincare", "₦6,500 – ₦10,000", 10],
-        ["Body Oil", "Skincare", "₦6,000 – ₦10,000", 10],
-        ["Face Mask", "Skincare", "₦1,000 – ₦4,500", 10],
-        ["Lip Oil", "Skincare", "₦1,000 – ₦2,000", 10],
-        ["Pimple Patch", "Skincare", "₦500 – ₦1,800", 10],
-
-        ["Bead Bracelet Set", "Accessories", "₦3,000 – ₦6,000", 10],
-        ["Masculine Chain Bracelet", "Accessories", "₦1,000 – ₦3,500", 10],
-        ["Chrome Heart Glasses", "Accessories", "₦15,000 – ₦20,000", 10],
-        ["Glasses", "Accessories", "₦2,000 – ₦5,000", 10],
-        ["Glasses Set of 3", "Accessories", "₦4,000 – ₦5,000", 10],
-        ["Glasses Set of 5", "Accessories", "₦5,000 – ₦10,000", 10],
-        ["Scrunchies", "Accessories", "₦1,200", 10],
-        ["Stanley Cup", "Accessories", "₦15,000", 10],
-        ["Body Floral Stanley Cup", "Accessories", "₦20,000", 10],
-        ["Headband", "Accessories", "₦1,600", 10],
-        ["Tote Bag", "Accessories", "₦10,000 – ₦20,000", 10],
-        ["Claw Clip", "Accessories", "₦2,000 – ₦2,500", 10],
-        ["Anklet", "Accessories", "₦1,000 – ₦2,000", 10],
-        ["Necklace", "Accessories", "₦1,000 – ₦3,500", 10],
-        ["Silver Bracelet", "Accessories", "₦3,500", 10],
-        ["Gold Bracelet", "Accessories", "₦3,500", 10],
-        ["Vacuum Cups", "Accessories", "₦10,000 – ₦20,000", 10],
-
-        ["Plain Tops", "Clothing", "₦6,500 – ₦8,000", 10],
-        ["Graphic Tops", "Clothing", "₦8,000 – ₦10,000", 10],
-        ["Tube Tops", "Clothing", "₦5,000 – ₦15,000", 10],
-        ["Jersey Tops", "Clothing", "₦8,500", 10],
-        ["Hoodies", "Clothing", "₦9,500 – ₦10,000", 10],
-        ["Zip-Up Hoodies", "Clothing", "₦9,000 – ₦15,000", 10],
-        ["Plain Sweatpants", "Clothing", "₦10,000", 10],
-        ["Leopard Sweatpants", "Clothing", "₦15,000", 10],
-        ["Designer Sweatpants", "Clothing", "₦20,000", 10],
-        ["Shorts", "Clothing", "₦10,000", 10],
-        ["Jean Bum Shorts", "Clothing", "₦5,000", 10],
-        ["Jeans", "Clothing", "₦10,000", 10],
-        ["Designed Jeans", "Clothing", "₦20,000", 10],
-        ["Bootcut Jeans", "Clothing", "₦10,000", 10],
-        ["Jeans Skirt", "Clothing", "₦6,500", 10],
-        ["Pleated Jeans Skirt", "Clothing", "₦6,000", 10],
-        ["Normal Shorts", "Clothing", "₦4,000", 10],
-
-        ["Shoes", "Shoes", "₦15,000 – ₦30,000", 10],
-        ["Adidas Sambas", "Shoes", "₦30,000 – ₦50,000", 10],
-        ["Adidas Campus", "Shoes", "₦30,000 – ₦50,000", 10],
-        ["Slides", "Shoes", "₦9,000", 10],
-        ["Crocs", "Shoes", "₦10,000", 10],
-        ["Loafers", "Shoes", "₦15,000 – ₦30,000", 10],
-        ["Clogs", "Shoes", "₦35,000 – ₦70,000", 10],
-        ["Timberland", "Shoes", "₦5,000 – ₦40,000", 10],
-        ["Vans", "Shoes", "₦5,000 – ₦40,000", 10],
-        ["Puma", "Shoes", "₦25,000 – ₦50,000", 10],
-
-        ["Hermes Bags", "Bags", "₦35,000 – ₦50,000", 10],
-        ["Mini Gucci Bags", "Bags", "₦20,000 – ₦50,000", 10],
-        ["Gucci Bags", "Bags", "₦35,000 – ₦60,000", 10],
-        ["Prada Bags", "Bags", "₦35,000 – ₦60,000", 10],
-        ["Dior Bags", "Bags", "₦35,000 – ₦70,000", 10],
-        ["Chanel Bags", "Bags", "₦45,000 – ₦70,000", 10],
-        ["Louis Vuitton Bags", "Bags", "₦25,000 – ₦70,000", 10],
-        ["Cartier Watches", "Bags", "₦20,000 – ₦35,000", 10],
-        ["Cartier Glasses", "Bags", "₦15,000 – ₦25,000", 10]
-
-    ];
-
-
-    table.innerHTML = "";
-
-    products.forEach(function(product) {
-
-        table.innerHTML += `
-
-            <tr>
-
-                <td>
-                    ${product[0]}
-                </td>
-
-                <td>
-                    ${product[1]}
-                </td>
-
-                <td>
-                    ${product[2]}
-                </td>
-
-                <td>
-                    ${product[3]}
-                </td>
-
-            </tr>
-
-        `;
-
-    });
-
-}
-
-
-/* ======================================================
-   REWARDS
-====================================================== */
-
-function loadRewards() {
-
-    const points =
-        Number(
-            localStorage.getItem("collectivePoints") || "0"
-        );
-
-
-    const spent =
-        Number(
-            localStorage.getItem("collectiveTotalSpent") || "0"
-        );
-
-
-    document.getElementById("rewardPoints")
-        .textContent = points;
-
-
-    document.getElementById("rewardSpent")
-        .textContent = money(spent);
-
-
-    document.getElementById("rewardGift1")
-        .textContent =
-        spent >= 50000
-            ? "UNLOCKED"
-            : "LOCKED";
-
-
-    document.getElementById("rewardGift2")
-        .textContent =
-        spent >= 100000
-            ? "UNLOCKED"
-            : "LOCKED";
-
-}
-
-
-/* ======================================================
-   APPROVE PAYMENT
-====================================================== */
-
-function approvePayment() {
-
-    const order = getPendingOrder();
-
-    if (!order) {
-
-        alert("There is no pending order.");
-
-        return;
-
-    }
-
-
-    /*
-       Payment approval means the transfer has been
-       checked by the store owner.
-    */
-
-    order.status = "paid";
-
-    localStorage.setItem(
-        "collectivePendingOrder",
-        JSON.stringify(order)
+    setInterval(
+        renderOrders,
+        2000
     );
-
-    localStorage.setItem(
-        "collectiveOrderStatus",
-        "paid"
-    );
-
-
-    /* UPDATE TOTAL SPENT */
-
-    const oldSpent =
-        Number(
-            localStorage.getItem("collectiveTotalSpent") || "0"
-        );
-
-
-    const newSpent =
-        oldSpent + Number(order.total || 0);
-
-
-    localStorage.setItem(
-        "collectiveTotalSpent",
-        String(newSpent)
-    );
-
-
-    /* EARN POINTS */
-
-    const earned =
-        Math.floor(
-            Number(order.total || 0) / 1000
-        );
-
-
-    const oldPoints =
-        Number(
-            localStorage.getItem("collectivePoints") || "0"
-        );
-
-
-    /*
-       The points used during checkout have already
-       been deducted when the customer clicked PAID.
-       These are the new points earned from the purchase.
-    */
-
-    localStorage.setItem(
-        "collectivePoints",
-        String(oldPoints + earned)
-    );
-
-
-    /* UPDATE GIFTS */
-
-    if (newSpent >= 50000) {
-
-        localStorage.setItem(
-            "collectiveGift1",
-            "true"
-        );
-
-    }
-
-
-    if (newSpent >= 100000) {
-
-        localStorage.setItem(
-            "collectiveGift2",
-            "true"
-        );
-
-    }
-
-
-    alert("Payment approved successfully.");
-
-    loadDashboard();
-
-}
-
-
-/* ======================================================
-   REJECT PAYMENT
-====================================================== */
-
-function rejectPayment() {
-
-    const order = getPendingOrder();
-
-    if (!order) {
-
-        alert("There is no pending order.");
-
-        return;
-
-    }
-
-
-    const confirmed =
-        confirm(
-            "Reject this payment/order?"
-        );
-
-
-    if (!confirmed) return;
-
-
-    order.status = "payment-rejected";
-
-
-    localStorage.setItem(
-        "collectivePendingOrder",
-        JSON.stringify(order)
-    );
-
-
-    localStorage.setItem(
-        "collectiveOrderStatus",
-        "payment-rejected"
-    );
-
-
-    alert("Payment marked as rejected.");
-
-    loadDashboard();
-
-}
-
-
-/* ======================================================
-   INITIAL LOAD
-====================================================== */
-
-if (
-    localStorage.getItem(
-        "collectiveAdminLoggedIn"
-    ) === "true"
-) {
-
-    loadDashboard();
-
-}
 
 </script>
 
 </body>
+
 </html>
+```
