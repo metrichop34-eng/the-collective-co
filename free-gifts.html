@@ -11,7 +11,7 @@
         .free-gift-page {
             width: min(1150px, 92%);
             margin: 0 auto;
-            padding-bottom: 100px;
+            padding-bottom: 70px;
         }
 
         .free-gift-header {
@@ -28,11 +28,14 @@
 
         .free-gift-header p {
             color: #71858A;
+            margin: 8px 0;
         }
 
-        /* SELECTION BAR */
+        /* =========================
+           GIFT SELECTION BAR
+        ========================= */
 
-        .gift-progress-box {
+        .gift-selection-box {
             width: min(700px, 100%);
             margin: 0 auto 35px;
             padding: 20px;
@@ -43,7 +46,7 @@
             box-sizing: border-box;
         }
 
-        .gift-progress-top {
+        .gift-selection-top {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -52,7 +55,7 @@
             margin-bottom: 12px;
         }
 
-        .gift-progress-track {
+        .gift-selection-track {
             width: 100%;
             height: 13px;
             background: #E8F1F2;
@@ -60,25 +63,27 @@
             overflow: hidden;
         }
 
-        .gift-progress-fill {
-            height: 100%;
+        .gift-selection-fill {
             width: 0%;
+            height: 100%;
             background: #304B52;
             border-radius: 20px;
             transition: width 0.3s ease;
         }
 
-        .gift-progress-message {
+        .gift-selection-message {
             margin-top: 10px;
             color: #71858A;
             font-size: 13px;
         }
 
-        /* PRODUCTS */
+        /* =========================
+           GIFT PRODUCTS
+        ========================= */
 
         .free-gift-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: 22px;
         }
 
@@ -109,8 +114,9 @@
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            color: #8DA0A4;
             margin-bottom: 15px;
+            color: #8DA0A4;
+            font-size: 13px;
         }
 
         .free-gift-image img {
@@ -130,12 +136,12 @@
             margin: 7px 0;
         }
 
-        .old-price {
+        .gift-original-price {
             color: #9AA7AA !important;
             text-decoration: line-through;
         }
 
-        .free-price {
+        .gift-free-price {
             color: #304B52 !important;
             font-size: 20px !important;
             font-weight: bold;
@@ -143,8 +149,8 @@
 
         .gift-select-button {
             width: 100%;
-            padding: 13px;
             border: none;
+            padding: 13px;
             border-radius: 13px;
             background: #A8C9CE;
             color: #203C43;
@@ -159,63 +165,12 @@
 
         .gift-select-button.selected {
             background: #304B52;
-            color: white;
+            color: #FFFFFF;
         }
 
-        /* BOTTOM PURCHASE BAR */
-
-        .purchase-progress {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: #FFFDF8;
-            border-top: 1px solid #DCEFF2;
-            padding: 15px 20px;
-            box-sizing: border-box;
-            z-index: 5000;
-            box-shadow: 0 -8px 25px rgba(48, 75, 82, 0.08);
-        }
-
-        .purchase-progress-inner {
-            width: min(800px, 100%);
-            margin: auto;
-        }
-
-        .purchase-text {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: #304B52;
-            font-size: 14px;
-            font-weight: bold;
-            margin-bottom: 8px;
-        }
-
-        .purchase-track {
-            width: 100%;
-            height: 10px;
-            background: #E8F1F2;
-            border-radius: 20px;
-            overflow: hidden;
-        }
-
-        .purchase-fill {
-            height: 100%;
-            width: 0%;
-            background: #304B52;
-            border-radius: 20px;
-            transition: width 0.3s ease;
-        }
-
-        .purchase-note {
-            text-align: center;
-            margin-top: 7px;
-            color: #71858A;
-            font-size: 12px;
-        }
-
-        /* LOCKED */
+        /* =========================
+           MESSAGE
+        ========================= */
 
         .gift-message {
             grid-column: 1 / -1;
@@ -243,55 +198,9 @@
             font-weight: bold;
         }
 
-        /* POPUP */
-
-        .gift-popup {
-            position: fixed;
-            inset: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(48, 75, 82, 0.35);
-            z-index: 10000;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-
-        .gift-popup-box {
-            width: min(450px, 100%);
-            background: #FFFDF8;
-            border-radius: 25px;
-            padding: 35px 25px;
-            text-align: center;
-            box-shadow: 0 20px 60px rgba(48, 75, 82, 0.2);
-            animation: giftPopupIn 0.3s ease;
-        }
-
-        @keyframes giftPopupIn {
-            from {
-                opacity: 0;
-                transform: scale(0.9);
-            }
-
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        .gift-popup-box h2 {
-            color: #304B52;
-            margin-bottom: 12px;
-        }
-
-        .gift-popup-box p {
-            color: #71858A;
-            font-size: 15px;
-        }
-
         @media (max-width: 850px) {
             .free-gift-grid {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: repeat(2, minmax(0, 1fr));
             }
         }
 
@@ -302,10 +211,6 @@
 
             .free-gift-header h1 {
                 font-size: 32px;
-            }
-
-            .purchase-text {
-                font-size: 12px;
             }
         }
     </style>
@@ -325,39 +230,63 @@
 <main class="free-gift-page">
 
     <section class="free-gift-header">
+
         <p>✦</p>
-        <h1 id="giftTitle">FREE GIFTS</h1>
-        <p id="giftDescription">
-            Pick your free gifts.
+
+        <h1>FREE GIFTS</h1>
+
+        <p>
+            Choose 5 products from the collection as your free gifts.
         </p>
+
     </section>
 
-    <div class="gift-progress-box">
 
-        <div class="gift-progress-top">
+    <!-- =========================
+         GIFT SELECTION BAR
+    ========================= -->
+
+    <div class="gift-selection-box">
+
+        <div class="gift-selection-top">
+
             <span>GIFTS PICKED</span>
-            <span id="giftCount">0 / 5</span>
+
+            <span id="giftCount">
+                0 / 5
+            </span>
+
         </div>
 
-        <div class="gift-progress-track">
+        <div class="gift-selection-track">
+
             <div
-                id="giftProgress"
-                class="gift-progress-fill">
+                id="giftSelectionFill"
+                class="gift-selection-fill">
             </div>
+
         </div>
 
         <div
-            id="giftProgressMessage"
-            class="gift-progress-message">
-            Pick your gifts below.
+            id="giftSelectionMessage"
+            class="gift-selection-message">
+
+            Pick 5 free gifts to continue.
+
         </div>
 
     </div>
+
+
+    <!-- =========================
+         PRODUCTS
+    ========================= -->
 
     <section
         id="freeGiftGrid"
         class="free-gift-grid">
     </section>
+
 
     <a href="profile.html" class="gift-back">
         ← BACK TO PROFILE
@@ -366,132 +295,64 @@
 </main>
 
 
-<!-- PURCHASE PROGRESS -->
-
-<div class="purchase-progress">
-
-    <div class="purchase-progress-inner">
-
-        <div class="purchase-text">
-
-            <span>
-                PURCHASE PROGRESS
-            </span>
-
-            <span id="purchaseAmount">
-                ₦0 / ₦50,000
-            </span>
-
-        </div>
-
-        <div class="purchase-track">
-
-            <div
-                id="purchaseProgress"
-                class="purchase-fill">
-            </div>
-
-        </div>
-
-        <div
-            id="purchaseNote"
-            class="purchase-note">
-
-            Select your gifts first.
-
-        </div>
-
-    </div>
-
-</div>
-
-
 <script src="script.js"></script>
 
 <script>
 
 document.addEventListener("DOMContentLoaded", function () {
 
-    const params =
-        new URLSearchParams(window.location.search);
-
-    const giftNumber =
-        params.get("gift") === "2" ? "2" : "1";
-
-
     /*
-     * GIFT RULES
+     * ==========================================
+     * FREE GIFT RULE
+     * ==========================================
+     *
+     * Gifts are ALREADY AVAILABLE.
+     *
+     * The customer chooses 5 products.
+     *
+     * Only products priced ₦10,000 or less
+     * are displayed.
+     *
+     * Every gift displays ₦0.
+     *
+     * After 5 are selected:
+     * → save the gifts
+     * → go to SHOP
+     *
+     * The ₦50,000 spending requirement happens
+     * AFTER returning to SHOP.
      */
 
-    const maxGifts = 5;
+    const MAX_GIFTS = 5;
 
-    const requiredAmount = 50000;
+    const MAX_GIFT_PRICE = 10000;
 
-    const maximumGiftPrice = 10000;
+    const STORAGE_KEY =
+        "collectiveSelectedFreeGifts";
 
 
     /*
      * ELEMENTS
      */
 
-    const title =
-        document.getElementById("giftTitle");
-
-    const description =
-        document.getElementById("giftDescription");
+    const grid =
+        document.getElementById("freeGiftGrid");
 
     const giftCount =
         document.getElementById("giftCount");
 
-    const giftProgress =
-        document.getElementById("giftProgress");
+    const giftSelectionFill =
+        document.getElementById("giftSelectionFill");
 
-    const giftProgressMessage =
-        document.getElementById("giftProgressMessage");
-
-    const grid =
-        document.getElementById("freeGiftGrid");
-
-    const purchaseAmount =
-        document.getElementById("purchaseAmount");
-
-    const purchaseProgress =
-        document.getElementById("purchaseProgress");
-
-    const purchaseNote =
-        document.getElementById("purchaseNote");
+    const giftSelectionMessage =
+        document.getElementById(
+            "giftSelectionMessage"
+        );
 
 
     /*
-     * TITLE
+     * LOAD PREVIOUS SELECTIONS
      */
-
-    if (giftNumber === "2") {
-
-        title.textContent = "FREE GIFTS 2";
-
-        description.textContent =
-            "Pick 5 free gifts from products priced at ₦10,000 or less.";
-
-    } else {
-
-        title.textContent = "FREE GIFTS";
-
-        description.textContent =
-            "Pick 5 free gifts from products priced at ₦10,000 or less.";
-
-    }
-
-
-    /*
-     * STORAGE
-     */
-
-    const selectionStorage =
-        giftNumber === "2"
-            ? "collectiveGift2Selections"
-            : "collectiveGift1Selections";
-
 
     let selectedGifts = [];
 
@@ -499,14 +360,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
         selectedGifts =
             JSON.parse(
-                localStorage.getItem(selectionStorage) || "[]"
+                localStorage.getItem(
+                    STORAGE_KEY
+                ) || "[]"
             );
 
         if (!Array.isArray(selectedGifts)) {
             selectedGifts = [];
         }
 
-    } catch {
+    } catch (error) {
 
         selectedGifts = [];
 
@@ -514,10 +377,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     /*
-     * USE GENERATED PRODUCTS
+     * GET PRODUCTS FROM SCRIPT.JS
      */
 
-    const availableProducts =
+    const allProducts =
         typeof products !== "undefined"
             ? products
             : [];
@@ -527,10 +390,11 @@ document.addEventListener("DOMContentLoaded", function () {
      * ONLY PRODUCTS ₦10,000 OR LESS
      */
 
-    const eligibleProducts =
-        availableProducts.filter(function (product) {
+    const giftProducts =
+        allProducts.filter(function (product) {
 
-            return Number(product.price) <= maximumGiftPrice;
+            return Number(product.price) <=
+                MAX_GIFT_PRICE;
 
         });
 
@@ -542,7 +406,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function saveSelections() {
 
         localStorage.setItem(
-            selectionStorage,
+            STORAGE_KEY,
             JSON.stringify(selectedGifts)
         );
 
@@ -550,41 +414,46 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     /*
-     * UPDATE SELECTION BAR
+     * UPDATE BAR
      */
 
-    function updateGiftProgress() {
+    function updateSelectionBar() {
 
         const amount =
             selectedGifts.length;
 
         giftCount.textContent =
-            `${amount} / ${maxGifts}`;
+            `${amount} / ${MAX_GIFTS}`;
+
 
         const percentage =
             Math.min(
-                (amount / maxGifts) * 100,
+                (amount / MAX_GIFTS) * 100,
                 100
             );
 
-        giftProgress.style.width =
+
+        giftSelectionFill.style.width =
             percentage + "%";
 
 
         if (amount === 0) {
 
-            giftProgressMessage.textContent =
-                "Pick 5 gifts to continue.";
+            giftSelectionMessage.textContent =
+                "Pick 5 free gifts to continue.";
 
-        } else if (amount < maxGifts) {
+        } else if (amount < MAX_GIFTS) {
 
-            giftProgressMessage.textContent =
-                `${maxGifts - amount} more gift${maxGifts - amount === 1 ? "" : "s"} to go.`;
+            const remaining =
+                MAX_GIFTS - amount;
+
+            giftSelectionMessage.textContent =
+                `${remaining} more gift${remaining === 1 ? "" : "s"} to go.`;
 
         } else {
 
-            giftProgressMessage.textContent =
-                "✓ 5 gifts picked! Taking you to Shop...";
+            giftSelectionMessage.textContent =
+                "✓ 5 gifts selected! Taking you to Shop...";
 
         }
 
@@ -592,60 +461,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     /*
-     * POPUP
-     */
-
-    function showSpendPopup() {
-
-        const popup =
-            document.createElement("div");
-
-        popup.className =
-            "gift-popup";
-
-        popup.innerHTML = `
-
-            <div class="gift-popup-box">
-
-                <h2>
-                    ✦ 5 FREE GIFTS SELECTED
-                </h2>
-
-                <p>
-                    Spend ₦50,000 to take away
-                    your 5 free gifts.
-                </p>
-
-            </div>
-
-        `;
-
-        document.body.appendChild(popup);
-
-
-        setTimeout(function () {
-
-            popup.remove();
-
-        }, 2500);
-
-    }
-
-
-    /*
-     * GO TO SHOP
+     * GO TO SHOP AFTER 5 GIFTS
      */
 
     function goToShop() {
-
-        showSpendPopup();
 
         setTimeout(function () {
 
             window.location.href =
                 "shop.html";
 
-        }, 2500);
+        }, 900);
 
     }
 
@@ -658,7 +484,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
         grid.innerHTML = "";
 
-        if (!eligibleProducts.length) {
+
+        if (giftProducts.length === 0) {
 
             grid.innerHTML = `
 
@@ -677,37 +504,55 @@ document.addEventListener("DOMContentLoaded", function () {
             `;
 
             return;
+
         }
 
 
-        eligibleProducts.forEach(function (product) {
+        giftProducts.forEach(function (product) {
 
-            const id =
+            const productId =
                 String(product.id);
 
-            const selected =
-                selectedGifts.includes(id);
+
+            const isSelected =
+                selectedGifts.includes(
+                    productId
+                );
 
 
             const card =
-                document.createElement("article");
+                document.createElement(
+                    "article"
+                );
+
 
             card.className =
                 "free-gift-card" +
-                (selected ? " selected" : "");
+                (
+                    isSelected
+                        ? " selected"
+                        : ""
+                );
 
 
-            const imageHTML =
-                product.image
+            /*
+             * PRODUCT IMAGE
+             */
 
-                    ? `<img
+            let imageHTML =
+                `<span>THE COLLECTIVE.CO</span>`;
+
+
+            if (product.image) {
+
+                imageHTML = `
+                    <img
                         src="${product.image}"
                         alt="${product.name}"
-                    >`
+                    >
+                `;
 
-                    : `<span>
-                        THE COLLECTIVE.CO
-                    </span>`;
+            }
 
 
             card.innerHTML = `
@@ -724,25 +569,29 @@ document.addEventListener("DOMContentLoaded", function () {
                     ${product.category}
                 </p>
 
-                <p class="old-price">
+                <p class="gift-original-price">
                     ₦${Number(product.price).toLocaleString()}
                 </p>
 
-                <p class="free-price">
+                <p class="gift-free-price">
                     ₦0
                 </p>
 
                 <button
                     type="button"
                     class="gift-select-button ${
-                        selected ? "selected" : ""
+                        isSelected
+                            ? "selected"
+                            : ""
                     }"
                 >
+
                     ${
-                        selected
+                        isSelected
                             ? "✓ SELECTED"
                             : "SELECT GIFT"
                     }
+
                 </button>
 
             `;
@@ -754,22 +603,28 @@ document.addEventListener("DOMContentLoaded", function () {
                 );
 
 
+            /*
+             * SELECT / UNSELECT
+             */
+
             button.addEventListener(
                 "click",
                 function () {
 
-                    const index =
-                        selectedGifts.indexOf(id);
+                    const existingIndex =
+                        selectedGifts.indexOf(
+                            productId
+                        );
 
 
                     /*
-                     * REMOVE SELECTION
+                     * UNSELECT
                      */
 
-                    if (index !== -1) {
+                    if (existingIndex !== -1) {
 
                         selectedGifts.splice(
-                            index,
+                            existingIndex,
                             1
                         );
 
@@ -777,48 +632,54 @@ document.addEventListener("DOMContentLoaded", function () {
 
                         renderProducts();
 
+                        updateSelectionBar();
+
                         return;
+
                     }
 
 
                     /*
-                     * MAXIMUM 5
+                     * MAX 5
                      */
 
                     if (
                         selectedGifts.length >=
-                        maxGifts
+                        MAX_GIFTS
                     ) {
 
                         alert(
-                            "You can only pick 5 free gifts."
+                            "You can only choose 5 free gifts."
                         );
 
                         return;
+
                     }
 
 
                     /*
-                     * ADD SELECTION
+                     * SELECT
                      */
 
-                    selectedGifts.push(id);
+                    selectedGifts.push(
+                        productId
+                    );
 
                     saveSelections();
 
                     renderProducts();
 
+                    updateSelectionBar();
+
 
                     /*
-                     * WHEN 5 ARE PICKED
+                     * FIVE SELECTED
                      */
 
                     if (
                         selectedGifts.length ===
-                        maxGifts
+                        MAX_GIFTS
                     ) {
-
-                        updateGiftProgress();
 
                         goToShop();
 
@@ -827,114 +688,21 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             );
 
+
             grid.appendChild(card);
 
         });
 
-
-        updateGiftProgress();
-
     }
 
 
     /*
-     * PURCHASE PROGRESS
-     *
-     * The progress is based on actual
-     * qualifying shop purchases.
+     * START
      */
-
-    function updatePurchaseProgress() {
-
-        const cart =
-            typeof getCartTotal === "function"
-                ? Number(getCartTotal())
-                : 0;
-
-
-        const amount =
-            Math.min(cart, requiredAmount);
-
-
-        const percentage =
-            Math.min(
-                (amount / requiredAmount) * 100,
-                100
-            );
-
-
-        purchaseAmount.textContent =
-            `₦${amount.toLocaleString()} / ₦${requiredAmount.toLocaleString()}`;
-
-
-        purchaseProgress.style.width =
-            percentage + "%";
-
-
-        if (selectedGifts.length < maxGifts) {
-
-            purchaseNote.textContent =
-                "Pick all 5 free gifts first.";
-
-            return;
-        }
-
-
-        const remaining =
-            Math.max(
-                requiredAmount - amount,
-                0
-            );
-
-
-        if (remaining > 0) {
-
-            purchaseNote.textContent =
-                `₦${remaining.toLocaleString()} more to go to take away your 5 gifts.`;
-
-        } else {
-
-            purchaseNote.textContent =
-                "✓ ₦50,000 reached! Proceeding to checkout...";
-
-            setTimeout(function () {
-
-                if (
-                    window.location.href.indexOf(
-                        "checkout"
-                    ) === -1
-                ) {
-
-                    if (
-                        typeof checkout === "function"
-                    ) {
-
-                        checkout();
-
-                    }
-
-                }
-
-            }, 800);
-
-        }
-
-    }
-
 
     renderProducts();
 
-    updatePurchaseProgress();
-
-
-    /*
-     * UPDATE WHEN CART CHANGES
-     */
-
-    setInterval(
-        updatePurchaseProgress,
-        500
-    );
+    updateSelectionBar();
 
 });
 
