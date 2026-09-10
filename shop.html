@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
@@ -8,722 +7,764 @@
     <title>Shop | THE COLLECTIVE.CO</title>
     <link rel="stylesheet" href="style.css">
 
-```
-<style>
-    /* ==============================
-       ₦50,000 GIFT SHOP BAR
-    ============================== */
+    <style>
+        /* ==============================
+           ₦50,000 GIFT SHOP BAR
+        ============================== */
 
-    #giftSpendBar {
-        display: none;
-        position: fixed;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        z-index: 9998;
-        background: #FFFDF8;
-        border-top: 1px solid #DCEFF2;
-        padding: 15px 20px 17px;
-        box-shadow: 0 -8px 30px rgba(48, 75, 82, 0.12);
-    }
-
-    .gift-spend-content {
-        width: min(850px, 100%);
-        margin: 0 auto;
-    }
-
-    .gift-spend-heading {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 15px;
-        color: #304B52;
-        font-size: 14px;
-        font-weight: bold;
-        margin-bottom: 9px;
-    }
-
-    .gift-spend-track {
-        width: 100%;
-        height: 12px;
-        background: #E8F1F2;
-        border-radius: 50px;
-        overflow: hidden;
-    }
-
-    .gift-spend-fill {
-        width: 0%;
-        height: 100%;
-        background: #304B52;
-        border-radius: 50px;
-        transition: width 0.3s ease;
-    }
-
-    .gift-spend-message {
-        text-align: center;
-        color: #71858A;
-        font-size: 12px;
-        margin-top: 8px;
-    }
-
-    body.gift-shopping-active {
-        padding-bottom: 95px;
-    }
-
-    /* ==============================
-       GIFT POPUP
-    ============================== */
-
-    #giftSpendPopup {
-        display: none;
-        position: fixed;
-        inset: 0;
-        z-index: 99999;
-        background: rgba(48, 75, 82, 0.45);
-        align-items: center;
-        justify-content: center;
-        padding: 20px;
-        box-sizing: border-box;
-    }
-
-    .gift-popup-box {
-        width: min(450px, 100%);
-        background: #FFFDF8;
-        border-radius: 23px;
-        padding: 32px 25px;
-        text-align: center;
-        box-shadow: 0 18px 50px rgba(0, 0, 0, 0.2);
-    }
-
-    .gift-popup-icon {
-        font-size: 45px;
-        margin-bottom: 10px;
-    }
-
-    .gift-popup-box h2 {
-        color: #304B52;
-        margin: 8px 0 12px;
-    }
-
-    .gift-popup-box p {
-        color: #71858A;
-        line-height: 1.6;
-    }
-
-    .gift-popup-box strong {
-        color: #304B52;
-    }
-
-    /* ==============================
-       CART
-    ============================== */
-
-    .cart-popup {
-        display: none;
-        position: fixed;
-        inset: 0;
-        z-index: 9997;
-        background: rgba(48, 75, 82, 0.45);
-        align-items: center;
-        justify-content: center;
-        padding: 20px;
-        box-sizing: border-box;
-    }
-
-    .cart-box {
-        position: relative;
-        width: min(520px, 100%);
-        max-height: 85vh;
-        overflow-y: auto;
-        background: #FFFDF8;
-        border-radius: 22px;
-        padding: 28px;
-        box-sizing: border-box;
-        box-shadow: 0 18px 50px rgba(0, 0, 0, 0.2);
-    }
-
-    .cart-box h2 {
-        color: #304B52;
-        margin-top: 0;
-    }
-
-    .close-cart {
-        position: absolute;
-        top: 12px;
-        right: 15px;
-        border: none;
-        background: none;
-        color: #304B52;
-        font-size: 30px;
-        cursor: pointer;
-    }
-
-    .cart-item {
-        display: flex;
-        justify-content: space-between;
-        gap: 15px;
-        padding: 15px 0;
-        border-bottom: 1px solid #E8F1F2;
-    }
-
-    .cart-item-info h3 {
-        margin: 0 0 5px;
-        color: #304B52;
-        font-size: 16px;
-    }
-
-    .cart-item-info small {
-        display: block;
-        color: #71858A;
-        margin-bottom: 5px;
-    }
-
-    .cart-item-info strong {
-        color: #304B52;
-    }
-
-    .cart-item-actions {
-        text-align: right;
-    }
-
-    .cart-quantity {
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-        gap: 8px;
-        margin-bottom: 7px;
-    }
-
-    .cart-quantity button {
-        width: 28px;
-        height: 28px;
-        border: 1px solid #C8D5D8;
-        background: #F7F4EE;
-        color: #304B52;
-        border-radius: 7px;
-        cursor: pointer;
-    }
-
-    .cart-item-total {
-        display: block;
-        color: #304B52;
-        margin-bottom: 5px;
-    }
-
-    .remove-cart-item {
-        border: none;
-        background: none;
-        color: #71858A;
-        text-decoration: underline;
-        cursor: pointer;
-        font-size: 12px;
-    }
-
-    .cart-total {
-        display: flex;
-        justify-content: space-between;
-        padding: 20px 0;
-        color: #304B52;
-        font-size: 18px;
-    }
-
-    .checkout-button {
-        width: 100%;
-        padding: 14px;
-        border: none;
-        border-radius: 12px;
-        background: #304B52;
-        color: white;
-        font-weight: bold;
-        cursor: pointer;
-    }
-
-    .empty-cart {
-        text-align: center;
-        padding: 30px 10px;
-        color: #71858A;
-    }
-
-    @media (max-width: 600px) {
-        .cart-item {
-            flex-direction: column;
+        #giftSpendBar {
+            display: none;
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 9998;
+            background: #FFFDF8;
+            border-top: 1px solid #DCEFF2;
+            padding: 15px 20px 17px;
+            box-shadow: 0 -8px 30px rgba(48, 75, 82, 0.12);
         }
 
-        .cart-item-actions {
-            text-align: left;
+        .gift-spend-content {
+            width: min(850px, 100%);
+            margin: 0 auto;
         }
 
-        .cart-quantity {
-            justify-content: flex-start;
+        .gift-spend-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            color: #304B52;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 9px;
+        }
+
+        .gift-spend-track {
+            width: 100%;
+            height: 12px;
+            background: #E8F1F2;
+            border-radius: 50px;
+            overflow: hidden;
+        }
+
+        .gift-spend-fill {
+            width: 0%;
+            height: 100%;
+            background: #304B52;
+            border-radius: 50px;
+            transition: width 0.3s ease;
+        }
+
+        .gift-spend-message {
+            text-align: center;
+            color: #71858A;
+            font-size: 12px;
+            margin-top: 8px;
         }
 
         body.gift-shopping-active {
-            padding-bottom: 105px;
+            padding-bottom: 95px;
         }
-    }
-</style>
-```
 
+        /* ==============================
+           GIFT POPUP
+        ============================== */
+
+        #giftSpendPopup {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            background: rgba(48, 75, 82, 0.45);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .gift-popup-box {
+            width: min(450px, 100%);
+            background: #FFFDF8;
+            border-radius: 23px;
+            padding: 32px 25px;
+            text-align: center;
+            box-shadow: 0 18px 50px rgba(0, 0, 0, 0.2);
+        }
+
+        .gift-popup-icon {
+            font-size: 45px;
+            margin-bottom: 10px;
+        }
+
+        .gift-popup-box h2 {
+            color: #304B52;
+            margin: 8px 0 12px;
+        }
+
+        .gift-popup-box p {
+            color: #71858A;
+            line-height: 1.6;
+        }
+
+        .gift-popup-box strong {
+            color: #304B52;
+        }
+
+        /* ==============================
+           CART
+        ============================== */
+
+        .cart-popup {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 9997;
+            background: rgba(48, 75, 82, 0.45);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .cart-box {
+            position: relative;
+            width: min(520px, 100%);
+            max-height: 85vh;
+            overflow-y: auto;
+            background: #FFFDF8;
+            border-radius: 22px;
+            padding: 28px;
+            box-sizing: border-box;
+            box-shadow: 0 18px 50px rgba(0, 0, 0, 0.2);
+        }
+
+        .cart-box h2 {
+            color: #304B52;
+            margin-top: 0;
+        }
+
+        .close-cart {
+            position: absolute;
+            top: 12px;
+            right: 15px;
+            border: none;
+            background: none;
+            color: #304B52;
+            font-size: 30px;
+            cursor: pointer;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid #E8F1F2;
+        }
+
+        .cart-item-info h3 {
+            margin: 0 0 5px;
+            color: #304B52;
+            font-size: 16px;
+        }
+
+        .cart-item-info small {
+            display: block;
+            color: #71858A;
+            margin-bottom: 5px;
+        }
+
+        .cart-item-info strong {
+            color: #304B52;
+        }
+
+        .cart-item-actions {
+            text-align: right;
+        }
+
+        .cart-quantity {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 8px;
+            margin-bottom: 7px;
+        }
+
+        .cart-quantity button {
+            width: 28px;
+            height: 28px;
+            border: 1px solid #C8D5D8;
+            background: #F7F4EE;
+            color: #304B52;
+            border-radius: 7px;
+            cursor: pointer;
+        }
+
+        .cart-item-total {
+            display: block;
+            color: #304B52;
+            margin-bottom: 5px;
+        }
+
+        .remove-cart-item {
+            border: none;
+            background: none;
+            color: #71858A;
+            text-decoration: underline;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px 0;
+            color: #304B52;
+            font-size: 18px;
+        }
+
+        .checkout-button {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            background: #304B52;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 30px 10px;
+            color: #71858A;
+        }
+
+        /* ==============================
+           PRODUCT LOADING
+        ============================== */
+
+        .product-grid {
+            min-height: 100px;
+        }
+
+        .products-loading {
+            width: 100%;
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 50px 20px;
+            color: #71858A;
+        }
+
+        @media (max-width: 600px) {
+
+            .cart-item {
+                flex-direction: column;
+            }
+
+            .cart-item-actions {
+                text-align: left;
+            }
+
+            .cart-quantity {
+                justify-content: flex-start;
+            }
+
+            body.gift-shopping-active {
+                padding-bottom: 105px;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-```
-<nav>
+    <nav>
 
-    <a href="index.html">Home</a>
+        <a href="index.html">Home</a>
 
-    <a href="shop.html">Shop</a>
+        <a href="shop.html">Shop</a>
 
-    <a href="index.html">About</a>
+        <a href="index.html">About</a>
 
-    <a href="contact.html">Contact</a>
+        <a href="contact.html">Contact</a>
 
-    <a href="#" id="categoryBtn">Category</a>
+        <a href="#" id="categoryBtn">Category</a>
 
-    <a href="profile.html">Profile</a>
+        <a href="profile.html">Profile</a>
 
-    <button id="cartBtn" class="cart-button" type="button">
-        🛒 Cart
-        <span id="cartCount">0</span>
-    </button>
-
-</nav>
-
-<div id="categoryMenu" class="collective-categories"></div>
-
-<div class="shop-header">
-
-    <h1>SHOP</h1>
-
-    <div class="bear">🧸</div>
-
-    <p>Find something you love.</p>
-
-    <div class="search-bar">
-
-        <input
-            type="text"
-            id="productSearch"
-            placeholder="Search products..."
-        >
-
-        <button id="searchButton" type="button">
-            🔍
+        <button id="cartBtn" class="cart-button" type="button">
+            🛒 Cart
+            <span id="cartCount">0</span>
         </button>
+
+    </nav>
+
+    <div id="categoryMenu" class="collective-categories"></div>
+
+    <div class="shop-header">
+
+        <h1>SHOP</h1>
+
+        <div class="bear">🧸</div>
+
+        <p>Find something you love.</p>
+
+        <div class="search-bar">
+
+            <input
+                type="text"
+                id="productSearch"
+                placeholder="Search products..."
+            >
+
+            <button id="searchButton" type="button">
+                🔍
+            </button>
+
+        </div>
 
     </div>
 
-</div>
+    <div
+        class="product-grid"
+        id="productGrid">
 
-<p class="no-products">
-    No products found.
-</p>
-
-<div
-    class="product-grid"
-    id="productGrid">
-</div>
-
-<!-- ==============================
-     CART POPUP
-============================== -->
-
-<div
-    id="cartPopup"
-    class="cart-popup">
-
-    <div class="cart-box">
-
-        <button
-            id="closeCart"
-            class="close-cart"
-            type="button">
-            ×
-        </button>
-
-        <h2>Your Cart</h2>
-
-        <div id="cartItems">
-            <p>Your cart is empty.</p>
+        <div class="products-loading">
+            Loading products...
         </div>
-
-        <div class="cart-total">
-
-            <strong>Total:</strong>
-
-            <strong id="cartTotal">
-                ₦0
-            </strong>
-
-        </div>
-
-        <button
-            id="checkoutBtn"
-            class="checkout-button"
-            type="button">
-            CHECKOUT
-        </button>
 
     </div>
 
-</div>
+    <p
+        class="no-products"
+        style="display:none;">
+        No products found.
+    </p>
 
-<!-- ==============================
-     ₦50K POPUP
-============================== -->
 
-<div id="giftSpendPopup">
+    <!-- ==============================
+         CART POPUP
+    ============================== -->
 
-    <div class="gift-popup-box">
+    <div
+        id="cartPopup"
+        class="cart-popup">
 
-        <div class="gift-popup-icon">
-            🎁
+        <div class="cart-box">
+
+            <button
+                id="closeCart"
+                class="close-cart"
+                type="button">
+                ×
+            </button>
+
+            <h2>Your Cart</h2>
+
+            <div id="cartItems">
+
+                <p class="empty-cart">
+                    Your cart is empty.
+                </p>
+
+            </div>
+
+            <div class="cart-total">
+
+                <strong>Total:</strong>
+
+                <strong id="cartTotal">
+                    ₦0
+                </strong>
+
+            </div>
+
+            <button
+                id="checkoutBtn"
+                class="checkout-button"
+                type="button">
+                CHECKOUT
+            </button>
+
         </div>
-
-        <h2>Your 5 gifts are saved!</h2>
-
-        <p>
-            Spend <strong>₦50,000</strong>
-            on your purchases to take away
-            your 5 free gifts.
-        </p>
-
-        <p>
-            Your free gifts do not count
-            toward the ₦50,000.
-        </p>
 
     </div>
 
-</div>
 
-<!-- ==============================
-     ₦50K PROGRESS BAR
-============================== -->
+    <!-- ==============================
+         ₦50K POPUP
+    ============================== -->
 
-<div id="giftSpendBar">
+    <div id="giftSpendPopup">
 
-    <div class="gift-spend-content">
+        <div class="gift-popup-box">
 
-        <div class="gift-spend-heading">
+            <div class="gift-popup-icon">
+                🎁
+            </div>
 
-            <span>
-                🎁 FREE GIFT PROGRESS
-            </span>
+            <h2>Your 5 gifts are saved!</h2>
 
-            <span id="giftSpendAmount">
-                ₦0 / ₦50,000
-            </span>
+            <p>
+                Spend <strong>₦50,000</strong>
+                on your purchases to take away
+                your 5 free gifts.
+            </p>
+
+            <p>
+                Your free gifts do not count
+                toward the ₦50,000.
+            </p>
 
         </div>
 
-        <div class="gift-spend-track">
+    </div>
+
+
+    <!-- ==============================
+         ₦50K PROGRESS BAR
+    ============================== -->
+
+    <div id="giftSpendBar">
+
+        <div class="gift-spend-content">
+
+            <div class="gift-spend-heading">
+
+                <span>
+                    🎁 FREE GIFT PROGRESS
+                </span>
+
+                <span id="giftSpendAmount">
+                    ₦0 / ₦50,000
+                </span>
+
+            </div>
+
+            <div class="gift-spend-track">
+
+                <div
+                    id="giftSpendFill"
+                    class="gift-spend-fill">
+                </div>
+
+            </div>
 
             <div
-                id="giftSpendFill"
-                class="gift-spend-fill">
+                id="giftSpendMessage"
+                class="gift-spend-message">
+
+                Spend ₦50,000 more to take away
+                your 5 gifts.
+
             </div>
 
         </div>
 
-        <div
-            id="giftSpendMessage"
-            class="gift-spend-message">
-
-            Spend ₦50,000 more to take away
-            your 5 gifts.
-
-        </div>
-
     </div>
 
-</div>
 
-<!-- MAIN WEBSITE JAVASCRIPT -->
-<script src="script.js"></script>
+    <!-- MAIN WEBSITE JAVASCRIPT -->
 
-<!-- FREE GIFT SHOPPING FLOW -->
-<script>
+    <script src="script.js"></script>
 
-    document.addEventListener(
-        "DOMContentLoaded",
-        function () {
 
-            const TARGET = 50000;
+    <!-- FREE GIFT SHOPPING FLOW -->
 
-            const GIFT_KEY =
-                "collectiveSelectedFreeGifts";
+    <script>
 
-            const FLOW_KEY =
-                "collectiveGiftFlowActive";
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
 
-            const CHECKOUT_KEY =
-                "collectiveGiftCheckoutStarted";
+                const TARGET = 50000;
 
-            const POPUP_KEY =
-                "collectiveGiftPopupShown";
+                const GIFT_KEY =
+                    "collectiveSelectedFreeGifts";
 
-            let selectedGifts = [];
+                const FLOW_KEY =
+                    "collectiveGiftFlowActive";
 
-            try {
+                const CHECKOUT_KEY =
+                    "collectiveGiftCheckoutStarted";
 
-                selectedGifts =
-                    JSON.parse(
-                        localStorage.getItem(
-                            GIFT_KEY
-                        ) || "[]"
-                    );
+                const POPUP_KEY =
+                    "collectiveGiftPopupShown";
 
-            } catch (error) {
+                let selectedGifts = [];
 
-                selectedGifts = [];
+                try {
 
-            }
+                    selectedGifts =
+                        JSON.parse(
+                            localStorage.getItem(
+                                GIFT_KEY
+                            ) || "[]"
+                        );
 
-            /*
-             * NO 5 GIFTS = NORMAL SHOP
-             */
+                } catch (error) {
 
-            if (
-                !Array.isArray(selectedGifts) ||
-                selectedGifts.length !== 5
-            ) {
-
-                return;
-
-            }
-
-            /*
-             * ACTIVATE ₦50K FLOW
-             */
-
-            localStorage.setItem(
-                FLOW_KEY,
-                "true"
-            );
-
-            document.body.classList.add(
-                "gift-shopping-active"
-            );
-
-            const bar =
-                document.getElementById(
-                    "giftSpendBar"
-                );
-
-            const popup =
-                document.getElementById(
-                    "giftSpendPopup"
-                );
-
-            const amount =
-                document.getElementById(
-                    "giftSpendAmount"
-                );
-
-            const fill =
-                document.getElementById(
-                    "giftSpendFill"
-                );
-
-            const message =
-                document.getElementById(
-                    "giftSpendMessage"
-                );
-
-            /*
-             * SHOW BAR
-             */
-
-            if (bar) {
-
-                bar.style.display =
-                    "block";
-
-            }
-
-            /*
-             * POPUP ONLY ONCE
-             */
-
-            if (
-                popup &&
-                localStorage.getItem(
-                    POPUP_KEY
-                ) !== "true"
-            ) {
-
-                popup.style.display =
-                    "flex";
-
-                localStorage.setItem(
-                    POPUP_KEY,
-                    "true"
-                );
-
-                setTimeout(
-                    function () {
-
-                        popup.style.display =
-                            "none";
-
-                    },
-                    4000
-                );
-
-            }
-
-            /*
-             * CALCULATE SHOPPING TOTAL
-             */
-
-            function updateGiftBar() {
-
-                let total = 0;
-
-                if (
-                    typeof getCartTotal ===
-                    "function"
-                ) {
-
-                    total =
-                        Number(
-                            getCartTotal()
-                        ) || 0;
-
-                }
-
-                const percentage =
-                    Math.min(
-                        (total / TARGET) * 100,
-                        100
-                    );
-
-                if (amount) {
-
-                    amount.textContent =
-                        `₦${total.toLocaleString()} / ₦50,000`;
-
-                }
-
-                if (fill) {
-
-                    fill.style.width =
-                        percentage + "%";
+                    selectedGifts = [];
 
                 }
 
                 /*
-                 * UNDER ₦50K
+                 * NORMAL SHOP IF 5 GIFTS
+                 * HAVE NOT BEEN SELECTED
                  */
 
-                if (total < TARGET) {
-
-                    const remaining =
-                        TARGET - total;
-
-                    if (message) {
-
-                        message.textContent =
-                            `Spend ₦${remaining.toLocaleString()} more to take away your 5 gifts.`;
-
-                    }
+                if (
+                    !Array.isArray(selectedGifts) ||
+                    selectedGifts.length !== 5
+                ) {
 
                     return;
 
                 }
 
                 /*
-                 * ₦50K REACHED
+                 * ACTIVATE ₦50K FLOW
                  */
 
-                if (message) {
+                localStorage.setItem(
+                    FLOW_KEY,
+                    "true"
+                );
 
-                    message.textContent =
-                        "✓ ₦50,000 reached! Taking you to checkout...";
+                document.body.classList.add(
+                    "gift-shopping-active"
+                );
+
+                const bar =
+                    document.getElementById(
+                        "giftSpendBar"
+                    );
+
+                const popup =
+                    document.getElementById(
+                        "giftSpendPopup"
+                    );
+
+                const amount =
+                    document.getElementById(
+                        "giftSpendAmount"
+                    );
+
+                const fill =
+                    document.getElementById(
+                        "giftSpendFill"
+                    );
+
+                const message =
+                    document.getElementById(
+                        "giftSpendMessage"
+                    );
+
+
+                /*
+                 * SHOW BAR
+                 */
+
+                if (bar) {
+
+                    bar.style.display =
+                        "block";
 
                 }
 
+
                 /*
-                 * ONLY START CHECKOUT ONCE
+                 * SHOW POPUP ONLY ONCE
                  */
 
                 if (
+                    popup &&
                     localStorage.getItem(
-                        CHECKOUT_KEY
+                        POPUP_KEY
                     ) !== "true"
                 ) {
 
+                    popup.style.display =
+                        "flex";
+
                     localStorage.setItem(
-                        CHECKOUT_KEY,
+                        POPUP_KEY,
                         "true"
                     );
 
                     setTimeout(
                         function () {
 
-                            if (
-                                typeof checkout ===
-                                "function"
-                            ) {
-
-                                checkout();
-
-                            }
+                            popup.style.display =
+                                "none";
 
                         },
-                        1000
+                        4000
                     );
 
                 }
 
-            }
 
-            /*
-             * INITIAL UPDATE
-             */
+                /*
+                 * UPDATE GIFT PROGRESS
+                 */
 
-            updateGiftBar();
+                function updateGiftBar() {
 
-            /*
-             * WATCH CART CHANGES
-             */
-
-            let previousCart =
-                localStorage.getItem(
-                    "collectiveCart"
-                );
-
-            setInterval(
-                function () {
-
-                    const currentCart =
-                        localStorage.getItem(
-                            "collectiveCart"
-                        );
+                    let total = 0;
 
                     if (
-                        currentCart !==
-                        previousCart
+                        typeof getCartTotal ===
+                        "function"
                     ) {
 
-                        previousCart =
-                            currentCart;
-
-                        updateGiftBar();
+                        total =
+                            Number(
+                                getCartTotal()
+                            ) || 0;
 
                     }
 
-                },
-                250
-            );
+                    const percentage =
+                        Math.min(
+                            (total / TARGET) * 100,
+                            100
+                        );
 
-        }
-    );
 
-</script>
-```
+                    if (amount) {
+
+                        amount.textContent =
+                            `₦${total.toLocaleString()} / ₦50,000`;
+
+                    }
+
+
+                    if (fill) {
+
+                        fill.style.width =
+                            percentage + "%";
+
+                    }
+
+
+                    /*
+                     * UNDER ₦50K
+                     */
+
+                    if (total < TARGET) {
+
+                        const remaining =
+                            TARGET - total;
+
+                        if (message) {
+
+                            message.textContent =
+                                `Spend ₦${remaining.toLocaleString()} more to take away your 5 gifts.`;
+
+                        }
+
+                        return;
+
+                    }
+
+
+                    /*
+                     * ₦50K REACHED
+                     */
+
+                    if (message) {
+
+                        message.textContent =
+                            "✓ ₦50,000 reached! Taking you to checkout...";
+
+                    }
+
+
+                    /*
+                     * START CHECKOUT ONCE
+                     */
+
+                    if (
+                        localStorage.getItem(
+                            CHECKOUT_KEY
+                        ) !== "true"
+                    ) {
+
+                        localStorage.setItem(
+                            CHECKOUT_KEY,
+                            "true"
+                        );
+
+                        setTimeout(
+                            function () {
+
+                                if (
+                                    typeof checkout ===
+                                    "function"
+                                ) {
+
+                                    checkout();
+
+                                }
+
+                            },
+                            1000
+                        );
+
+                    }
+
+                }
+
+
+                /*
+                 * INITIAL UPDATE
+                 */
+
+                updateGiftBar();
+
+
+                /*
+                 * WATCH CART CHANGES
+                 */
+
+                let previousCart =
+                    localStorage.getItem(
+                        "collectiveCart"
+                    );
+
+
+                setInterval(
+                    function () {
+
+                        const currentCart =
+                            localStorage.getItem(
+                                "collectiveCart"
+                            );
+
+                        if (
+                            currentCart !==
+                            previousCart
+                        ) {
+
+                            previousCart =
+                                currentCart;
+
+                            updateGiftBar();
+
+                        }
+
+                    },
+                    500
+                );
+
+            }
+        );
+
+    </script>
 
 </body>
 
