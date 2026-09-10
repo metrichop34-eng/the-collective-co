@@ -128,7 +128,6 @@
             box-sizing: border-box;
         }
 
-        /* FIX: allows JavaScript .open class to show cart */
         .cart-popup.open {
             display: flex;
         }
@@ -658,6 +657,15 @@
 
                     if (total < TARGET) {
 
+                        /*
+                         * Allow checkout to trigger
+                         * again if the total changes.
+                         */
+
+                        localStorage.removeItem(
+                            CHECKOUT_KEY
+                        );
+
                         const remaining =
                             TARGET - total;
 
@@ -686,6 +694,30 @@
 
 
                     /*
+                     * IMPORTANT:
+                     * Make sure checkout() exists
+                     * BEFORE locking the flow.
+                     */
+
+                    if (
+                        typeof checkout !==
+                        "function"
+                    ) {
+
+                        console.error(
+                            "THE COLLECTIVE.CO: checkout() was not found in script.js"
+                        );
+
+                        localStorage.removeItem(
+                            CHECKOUT_KEY
+                        );
+
+                        return;
+
+                    }
+
+
+                    /*
                      * START CHECKOUT ONCE
                      */
 
@@ -703,17 +735,10 @@
                         setTimeout(
                             function () {
 
-                                if (
-                                    typeof checkout ===
-                                    "function"
-                                ) {
-
-                                    checkout();
-
-                                }
+                                checkout();
 
                             },
-                            1000
+                            500
                         );
 
                     }
@@ -762,6 +787,27 @@
                     500
                 );
 
+
+                /*
+                 * ALSO WATCH STORAGE CHANGES
+                 */
+
+                window.addEventListener(
+                    "storage",
+                    function (event) {
+
+                        if (
+                            event.key ===
+                            "collectiveCart"
+                        ) {
+
+                            updateGiftBar();
+
+                        }
+
+                    }
+                );
+
             }
         );
 
@@ -769,3 +815,4 @@
 
 </body>
 
+</html>
