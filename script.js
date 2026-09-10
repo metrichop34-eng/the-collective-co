@@ -530,17 +530,16 @@ productCatalog.forEach(product => {
 
 
 // ======================================================
-// SAFE LOCAL STORAGE
+// SAFE STORAGE
 // ======================================================
 
 function getStoredArray(key) {
 
     try {
 
-        const data =
-            JSON.parse(
-                localStorage.getItem(key) || "[]"
-            );
+        const data = JSON.parse(
+            localStorage.getItem(key) || "[]"
+        );
 
         return Array.isArray(data)
             ? data
@@ -557,10 +556,21 @@ function getStoredArray(key) {
 
 function setStoredArray(key, value) {
 
-    localStorage.setItem(
-        key,
-        JSON.stringify(value)
-    );
+    try {
+
+        localStorage.setItem(
+            key,
+            JSON.stringify(value)
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Could not save data:",
+            error
+        );
+
+    }
 
 }
 
@@ -569,9 +579,7 @@ function setStoredArray(key, value) {
 // CART
 // ======================================================
 
-let cart = getStoredArray(
-    "collectiveCart"
-);
+let cart = getStoredArray("collectiveCart");
 
 
 function saveCart() {
@@ -588,8 +596,7 @@ function getCartQuantity() {
 
     return cart.reduce(
         (total, item) =>
-            total +
-            Number(item.quantity || 0),
+            total + Number(item.quantity || 0),
         0
     );
 
@@ -601,10 +608,8 @@ function getCartTotal() {
     return cart.reduce(
         (total, item) =>
             total +
-            (
-                Number(item.price || 0) *
-                Number(item.quantity || 0)
-            ),
+            Number(item.price || 0) *
+            Number(item.quantity || 0),
         0
     );
 
@@ -679,13 +684,9 @@ function getCheckoutItems() {
 function updateCartCount() {
 
     const cartCount =
-        document.getElementById(
-            "cartCount"
-        );
+        document.getElementById("cartCount");
 
-    if (!cartCount) {
-        return;
-    }
+    if (!cartCount) return;
 
     cartCount.textContent =
         getCartQuantity();
@@ -698,34 +699,21 @@ function updateCartDisplay() {
     updateCartCount();
 
     const cartItems =
-        document.getElementById(
-            "cartItems"
-        );
+        document.getElementById("cartItems");
 
     const cartTotal =
-        document.getElementById(
-            "cartTotal"
-        );
+        document.getElementById("cartTotal");
 
-    if (!cartItems) {
-        return;
-    }
+    if (!cartItems) return;
+
 
     if (cart.length === 0) {
 
         cartItems.innerHTML = `
             <div class="empty-cart">
-                <div class="empty-cart-icon">
-                    🛍️
-                </div>
-
-                <p>
-                    Your cart is empty.
-                </p>
-
-                <small>
-                    Add something you love.
-                </small>
+                <div class="empty-cart-icon">🛍️</div>
+                <p>Your cart is empty.</p>
+                <small>Add something you love.</small>
             </div>
         `;
 
@@ -736,7 +724,9 @@ function updateCartDisplay() {
         return;
     }
 
+
     cartItems.innerHTML = "";
+
 
     cart.forEach((item, index) => {
 
@@ -749,26 +739,22 @@ function updateCartDisplay() {
         const itemTotal =
             price * quantity;
 
+
         const cartItem =
             document.createElement("div");
 
         cartItem.className =
             "cart-item";
 
+
         cartItem.innerHTML = `
             <div class="cart-item-info">
 
-                <h3>
-                    ${item.name}
-                </h3>
+                <h3>${item.name}</h3>
 
                 ${
                     item.color
-                        ? `
-                            <small>
-                                Shade: ${item.color}
-                            </small>
-                          `
+                        ? `<small>Shade: ${item.color}</small>`
                         : ""
                 }
 
@@ -789,9 +775,7 @@ function updateCartDisplay() {
                         −
                     </button>
 
-                    <span>
-                        ${quantity}
-                    </span>
+                    <span>${quantity}</span>
 
                     <button
                         type="button"
@@ -816,11 +800,11 @@ function updateCartDisplay() {
             </div>
         `;
 
-        cartItems.appendChild(
-            cartItem
-        );
+
+        cartItems.appendChild(cartItem);
 
     });
+
 
     if (cartTotal) {
 
@@ -833,24 +817,19 @@ function updateCartDisplay() {
 
 
 // ======================================================
-// OPEN / CLOSE CART
+// CART OPEN / CLOSE
 // ======================================================
 
 function openCart() {
 
-    const cartPopup =
-        document.getElementById(
-            "cartPopup"
-        );
+    const popup =
+        document.getElementById("cartPopup");
 
-    if (!cartPopup) {
-        return;
-    }
+    if (!popup) return;
 
     updateCartDisplay();
 
-    cartPopup.style.display =
-        "flex";
+    popup.style.display = "flex";
 
     document.body.classList.add(
         "cart-open"
@@ -861,17 +840,12 @@ function openCart() {
 
 function closeCart() {
 
-    const cartPopup =
-        document.getElementById(
-            "cartPopup"
-        );
+    const popup =
+        document.getElementById("cartPopup");
 
-    if (!cartPopup) {
-        return;
-    }
+    if (!popup) return;
 
-    cartPopup.style.display =
-        "none";
+    popup.style.display = "none";
 
     document.body.classList.remove(
         "cart-open"
@@ -893,12 +867,9 @@ document.addEventListener(
                 ? event.target
                 : null;
 
-        if (!target) {
-            return;
-        }
+        if (!target) return;
 
 
-        // OPEN CART
         if (
             target.id === "cartBtn" ||
             target.closest("#cartBtn")
@@ -912,7 +883,6 @@ document.addEventListener(
         }
 
 
-        // CLOSE CART
         if (
             target.id === "closeCart" ||
             target.closest("#closeCart")
@@ -926,7 +896,6 @@ document.addEventListener(
         }
 
 
-        // REMOVE
         if (
             target.classList.contains(
                 "remove-cart-item"
@@ -934,19 +903,14 @@ document.addEventListener(
         ) {
 
             const index =
-                Number(
-                    target.dataset.index
-                );
+                Number(target.dataset.index);
 
             if (
                 Number.isInteger(index) &&
                 cart[index]
             ) {
 
-                cart.splice(
-                    index,
-                    1
-                );
+                cart.splice(index, 1);
 
                 saveCart();
 
@@ -960,7 +924,6 @@ document.addEventListener(
         }
 
 
-        // MINUS
         if (
             target.classList.contains(
                 "cart-minus"
@@ -968,9 +931,7 @@ document.addEventListener(
         ) {
 
             const index =
-                Number(
-                    target.dataset.index
-                );
+                Number(target.dataset.index);
 
             if (
                 Number.isInteger(index) &&
@@ -978,9 +939,7 @@ document.addEventListener(
             ) {
 
                 if (
-                    Number(
-                        cart[index].quantity
-                    ) > 1
+                    Number(cart[index].quantity) > 1
                 ) {
 
                     cart[index].quantity--;
@@ -999,7 +958,6 @@ document.addEventListener(
         }
 
 
-        // PLUS
         if (
             target.classList.contains(
                 "cart-plus"
@@ -1007,9 +965,7 @@ document.addEventListener(
         ) {
 
             const index =
-                Number(
-                    target.dataset.index
-                );
+                Number(target.dataset.index);
 
             if (
                 Number.isInteger(index) &&
@@ -1028,10 +984,10 @@ document.addEventListener(
                         ? product.stock
                         : 10;
 
+
                 if (
-                    Number(
-                        cart[index].quantity
-                    ) < maximum
+                    Number(cart[index].quantity) <
+                    maximum
                 ) {
 
                     cart[index].quantity++;
@@ -1053,24 +1009,18 @@ document.addEventListener(
 );
 
 
-// Close cart when clicking background
-
 document.addEventListener(
     "click",
     function(event) {
 
-        const cartPopup =
+        const popup =
             document.getElementById(
                 "cartPopup"
             );
 
-        if (!cartPopup) {
-            return;
-        }
+        if (!popup) return;
 
-        if (
-            event.target === cartPopup
-        ) {
+        if (event.target === popup) {
 
             closeCart();
 
@@ -1080,15 +1030,11 @@ document.addEventListener(
 );
 
 
-// ESC closes cart
-
 document.addEventListener(
     "keydown",
     function(event) {
 
-        if (
-            event.key === "Escape"
-        ) {
+        if (event.key === "Escape") {
 
             closeCart();
 
@@ -1175,10 +1121,9 @@ function updatePointsDisplay() {
     const points =
         getPoints();
 
+
     document
-        .querySelectorAll(
-            ".points-balance"
-        )
+        .querySelectorAll(".points-balance")
         .forEach(element => {
 
             element.textContent =
@@ -1186,10 +1131,12 @@ function updatePointsDisplay() {
 
         });
 
+
     const profilePoints =
         document.getElementById(
             "profilePoints"
         );
+
 
     if (profilePoints) {
 
@@ -1240,9 +1187,8 @@ function updateRewardStatus() {
     const totalSpent =
         getTotalSpent();
 
-    if (
-        totalSpent >= 50000
-    ) {
+
+    if (totalSpent >= 50000) {
 
         localStorage.setItem(
             "collectiveGift1",
@@ -1251,9 +1197,8 @@ function updateRewardStatus() {
 
     }
 
-    if (
-        totalSpent >= 100000
-    ) {
+
+    if (totalSpent >= 100000) {
 
         localStorage.setItem(
             "collectiveGift2",
@@ -1261,6 +1206,7 @@ function updateRewardStatus() {
         );
 
     }
+
 
     const gift1Status =
         document.getElementById(
@@ -1272,6 +1218,7 @@ function updateRewardStatus() {
             "gift2Status"
         );
 
+
     if (gift1Status) {
 
         gift1Status.textContent =
@@ -1280,6 +1227,7 @@ function updateRewardStatus() {
                 : "NOT UNLOCKED";
 
     }
+
 
     if (gift2Status) {
 
@@ -1299,13 +1247,24 @@ function updateRewardStatus() {
 
 let currentCategory = "All";
 
+let filteredProducts = [];
 
-function filterProducts() {
+let productsShown = 0;
+
+const PRODUCTS_PER_LOAD = 60;
+
+
+// ======================================================
+// GET FILTERED PRODUCTS
+// ======================================================
+
+function getFilteredProducts() {
 
     const searchInput =
         document.getElementById(
             "productSearch"
         );
+
 
     const search =
         searchInput
@@ -1314,78 +1273,296 @@ function filterProducts() {
                 .trim()
             : "";
 
-    const cards =
-        document.querySelectorAll(
-            ".product-card"
-        );
 
-    let visible = 0;
-
-    cards.forEach(card => {
-
-        const name =
-            (
-                card.dataset.name ||
-                ""
-            ).toLowerCase();
-
-        const category =
-            card.dataset.category ||
-            "";
+    return products.filter(product => {
 
         const matchesSearch =
-            name.includes(search);
+            product.name
+                .toLowerCase()
+                .includes(search);
+
 
         const matchesCategory =
             currentCategory === "All" ||
-            category === currentCategory;
+            product.category ===
+            currentCategory;
 
-        if (
+
+        return (
             matchesSearch &&
             matchesCategory
-        ) {
-
-            card.style.display = "";
-
-            visible++;
-
-        } else {
-
-            card.style.display = "none";
-
-        }
+        );
 
     });
 
-    const message =
+}
+
+
+// ======================================================
+// RENDER PRODUCTS
+// ======================================================
+
+function renderProducts() {
+
+    const grid =
         document.querySelector(
-            ".no-products"
+            ".product-grid"
         );
 
-    if (message) {
 
-        message.style.display =
-            visible === 0
-                ? "block"
-                : "none";
+    if (!grid) return;
+
+
+    grid.innerHTML = "";
+
+
+    productsShown = 0;
+
+
+    filteredProducts =
+        getFilteredProducts();
+
+
+    renderNextProducts();
+
+}
+
+
+// ======================================================
+// RENDER NEXT BATCH
+// ======================================================
+
+function renderNextProducts() {
+
+    const grid =
+        document.querySelector(
+            ".product-grid"
+        );
+
+
+    if (!grid) return;
+
+
+    const start =
+        productsShown;
+
+
+    const end =
+        Math.min(
+            start + PRODUCTS_PER_LOAD,
+            filteredProducts.length
+        );
+
+
+    const fragment =
+        document.createDocumentFragment();
+
+
+    for (
+        let i = start;
+        i < end;
+        i++
+    ) {
+
+        fragment.appendChild(
+            createProductCard(
+                filteredProducts[i]
+            )
+        );
+
+    }
+
+
+    grid.appendChild(fragment);
+
+
+    productsShown = end;
+
+
+    updateLoadMoreButton();
+
+    updateNoProductsMessage();
+
+}
+
+
+// ======================================================
+// LOAD MORE BUTTON
+// ======================================================
+
+function updateLoadMoreButton() {
+
+    let button =
+        document.getElementById(
+            "loadMoreProducts"
+        );
+
+
+    const grid =
+        document.querySelector(
+            ".product-grid"
+        );
+
+
+    if (!grid) return;
+
+
+    if (
+        productsShown >=
+        filteredProducts.length
+    ) {
+
+        if (button) {
+            button.remove();
+        }
+
+        return;
+
+    }
+
+
+    if (!button) {
+
+        button =
+            document.createElement(
+                "button"
+            );
+
+        button.id =
+            "loadMoreProducts";
+
+        button.type =
+            "button";
+
+        button.textContent =
+            "LOAD MORE PRODUCTS";
+
+
+        button.style.display =
+            "block";
+
+        button.style.margin =
+            "30px auto";
+
+        button.style.padding =
+            "13px 25px";
+
+        button.style.border =
+            "0";
+
+        button.style.borderRadius =
+            "12px";
+
+        button.style.cursor =
+            "pointer";
+
+        button.style.fontWeight =
+            "bold";
+
+        button.style.background =
+            "#304B52";
+
+        button.style.color =
+            "#FFFFFF";
+
+
+        button.addEventListener(
+            "click",
+            function() {
+
+                renderNextProducts();
+
+            }
+        );
+
+
+        grid.parentNode.appendChild(
+            button
+        );
 
     }
 
 }
 
 
+// ======================================================
+// NO PRODUCTS MESSAGE
+// ======================================================
+
+function updateNoProductsMessage() {
+
+    const grid =
+        document.querySelector(
+            ".product-grid"
+        );
+
+
+    if (!grid) return;
+
+
+    let message =
+        document.querySelector(
+            ".no-products"
+        );
+
+
+    if (!message) {
+
+        message =
+            document.createElement(
+                "p"
+            );
+
+        message.className =
+            "no-products";
+
+        message.textContent =
+            "No products found.";
+
+        grid.parentNode.insertBefore(
+            message,
+            grid
+        );
+
+    }
+
+
+    message.style.display =
+        filteredProducts.length === 0
+            ? "block"
+            : "none";
+
+}
+
+
+// ======================================================
+// FILTER PRODUCTS
+// ======================================================
+
+function filterProducts() {
+
+    renderProducts();
+
+}
+
+
+// ======================================================
+// CATEGORY MENU
+// ======================================================
+
 function createCategoryMenu() {
 
-    const categoryContainer =
+    const container =
         document.querySelector(
             ".collective-categories"
         );
 
-    if (!categoryContainer) {
-        return;
-    }
 
-    categoryContainer.innerHTML = "";
+    if (!container) return;
+
+
+    container.innerHTML = "";
+
 
     const categories = [
         "All",
@@ -1396,70 +1573,86 @@ function createCategoryMenu() {
         "Bags"
     ];
 
-    categories.forEach(category => {
 
-        const button =
-            document.createElement(
-                "button"
-            );
+    categories.forEach(
+        category => {
 
-        button.type = "button";
+            const button =
+                document.createElement(
+                    "button"
+                );
 
-        button.className =
-            "category-button";
 
-        button.textContent =
-            category === "All"
-                ? "ALL PRODUCTS"
-                : category.toUpperCase();
+            button.type =
+                "button";
 
-        if (
-            category ===
-            currentCategory
-        ) {
 
-            button.classList.add(
-                "selected"
-            );
+            button.className =
+                "category-button";
 
-        }
 
-        button.addEventListener(
-            "click",
-            function() {
+            button.textContent =
+                category === "All"
+                    ? "ALL PRODUCTS"
+                    : category.toUpperCase();
 
-                currentCategory =
-                    category;
 
-                document
-                    .querySelectorAll(
-                        ".category-button"
-                    )
-                    .forEach(btn =>
-                        btn.classList.remove(
-                            "selected"
-                        )
-                    );
+            if (
+                category ===
+                currentCategory
+            ) {
 
                 button.classList.add(
                     "selected"
                 );
 
-                filterProducts();
-
             }
-        );
 
-        categoryContainer.appendChild(
-            button
-        );
 
-    });
+            button.addEventListener(
+                "click",
+                function() {
+
+                    currentCategory =
+                        category;
+
+
+                    document
+                        .querySelectorAll(
+                            ".category-button"
+                        )
+                        .forEach(
+                            btn =>
+                                btn.classList.remove(
+                                    "selected"
+                                )
+                        );
+
+
+                    button.classList.add(
+                        "selected"
+                    );
+
+
+                    renderProducts();
+
+                }
+            );
+
+
+            container.appendChild(
+                button
+            );
+
+        }
+    );
 
 }
 
 
-// Category button
+// ======================================================
+// CATEGORY BUTTON
+// ======================================================
 
 document.addEventListener(
     "click",
@@ -1470,31 +1663,35 @@ document.addEventListener(
                 ? event.target
                 : null;
 
-        if (!target) {
-            return;
-        }
+
+        if (!target) return;
+
 
         if (
-            target.id === "categoryBtn"
+            target.id ===
+            "categoryBtn"
         ) {
 
             event.preventDefault();
+
 
             const menu =
                 document.querySelector(
                     ".collective-categories"
                 );
 
-            if (!menu) {
-                return;
-            }
 
-            const isHidden =
-                menu.style.display === "none" ||
+            if (!menu) return;
+
+
+            const hidden =
+                menu.style.display ===
+                    "none" ||
                 menu.style.display === "";
 
+
             menu.style.display =
-                isHidden
+                hidden
                     ? "flex"
                     : "none";
 
@@ -1504,7 +1701,9 @@ document.addEventListener(
 );
 
 
-// Search typing
+// ======================================================
+// SEARCH
+// ======================================================
 
 document.addEventListener(
     "input",
@@ -1513,18 +1712,16 @@ document.addEventListener(
         if (
             event.target &&
             event.target.id ===
-            "productSearch"
+                "productSearch"
         ) {
 
-            filterProducts();
+            renderProducts();
 
         }
 
     }
 );
 
-
-// Search button
 
 document.addEventListener(
     "click",
@@ -1535,9 +1732,9 @@ document.addEventListener(
                 ? event.target
                 : null;
 
-        if (!target) {
-            return;
-        }
+
+        if (!target) return;
+
 
         if (
             target.id ===
@@ -1546,7 +1743,7 @@ document.addEventListener(
 
             event.preventDefault();
 
-            filterProducts();
+            renderProducts();
 
         }
 
@@ -1565,17 +1762,21 @@ function createProductCard(product) {
             "div"
         );
 
+
     card.className =
         "product-card";
 
+
     card.dataset.name =
         product.name;
+
 
     card.dataset.category =
         product.category;
 
 
     let colorOption = "";
+
 
     if (
         product.colors &&
@@ -1683,15 +1884,18 @@ function createProductCard(product) {
 
     let quantity = 1;
 
+
     const minus =
         card.querySelector(
             ".quantity-minus"
         );
 
+
     const plus =
         card.querySelector(
             ".quantity-plus"
         );
+
 
     const number =
         card.querySelector(
@@ -1705,9 +1909,7 @@ function createProductCard(product) {
             "click",
             function() {
 
-                if (
-                    quantity > 1
-                ) {
+                if (quantity > 1) {
 
                     quantity--;
 
@@ -1762,6 +1964,7 @@ function createProductCard(product) {
                     card.querySelector(
                         ".product-color"
                     );
+
 
                 if (
                     selectedColor &&
@@ -1865,79 +2068,26 @@ function createProductCard(product) {
 
 function displayProducts() {
 
-    const productGrid =
+    const grid =
         document.querySelector(
             ".product-grid"
         );
 
-    /*
-     * Important:
-     * If another page does not have a product grid,
-     * simply stop here instead of causing an error.
-     */
 
-    if (!productGrid) {
+    if (!grid) {
+
+        console.warn(
+            "THE COLLECTIVE.CO: .product-grid was not found in shop.html"
+        );
+
         return;
-    }
-
-
-    productGrid.innerHTML = "";
-
-
-    const fragment =
-        document.createDocumentFragment();
-
-
-    products.forEach(product => {
-
-        fragment.appendChild(
-            createProductCard(
-                product
-            )
-        );
-
-    });
-
-
-    productGrid.appendChild(
-        fragment
-    );
-
-
-    let noProducts =
-        document.querySelector(
-            ".no-products"
-        );
-
-
-    if (!noProducts) {
-
-        noProducts =
-            document.createElement(
-                "p"
-            );
-
-        noProducts.className =
-            "no-products";
-
-        noProducts.textContent =
-            "No products found.";
-
-        productGrid.parentNode.insertBefore(
-            noProducts,
-            productGrid
-        );
 
     }
-
-
-    noProducts.style.display =
-        "none";
 
 
     createCategoryMenu();
 
-    filterProducts();
+    renderProducts();
 
     updateCartDisplay();
 
@@ -1955,8 +2105,11 @@ function showCheckoutModal(content) {
             "collectiveCheckoutModal"
         );
 
+
     if (oldModal) {
+
         oldModal.remove();
+
     }
 
 
@@ -1965,32 +2118,24 @@ function showCheckoutModal(content) {
             "div"
         );
 
+
     modal.id =
         "collectiveCheckoutModal";
 
-    modal.style.position =
-        "fixed";
 
-    modal.style.inset =
-        "0";
-
-    modal.style.background =
-        "rgba(48,75,82,0.45)";
-
-    modal.style.display =
-        "flex";
-
-    modal.style.alignItems =
-        "center";
-
-    modal.style.justifyContent =
-        "center";
-
-    modal.style.zIndex =
-        "99999";
-
-    modal.style.padding =
-        "20px";
+    Object.assign(
+        modal.style,
+        {
+            position: "fixed",
+            inset: "0",
+            background: "rgba(48,75,82,0.45)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: "99999",
+            padding: "20px"
+        }
+    );
 
 
     const box =
@@ -1998,46 +2143,32 @@ function showCheckoutModal(content) {
             "div"
         );
 
-    box.style.background =
-        "#FFFDF8";
 
-    box.style.width =
-        "100%";
+    Object.assign(
+        box.style,
+        {
+            background: "#FFFDF8",
+            width: "100%",
+            maxWidth: "560px",
+            maxHeight: "90vh",
+            overflowY: "auto",
+            borderRadius: "22px",
+            padding: "30px",
+            boxSizing: "border-box",
+            textAlign: "center",
+            boxShadow: "0 15px 45px rgba(0,0,0,0.18)"
+        }
+    );
 
-    box.style.maxWidth =
-        "560px";
-
-    box.style.maxHeight =
-        "90vh";
-
-    box.style.overflowY =
-        "auto";
-
-    box.style.borderRadius =
-        "22px";
-
-    box.style.padding =
-        "30px";
-
-    box.style.boxSizing =
-        "border-box";
-
-    box.style.textAlign =
-        "center";
-
-    box.style.boxShadow =
-        "0 15px 45px rgba(0,0,0,0.18)";
 
     box.innerHTML =
         content;
 
-    modal.appendChild(
-        box
-    );
 
-    document.body.appendChild(
-        modal
-    );
+    modal.appendChild(box);
+
+    document.body.appendChild(modal);
+
 
     return modal;
 
@@ -2050,9 +2181,7 @@ function showCheckoutModal(content) {
 
 function checkout() {
 
-    if (
-        cart.length === 0
-    ) {
+    if (cart.length === 0) {
 
         alert(
             "Your cart is empty."
@@ -2076,12 +2205,14 @@ function checkout() {
                 "You need to log in before checkout. Go to the login page?"
             );
 
+
         if (answer) {
 
             window.location.href =
                 "login.html";
 
         }
+
 
         return;
 
@@ -2102,13 +2233,12 @@ function startCheckout() {
     const total =
         getCartTotal();
 
+
     const currentPoints =
         getPoints();
 
 
-    if (
-        currentPoints <= 0
-    ) {
+    if (currentPoints <= 0) {
 
         showCustomerDetails(
             total,
@@ -2189,6 +2319,7 @@ function startCheckout() {
             "usePointsYes"
         );
 
+
     const no =
         document.getElementById(
             "usePointsNo"
@@ -2246,15 +2377,11 @@ function showPointsInput(
         Math.min(
             currentPoints,
             200,
-            Math.floor(
-                total / 100
-            )
+            Math.floor(total / 100)
         );
 
 
-    if (
-        maximumPoints <= 0
-    ) {
+    if (maximumPoints <= 0) {
 
         showCustomerDetails(
             total,
@@ -2328,9 +2455,7 @@ function showPointsInput(
         );
 
 
-    if (!apply) {
-        return;
-    }
+    if (!apply) return;
 
 
     apply.addEventListener(
@@ -2342,15 +2467,12 @@ function showPointsInput(
                     "pointsToUse"
                 );
 
-            if (!input) {
-                return;
-            }
+
+            if (!input) return;
 
 
             const points =
-                Number(
-                    input.value
-                );
+                Number(input.value);
 
 
             if (
@@ -2369,9 +2491,7 @@ function showPointsInput(
 
 
             const discount =
-                pointsToNaira(
-                    points
-                );
+                pointsToNaira(points);
 
 
             const newTotal =
@@ -2487,7 +2607,6 @@ function showCustomerDetails(
                             .join("")
                         : ""
                 }
-
 
                 ${
                     giftItems.length
@@ -2678,9 +2797,7 @@ function showCustomerDetails(
         );
 
 
-    if (!continueButton) {
-        return;
-    }
+    if (!continueButton) return;
 
 
     continueButton.addEventListener(
@@ -2692,15 +2809,18 @@ function showCustomerDetails(
                     "checkoutFirstName"
                 ).value.trim();
 
+
             const lastName =
                 document.getElementById(
                     "checkoutLastName"
                 ).value.trim();
 
+
             const address =
                 document.getElementById(
                     "checkoutAddress"
                 ).value.trim();
+
 
             const phone =
                 document.getElementById(
@@ -2835,6 +2955,7 @@ function showTransferConfirmation(
                 to one of the accounts below.
             </p>
 
+
             <div
                 style="
                     background:#F7F4EE;
@@ -2861,6 +2982,7 @@ function showTransferConfirmation(
 
             </div>
 
+
             <div
                 style="
                     font-weight:bold;
@@ -2870,6 +2992,7 @@ function showTransferConfirmation(
             >
                 OR
             </div>
+
 
             <div
                 style="
@@ -2896,6 +3019,7 @@ function showTransferConfirmation(
 
             </div>
 
+
             <p
                 style="
                     font-size:12px;
@@ -2905,6 +3029,7 @@ function showTransferConfirmation(
             >
                 Bank transfer only.
             </p>
+
 
             <button
                 id="paidButton"
@@ -2933,9 +3058,7 @@ function showTransferConfirmation(
         );
 
 
-    if (!paidButton) {
-        return;
-    }
+    if (!paidButton) return;
 
 
     paidButton.addEventListener(
@@ -2948,7 +3071,9 @@ function showTransferConfirmation(
                 customer
             );
 
+
             modal.remove();
+
 
             showPaymentChecking();
 
@@ -3050,9 +3175,7 @@ function createPendingOrder(
         );
 
 
-    orders.push(
-        order
-    );
+    orders.push(order);
 
 
     setStoredArray(
@@ -3175,9 +3298,9 @@ document.addEventListener(
                 ? event.target
                 : null;
 
-        if (!target) {
-            return;
-        }
+
+        if (!target) return;
+
 
         if (
             target.id ===
@@ -3213,13 +3336,19 @@ function updateGiftShoppingProgress() {
                 "giftSpendBar"
             );
 
+
         if (bar) {
-            bar.style.display = "none";
+
+            bar.style.display =
+                "none";
+
         }
+
 
         document.body.classList.remove(
             "gift-shopping-active"
         );
+
 
         return;
 
@@ -3227,6 +3356,7 @@ function updateGiftShoppingProgress() {
 
 
     const target = 50000;
+
 
     const paidShoppingTotal =
         getCartTotal();
@@ -3237,15 +3367,18 @@ function updateGiftShoppingProgress() {
             "giftSpendBar"
         );
 
+
     const amount =
         document.getElementById(
             "giftSpendAmount"
         );
 
+
     const fill =
         document.getElementById(
             "giftSpendFill"
         );
+
 
     const message =
         document.getElementById(
@@ -3307,6 +3440,7 @@ function updateGiftShoppingProgress() {
 
         }
 
+
         return;
 
     }
@@ -3358,9 +3492,7 @@ function setupSignup() {
         );
 
 
-    if (!createAccountBtn) {
-        return;
-    }
+    if (!createAccountBtn) return;
 
 
     createAccountBtn.addEventListener(
@@ -3372,10 +3504,12 @@ function setupSignup() {
                     "signupName"
                 );
 
+
             const emailInput =
                 document.getElementById(
                     "signupEmail"
                 );
+
 
             const passwordInput =
                 document.getElementById(
@@ -3387,18 +3521,16 @@ function setupSignup() {
                 !nameInput ||
                 !emailInput ||
                 !passwordInput
-            ) {
-
-                return;
-
-            }
+            ) return;
 
 
             const name =
                 nameInput.value.trim();
 
+
             const email =
                 emailInput.value.trim();
+
 
             const password =
                 passwordInput.value;
@@ -3498,9 +3630,7 @@ function setupLogin() {
         );
 
 
-    if (!loginBtn) {
-        return;
-    }
+    if (!loginBtn) return;
 
 
     loginBtn.addEventListener(
@@ -3512,6 +3642,7 @@ function setupLogin() {
                     "loginEmail"
                 );
 
+
             const passwordInput =
                 document.getElementById(
                     "loginPassword"
@@ -3521,15 +3652,12 @@ function setupLogin() {
             if (
                 !emailInput ||
                 !passwordInput
-            ) {
-
-                return;
-
-            }
+            ) return;
 
 
             const email =
                 emailInput.value.trim();
+
 
             const password =
                 passwordInput.value;
@@ -3628,35 +3756,42 @@ function setupProfile() {
             "profileName"
         );
 
+
     const profileEmail =
         document.getElementById(
             "profileEmail"
         );
+
 
     const profilePoints =
         document.getElementById(
             "profilePoints"
         );
 
+
     const profileGreeting =
         document.getElementById(
             "profileGreeting"
         );
+
 
     const profileInitial =
         document.getElementById(
             "profileInitial"
         );
 
+
     const gift1Status =
         document.getElementById(
             "gift1Status"
         );
 
+
     const gift2Status =
         document.getElementById(
             "gift2Status"
         );
+
 
     const logoutBtn =
         document.getElementById(
@@ -3692,12 +3827,14 @@ function setupProfile() {
 
         }
 
+
         if (profileEmail) {
 
             profileEmail.textContent =
                 "You need to log in to view your profile.";
 
         }
+
 
         return;
 
@@ -3776,9 +3913,11 @@ function setupProfile() {
                     "collectiveLoggedIn"
                 );
 
+
                 alert(
                     "You have been logged out."
                 );
+
 
                 window.location.href =
                     "login.html";
@@ -3804,9 +3943,8 @@ document.addEventListener(
                 ? event.target
                 : null;
 
-        if (!target) {
-            return;
-        }
+
+        if (!target) return;
 
 
         const earnCard =
@@ -3850,11 +3988,6 @@ document.addEventListener(
     "DOMContentLoaded",
     function() {
 
-        /*
-         * Each function checks whether the
-         * relevant HTML exists first.
-         */
-
         displayProducts();
 
         updateCartDisplay();
@@ -3872,34 +4005,15 @@ document.addEventListener(
         updateGiftShoppingProgress();
 
 
-        /*
-         * Keep cart/progress synchronized
-         * if another page changes localStorage.
-         */
-
-        let lastCart =
-            localStorage.getItem(
-                "collectiveCart"
-            );
-
-
-        setInterval(
-            function() {
-
-                const currentCart =
-                    localStorage.getItem(
-                        "collectiveCart"
-                    );
-
+        // Synchronize cart between pages/tabs
+        window.addEventListener(
+            "storage",
+            function(event) {
 
                 if (
-                    currentCart !==
-                    lastCart
+                    event.key ===
+                    "collectiveCart"
                 ) {
-
-                    lastCart =
-                        currentCart;
-
 
                     cart =
                         getStoredArray(
@@ -3913,8 +4027,27 @@ document.addEventListener(
 
                 }
 
-            },
-            500
+
+                if (
+                    event.key ===
+                    "collectivePoints"
+                ) {
+
+                    updatePointsDisplay();
+
+                }
+
+
+                if (
+                    event.key ===
+                    "collectiveTotalSpent"
+                ) {
+
+                    updateRewardStatus();
+
+                }
+
+            }
         );
 
     }
