@@ -53,107 +53,82 @@ const productCatalog = [
         size: "100 ml",
         description: "A masculine perfume."
     },
-
     {
         name: "Body Butter",
         category: "Skincare",
         min: 5000,
-        max: 9500,
-        size: "Not specified"
+        max: 9500
     },
-
     {
         name: "Sunscreen",
         category: "Skincare",
         min: 4000,
-        max: 9000,
-        size: "Not specified"
+        max: 9000
     },
-
     {
         name: "Face Cleanser",
         category: "Skincare",
         min: 7500,
-        max: 10000,
-        size: "Not specified"
+        max: 10000
     },
-
     {
         name: "Body Scrub",
         category: "Skincare",
         min: 4000,
-        max: 8000,
-        size: "Not specified"
+        max: 8000
     },
-
     {
         name: "Face Serum",
         category: "Skincare",
         min: 1500,
-        max: 4500,
-        size: "Not specified"
+        max: 4500
     },
-
     {
         name: "Lip Mask",
         category: "Skincare",
         min: 1000,
-        max: 3000,
-        size: "Not specified"
+        max: 3000
     },
-
     {
         name: "Rhode Lip Gloss",
         category: "Skincare",
         min: 10000,
         max: 15000,
-        size: "Not specified",
         colors: ["Clear", "Pink", "Brown"]
     },
-
     {
         name: "SHEGLAM Lip Gloss",
         category: "Skincare",
         min: 10000,
         max: 15000,
-        size: "Not specified",
         colors: ["Clear", "Pink", "Nude", "Brown"]
     },
-
     {
         name: "USHAS Lip Gloss",
         category: "Skincare",
         min: 10000,
         max: 15000,
-        size: "Not specified",
         colors: ["Clear", "Pink", "Nude", "Brown"]
     },
-
     {
         name: "Clear Normal Lip Gloss",
         category: "Skincare",
         min: 1000,
         max: 2000,
-        size: "Not specified",
         colors: ["Clear"]
     },
-
     {
         name: "Lip Balm",
         category: "Skincare",
         min: 1000,
-        max: 2000,
-        size: "Not specified"
+        max: 2000
     },
-
     {
         name: "Shower Gel",
         category: "Skincare",
         min: 12000,
-        max: 12000,
-        size: "Not specified"
+        max: 12000
     },
-
     {
         name: "Men's Fragrance Perfume",
         category: "Skincare",
@@ -161,7 +136,6 @@ const productCatalog = [
         max: 10000,
         size: "50 ml"
     },
-
     {
         name: "Women's Fragrance Perfume",
         category: "Skincare",
@@ -169,63 +143,48 @@ const productCatalog = [
         max: 10000,
         size: "50 ml"
     },
-
     {
         name: "Body Lotion",
         category: "Skincare",
         min: 8000,
-        max: 12000,
-        size: "Not specified"
+        max: 12000
     },
-
     {
         name: "Face Moisturizer",
         category: "Skincare",
         min: 3000,
-        max: 7000,
-        size: "Not specified"
+        max: 7000
     },
-
     {
         name: "Face Toner",
         category: "Skincare",
         min: 6500,
-        max: 10000,
-        size: "Not specified"
+        max: 10000
     },
-
     {
         name: "Body Oil",
         category: "Skincare",
         min: 6000,
-        max: 10000,
-        size: "Not specified"
+        max: 10000
     },
-
     {
         name: "Face Mask",
         category: "Skincare",
         min: 1000,
-        max: 4500,
-        size: "Not specified"
+        max: 4500
     },
-
     {
         name: "Lip Oil",
         category: "Skincare",
         min: 1000,
-        max: 2000,
-        size: "Not specified"
+        max: 2000
     },
-
     {
         name: "Pimple Patch",
         category: "Skincare",
         min: 500,
-        max: 1800,
-        size: "Not specified"
+        max: 1800
     },
-
 
     // ACCESSORIES
 
@@ -235,119 +194,102 @@ const productCatalog = [
         min: 3000,
         max: 6000
     },
-
     {
         name: "Masculine Chain Bracelet",
         category: "Accessories",
         min: 1000,
         max: 3500
     },
-
     {
         name: "Chrome Heart Glasses",
         category: "Accessories",
         min: 15000,
         max: 20000
     },
-
     {
         name: "Glasses",
         category: "Accessories",
         min: 2000,
         max: 5000
     },
-
     {
         name: "Glasses Set of 3",
         category: "Accessories",
         min: 4000,
         max: 5000
     },
-
     {
         name: "Glasses Set of 5",
         category: "Accessories",
         min: 5000,
         max: 10000
     },
-
     {
         name: "Scrunchies",
         category: "Accessories",
         min: 1200,
         max: 1200
     },
-
     {
         name: "Stanley Cup",
         category: "Accessories",
         min: 15000,
         max: 15000
     },
-
     {
         name: "Body Floral Stanley Cup",
         category: "Accessories",
         min: 20000,
         max: 20000
     },
-
     {
         name: "Headband",
         category: "Accessories",
         min: 1600,
         max: 1600
     },
-
     {
         name: "Tote Bag",
         category: "Accessories",
         min: 10000,
         max: 20000
     },
-
     {
         name: "Claw Clip",
         category: "Accessories",
         min: 2000,
         max: 2500
     },
-
     {
         name: "Anklet",
         category: "Accessories",
         min: 1000,
         max: 2000
     },
-
     {
         name: "Necklace",
         category: "Accessories",
         min: 1000,
         max: 3500
     },
-
     {
         name: "Silver Bracelet",
         category: "Accessories",
         min: 3500,
         max: 3500
     },
-
     {
         name: "Gold Bracelet",
         category: "Accessories",
         min: 3500,
         max: 3500
     },
-
     {
         name: "Vacuum Cups",
         category: "Accessories",
         min: 10000,
         max: 20000
     },
-
 
     // CLOTHING
 
@@ -357,119 +299,102 @@ const productCatalog = [
         min: 6500,
         max: 8000
     },
-
     {
         name: "Graphic Tops",
         category: "Clothing",
         min: 8000,
         max: 10000
     },
-
     {
         name: "Tube Tops",
         category: "Clothing",
         min: 5000,
         max: 15000
     },
-
     {
         name: "Jersey Tops",
         category: "Clothing",
         min: 8500,
         max: 8500
     },
-
     {
         name: "Hoodies",
         category: "Clothing",
         min: 9500,
         max: 10000
     },
-
     {
         name: "Zip-Up Hoodies",
         category: "Clothing",
         min: 9000,
         max: 15000
     },
-
     {
         name: "Plain Sweatpants",
         category: "Clothing",
         min: 10000,
         max: 10000
     },
-
     {
         name: "Leopard Sweatpants",
         category: "Clothing",
         min: 15000,
         max: 15000
     },
-
     {
         name: "Designer Sweatpants",
         category: "Clothing",
         min: 20000,
         max: 20000
     },
-
     {
         name: "Shorts",
         category: "Clothing",
         min: 10000,
         max: 10000
     },
-
     {
         name: "Jean Bum Shorts",
         category: "Clothing",
         min: 5000,
         max: 5000
     },
-
     {
         name: "Jeans",
         category: "Clothing",
         min: 10000,
         max: 10000
     },
-
     {
         name: "Designed Jeans",
         category: "Clothing",
         min: 20000,
         max: 20000
     },
-
     {
         name: "Bootcut Jeans",
         category: "Clothing",
         min: 10000,
         max: 10000
     },
-
     {
         name: "Jeans Skirt",
         category: "Clothing",
         min: 6500,
         max: 6500
     },
-
     {
         name: "Pleated Jeans Skirt",
         category: "Clothing",
         min: 6000,
         max: 6000
     },
-
     {
         name: "Normal Shorts",
         category: "Clothing",
         min: 4000,
         max: 4000
     },
-
 
     // SHOES
 
@@ -479,70 +404,60 @@ const productCatalog = [
         min: 15000,
         max: 30000
     },
-
     {
         name: "Adidas Sambas",
         category: "Shoes",
         min: 30000,
         max: 50000
     },
-
     {
         name: "Adidas Campus",
         category: "Shoes",
         min: 30000,
         max: 50000
     },
-
     {
         name: "Slides",
         category: "Shoes",
         min: 9000,
         max: 9000
     },
-
     {
         name: "Crocs",
         category: "Shoes",
         min: 10000,
         max: 10000
     },
-
     {
         name: "Loafers",
         category: "Shoes",
         min: 15000,
         max: 30000
     },
-
     {
         name: "Clogs",
         category: "Shoes",
         min: 35000,
         max: 70000
     },
-
     {
         name: "Timberland",
         category: "Shoes",
         min: 5000,
         max: 40000
     },
-
     {
         name: "Vans",
         category: "Shoes",
         min: 5000,
         max: 40000
     },
-
     {
         name: "Puma",
         category: "Shoes",
         min: 25000,
         max: 50000
     },
-
 
     // BAGS
 
@@ -552,56 +467,48 @@ const productCatalog = [
         min: 35000,
         max: 50000
     },
-
     {
         name: "Mini Gucci Bags",
         category: "Bags",
         min: 20000,
         max: 50000
     },
-
     {
         name: "Gucci Bags",
         category: "Bags",
         min: 35000,
         max: 60000
     },
-
     {
         name: "Prada Bags",
         category: "Bags",
         min: 35000,
         max: 60000
     },
-
     {
         name: "Dior Bags",
         category: "Bags",
         min: 35000,
         max: 70000
     },
-
     {
         name: "Chanel Bags",
         category: "Bags",
         min: 45000,
         max: 70000
     },
-
     {
         name: "Louis Vuitton Bags",
         category: "Bags",
         min: 25000,
         max: 70000
     },
-
     {
         name: "Cartier Watches",
         category: "Bags",
         min: 20000,
         max: 35000
     },
-
     {
         name: "Cartier Glasses",
         category: "Bags",
@@ -629,6 +536,7 @@ function makePrice(min, max, number) {
     return Math.round(
         (min + step * (number - 1)) / 100
     ) * 100;
+
 }
 
 productCatalog.forEach(product => {
@@ -636,15 +544,35 @@ productCatalog.forEach(product => {
     for (let i = 1; i <= 30; i++) {
 
         products.push({
+
             id: `${product.name}-${i}`,
+
             name: product.name,
+
             listing: i,
+
             category: product.category,
-            price: makePrice(product.min, product.max, i),
-            size: product.size || "Not specified",
-            description: product.description || "",
-            colors: product.colors || [],
+
+            price: makePrice(
+                product.min,
+                product.max,
+                i
+            ),
+
+            size:
+                product.size ||
+                "Not specified",
+
+            description:
+                product.description ||
+                "",
+
+            colors:
+                product.colors ||
+                [],
+
             stock: 10
+
         });
 
     }
@@ -662,11 +590,17 @@ function loadCart() {
 
     try {
 
-        const saved = JSON.parse(
-            localStorage.getItem("collectiveCart") || "[]"
-        );
+        const saved =
+            JSON.parse(
+                localStorage.getItem(
+                    "collectiveCart"
+                ) || "[]"
+            );
 
-        cart = Array.isArray(saved) ? saved : [];
+        cart =
+            Array.isArray(saved)
+                ? saved
+                : [];
 
     } catch (error) {
 
@@ -689,7 +623,10 @@ function getCartQuantity() {
 
     return cart.reduce(
         (total, item) =>
-            total + Number(item.quantity || 0),
+            total +
+            Number(
+                item.quantity || 0
+            ),
         0
     );
 
@@ -710,39 +647,121 @@ function getCartTotal() {
 
 // ======================================================
 // FREE GIFT STORAGE
-// IMPORTANT: BOTH OLD AND NEW KEYS ARE SUPPORTED
+// FIXED: ALWAYS RETURNS REAL PRODUCTS
 // ======================================================
 
 function getSelectedFreeGiftProducts() {
 
     try {
 
-        let gifts = JSON.parse(
+        let saved =
             localStorage.getItem(
                 "collectiveSelectedFreeGifts"
-            ) || "null"
-        );
+            );
 
-        if (
-            Array.isArray(gifts) &&
-            gifts.length > 0
-        ) {
+        /*
+         * Use old key if new key is missing.
+         */
 
-            return gifts;
+        if (!saved) {
+
+            saved =
+                localStorage.getItem(
+                    "collectiveFreeGifts"
+                );
 
         }
 
-        gifts = JSON.parse(
-            localStorage.getItem(
-                "collectiveFreeGifts"
-            ) || "[]"
-        );
+        if (!saved) {
+            return [];
+        }
 
-        return Array.isArray(gifts)
-            ? gifts
-            : [];
+        const gifts =
+            JSON.parse(saved);
+
+        if (!Array.isArray(gifts)) {
+            return [];
+        }
+
+        return gifts
+            .map(gift => {
+
+                /*
+                 * If only the product ID was saved,
+                 * find the real product.
+                 */
+
+                if (
+                    typeof gift ===
+                    "string"
+                ) {
+
+                    return products.find(
+                        product =>
+                            product.id === gift
+                    );
+
+                }
+
+                /*
+                 * If an object was saved,
+                 * find the real product using its ID.
+                 */
+
+                if (
+                    gift &&
+                    typeof gift ===
+                    "object"
+                ) {
+
+                    if (gift.id) {
+
+                        const realProduct =
+                            products.find(
+                                product =>
+                                    product.id ===
+                                    gift.id
+                            );
+
+                        if (realProduct) {
+                            return realProduct;
+                        }
+
+                    }
+
+                    /*
+                     * Also support old saved
+                     * objects using the name.
+                     */
+
+                    if (gift.name) {
+
+                        const realProduct =
+                            products.find(
+                                product =>
+                                    product.name ===
+                                    gift.name
+                            );
+
+                        if (realProduct) {
+                            return realProduct;
+                        }
+
+                    }
+
+                }
+
+                return null;
+
+            })
+            .filter(Boolean);
 
     } catch (error) {
+
+        console.error(
+            "FREE GIFT LOAD ERROR:",
+            error
+        );
 
         return [];
 
@@ -750,17 +769,56 @@ function getSelectedFreeGiftProducts() {
 
 }
 
-function saveSelectedFreeGiftProducts(gifts) {
+function saveSelectedFreeGiftProducts(
+    gifts
+) {
 
     const safeGifts =
         Array.isArray(gifts)
             ? gifts
+                .map(gift => {
+
+                    if (
+                        typeof gift ===
+                        "string"
+                    ) {
+
+                        return products.find(
+                            product =>
+                                product.id ===
+                                gift
+                        );
+
+                    }
+
+                    if (
+                        gift &&
+                        typeof gift ===
+                        "object"
+                    ) {
+
+                        return products.find(
+                            product =>
+                                product.id ===
+                                gift.id
+                        ) || gift;
+
+                    }
+
+                    return null;
+
+                })
+                .filter(Boolean)
             : [];
 
     localStorage.setItem(
         "collectiveSelectedFreeGifts",
         JSON.stringify(safeGifts)
     );
+
+    /*
+     * Keep the old key synchronized.
+     */
 
     localStorage.setItem(
         "collectiveFreeGifts",
@@ -789,11 +847,15 @@ function clearSelectedFreeGiftProducts() {
 function updateCartCount() {
 
     const count =
-        document.getElementById("cartCount");
+        document.getElementById(
+            "cartCount"
+        );
 
     if (count) {
+
         count.textContent =
             getCartQuantity();
+
     }
 
 }
@@ -803,10 +865,14 @@ function updateCartDisplay() {
     updateCartCount();
 
     const cartItems =
-        document.getElementById("cartItems");
+        document.getElementById(
+            "cartItems"
+        );
 
     const cartTotal =
-        document.getElementById("cartTotal");
+        document.getElementById(
+            "cartTotal"
+        );
 
     if (!cartItems) {
         return;
@@ -816,6 +882,7 @@ function updateCartDisplay() {
         getSelectedFreeGiftProducts();
 
     let html = "";
+
 
     // ------------------------------
     // PAID PRODUCTS
@@ -831,78 +898,90 @@ function updateCartDisplay() {
 
     } else {
 
-        cart.forEach((item, index) => {
+        cart.forEach(
+            (item, index) => {
 
-            const quantity =
-                Number(item.quantity || 1);
+                const quantity =
+                    Number(
+                        item.quantity || 1
+                    );
 
-            const price =
-                Number(item.price || 0);
+                const price =
+                    Number(
+                        item.price || 0
+                    );
 
-            const itemTotal =
-                price * quantity;
+                const itemTotal =
+                    price * quantity;
 
-            html += `
-                <div class="cart-item">
+                html += `
 
-                    <div class="cart-item-info">
+                    <div class="cart-item">
 
-                        <h3>
-                            ${item.name || "Product"}
-                        </h3>
+                        <div class="cart-item-info">
 
-                        ${
-                            item.color
-                                ? `<small>Shade: ${item.color}</small>`
-                                : ""
-                        }
+                            <h3>
+                                ${item.name || "Product"}
+                            </h3>
 
-                        <strong>
-                            ₦${itemTotal.toLocaleString()}
-                        </strong>
+                            ${
+                                item.color
+                                    ? `
+                                        <small>
+                                            Shade: ${item.color}
+                                        </small>
+                                    `
+                                    : ""
+                            }
 
-                    </div>
+                            <strong>
+                                ₦${itemTotal.toLocaleString()}
+                            </strong>
 
-                    <div class="cart-item-actions">
+                        </div>
 
-                        <div class="cart-quantity">
+                        <div class="cart-item-actions">
+
+                            <div class="cart-quantity">
+
+                                <button
+                                    type="button"
+                                    class="cart-minus"
+                                    data-index="${index}"
+                                >
+                                    −
+                                </button>
+
+                                <span>
+                                    ${quantity}
+                                </span>
+
+                                <button
+                                    type="button"
+                                    class="cart-plus"
+                                    data-index="${index}"
+                                >
+                                    +
+                                </button>
+
+                            </div>
 
                             <button
                                 type="button"
-                                class="cart-minus"
+                                class="remove-cart-item"
                                 data-index="${index}"
                             >
-                                −
-                            </button>
-
-                            <span>
-                                ${quantity}
-                            </span>
-
-                            <button
-                                type="button"
-                                class="cart-plus"
-                                data-index="${index}"
-                            >
-                                +
+                                Remove
                             </button>
 
                         </div>
 
-                        <button
-                            type="button"
-                            class="remove-cart-item"
-                            data-index="${index}"
-                        >
-                            Remove
-                        </button>
-
                     </div>
 
-                </div>
-            `;
+                `;
 
-        });
+            }
+        );
 
     }
 
@@ -941,7 +1020,8 @@ function updateCartDisplay() {
                     "
                 >
 
-                    ${selectedGifts.map(gift => `
+                    ${selectedGifts.map(
+                        gift => `
 
                         <div
                             style="
@@ -959,7 +1039,7 @@ function updateCartDisplay() {
                                     color:#304B52;
                                 "
                             >
-                                🎁 ${gift.name}
+                                🎁 ${gift.name || "Free Gift"}
                             </span>
 
                             <strong
@@ -973,7 +1053,8 @@ function updateCartDisplay() {
 
                         </div>
 
-                    `).join("")}
+                    `
+                    ).join("")}
 
                 </div>
 
@@ -995,7 +1076,8 @@ function updateCartDisplay() {
 
     }
 
-    cartItems.innerHTML = html;
+    cartItems.innerHTML =
+        html;
 
     if (cartTotal) {
 
@@ -1008,16 +1090,17 @@ function updateCartDisplay() {
 
 
 // ======================================================
-// OPEN CART
+// OPEN / CLOSE CART
 // ======================================================
 
 function openCart() {
 
     const popup =
-        document.getElementById("cartPopup");
+        document.getElementById(
+            "cartPopup"
+        );
 
     if (!popup) {
-        console.error("cartPopup was not found.");
         return;
     }
 
@@ -1025,26 +1108,36 @@ function openCart() {
 
     popup.classList.add("open");
 
-    popup.style.display = "flex";
+    popup.style.display =
+        "flex";
 
-    document.body.classList.add("cart-open");
+    document.body.classList.add(
+        "cart-open"
+    );
 
 }
 
 function closeCart() {
 
     const popup =
-        document.getElementById("cartPopup");
+        document.getElementById(
+            "cartPopup"
+        );
 
     if (!popup) {
         return;
     }
 
-    popup.classList.remove("open");
+    popup.classList.remove(
+        "open"
+    );
 
-    popup.style.display = "none";
+    popup.style.display =
+        "none";
 
-    document.body.classList.remove("cart-open");
+    document.body.classList.remove(
+        "cart-open"
+    );
 
 }
 
@@ -1056,13 +1149,19 @@ function closeCart() {
 function setupCartEvents() {
 
     const cartButton =
-        document.getElementById("cartBtn");
+        document.getElementById(
+            "cartBtn"
+        );
 
     const closeButton =
-        document.getElementById("closeCart");
+        document.getElementById(
+            "closeCart"
+        );
 
     const popup =
-        document.getElementById("cartPopup");
+        document.getElementById(
+            "cartPopup"
+        );
 
     if (cartButton) {
 
@@ -1071,6 +1170,7 @@ function setupCartEvents() {
             function(event) {
 
                 event.preventDefault();
+
                 event.stopPropagation();
 
                 openCart();
@@ -1087,6 +1187,7 @@ function setupCartEvents() {
             function(event) {
 
                 event.preventDefault();
+
                 event.stopPropagation();
 
                 closeCart();
@@ -1102,8 +1203,13 @@ function setupCartEvents() {
             "click",
             function(event) {
 
-                if (event.target === popup) {
+                if (
+                    event.target ===
+                    popup
+                ) {
+
                     closeCart();
+
                 }
 
             }
@@ -1125,7 +1231,8 @@ function setupCartItemEvents() {
         function(event) {
 
             const target =
-                event.target instanceof Element
+                event.target instanceof
+                Element
                     ? event.target
                     : null;
 
@@ -1134,10 +1241,10 @@ function setupCartItemEvents() {
             }
 
 
-            // REMOVE
-
             const removeButton =
-                target.closest(".remove-cart-item");
+                target.closest(
+                    ".remove-cart-item"
+                );
 
             if (removeButton) {
 
@@ -1151,7 +1258,10 @@ function setupCartItemEvents() {
                     cart[index]
                 ) {
 
-                    cart.splice(index, 1);
+                    cart.splice(
+                        index,
+                        1
+                    );
 
                     saveCart();
 
@@ -1166,10 +1276,10 @@ function setupCartItemEvents() {
             }
 
 
-            // MINUS
-
             const minusButton =
-                target.closest(".cart-minus");
+                target.closest(
+                    ".cart-minus"
+                );
 
             if (minusButton) {
 
@@ -1185,12 +1295,14 @@ function setupCartItemEvents() {
 
                     const quantity =
                         Number(
-                            cart[index].quantity || 1
+                            cart[index]
+                                .quantity || 1
                         );
 
                     if (quantity > 1) {
 
-                        cart[index].quantity =
+                        cart[index]
+                            .quantity =
                             quantity - 1;
 
                     }
@@ -1208,10 +1320,10 @@ function setupCartItemEvents() {
             }
 
 
-            // PLUS
-
             const plusButton =
-                target.closest(".cart-plus");
+                target.closest(
+                    ".cart-plus"
+                );
 
             if (plusButton) {
 
@@ -1227,12 +1339,14 @@ function setupCartItemEvents() {
 
                     const quantity =
                         Number(
-                            cart[index].quantity || 1
+                            cart[index]
+                                .quantity || 1
                         );
 
                     if (quantity < 10) {
 
-                        cart[index].quantity =
+                        cart[index]
+                            .quantity =
                             quantity + 1;
 
                     }
@@ -1263,8 +1377,13 @@ function setupEscapeKey() {
         "keydown",
         function(event) {
 
-            if (event.key === "Escape") {
+            if (
+                event.key ===
+                "Escape"
+            ) {
+
                 closeCart();
+
             }
 
         }
@@ -1304,14 +1423,16 @@ function savePoints(points) {
 function calculatePoints(amount) {
 
     return Math.floor(
-        Number(amount || 0) / 1000
+        Number(amount || 0) /
+        1000
     );
 
 }
 
 function pointsToNaira(points) {
 
-    return Number(points || 0) * 100;
+    return Number(points || 0) *
+        100;
 
 }
 
@@ -1330,7 +1451,9 @@ function updatePointsDisplay() {
         getPoints();
 
     document
-        .querySelectorAll(".points-balance")
+        .querySelectorAll(
+            ".points-balance"
+        )
         .forEach(element => {
 
             element.textContent =
@@ -1344,8 +1467,10 @@ function updatePointsDisplay() {
         );
 
     if (profilePoints) {
+
         profilePoints.textContent =
             points;
+
     }
 
 }
@@ -1385,7 +1510,8 @@ function addPurchasePoints(amount) {
         calculatePoints(amount);
 
     savePoints(
-        getPoints() + earned
+        getPoints() +
+        earned
     );
 
     updatePointsDisplay();
@@ -1404,7 +1530,9 @@ function updateRewardStatus() {
     const totalSpent =
         getTotalSpent();
 
-    if (totalSpent >= 50000) {
+    if (
+        totalSpent >= 50000
+    ) {
 
         localStorage.setItem(
             "collectiveGift1",
@@ -1413,7 +1541,9 @@ function updateRewardStatus() {
 
     }
 
-    if (totalSpent >= 100000) {
+    if (
+        totalSpent >= 100000
+    ) {
 
         localStorage.setItem(
             "collectiveGift2",
@@ -1484,30 +1614,37 @@ function filterProducts() {
 
         const name =
             (
-                card.dataset.name || ""
+                card.dataset.name ||
+                ""
             ).toLowerCase();
 
         const category =
-            card.dataset.category || "";
+            card.dataset.category ||
+            "";
 
         const matchesSearch =
             name.includes(search);
 
         const matchesCategory =
-            currentCategory === "All" ||
-            category === currentCategory;
+            currentCategory ===
+                "All" ||
+            category ===
+                currentCategory;
 
         if (
             matchesSearch &&
             matchesCategory
         ) {
 
-            card.style.display = "";
+            card.style.display =
+                "";
+
             visible++;
 
         } else {
 
-            card.style.display = "none";
+            card.style.display =
+                "none";
 
         }
 
@@ -1556,58 +1693,70 @@ function createCategoryMenu() {
         "Bags"
     ];
 
-    categories.forEach(category => {
+    categories.forEach(
+        category => {
 
-        const button =
-            document.createElement("button");
+            const button =
+                document.createElement(
+                    "button"
+                );
 
-        button.type = "button";
+            button.type =
+                "button";
 
-        button.className =
-            "category-button";
+            button.className =
+                "category-button";
 
-        button.textContent =
-            category === "All"
-                ? "ALL PRODUCTS"
-                : category.toUpperCase();
+            button.textContent =
+                category === "All"
+                    ? "ALL PRODUCTS"
+                    : category.toUpperCase();
 
-        if (category === currentCategory) {
-
-            button.classList.add(
-                "selected"
-            );
-
-        }
-
-        button.addEventListener(
-            "click",
-            function() {
-
-                currentCategory =
-                    category;
-
-                document
-                    .querySelectorAll(
-                        ".category-button"
-                    )
-                    .forEach(btn =>
-                        btn.classList.remove(
-                            "selected"
-                        )
-                    );
+            if (
+                category ===
+                currentCategory
+            ) {
 
                 button.classList.add(
                     "selected"
                 );
 
-                filterProducts();
-
             }
-        );
 
-        container.appendChild(button);
+            button.addEventListener(
+                "click",
+                function() {
 
-    });
+                    currentCategory =
+                        category;
+
+                    document
+                        .querySelectorAll(
+                            ".category-button"
+                        )
+                        .forEach(
+                            btn =>
+                                btn.classList
+                                    .remove(
+                                        "selected"
+                                    )
+                        );
+
+                    button.classList.add(
+                        "selected"
+                    );
+
+                    filterProducts();
+
+                }
+            );
+
+            container.appendChild(
+                button
+            );
+
+        }
+    );
 
 }
 
@@ -1623,7 +1772,10 @@ function setupCategoryButton() {
             ".collective-categories"
         );
 
-    if (!button || !menu) {
+    if (
+        !button ||
+        !menu
+    ) {
         return;
     }
 
@@ -1634,7 +1786,8 @@ function setupCategoryButton() {
             event.preventDefault();
 
             menu.style.display =
-                menu.style.display === "flex"
+                menu.style.display ===
+                    "flex"
                     ? "none"
                     : "flex";
 
@@ -1682,9 +1835,6 @@ function renderProducts() {
         );
 
     if (!container) {
-        console.error(
-            "productGrid was not found."
-        );
         return;
     }
 
@@ -1692,104 +1842,116 @@ function renderProducts() {
 
     products
         .slice(0, 60)
-        .forEach(product => {
+        .forEach(
+            product => {
 
-            const card =
-                document.createElement("div");
+                const card =
+                    document.createElement(
+                        "div"
+                    );
 
-            card.className =
-                "product-card";
+                card.className =
+                    "product-card";
 
-            card.dataset.name =
-                product.name;
+                card.dataset.name =
+                    product.name;
 
-            card.dataset.category =
-                product.category;
+                card.dataset.category =
+                    product.category;
 
-            const colors =
-                product.colors || [];
+                const colors =
+                    product.colors ||
+                    [];
 
-            let colorHTML = "";
+                let colorHTML =
+                    "";
 
-            if (colors.length > 0) {
+                if (
+                    colors.length > 0
+                ) {
 
-                colorHTML = `
+                    colorHTML = `
 
-                    <div class="product-colors">
+                        <div class="product-colors">
 
-                        <label>
-                            Shade
-                        </label>
+                            <label>
+                                Shade
+                            </label>
 
-                        <select
-                            class="product-color"
+                            <select
+                                class="product-color"
+                            >
+
+                                ${colors.map(
+                                    color => `
+                                    <option value="${color}">
+                                        ${color}
+                                    </option>
+                                `
+                                ).join("")}
+
+                            </select>
+
+                        </div>
+
+                    `;
+
+                }
+
+                card.innerHTML = `
+
+                    <div class="product-image">
+
+                        <span>
+                            ${product.name}
+                        </span>
+
+                    </div>
+
+                    <div class="product-info">
+
+                        <p class="product-category">
+                            ${product.category}
+                        </p>
+
+                        <h3>
+                            ${product.name}
+                        </h3>
+
+                        <p class="product-description">
+                            ${product.description || ""}
+                        </p>
+
+                        <p class="product-size">
+                            ${product.size}
+                        </p>
+
+                        <p class="product-price">
+                            ₦${Number(
+                                product.price
+                            ).toLocaleString()}
+                        </p>
+
+                        ${colorHTML}
+
+                        <button
+                            type="button"
+                            class="add-to-cart"
+                            data-product-id="${product.id}"
                         >
-
-                            ${colors.map(color => `
-                                <option value="${color}">
-                                    ${color}
-                                </option>
-                            `).join("")}
-
-                        </select>
+                            ADD TO CART
+                        </button>
 
                     </div>
 
                 `;
 
+                container.appendChild(
+                    card
+                );
+
             }
-
-            card.innerHTML = `
-
-                <div class="product-image">
-
-                    <span>
-                        ${product.name}
-                    </span>
-
-                </div>
-
-                <div class="product-info">
-
-                    <p class="product-category">
-                        ${product.category}
-                    </p>
-
-                    <h3>
-                        ${product.name}
-                    </h3>
-
-                    <p class="product-description">
-                        ${product.description || ""}
-                    </p>
-
-                    <p class="product-size">
-                        ${product.size}
-                    </p>
-
-                    <p class="product-price">
-                        ₦${Number(
-                            product.price
-                        ).toLocaleString()}
-                    </p>
-
-                    ${colorHTML}
-
-                    <button
-                        type="button"
-                        class="add-to-cart"
-                        data-product-id="${product.id}"
-                    >
-                        ADD TO CART
-                    </button>
-
-                </div>
-
-            `;
-
-            container.appendChild(card);
-
-        });
+        );
 
     filterProducts();
 
@@ -1807,7 +1969,8 @@ function setupAddToCart() {
         function(event) {
 
             const target =
-                event.target instanceof Element
+                event.target instanceof
+                Element
                     ? event.target
                     : null;
 
@@ -1827,12 +1990,14 @@ function setupAddToCart() {
             event.preventDefault();
 
             const productId =
-                button.dataset.productId;
+                button.dataset
+                    .productId;
 
             const product =
                 products.find(
                     item =>
-                        item.id === productId
+                        item.id ===
+                        productId
                 );
 
             if (!product) {
@@ -1857,19 +2022,23 @@ function setupAddToCart() {
             const existing =
                 cart.find(
                     item =>
-                        item.id === product.id &&
+                        item.id ===
+                            product.id &&
                         (item.color || "") ===
-                        selectedColor
+                            selectedColor
                 );
 
             if (existing) {
 
                 const quantity =
                     Number(
-                        existing.quantity || 1
+                        existing.quantity ||
+                        1
                     );
 
-                if (quantity < 10) {
+                if (
+                    quantity < 10
+                ) {
 
                     existing.quantity =
                         quantity + 1;
@@ -1939,12 +2108,20 @@ function getFreeGiftLevel() {
     const totalSpent =
         getTotalSpent();
 
-    if (totalSpent >= 100000) {
+    if (
+        totalSpent >= 100000
+    ) {
+
         return 10;
+
     }
 
-    if (totalSpent >= 50000) {
+    if (
+        totalSpent >= 50000
+    ) {
+
         return 5;
+
     }
 
     return 0;
@@ -1970,7 +2147,9 @@ function renderGiftOptions() {
     const unlocked =
         getFreeGiftLevel();
 
-    if (unlocked <= 0) {
+    if (
+        unlocked <= 0
+    ) {
 
         container.innerHTML = `
             <p>
@@ -1986,132 +2165,155 @@ function renderGiftOptions() {
         products
             .filter(
                 product =>
-                    product.category === "Accessories" ||
-                    product.category === "Skincare"
+                    product.category ===
+                        "Accessories" ||
+                    product.category ===
+                        "Skincare"
             )
-            .slice(0, unlocked);
+            .slice(
+                0,
+                unlocked
+            );
 
     const selected =
         getSelectedFreeGiftProducts();
 
     container.innerHTML =
-        giftProducts.map(product => `
+        giftProducts
+            .map(
+                product => `
 
-            <label class="gift-option">
+                    <label class="gift-option">
 
-                <input
-                    type="checkbox"
-                    class="gift-checkbox"
-                    value="${product.id}"
-                    ${
-                        selected.some(
-                            gift =>
-                                gift.id === product.id
-                        )
-                            ? "checked"
-                            : ""
-                    }
-                >
+                        <input
+                            type="checkbox"
+                            class="gift-checkbox"
+                            value="${product.id}"
+                            ${
+                                selected.some(
+                                    gift =>
+                                        gift.id ===
+                                        product.id
+                                )
+                                    ? "checked"
+                                    : ""
+                            }
+                        >
 
-                <span>
-                    ${product.name}
-                </span>
+                        <span>
+                            ${product.name}
+                        </span>
 
-            </label>
+                    </label>
 
-        `).join("");
+                `
+            )
+            .join("");
 
 
     container
         .querySelectorAll(
             ".gift-checkbox"
         )
-        .forEach(checkbox => {
+        .forEach(
+            checkbox => {
 
-            checkbox.addEventListener(
-                "change",
-                function() {
+                checkbox.addEventListener(
+                    "change",
+                    function() {
 
-                    let gifts =
-                        getSelectedFreeGiftProducts();
+                        let gifts =
+                            getSelectedFreeGiftProducts();
 
-                    const product =
-                        products.find(
-                            item =>
-                                item.id ===
-                                checkbox.value
-                        );
+                        const product =
+                            products.find(
+                                item =>
+                                    item.id ===
+                                    checkbox.value
+                            );
 
-                    if (!product) {
-                        return;
-                    }
-
-                    if (checkbox.checked) {
-
-                        if (
-                            gifts.some(
-                                gift =>
-                                    gift.id ===
-                                    product.id
-                            )
-                        ) {
-
+                        if (!product) {
                             return;
-
                         }
 
                         if (
-                            gifts.length <
-                            unlocked
+                            checkbox.checked
                         ) {
 
-                            gifts.push(product);
+                            if (
+                                gifts.some(
+                                    gift =>
+                                        gift.id ===
+                                        product.id
+                                )
+                            ) {
+
+                                return;
+
+                            }
+
+                            if (
+                                gifts.length <
+                                unlocked
+                            ) {
+
+                                gifts.push(
+                                    product
+                                );
+
+                            } else {
+
+                                checkbox.checked =
+                                    false;
+
+                                alert(
+                                    `You can select up to ${unlocked} free item${unlocked === 1 ? "" : "s"}.`
+                                );
+
+                                return;
+
+                            }
 
                         } else {
 
-                            checkbox.checked =
-                                false;
-
-                            alert(
-                                `You can select up to ${unlocked} free item${unlocked === 1 ? "" : "s"}.`
-                            );
-
-                            return;
+                            gifts =
+                                gifts.filter(
+                                    gift =>
+                                        gift.id !==
+                                        product.id
+                                );
 
                         }
 
-                    } else {
+                        saveSelectedFreeGiftProducts(
+                            gifts
+                        );
 
-                        gifts =
-                            gifts.filter(
-                                gift =>
-                                    gift.id !==
-                                    product.id
-                            );
+                        updateCartDisplay();
+
+                        /*
+                         * SHOW THE CORRECT
+                         * ₦50K OR ₦100K POPUP
+                         */
+
+                        showGiftPickedPopup(
+                            gifts.length,
+                            unlocked
+                        );
 
                     }
+                );
 
-                    saveSelectedFreeGiftProducts(
-                        gifts
-                    );
-
-                    updateCartDisplay();
-
-                    showGiftPickedPopup(
-                        gifts.length,
-                        unlocked
-                    );
-
-                }
-            );
-
-        });
+            }
+        );
 
 }
 
 
 // ======================================================
 // GIFT PICKED POPUP
+// ₦50K = 5 GIFTS
+// ₦100K = 10 GIFTS
 // ======================================================
 
 function showGiftPickedPopup(
@@ -2120,8 +2322,15 @@ function showGiftPickedPopup(
 ) {
 
     if (
-        selectedCount !== unlocked ||
-        unlocked < 5
+        selectedCount !==
+        unlocked
+    ) {
+        return;
+    }
+
+    if (
+        unlocked !== 5 &&
+        unlocked !== 10
     ) {
         return;
     }
@@ -2135,8 +2344,15 @@ function showGiftPickedPopup(
         old.remove();
     }
 
+    const target =
+        unlocked === 5
+            ? 50000
+            : 100000;
+
     const popup =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
     popup.id =
         "giftPickedPopup";
@@ -2190,11 +2406,12 @@ function showGiftPickedPopup(
                     line-height:1.6;
                 "
             >
-                Spend ₦${unlocked === 5
-                    ? "50,000"
-                    : "100,000"}
+                Spend
+                <strong>
+                    ₦${target.toLocaleString()}
+                </strong>
                 on your purchases to take away
-                your free gifts.
+                your ${unlocked} free gifts.
             </p>
 
             <p
@@ -2219,19 +2436,27 @@ function showGiftPickedPopup(
 
     `;
 
-    document.body.appendChild(popup);
+    document.body.appendChild(
+        popup
+    );
 
-    document
-        .getElementById("giftPopupClose")
-        ?.addEventListener(
-            "click",
-            () => popup.remove()
+    const closeButton =
+        document.getElementById(
+            "giftPopupClose"
         );
 
-    setTimeout(
-        () => popup.remove(),
-        5000
-    );
+    if (closeButton) {
+
+        closeButton.addEventListener(
+            "click",
+            function() {
+
+                popup.remove();
+
+            }
+        );
+
+    }
 
 }
 
@@ -2249,32 +2474,39 @@ function updateGiftShoppingProgress() {
         .querySelectorAll(
             ".gift-progress"
         )
-        .forEach(element => {
+        .forEach(
+            element => {
 
-            if (total >= 100000) {
+                if (
+                    total >= 100000
+                ) {
 
-                element.textContent =
-                    "₦100,000 reward unlocked";
+                    element.textContent =
+                        "₦100,000 reward unlocked";
 
-            } else if (total >= 50000) {
+                } else if (
+                    total >= 50000
+                ) {
 
-                element.textContent =
-                    "₦50,000 reward unlocked";
+                    element.textContent =
+                        "₦50,000 reward unlocked";
 
-            } else {
+                } else {
 
-                const remaining =
-                    50000 - total;
+                    const remaining =
+                        50000 -
+                        total;
 
-                element.textContent =
-                    `₦${Math.max(
-                        0,
-                        remaining
-                    ).toLocaleString()} more to unlock your first reward`;
+                    element.textContent =
+                        `₦${Math.max(
+                            0,
+                            remaining
+                        ).toLocaleString()} more to unlock your first reward`;
+
+                }
 
             }
-
-        });
+        );
 
 }
 
@@ -2313,8 +2545,12 @@ function getCurrentUser() {
 
 function requireLogin() {
 
-    if (isLoggedIn()) {
+    if (
+        isLoggedIn()
+    ) {
+
         return true;
+
     }
 
     alert(
@@ -2337,46 +2573,54 @@ function requireLogin() {
 function getCheckoutItems() {
 
     const paidItems =
-        cart.map(item => ({
-            ...item,
-            isFreeGift: false
-        }));
+        cart.map(
+            item => ({
+                ...item,
+                isFreeGift: false
+            })
+        );
 
     const gifts =
         getSelectedFreeGiftProducts();
 
     const freeItems =
-        gifts.map(product => ({
+        gifts.map(
+            product => ({
 
-            id:
-                "FREE-GIFT-" +
-                product.id,
+                id:
+                    "FREE-GIFT-" +
+                    product.id,
 
-            name:
-                product.name,
+                name:
+                    product.name,
 
-            category:
-                product.category,
+                category:
+                    product.category,
 
-            price:
-                0,
+                price:
+                    0,
 
-            quantity:
-                1,
+                quantity:
+                    1,
 
-            color:
-                null,
+                color:
+                    null,
 
-            size:
-                product.size,
+                size:
+                    product.size ||
+                    "Not specified",
 
-            isFreeGift:
-                true,
+                isFreeGift:
+                    true,
 
-            originalGiftPrice:
-                product.price
+                originalGiftPrice:
+                    Number(
+                        product.price ||
+                        0
+                    )
 
-        }));
+            })
+        );
 
     return [
         ...paidItems,
@@ -2387,8 +2631,7 @@ function getCheckoutItems() {
 
 
 // ======================================================
-// CHECKOUT FUNCTION
-// IMPORTANT: THIS WAS MISSING BEFORE
+// CHECKOUT
 // ======================================================
 
 function checkout() {
@@ -2404,7 +2647,9 @@ function checkout() {
 
 function createCheckoutModal() {
 
-    if (cart.length === 0) {
+    if (
+        cart.length === 0
+    ) {
 
         alert(
             "Your cart is empty."
@@ -2414,8 +2659,12 @@ function createCheckoutModal() {
 
     }
 
-    if (!requireLogin()) {
+    if (
+        !requireLogin()
+    ) {
+
         return;
+
     }
 
     const oldModal =
@@ -2428,7 +2677,8 @@ function createCheckoutModal() {
     }
 
     const user =
-        getCurrentUser() || {};
+        getCurrentUser() ||
+        {};
 
     const total =
         getCartTotal();
@@ -2450,7 +2700,9 @@ function createCheckoutModal() {
         );
 
     const modal =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
     modal.id =
         "checkoutModal";
@@ -2486,6 +2738,7 @@ function createCheckoutModal() {
                 ${
                     selectedGifts.length > 0
                         ? `
+
                             <div
                                 style="
                                     margin:15px 0;
@@ -2503,7 +2756,9 @@ function createCheckoutModal() {
                                     🎁 FREE GIFTS
                                 </strong>
 
-                                ${selectedGifts.map(gift => `
+                                ${selectedGifts.map(
+                                    gift => `
+
                                     <div
                                         style="
                                             display:flex;
@@ -2512,17 +2767,22 @@ function createCheckoutModal() {
                                             color:#304B52;
                                         "
                                     >
+
                                         <span>
-                                            🎁 ${gift.name}
+                                            🎁 ${gift.name || "Free Gift"}
                                         </span>
 
                                         <strong>
                                             FREE
                                         </strong>
+
                                     </div>
-                                `).join("")}
+
+                                `
+                                ).join("")}
 
                             </div>
+
                         `
                         : ""
                 }
@@ -2598,7 +2858,9 @@ function createCheckoutModal() {
 
     `;
 
-    document.body.appendChild(modal);
+    document.body.appendChild(
+        modal
+    );
 
 
     document
@@ -2657,7 +2919,8 @@ function createCheckoutModal() {
                             .getElementById(
                                 "checkoutPoints"
                             )
-                            ?.value || 0
+                            ?.value ||
+                        0
                     );
 
                 if (
@@ -2692,7 +2955,8 @@ function createCheckoutModal() {
                 const finalTotal =
                     Math.max(
                         0,
-                        total - discount
+                        total -
+                        discount
                     );
 
                 const customer = {
@@ -2904,9 +3168,11 @@ async function createPendingOrder(
             checkoutItems,
 
         paidItems:
-            cart.map(item => ({
-                ...item
-            })),
+            cart.map(
+                item => ({
+                    ...item
+                })
+            ),
 
         freeGifts:
             selectedGifts.map(
@@ -2928,7 +3194,10 @@ async function createPendingOrder(
                         1,
 
                     originalGiftPrice:
-                        product.price
+                        Number(
+                            product.price ||
+                            0
+                        )
 
                 })
             ),
@@ -2965,7 +3234,6 @@ async function createPendingOrder(
             order
         );
 
-
         console.log(
             "ORDER SAVED TO FIREBASE",
             order
@@ -2983,8 +3251,14 @@ async function createPendingOrder(
                     ) || "[]"
                 );
 
-            if (!Array.isArray(oldOrders)) {
+            if (
+                !Array.isArray(
+                    oldOrders
+                )
+            ) {
+
                 oldOrders = [];
+
             }
 
         } catch (error) {
@@ -3016,7 +3290,6 @@ async function createPendingOrder(
 
 
         return true;
-
 
     } catch (error) {
 
@@ -3052,7 +3325,9 @@ function showPaymentChecking() {
     }
 
     const modal =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
     modal.id =
         "paymentCheckingModal";
@@ -3092,7 +3367,9 @@ function showPaymentChecking() {
 
     `;
 
-    document.body.appendChild(modal);
+    document.body.appendChild(
+        modal
+    );
 
     document
         .getElementById(
@@ -3117,7 +3394,8 @@ function setupCheckout() {
         function(event) {
 
             const target =
-                event.target instanceof Element
+                event.target instanceof
+                Element
                     ? event.target
                     : null;
 
@@ -3135,6 +3413,7 @@ function setupCheckout() {
             }
 
             event.preventDefault();
+
             event.stopPropagation();
 
             checkout();
@@ -3161,34 +3440,41 @@ function updateLoginStatus() {
         .querySelectorAll(
             ".login-required"
         )
-        .forEach(element => {
+        .forEach(
+            element => {
 
-            element.style.display =
-                loggedIn
-                    ? "none"
-                    : "";
+                element.style.display =
+                    loggedIn
+                        ? "none"
+                        : "";
 
-        });
+            }
+        );
 
     document
         .querySelectorAll(
             ".logout-button"
         )
-        .forEach(element => {
+        .forEach(
+            element => {
 
-            element.style.display =
-                loggedIn
-                    ? ""
-                    : "none";
+                element.style.display =
+                    loggedIn
+                        ? ""
+                        : "none";
 
-        });
+            }
+        );
 
     const accountName =
         document.getElementById(
             "accountName"
         );
 
-    if (accountName && user) {
+    if (
+        accountName &&
+        user
+    ) {
 
         accountName.textContent =
             `${user.firstName || ""} ${user.lastName || ""}`
@@ -3210,7 +3496,8 @@ function setupLogout() {
         function(event) {
 
             const target =
-                event.target instanceof Element
+                event.target instanceof
+                Element
                     ? event.target
                     : null;
 
@@ -3294,28 +3581,42 @@ function updateProfile() {
         );
 
     if (firstName) {
+
         firstName.textContent =
-            user?.firstName || "";
+            user?.firstName ||
+            "";
+
     }
 
     if (lastName) {
+
         lastName.textContent =
-            user?.lastName || "";
+            user?.lastName ||
+            "";
+
     }
 
     if (address) {
+
         address.textContent =
-            user?.address || "";
+            user?.address ||
+            "";
+
     }
 
     if (phone) {
+
         phone.textContent =
-            user?.phone || "";
+            user?.phone ||
+            "";
+
     }
 
     if (profilePoints) {
+
         profilePoints.textContent =
             points;
+
     }
 
     if (profileSpent) {
@@ -3343,36 +3644,43 @@ function updateFreeItemCards() {
         .querySelectorAll(
             ".free-item-card"
         )
-        .forEach(card => {
+        .forEach(
+            card => {
 
-            const required =
-                Number(
-                    card.dataset.required || 0
-                );
+                const required =
+                    Number(
+                        card.dataset
+                            .required ||
+                        0
+                    );
 
-            if (totalSpent >= required) {
+                if (
+                    totalSpent >=
+                    required
+                ) {
 
-                card.classList.add(
-                    "unlocked"
-                );
+                    card.classList.add(
+                        "unlocked"
+                    );
 
-                card.classList.remove(
-                    "locked"
-                );
+                    card.classList.remove(
+                        "locked"
+                    );
 
-            } else {
+                } else {
 
-                card.classList.add(
-                    "locked"
-                );
+                    card.classList.add(
+                        "locked"
+                    );
 
-                card.classList.remove(
-                    "unlocked"
-                );
+                    card.classList.remove(
+                        "unlocked"
+                    );
+
+                }
 
             }
-
-        });
+        );
 
 }
 
@@ -3400,42 +3708,50 @@ function updateOrderStatusDisplay() {
         .querySelectorAll(
             ".order-status"
         )
-        .forEach(element => {
+        .forEach(
+            element => {
 
-            if (status === "approved") {
+                if (
+                    status ===
+                    "approved"
+                ) {
 
-                element.textContent =
-                    "APPROVED";
+                    element.textContent =
+                        "APPROVED";
 
-            } else if (
-                status === "rejected"
-            ) {
+                } else if (
+                    status ===
+                    "rejected"
+                ) {
 
-                element.textContent =
-                    "REJECTED";
+                    element.textContent =
+                        "REJECTED";
 
-            } else if (
-                status === "delivered"
-            ) {
+                } else if (
+                    status ===
+                    "delivered"
+                ) {
 
-                element.textContent =
-                    "DELIVERED";
+                    element.textContent =
+                        "DELIVERED";
 
-            } else if (
-                status === "payment-checking"
-            ) {
+                } else if (
+                    status ===
+                    "payment-checking"
+                ) {
 
-                element.textContent =
-                    "PAYMENT CHECKING";
+                    element.textContent =
+                        "PAYMENT CHECKING";
 
-            } else {
+                } else {
 
-                element.textContent =
-                    "NO ACTIVE ORDER";
+                    element.textContent =
+                        "NO ACTIVE ORDER";
+
+                }
 
             }
-
-        });
+        );
 
 }
 
@@ -3460,7 +3776,9 @@ async function checkFirebaseOrderStatus() {
     try {
 
         pendingOrder =
-            JSON.parse(pending);
+            JSON.parse(
+                pending
+            );
 
     } catch (error) {
 
@@ -3471,7 +3789,6 @@ async function checkFirebaseOrderStatus() {
     if (!pendingOrder?.id) {
         return;
     }
-
 
     try {
 
@@ -3486,7 +3803,6 @@ async function checkFirebaseOrderStatus() {
                 )
             );
 
-
         snapshot.forEach(
             documentSnapshot => {
 
@@ -3497,9 +3813,10 @@ async function checkFirebaseOrderStatus() {
                     order.id !==
                     pendingOrder.id
                 ) {
-                    return;
-                }
 
+                    return;
+
+                }
 
                 if (order.status) {
 
@@ -3510,19 +3827,21 @@ async function checkFirebaseOrderStatus() {
 
                 }
 
-
                 if (
-                    order.status === "approved" ||
-                    order.status === "delivered"
+                    order.status ===
+                        "approved" ||
+                    order.status ===
+                        "delivered"
                 ) {
 
                     const previousStatus =
                         pendingOrder.status;
 
-
                     if (
-                        previousStatus !== "approved" &&
-                        previousStatus !== "delivered"
+                        previousStatus !==
+                            "approved" &&
+                        previousStatus !==
+                            "delivered"
                     ) {
 
                         const qualifyingSpend =
@@ -3533,12 +3852,10 @@ async function checkFirebaseOrderStatus() {
                                 0
                             );
 
-
                         saveTotalSpent(
                             getTotalSpent() +
                             qualifyingSpend
                         );
-
 
                         savePoints(
                             getPoints() +
@@ -3547,17 +3864,14 @@ async function checkFirebaseOrderStatus() {
                             )
                         );
 
-
                         cart = [];
 
                         saveCart();
 
                         clearSelectedFreeGiftProducts();
 
-
                         pendingOrder.status =
                             order.status;
-
 
                         localStorage.setItem(
                             "collectivePendingOrder",
@@ -3565,7 +3879,6 @@ async function checkFirebaseOrderStatus() {
                                 pendingOrder
                             )
                         );
-
 
                         updateCartDisplay();
 
@@ -3577,10 +3890,11 @@ async function checkFirebaseOrderStatus() {
 
                         updateFreeItemCards();
 
+                        renderGiftOptions();
+
                     }
 
                 }
-
 
                 if (
                     order.status ===
@@ -3602,9 +3916,7 @@ async function checkFirebaseOrderStatus() {
             }
         );
 
-
         updateOrderStatusDisplay();
-
 
     } catch (error) {
 
@@ -3641,7 +3953,6 @@ function setupStorageSync() {
 
             }
 
-
             if (
                 event.key ===
                     "collectiveSelectedFreeGifts" ||
@@ -3651,8 +3962,9 @@ function setupStorageSync() {
 
                 updateCartDisplay();
 
-            }
+                renderGiftOptions();
 
+            }
 
             if (
                 event.key ===
@@ -3664,7 +3976,6 @@ function setupStorageSync() {
                 updateProfile();
 
             }
-
 
             if (
                 event.key ===
@@ -3683,7 +3994,6 @@ function setupStorageSync() {
 
             }
 
-
             if (
                 event.key ===
                     "collectiveLoggedIn" ||
@@ -3696,7 +4006,6 @@ function setupStorageSync() {
                 updateProfile();
 
             }
-
 
             if (
                 event.key ===
@@ -3775,7 +4084,8 @@ function initializeCollective() {
 // ======================================================
 
 if (
-    document.readyState === "loading"
+    document.readyState ===
+    "loading"
 ) {
 
     document.addEventListener(
