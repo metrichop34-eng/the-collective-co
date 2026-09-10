@@ -1,4 +1,12 @@
 // ======================================================
+// THE COLLECTIVE.CO
+// COMPLETE SHOP SYSTEM
+// CART + CHECKOUT + POINTS + FREE GIFTS + LOGIN
+// FIREBASE ORDERS
+// ======================================================
+
+
+// ======================================================
 // FIREBASE CONNECTION
 // ======================================================
 
@@ -18,27 +26,15 @@ const firebaseReady = Promise.all([
     };
 
     const app = firebaseApp.initializeApp(firebaseConfig);
-
     const db = firestore.getFirestore(app);
 
     return {
         db,
         addDoc: firestore.addDoc,
         collection: firestore.collection,
-        getDocs: firestore.getDocs,
-        query: firestore.query,
-        orderBy: firestore.orderBy,
-        doc: firestore.doc,
-        updateDoc: firestore.updateDoc
+        getDocs: firestore.getDocs
     };
-
 });
-
-
-// ======================================================
-// THE COLLECTIVE.CO — COMPLETE SHOP SYSTEM
-// CART + CHECKOUT + POINTS + FREE GIFTS + LOGIN
-// ======================================================
 
 
 // ======================================================
@@ -47,9 +43,7 @@ const firebaseReady = Promise.all([
 
 const productCatalog = [
 
-    // ==================================================
     // SKINCARE
-    // ==================================================
 
     {
         name: "Men's Perfume",
@@ -114,11 +108,7 @@ const productCatalog = [
         min: 10000,
         max: 15000,
         size: "Not specified",
-        colors: [
-            "Clear",
-            "Pink",
-            "Brown"
-        ]
+        colors: ["Clear", "Pink", "Brown"]
     },
 
     {
@@ -127,12 +117,7 @@ const productCatalog = [
         min: 10000,
         max: 15000,
         size: "Not specified",
-        colors: [
-            "Clear",
-            "Pink",
-            "Nude",
-            "Brown"
-        ]
+        colors: ["Clear", "Pink", "Nude", "Brown"]
     },
 
     {
@@ -141,12 +126,7 @@ const productCatalog = [
         min: 10000,
         max: 15000,
         size: "Not specified",
-        colors: [
-            "Clear",
-            "Pink",
-            "Nude",
-            "Brown"
-        ]
+        colors: ["Clear", "Pink", "Nude", "Brown"]
     },
 
     {
@@ -155,9 +135,7 @@ const productCatalog = [
         min: 1000,
         max: 2000,
         size: "Not specified",
-        colors: [
-            "Clear"
-        ]
+        colors: ["Clear"]
     },
 
     {
@@ -249,9 +227,7 @@ const productCatalog = [
     },
 
 
-    // ==================================================
     // ACCESSORIES
-    // ==================================================
 
     {
         name: "Bead Bracelet Set",
@@ -373,9 +349,7 @@ const productCatalog = [
     },
 
 
-    // ==================================================
     // CLOTHING
-    // ==================================================
 
     {
         name: "Plain Tops",
@@ -497,9 +471,7 @@ const productCatalog = [
     },
 
 
-    // ==================================================
     // SHOES
-    // ==================================================
 
     {
         name: "Shoes",
@@ -572,9 +544,7 @@ const productCatalog = [
     },
 
 
-    // ==================================================
     // BAGS
-    // ==================================================
 
     {
         name: "Hermes Bags",
@@ -648,86 +618,38 @@ const productCatalog = [
 
 const products = [];
 
+function makePrice(min, max, number) {
 
-function makePrice(
-    min,
-    max,
-    number
-) {
-
-    if (
-        min === max
-    ) {
+    if (min === max) {
         return min;
     }
 
-
-    const step =
-        (max - min) / 29;
-
+    const step = (max - min) / 29;
 
     return Math.round(
-        (
-            min +
-            step *
-            (number - 1)
-        ) / 100
+        (min + step * (number - 1)) / 100
     ) * 100;
-
 }
 
+productCatalog.forEach(product => {
 
-productCatalog.forEach(
-    product => {
+    for (let i = 1; i <= 30; i++) {
 
-        for (
-            let i = 1;
-            i <= 30;
-            i++
-        ) {
-
-            products.push({
-
-                id:
-                    `${product.name}-${i}`,
-
-                name:
-                    product.name,
-
-                listing:
-                    i,
-
-                category:
-                    product.category,
-
-                price:
-                    makePrice(
-                        product.min,
-                        product.max,
-                        i
-                    ),
-
-                size:
-                    product.size ||
-                    "Not specified",
-
-                description:
-                    product.description ||
-                    "",
-
-                colors:
-                    product.colors ||
-                    [],
-
-                stock:
-                    10
-
-            });
-
-        }
+        products.push({
+            id: `${product.name}-${i}`,
+            name: product.name,
+            listing: i,
+            category: product.category,
+            price: makePrice(product.min, product.max, i),
+            size: product.size || "Not specified",
+            description: product.description || "",
+            colors: product.colors || [],
+            stock: 10
+        });
 
     }
-);
+
+});
 
 
 // ======================================================
@@ -736,31 +658,24 @@ productCatalog.forEach(
 
 let cart = [];
 
+function loadCart() {
 
-try {
+    try {
 
-    cart =
-        JSON.parse(
-            localStorage.getItem(
-                "collectiveCart"
-            ) || "[]"
-        );
+        const saved =
+            JSON.parse(
+                localStorage.getItem("collectiveCart") || "[]"
+            );
 
+        cart = Array.isArray(saved) ? saved : [];
 
-    if (
-        !Array.isArray(cart)
-    ) {
+    } catch (error) {
 
         cart = [];
 
     }
 
-} catch (error) {
-
-    cart = [];
-
 }
-
 
 function saveCart() {
 
@@ -771,46 +686,23 @@ function saveCart() {
 
 }
 
-
 function getCartQuantity() {
 
     return cart.reduce(
-        (
-            total,
-            item
-        ) => {
-
-            return total +
-                Number(
-                    item.quantity || 0
-                );
-
-        },
+        (total, item) =>
+            total + Number(item.quantity || 0),
         0
     );
 
 }
 
-
 function getCartTotal() {
 
     return cart.reduce(
-        (
-            total,
-            item
-        ) => {
-
-            return total +
-                (
-                    Number(
-                        item.price || 0
-                    ) *
-                    Number(
-                        item.quantity || 0
-                    )
-                );
-
-        },
+        (total, item) =>
+            total +
+            Number(item.price || 0) *
+            Number(item.quantity || 0),
         0
     );
 
@@ -824,50 +716,29 @@ function getCartTotal() {
 function updateCartCount() {
 
     const count =
-        document.getElementById(
-            "cartCount"
-        );
+        document.getElementById("cartCount");
 
-
-    if (
-        count
-    ) {
-
-        count.textContent =
-            getCartQuantity();
-
+    if (count) {
+        count.textContent = getCartQuantity();
     }
 
 }
-
 
 function updateCartDisplay() {
 
     updateCartCount();
 
-
     const cartItems =
-        document.getElementById(
-            "cartItems"
-        );
-
+        document.getElementById("cartItems");
 
     const cartTotal =
-        document.getElementById(
-            "cartTotal"
-        );
+        document.getElementById("cartTotal");
 
-
-    if (
-        !cartItems
-    ) {
+    if (!cartItems) {
         return;
     }
 
-
-    if (
-        cart.length === 0
-    ) {
+    if (cart.length === 0) {
 
         cartItems.innerHTML = `
             <div class="empty-cart">
@@ -875,108 +746,83 @@ function updateCartDisplay() {
             </div>
         `;
 
-        if (
-            cartTotal
-        ) {
-
-            cartTotal.textContent =
-                "₦0";
-
+        if (cartTotal) {
+            cartTotal.textContent = "₦0";
         }
 
         return;
-
     }
 
+    cartItems.innerHTML = cart.map(
+        (item, index) => {
 
-    cartItems.innerHTML =
-        cart.map(
-            (
-                item,
-                index
-            ) => {
+            const quantity =
+                Number(item.quantity || 1);
 
-                const quantity =
-                    Number(
-                        item.quantity || 1
-                    );
+            const price =
+                Number(item.price || 0);
 
+            return `
+                <div class="cart-item">
 
-                const price =
-                    Number(
-                        item.price || 0
-                    );
+                    <div class="cart-item-info">
 
+                        <strong>
+                            ${item.name || "Product"}
+                        </strong>
 
-                return `
+                        ${
+                            item.color
+                                ? `<span>Shade: ${item.color}</span>`
+                                : ""
+                        }
 
-                    <div class="cart-item">
-
-                        <div class="cart-item-info">
-
-                            <strong>
-                                ${item.name || "Product"}
-                            </strong>
-
-                            <span>
-                                ${item.color
-                                    ? `Shade: ${item.color}`
-                                    : ""}
-                            </span>
-
-                            <span>
-                                ₦${(
-                                    price *
-                                    quantity
-                                ).toLocaleString()}
-                            </span>
-
-                        </div>
-
-
-                        <div class="cart-controls">
-
-                            <button
-                                type="button"
-                                class="cart-minus"
-                                data-index="${index}"
-                            >
-                                −
-                            </button>
-
-                            <span>
-                                ${quantity}
-                            </span>
-
-                            <button
-                                type="button"
-                                class="cart-plus"
-                                data-index="${index}"
-                            >
-                                +
-                            </button>
-
-                            <button
-                                type="button"
-                                class="remove-cart-item"
-                                data-index="${index}"
-                            >
-                                Remove
-                            </button>
-
-                        </div>
+                        <span>
+                            ₦${(
+                                price * quantity
+                            ).toLocaleString()}
+                        </span>
 
                     </div>
 
-                `;
+                    <div class="cart-controls">
 
-            }
-        ).join("");
+                        <button
+                            type="button"
+                            class="cart-minus"
+                            data-index="${index}"
+                        >
+                            −
+                        </button>
 
+                        <span>
+                            ${quantity}
+                        </span>
 
-    if (
-        cartTotal
-    ) {
+                        <button
+                            type="button"
+                            class="cart-plus"
+                            data-index="${index}"
+                        >
+                            +
+                        </button>
+
+                        <button
+                            type="button"
+                            class="remove-cart-item"
+                            data-index="${index}"
+                        >
+                            Remove
+                        </button>
+
+                    </div>
+
+                </div>
+            `;
+        }
+    ).join("");
+
+    if (cartTotal) {
 
         cartTotal.textContent =
             `₦${getCartTotal().toLocaleString()}`;
@@ -987,294 +833,258 @@ function updateCartDisplay() {
 
 
 // ======================================================
-// OPEN / CLOSE CART
+// OPEN CART
 // ======================================================
 
 function openCart() {
 
     const popup =
-        document.getElementById(
-            "cartPopup"
-        );
+        document.getElementById("cartPopup");
 
-
-    if (
-        !popup
-    ) {
+    if (!popup) {
+        console.error("cartPopup was not found.");
         return;
     }
 
+    updateCartDisplay();
 
-    popup.classList.add(
-        "open"
-    );
+    popup.classList.add("open");
 
+    popup.style.display = "flex";
 
-    document.body.classList.add(
-        "cart-open"
-    );
+    document.body.classList.add("cart-open");
 
 }
-
 
 function closeCart() {
 
     const popup =
-        document.getElementById(
-            "cartPopup"
-        );
+        document.getElementById("cartPopup");
 
-
-    if (
-        !popup
-    ) {
+    if (!popup) {
         return;
     }
 
+    popup.classList.remove("open");
 
-    popup.classList.remove(
-        "open"
-    );
+    popup.style.display = "none";
+
+    document.body.classList.remove("cart-open");
+
+}
 
 
-    document.body.classList.remove(
-        "cart-open"
+// ======================================================
+// CART BUTTONS
+// ======================================================
+
+function setupCartEvents() {
+
+    const cartButton =
+        document.getElementById("cartBtn");
+
+    const closeButton =
+        document.getElementById("closeCart");
+
+    const popup =
+        document.getElementById("cartPopup");
+
+    if (cartButton) {
+
+        cartButton.addEventListener(
+            "click",
+            function(event) {
+
+                event.preventDefault();
+                event.stopPropagation();
+
+                openCart();
+
+            }
+        );
+
+    }
+
+    if (closeButton) {
+
+        closeButton.addEventListener(
+            "click",
+            function(event) {
+
+                event.preventDefault();
+                event.stopPropagation();
+
+                closeCart();
+
+            }
+        );
+
+    }
+
+    if (popup) {
+
+        popup.addEventListener(
+            "click",
+            function(event) {
+
+                if (event.target === popup) {
+                    closeCart();
+                }
+
+            }
+        );
+
+    }
+
+}
+
+
+// ======================================================
+// CART ITEM CONTROLS
+// ======================================================
+
+function setupCartItemEvents() {
+
+    document.addEventListener(
+        "click",
+        function(event) {
+
+            const target =
+                event.target instanceof Element
+                    ? event.target
+                    : null;
+
+            if (!target) {
+                return;
+            }
+
+
+            // REMOVE
+
+            if (
+                target.classList.contains(
+                    "remove-cart-item"
+                )
+            ) {
+
+                const index =
+                    Number(target.dataset.index);
+
+                if (
+                    Number.isInteger(index) &&
+                    cart[index]
+                ) {
+
+                    cart.splice(index, 1);
+
+                    saveCart();
+
+                    updateCartDisplay();
+
+                    updateGiftShoppingProgress();
+
+                }
+
+                return;
+            }
+
+
+            // MINUS
+
+            if (
+                target.classList.contains(
+                    "cart-minus"
+                )
+            ) {
+
+                const index =
+                    Number(target.dataset.index);
+
+                if (
+                    Number.isInteger(index) &&
+                    cart[index]
+                ) {
+
+                    const quantity =
+                        Number(
+                            cart[index].quantity || 1
+                        );
+
+                    if (quantity > 1) {
+                        cart[index].quantity = quantity - 1;
+                    }
+
+                    saveCart();
+
+                    updateCartDisplay();
+
+                    updateGiftShoppingProgress();
+
+                }
+
+                return;
+            }
+
+
+            // PLUS
+
+            if (
+                target.classList.contains(
+                    "cart-plus"
+                )
+            ) {
+
+                const index =
+                    Number(target.dataset.index);
+
+                if (
+                    Number.isInteger(index) &&
+                    cart[index]
+                ) {
+
+                    const quantity =
+                        Number(
+                            cart[index].quantity || 1
+                        );
+
+                    if (quantity < 10) {
+                        cart[index].quantity = quantity + 1;
+                    }
+
+                    saveCart();
+
+                    updateCartDisplay();
+
+                    updateGiftShoppingProgress();
+
+                }
+
+            }
+
+        }
     );
 
 }
 
 
-document.addEventListener(
-    "click",
-    function(event) {
-
-        const target =
-            event.target instanceof Element
-                ? event.target
-                : null;
-
-
-        if (
-            !target
-        ) {
-            return;
-        }
-
-
-        if (
-            target.id === "cartBtn" ||
-            target.closest("#cartBtn")
-        ) {
-
-            event.preventDefault();
-
-            openCart();
-
-            return;
-
-        }
-
-
-        if (
-            target.id === "closeCart" ||
-            target.closest("#closeCart")
-        ) {
-
-            event.preventDefault();
-
-            closeCart();
-
-            return;
-
-        }
-
-
-        if (
-            target.classList.contains(
-                "remove-cart-item"
-            )
-        ) {
-
-            const index =
-                Number(
-                    target.dataset.index
-                );
-
-
-            if (
-                Number.isInteger(index) &&
-                cart[index]
-            ) {
-
-                cart.splice(
-                    index,
-                    1
-                );
-
-                saveCart();
-
-                updateCartDisplay();
-
-                if (
-                    typeof updateGiftShoppingProgress ===
-                    "function"
-                ) {
-
-                    updateGiftShoppingProgress();
-
-                }
-
-            }
-
-            return;
-
-        }
-
-
-        if (
-            target.classList.contains(
-                "cart-minus"
-            )
-        ) {
-
-            const index =
-                Number(
-                    target.dataset.index
-                );
-
-
-            if (
-                Number.isInteger(index) &&
-                cart[index]
-            ) {
-
-                if (
-                    Number(
-                        cart[index].quantity
-                    ) > 1
-                ) {
-
-                    cart[index].quantity--;
-
-                }
-
-                saveCart();
-
-                updateCartDisplay();
-
-                if (
-                    typeof updateGiftShoppingProgress ===
-                    "function"
-                ) {
-
-                    updateGiftShoppingProgress();
-
-                }
-
-            }
-
-            return;
-
-        }
-
-
-        if (
-            target.classList.contains(
-                "cart-plus"
-            )
-        ) {
-
-            const index =
-                Number(
-                    target.dataset.index
-                );
-
-
-            if (
-                Number.isInteger(index) &&
-                cart[index]
-            ) {
-
-                if (
-                    Number(
-                        cart[index].quantity
-                    ) < 10
-                ) {
-
-                    cart[index].quantity++;
-
-                }
-
-                saveCart();
-
-                updateCartDisplay();
-
-                if (
-                    typeof updateGiftShoppingProgress ===
-                    "function"
-                ) {
-
-                    updateGiftShoppingProgress();
-
-                }
-
-            }
-
-            return;
-
-        }
-
-    }
-);
-
-
 // ======================================================
-// CART OUTSIDE CLICK
+// ESCAPE KEY
 // ======================================================
 
-document.addEventListener(
-    "click",
-    function(event) {
+function setupEscapeKey() {
 
-        const cartPopup =
-            document.getElementById(
-                "cartPopup"
-            );
+    document.addEventListener(
+        "keydown",
+        function(event) {
 
-
-        if (
-            !cartPopup
-        ) {
-            return;
-        }
-
-
-        if (
-            event.target === cartPopup
-        ) {
-
-            closeCart();
+            if (event.key === "Escape") {
+                closeCart();
+            }
 
         }
+    );
 
-    }
-);
-
-
-document.addEventListener(
-    "keydown",
-    function(event) {
-
-        if (
-            event.key === "Escape"
-        ) {
-
-            closeCart();
-
-        }
-
-    }
-);
+}
 
 
 // ======================================================
@@ -1291,10 +1101,7 @@ function getPoints() {
 
 }
 
-
-function savePoints(
-    points
-) {
+function savePoints(points) {
 
     localStorage.setItem(
         "collectivePoints",
@@ -1308,30 +1115,21 @@ function savePoints(
 
 }
 
-
-function calculatePoints(
-    amount
-) {
+function calculatePoints(amount) {
 
     return Math.floor(
-        Number(amount) / 1000
+        Number(amount || 0) / 1000
     );
 
 }
 
+function pointsToNaira(points) {
 
-function pointsToNaira(
-    points
-) {
-
-    return Number(points) * 100;
+    return Number(points || 0) * 100;
 
 }
 
-
-function getMaxPointsUsable(
-    points
-) {
+function getMaxPointsUsable(points) {
 
     return Math.min(
         Number(points) || 0,
@@ -1340,67 +1138,42 @@ function getMaxPointsUsable(
 
 }
 
-
-function addPurchasePoints(
-    amount
-) {
+function addPurchasePoints(amount) {
 
     const earned =
-        calculatePoints(
-            amount
-        );
-
-
-    const current =
-        getPoints();
-
+        calculatePoints(amount);
 
     savePoints(
-        current + earned
+        getPoints() + earned
     );
 
-
     updatePointsDisplay();
-
 
     return earned;
 
 }
-
 
 function updatePointsDisplay() {
 
     const points =
         getPoints();
 
-
     document
-        .querySelectorAll(
-            ".points-balance"
-        )
-        .forEach(
-            element => {
+        .querySelectorAll(".points-balance")
+        .forEach(element => {
 
-                element.textContent =
-                    `${points} points`;
+            element.textContent =
+                `${points} points`;
 
-            }
-        );
-
+        });
 
     const profilePoints =
         document.getElementById(
             "profilePoints"
         );
 
-
-    if (
-        profilePoints
-    ) {
-
-        profilePoints.textContent =
-            points;
-
+    if (profilePoints) {
+        profilePoints.textContent = points;
     }
 
 }
@@ -1420,10 +1193,7 @@ function getTotalSpent() {
 
 }
 
-
-function saveTotalSpent(
-    amount
-) {
+function saveTotalSpent(amount) {
 
     localStorage.setItem(
         "collectiveTotalSpent",
@@ -1439,7 +1209,7 @@ function saveTotalSpent(
 
 
 // ======================================================
-// REWARDS / PROFILE STATUS
+// REWARDS
 // ======================================================
 
 function updateRewardStatus() {
@@ -1447,10 +1217,7 @@ function updateRewardStatus() {
     const totalSpent =
         getTotalSpent();
 
-
-    if (
-        totalSpent >= 50000
-    ) {
+    if (totalSpent >= 50000) {
 
         localStorage.setItem(
             "collectiveGift1",
@@ -1459,10 +1226,7 @@ function updateRewardStatus() {
 
     }
 
-
-    if (
-        totalSpent >= 100000
-    ) {
+    if (totalSpent >= 100000) {
 
         localStorage.setItem(
             "collectiveGift2",
@@ -1471,22 +1235,17 @@ function updateRewardStatus() {
 
     }
 
-
     const gift1Status =
         document.getElementById(
             "gift1Status"
         );
-
 
     const gift2Status =
         document.getElementById(
             "gift2Status"
         );
 
-
-    if (
-        gift1Status
-    ) {
+    if (gift1Status) {
 
         gift1Status.textContent =
             totalSpent >= 50000
@@ -1495,10 +1254,7 @@ function updateRewardStatus() {
 
     }
 
-
-    if (
-        gift2Status
-    ) {
+    if (gift2Status) {
 
         gift2Status.textContent =
             totalSpent >= 100000
@@ -1511,12 +1267,10 @@ function updateRewardStatus() {
 
 
 // ======================================================
-// SEARCH + CATEGORY
+// SEARCH
 // ======================================================
 
-let currentCategory =
-    "All";
-
+let currentCategory = "All";
 
 function filterProducts() {
 
@@ -1525,7 +1279,6 @@ function filterProducts() {
             "productSearch"
         );
 
-
     const search =
         searchInput
             ? searchInput.value
@@ -1533,74 +1286,52 @@ function filterProducts() {
                 .trim()
             : "";
 
-
     const cards =
         document.querySelectorAll(
             ".product-card"
         );
 
-
     let visible = 0;
 
+    cards.forEach(card => {
 
-    cards.forEach(
-        card => {
+        const name =
+            (
+                card.dataset.name || ""
+            ).toLowerCase();
 
-            const name =
-                (
-                    card.dataset.name ||
-                    ""
-                ).toLowerCase();
+        const category =
+            card.dataset.category || "";
 
+        const matchesSearch =
+            name.includes(search);
 
-            const category =
-                card.dataset.category ||
-                "";
+        const matchesCategory =
+            currentCategory === "All" ||
+            category === currentCategory;
 
+        if (
+            matchesSearch &&
+            matchesCategory
+        ) {
 
-            const matchesSearch =
-                name.includes(
-                    search
-                );
+            card.style.display = "";
+            visible++;
 
+        } else {
 
-            const matchesCategory =
-                currentCategory ===
-                "All" ||
-                category ===
-                currentCategory;
-
-
-            if (
-                matchesSearch &&
-                matchesCategory
-            ) {
-
-                card.style.display =
-                    "";
-
-                visible++;
-
-            } else {
-
-                card.style.display =
-                    "none";
-
-            }
+            card.style.display = "none";
 
         }
-    );
 
+    });
 
     const message =
         document.querySelector(
             ".no-products"
         );
 
-
-    if (
-        message
-    ) {
+    if (message) {
 
         message.style.display =
             visible === 0
@@ -1618,22 +1349,16 @@ function filterProducts() {
 
 function createCategoryMenu() {
 
-    const categoryContainer =
+    const container =
         document.querySelector(
             ".collective-categories"
         );
 
-
-    if (
-        !categoryContainer
-    ) {
+    if (!container) {
         return;
     }
 
-
-    categoryContainer.innerHTML =
-        "";
-
+    container.innerHTML = "";
 
     const categories = [
         "All",
@@ -1644,77 +1369,98 @@ function createCategoryMenu() {
         "Bags"
     ];
 
+    categories.forEach(category => {
 
-    categories.forEach(
-        category => {
+        const button =
+            document.createElement(
+                "button"
+            );
 
-            const button =
-                document.createElement(
-                    "button"
-                );
+        button.type = "button";
 
+        button.className =
+            "category-button";
 
-            button.type =
-                "button";
+        button.textContent =
+            category === "All"
+                ? "ALL PRODUCTS"
+                : category.toUpperCase();
 
+        if (category === currentCategory) {
+            button.classList.add("selected");
+        }
 
-            button.className =
-                "category-button";
+        button.addEventListener(
+            "click",
+            function() {
 
+                currentCategory =
+                    category;
 
-            button.textContent =
-                category === "All"
-                    ? "ALL PRODUCTS"
-                    : category.toUpperCase();
-
-
-            if (
-                category ===
-                currentCategory
-            ) {
+                document
+                    .querySelectorAll(
+                        ".category-button"
+                    )
+                    .forEach(btn =>
+                        btn.classList.remove(
+                            "selected"
+                        )
+                    );
 
                 button.classList.add(
                     "selected"
                 );
 
+                filterProducts();
+
             }
+        );
+
+        container.appendChild(button);
+
+    });
+
+}
 
 
-            button.addEventListener(
-                "click",
-                function() {
+// ======================================================
+// CATEGORY TOGGLE
+// ======================================================
 
-                    currentCategory =
-                        category;
+function setupCategoryButton() {
 
+    const button =
+        document.getElementById(
+            "categoryBtn"
+        );
 
-                    document
-                        .querySelectorAll(
-                            ".category-button"
-                        )
-                        .forEach(
-                            btn =>
-                                btn.classList
-                                    .remove(
-                                        "selected"
-                                    )
-                        );
+    const menu =
+        document.querySelector(
+            ".collective-categories"
+        );
 
+    if (!button || !menu) {
+        return;
+    }
 
-                    button.classList.add(
-                        "selected"
-                    );
+    button.addEventListener(
+        "click",
+        function(event) {
 
+            event.preventDefault();
 
-                    filterProducts();
+            if (
+                menu.style.display === "none" ||
+                menu.style.display === ""
+            ) {
 
-                }
-            );
+                menu.style.display = "flex";
 
+            } else {
 
-            categoryContainer.appendChild(
-                button
-            );
+                menu.style.display = "none";
+
+            }
 
         }
     );
@@ -1723,90 +1469,27 @@ function createCategoryMenu() {
 
 
 // ======================================================
-// CATEGORY BUTTON
+// SEARCH EVENT
 // ======================================================
 
-document.addEventListener(
-    "click",
-    function(event) {
+function setupSearch() {
 
-        const target =
-            event.target instanceof Element
-                ? event.target
-                : null;
-
-
-        if (
-            !target
-        ) {
-            return;
-        }
-
-
-        if (
-            target.id ===
-            "categoryBtn"
-        ) {
-
-            event.preventDefault();
-
-
-            const menu =
-                document.querySelector(
-                    ".collective-categories"
-                );
-
-
-            if (
-                !menu
-            ) {
-                return;
-            }
-
-
-            if (
-                menu.style.display ===
-                    "none" ||
-                menu.style.display ===
-                    ""
-            ) {
-
-                menu.style.display =
-                    "flex";
-
-            } else {
-
-                menu.style.display =
-                    "none";
-
-            }
-
-        }
-
-    }
-);
-
-
-// ======================================================
-// SEARCH
-// ======================================================
-
-document.addEventListener(
-    "input",
-    function(event) {
-
-        if (
-            event.target &&
-            event.target.id ===
+    const search =
+        document.getElementById(
             "productSearch"
-        ) {
+        );
 
-            filterProducts();
-
-        }
-
+    if (!search) {
+        return;
     }
-);
+
+    search.addEventListener(
+        "input",
+        filterProducts
+    );
+
+}
+
 
 // ======================================================
 // RENDER PRODUCTS
@@ -1822,142 +1505,111 @@ function renderProducts() {
             ".product-grid"
         );
 
-
-    if (
-        !container
-    ) {
+    if (!container) {
+        console.error("productGrid was not found.");
         return;
     }
 
-
-    container.innerHTML =
-        "";
-
+    container.innerHTML = "";
 
     products
-        .slice(
-            0,
-            60
-        )
-        .forEach(
-            product => {
+        .slice(0, 60)
+        .forEach(product => {
 
-                const card =
-                    document.createElement(
-                        "div"
-                    );
-
-
-                card.className =
-                    "product-card";
-
-
-                card.dataset.name =
-                    product.name;
-
-
-                card.dataset.category =
-                    product.category;
-
-
-                const colors =
-                    product.colors ||
-                    [];
-
-
-                let colorHTML =
-                    "";
-
-
-                if (
-                    colors.length
-                ) {
-
-                    colorHTML = `
-
-                        <div class="product-colors">
-
-                            <label>
-                                Shade
-                            </label>
-
-                            <select
-                                class="product-color"
-                            >
-
-                                ${colors
-                                    .map(
-                                        color => `
-                                            <option value="${color}">
-                                                ${color}
-                                            </option>
-                                        `
-                                    )
-                                    .join("")}
-
-                            </select>
-
-                        </div>
-
-                    `;
-
-                }
-
-
-                card.innerHTML = `
-
-                    <div class="product-image">
-                        <span>
-                            ${product.name}
-                        </span>
-                    </div>
-
-                    <div class="product-info">
-
-                        <p class="product-category">
-                            ${product.category}
-                        </p>
-
-                        <h3>
-                            ${product.name}
-                        </h3>
-
-                        <p class="product-description">
-                            ${product.description || ""}
-                        </p>
-
-                        <p class="product-size">
-                            ${product.size}
-                        </p>
-
-                        <p class="product-price">
-                            ₦${Number(
-                                product.price
-                            ).toLocaleString()}
-                        </p>
-
-                        ${colorHTML}
-
-                        <button
-                            type="button"
-                            class="add-to-cart"
-                            data-product-id="${product.id}"
-                        >
-                            ADD TO CART
-                        </button>
-
-                    </div>
-
-                `;
-
-
-                container.appendChild(
-                    card
+            const card =
+                document.createElement(
+                    "div"
                 );
 
-            }
-        );
+            card.className =
+                "product-card";
 
+            card.dataset.name =
+                product.name;
+
+            card.dataset.category =
+                product.category;
+
+            const colors =
+                product.colors || [];
+
+            let colorHTML = "";
+
+            if (colors.length > 0) {
+
+                colorHTML = `
+                    <div class="product-colors">
+
+                        <label>
+                            Shade
+                        </label>
+
+                        <select class="product-color">
+
+                            ${colors.map(
+                                color => `
+                                    <option value="${color}">
+                                        ${color}
+                                    </option>
+                                `
+                            ).join("")}
+
+                        </select>
+
+                    </div>
+                `;
+
+            }
+
+            card.innerHTML = `
+
+                <div class="product-image">
+                    <span>
+                        ${product.name}
+                    </span>
+                </div>
+
+                <div class="product-info">
+
+                    <p class="product-category">
+                        ${product.category}
+                    </p>
+
+                    <h3>
+                        ${product.name}
+                    </h3>
+
+                    <p class="product-description">
+                        ${product.description || ""}
+                    </p>
+
+                    <p class="product-size">
+                        ${product.size}
+                    </p>
+
+                    <p class="product-price">
+                        ₦${Number(
+                            product.price
+                        ).toLocaleString()}
+                    </p>
+
+                    ${colorHTML}
+
+                    <button
+                        type="button"
+                        class="add-to-cart"
+                        data-product-id="${product.id}"
+                    >
+                        ADD TO CART
+                    </button>
+
+                </div>
+
+            `;
+
+            container.appendChild(card);
+
+        });
 
     filterProducts();
 
@@ -1965,169 +1617,131 @@ function renderProducts() {
 
 
 // ======================================================
-// ADD PRODUCT TO CART
+// ADD TO CART
 // ======================================================
 
-document.addEventListener(
-    "click",
-    function(event) {
+function setupAddToCart() {
 
-        const target =
-            event.target instanceof Element
-                ? event.target
-                : null;
+    document.addEventListener(
+        "click",
+        function(event) {
 
+            const target =
+                event.target instanceof Element
+                    ? event.target
+                    : null;
 
-        if (
-            !target
-        ) {
-            return;
-        }
+            if (!target) {
+                return;
+            }
 
+            const button =
+                target.closest(
+                    ".add-to-cart"
+                );
 
-        const button =
-            target.closest(
-                ".add-to-cart"
-            );
+            if (!button) {
+                return;
+            }
 
+            event.preventDefault();
 
-        if (
-            !button
-        ) {
-            return;
-        }
+            const productId =
+                button.dataset.productId;
 
+            const product =
+                products.find(
+                    item =>
+                        item.id === productId
+                );
 
-        event.preventDefault();
+            if (!product) {
+                return;
+            }
 
+            const card =
+                button.closest(
+                    ".product-card"
+                );
 
-        const productId =
-            button.dataset.productId;
+            const colorSelect =
+                card
+                    ? card.querySelector(
+                        ".product-color"
+                    )
+                    : null;
 
+            const selectedColor =
+                colorSelect
+                    ? colorSelect.value
+                    : "";
 
-        const product =
-            products.find(
-                item =>
-                    item.id ===
-                    productId
-            );
+            const existing =
+                cart.find(
+                    item =>
+                        item.id === product.id &&
+                        (
+                            item.color || ""
+                        ) === selectedColor
+                );
 
+            if (existing) {
 
-        if (
-            !product
-        ) {
-            return;
-        }
+                const quantity =
+                    Number(
+                        existing.quantity || 1
+                    );
 
+                if (quantity < 10) {
+                    existing.quantity =
+                        quantity + 1;
+                }
 
-        const card =
-            button.closest(
-                ".product-card"
-            );
+            } else {
 
+                cart.push({
 
-        const colorSelect =
-            card
-                ? card.querySelector(
-                    ".product-color"
-                )
-                : null;
+                    id: product.id,
 
+                    name: product.name,
 
-        const selectedColor =
-            colorSelect
-                ? colorSelect.value
-                : "";
+                    category: product.category,
 
+                    price: product.price,
 
-        const existing =
-            cart.find(
-                item =>
-                    item.id ===
-                        product.id &&
-                    (
-                        item.color ||
-                        ""
-                    ) ===
-                        selectedColor
-            );
+                    size: product.size,
 
+                    color: selectedColor,
 
-        if (
-            existing
-        ) {
+                    quantity: 1
 
-            if (
-                Number(
-                    existing.quantity
-                ) < 10
-            ) {
-
-                existing.quantity++;
+                });
 
             }
 
-        } else {
+            saveCart();
 
-            cart.push({
-
-                id:
-                    product.id,
-
-                name:
-                    product.name,
-
-                category:
-                    product.category,
-
-                price:
-                    product.price,
-
-                size:
-                    product.size,
-
-                color:
-                    selectedColor,
-
-                quantity:
-                    1
-
-            });
-
-        }
-
-
-        saveCart();
-
-        updateCartDisplay();
-
-
-        if (
-            typeof updateGiftShoppingProgress ===
-            "function"
-        ) {
+            updateCartDisplay();
 
             updateGiftShoppingProgress();
 
+            button.textContent =
+                "ADDED ✓";
+
+            setTimeout(
+                function() {
+
+                    button.textContent =
+                        "ADD TO CART";
+
+                },
+                1000
+            );
+
         }
+    );
 
-
-        button.textContent =
-            "ADDED ✓";
-
-
-        setTimeout(
-            function() {
-
-                button.textContent =
-                    "ADD TO CART";
-
-            },
-            1000
-        );
-
-    }
-);
+}
 
 
 // ======================================================
@@ -2139,43 +1753,34 @@ function getFreeGiftLevel() {
     const totalSpent =
         getTotalSpent();
 
-
-    if (
-        totalSpent >= 100000
-    ) {
-
+    if (totalSpent >= 100000) {
         return 10;
-
     }
 
-
-    if (
-        totalSpent >= 50000
-    ) {
-
+    if (totalSpent >= 50000) {
         return 5;
-
     }
-
 
     return 0;
 
 }
 
-
 function getSelectedFreeGiftProducts() {
 
     try {
 
-        return JSON.parse(
-            localStorage.getItem(
-                "collectiveFreeGifts"
-            ) || "[]"
-        );
+        const gifts =
+            JSON.parse(
+                localStorage.getItem(
+                    "collectiveFreeGifts"
+                ) || "[]"
+            );
 
-    } catch (
-        error
-    ) {
+        return Array.isArray(gifts)
+            ? gifts
+            : [];
+
+    } catch (error) {
 
         return [];
 
@@ -2183,20 +1788,14 @@ function getSelectedFreeGiftProducts() {
 
 }
 
-
-function saveSelectedFreeGiftProducts(
-    gifts
-) {
+function saveSelectedFreeGiftProducts(gifts) {
 
     localStorage.setItem(
         "collectiveFreeGifts",
-        JSON.stringify(
-            gifts
-        )
+        JSON.stringify(gifts)
     );
 
 }
-
 
 function clearSelectedFreeGiftProducts() {
 
@@ -2208,7 +1807,7 @@ function clearSelectedFreeGiftProducts() {
 
 
 // ======================================================
-// GIFT SHOPPING PROGRESS
+// GIFT PROGRESS
 // ======================================================
 
 function updateGiftShoppingProgress() {
@@ -2216,32 +1815,20 @@ function updateGiftShoppingProgress() {
     const total =
         getCartTotal();
 
-
-    const elements =
-        document.querySelectorAll(
+    document
+        .querySelectorAll(
             ".gift-progress"
-        );
+        )
+        .forEach(element => {
 
+            if (total >= 100000) {
 
-    elements.forEach(
-        element => {
-
-            let text =
-                "";
-
-
-            if (
-                total >= 100000
-            ) {
-
-                text =
+                element.textContent =
                     "₦100,000 reward unlocked";
 
-            } else if (
-                total >= 50000
-            ) {
+            } else if (total >= 50000) {
 
-                text =
+                element.textContent =
                     "₦50,000 reward unlocked";
 
             } else {
@@ -2252,24 +1839,18 @@ function updateGiftShoppingProgress() {
                         50000 - total
                     );
 
-
-                text =
+                element.textContent =
                     `₦${remaining.toLocaleString()} more to unlock your first reward`;
 
             }
 
-
-            element.textContent =
-                text;
-
-        }
-    );
+        });
 
 }
 
 
 // ======================================================
-// GIFT SELECTION
+// GIFT OPTIONS
 // ======================================================
 
 function renderGiftOptions() {
@@ -2279,21 +1860,14 @@ function renderGiftOptions() {
             "giftOptions"
         );
 
-
-    if (
-        !container
-    ) {
+    if (!container) {
         return;
     }
-
 
     const unlocked =
         getFreeGiftLevel();
 
-
-    if (
-        unlocked <= 0
-    ) {
+    if (unlocked <= 0) {
 
         container.innerHTML = `
             <p>
@@ -2302,144 +1876,120 @@ function renderGiftOptions() {
         `;
 
         return;
-
     }
-
 
     const giftProducts =
         products
             .filter(
                 product =>
-                    product.category ===
-                    "Accessories" ||
-                    product.category ===
-                    "Skincare"
+                    product.category === "Accessories" ||
+                    product.category === "Skincare"
             )
-            .slice(
-                0,
-                unlocked
-            );
-
-
-    container.innerHTML =
-        giftProducts
-            .map(
-                product => `
-
-                    <label class="gift-option">
-
-                        <input
-                            type="checkbox"
-                            class="gift-checkbox"
-                            value="${product.id}"
-                        >
-
-                        <span>
-                            ${product.name}
-                        </span>
-
-                    </label>
-
-                `
-            )
-            .join("");
-
+            .slice(0, unlocked);
 
     const selected =
         getSelectedFreeGiftProducts();
 
+    container.innerHTML =
+        giftProducts.map(
+            product => `
+
+                <label class="gift-option">
+
+                    <input
+                        type="checkbox"
+                        class="gift-checkbox"
+                        value="${product.id}"
+                        ${
+                            selected.some(
+                                gift =>
+                                    gift.id === product.id
+                            )
+                                ? "checked"
+                                : ""
+                        }
+                    >
+
+                    <span>
+                        ${product.name}
+                    </span>
+
+                </label>
+
+            `
+        ).join("");
 
     container
         .querySelectorAll(
             ".gift-checkbox"
         )
-        .forEach(
-            checkbox => {
+        .forEach(checkbox => {
 
-                checkbox.checked =
-                    selected.some(
-                        gift =>
-                            gift.id ===
-                            checkbox.value
-                    );
+            checkbox.addEventListener(
+                "change",
+                function() {
 
+                    let gifts =
+                        getSelectedFreeGiftProducts();
 
-                checkbox.addEventListener(
-                    "change",
-                    function() {
+                    const product =
+                        products.find(
+                            item =>
+                                item.id ===
+                                checkbox.value
+                        );
 
-                        let gifts =
-                            getSelectedFreeGiftProducts();
+                    if (!product) {
+                        return;
+                    }
 
-
-                        const product =
-                            products.find(
-                                item =>
-                                    item.id ===
-                                    checkbox.value
-                            );
-
+                    if (checkbox.checked) {
 
                         if (
-                            !product
-                        ) {
-                            return;
-                        }
-
-
-                        if (
-                            checkbox.checked
+                            gifts.length <
+                            unlocked
                         ) {
 
-                            if (
-                                gifts.length <
-                                unlocked
-                            ) {
-
-                                gifts.push(
-                                    product
-                                );
-
-                            } else {
-
-                                checkbox.checked =
-                                    false;
-
-                                alert(
-                                    `You can select up to ${unlocked} free item${unlocked === 1 ? "" : "s"}.`
-                                );
-
-                                return;
-
-                            }
+                            gifts.push(product);
 
                         } else {
 
-                            gifts =
-                                gifts.filter(
-                                    gift =>
-                                        gift.id !==
-                                        product.id
-                                );
+                            checkbox.checked =
+                                false;
+
+                            alert(
+                                `You can select up to ${unlocked} free item${unlocked === 1 ? "" : "s"}.`
+                            );
+
+                            return;
 
                         }
 
+                    } else {
 
-                        saveSelectedFreeGiftProducts(
-                            gifts
-                        );
+                        gifts =
+                            gifts.filter(
+                                gift =>
+                                    gift.id !==
+                                    product.id
+                            );
 
                     }
-                );
 
-            }
-        );
+                    saveSelectedFreeGiftProducts(
+                        gifts
+                    );
+
+                }
+            );
+
+        });
 
 }
 
 
 // ======================================================
-// LOGIN HELPERS
+// LOGIN
 // ======================================================
 
 function isLoggedIn() {
@@ -2452,7 +2002,6 @@ function isLoggedIn() {
 
 }
 
-
 function getCurrentUser() {
 
     try {
@@ -2463,9 +2012,7 @@ function getCurrentUser() {
             ) || "null"
         );
 
-    } catch (
-        error
-    ) {
+    } catch (error) {
 
         return null;
 
@@ -2473,26 +2020,18 @@ function getCurrentUser() {
 
 }
 
-
 function requireLogin() {
 
-    if (
-        isLoggedIn()
-    ) {
-
+    if (isLoggedIn()) {
         return true;
-
     }
-
 
     alert(
         "Please log in before checking out."
     );
 
-
     window.location.href =
         "login.html";
-
 
     return false;
 
@@ -2505,92 +2044,65 @@ function requireLogin() {
 
 function getCheckoutItems() {
 
-    return cart.map(
-        item => ({
-            ...item
-        })
-    );
+    return cart.map(item => ({
+        ...item
+    }));
 
 }
 
-
 function createCheckoutModal() {
 
-    if (
-        cart.length === 0
-    ) {
+    if (cart.length === 0) {
 
         alert(
             "Your cart is empty."
         );
 
         return;
-
     }
 
-
-    if (
-        !requireLogin()
-    ) {
-
+    if (!requireLogin()) {
         return;
-
     }
 
-
-    const existingModal =
+    const oldModal =
         document.getElementById(
             "checkoutModal"
         );
 
-
-    if (
-        existingModal
-    ) {
-
-        existingModal.remove();
-
+    if (oldModal) {
+        oldModal.remove();
     }
 
-
     const user =
-        getCurrentUser() ||
-        {};
-
-
-    const modal =
-        document.createElement(
-            "div"
-        );
-
-
-    modal.id =
-        "checkoutModal";
-
-
-    modal.className =
-        "checkout-modal";
-
+        getCurrentUser() || {};
 
     const total =
         getCartTotal();
 
-
     const availablePoints =
         getPoints();
-
 
     const maxUsablePoints =
         getMaxPointsUsable(
             availablePoints
         );
 
-
     const maxDiscount =
         pointsToNaira(
             maxUsablePoints
         );
 
+    const modal =
+        document.createElement(
+            "div"
+        );
+
+    modal.id =
+        "checkoutModal";
+
+    modal.className =
+        "checkout-modal";
 
     modal.innerHTML = `
 
@@ -2629,7 +2141,6 @@ function createCheckoutModal() {
                 </p>
 
             </div>
-
 
             <div class="checkout-form">
 
@@ -2677,7 +2188,6 @@ function createCheckoutModal() {
 
             </div>
 
-
             <button
                 type="button"
                 id="continuePayment"
@@ -2690,30 +2200,17 @@ function createCheckoutModal() {
 
     `;
 
-
-    document.body.appendChild(
-        modal
-    );
-
+    document.body.appendChild(modal);
 
     document
-        .getElementById(
-            "checkoutClose"
-        )
+        .getElementById("checkoutClose")
         ?.addEventListener(
             "click",
-            function() {
-
-                modal.remove();
-
-            }
+            () => modal.remove()
         );
 
-
     document
-        .getElementById(
-            "continuePayment"
-        )
+        .getElementById("continuePayment")
         ?.addEventListener(
             "click",
             function() {
@@ -2726,7 +2223,6 @@ function createCheckoutModal() {
                         ?.value
                         .trim();
 
-
                 const lastName =
                     document
                         .getElementById(
@@ -2734,7 +2230,6 @@ function createCheckoutModal() {
                         )
                         ?.value
                         .trim();
-
 
                 const address =
                     document
@@ -2744,7 +2239,6 @@ function createCheckoutModal() {
                         ?.value
                         .trim();
 
-
                 const phone =
                     document
                         .getElementById(
@@ -2752,7 +2246,6 @@ function createCheckoutModal() {
                         )
                         ?.value
                         .trim();
-
 
                 const pointsInput =
                     Number(
@@ -2762,7 +2255,6 @@ function createCheckoutModal() {
                             )
                             ?.value || 0
                     );
-
 
                 if (
                     !firstName ||
@@ -2779,7 +2271,6 @@ function createCheckoutModal() {
 
                 }
 
-
                 const pointsUsed =
                     Math.min(
                         Math.max(
@@ -2789,12 +2280,10 @@ function createCheckoutModal() {
                         maxUsablePoints
                     );
 
-
                 const discount =
                     pointsToNaira(
                         pointsUsed
                     );
-
 
                 const finalTotal =
                     Math.max(
@@ -2802,23 +2291,14 @@ function createCheckoutModal() {
                         total - discount
                     );
 
-
                 const customer = {
 
-                    firstName:
-                        firstName,
-
-                    lastName:
-                        lastName,
-
-                    address:
-                        address,
-
-                    phone:
-                        phone
+                    firstName,
+                    lastName,
+                    address,
+                    phone
 
                 };
-
 
                 showPaymentModal(
                     modal,
@@ -2834,7 +2314,7 @@ function createCheckoutModal() {
 
 
 // ======================================================
-// PAYMENT MODAL
+// PAYMENT
 // ======================================================
 
 function showPaymentModal(
@@ -2870,7 +2350,6 @@ function showPaymentModal(
                 ).toLocaleString()}
             </h1>
 
-
             <div class="payment-details">
 
                 <h3>
@@ -2890,7 +2369,6 @@ function showPaymentModal(
                         0708648701
                     </strong>
                 </p>
-
 
                 <h3>
                     SmartCash PSB
@@ -2912,7 +2390,6 @@ function showPaymentModal(
 
             </div>
 
-
             <button
                 type="button"
                 id="paidButton"
@@ -2925,28 +2402,31 @@ function showPaymentModal(
 
     `;
 
-
     document
-        .getElementById(
-            "paymentClose"
-        )
+        .getElementById("paymentClose")
         ?.addEventListener(
             "click",
-            function() {
-
-                checkoutModal.remove();
-
-            }
+            () => checkoutModal.remove()
         );
 
-
     document
-        .getElementById(
-            "paidButton"
-        )
+        .getElementById("paidButton")
         ?.addEventListener(
             "click",
             async function() {
+
+                const button =
+                    document.getElementById(
+                        "paidButton"
+                    );
+
+                if (button) {
+
+                    button.disabled = true;
+                    button.textContent =
+                        "SUBMITTING...";
+
+                }
 
                 const saved =
                     await createPendingOrder(
@@ -2955,18 +2435,21 @@ function showPaymentModal(
                         customer
                     );
 
+                if (!saved) {
 
-                if (
-                    !saved
-                ) {
+                    if (button) {
+
+                        button.disabled = false;
+                        button.textContent =
+                            "I HAVE PAID";
+
+                    }
 
                     return;
 
                 }
 
-
                 checkoutModal.remove();
-
 
                 showPaymentChecking();
 
@@ -2977,7 +2460,7 @@ function showPaymentModal(
 
 
 // ======================================================
-// CREATE ORDER — FIREBASE
+// CREATE FIREBASE ORDER
 // ======================================================
 
 async function createPendingOrder(
@@ -2989,10 +2472,8 @@ async function createPendingOrder(
     const checkoutItems =
         getCheckoutItems();
 
-
     const originalPaidTotal =
         getCartTotal();
-
 
     const order = {
 
@@ -3000,8 +2481,7 @@ async function createPendingOrder(
             "ORDER-" +
             Date.now(),
 
-        customer:
-            customer,
+        customer,
 
         items:
             checkoutItems.map(
@@ -3049,11 +2529,9 @@ async function createPendingOrder(
         qualifyingSpend:
             originalPaidTotal,
 
-        pointsUsed:
-            pointsUsed,
+        pointsUsed,
 
-        total:
-            total,
+        total,
 
         status:
             "payment-checking",
@@ -3063,12 +2541,10 @@ async function createPendingOrder(
 
     };
 
-
     try {
 
         const firebase =
             await firebaseReady;
-
 
         await firebase.addDoc(
             firebase.collection(
@@ -3078,12 +2554,10 @@ async function createPendingOrder(
             order
         );
 
-
         console.log(
             "ORDER SAVED TO FIREBASE",
             order
         );
-
 
         const oldOrders =
             JSON.parse(
@@ -3092,48 +2566,36 @@ async function createPendingOrder(
                 ) || "[]"
             );
 
-
         localStorage.setItem(
             "collectiveOrders",
-            JSON.stringify(
-                [
-                    ...oldOrders,
-                    order
-                ]
-            )
+            JSON.stringify([
+                ...oldOrders,
+                order
+            ])
         );
-
 
         localStorage.setItem(
             "collectivePendingOrder",
-            JSON.stringify(
-                order
-            )
+            JSON.stringify(order)
         );
-
 
         localStorage.setItem(
             "collectiveOrderStatus",
             "payment-checking"
         );
 
-
         return true;
 
-    } catch (
-        error
-    ) {
+    } catch (error) {
 
         console.error(
             "FIREBASE ORDER ERROR:",
             error
         );
 
-
         alert(
             "Your order could not be submitted right now. Please try again."
         );
-
 
         return false;
 
@@ -3148,34 +2610,25 @@ async function createPendingOrder(
 
 function showPaymentChecking() {
 
-    const existing =
+    const old =
         document.getElementById(
             "paymentCheckingModal"
         );
 
-
-    if (
-        existing
-    ) {
-
-        existing.remove();
-
+    if (old) {
+        old.remove();
     }
-
 
     const modal =
         document.createElement(
             "div"
         );
 
-
     modal.id =
         "paymentCheckingModal";
 
-
     modal.className =
         "checkout-modal";
-
 
     modal.innerHTML = `
 
@@ -3209,11 +2662,7 @@ function showPaymentChecking() {
 
     `;
 
-
-    document.body.appendChild(
-        modal
-    );
-
+    document.body.appendChild(modal);
 
     document
         .getElementById(
@@ -3221,11 +2670,7 @@ function showPaymentChecking() {
         )
         ?.addEventListener(
             "click",
-            function() {
-
-                modal.remove();
-
-            }
+            () => modal.remove()
         );
 
 }
@@ -3235,156 +2680,36 @@ function showPaymentChecking() {
 // CHECKOUT BUTTON
 // ======================================================
 
-document.addEventListener(
-    "click",
-    function(event) {
+function setupCheckout() {
 
-        const target =
-            event.target instanceof Element
-                ? event.target
-                : null;
+    const checkoutButton =
+        document.getElementById(
+            "checkoutBtn"
+        );
 
-
-        if (
-            !target
-        ) {
-            return;
-        }
-
-
-        const checkoutButton =
-            target.closest(
-                "#checkoutBtn, .checkout-btn, [data-checkout]"
-            );
-
-
-        if (
-            !checkoutButton
-        ) {
-            return;
-        }
-
-
-        event.preventDefault();
-
-
-        createCheckoutModal();
-
+    if (!checkoutButton) {
+        console.warn(
+            "checkoutBtn was not found."
+        );
+        return;
     }
-);
 
+    checkoutButton.addEventListener(
+        "click",
+        function(event) {
 
-// ======================================================
-// STORAGE SYNC
-// ======================================================
+            event.preventDefault();
 
-window.addEventListener(
-    "storage",
-    function(event) {
-
-        if (
-            event.key ===
-            "collectiveCart"
-        ) {
-
-            try {
-
-                cart =
-                    JSON.parse(
-                        event.newValue ||
-                        "[]"
-                    );
-
-            } catch (
-                error
-            ) {
-
-                cart = [];
-
-            }
-
-
-            updateCartDisplay();
-
-
-            if (
-                typeof updateGiftShoppingProgress ===
-                "function"
-            ) {
-
-                updateGiftShoppingProgress();
-
-            }
+            createCheckoutModal();
 
         }
-
-
-        if (
-            event.key ===
-            "collectivePoints"
-        ) {
-
-            updatePointsDisplay();
-
-        }
-
-
-        if (
-            event.key ===
-            "collectiveTotalSpent"
-        ) {
-
-            updateRewardStatus();
-
-            updateGiftShoppingProgress();
-
-        }
-
-    }
-);
-
-
-// ======================================================
-// INITIALIZE SHOP
-// ======================================================
-
-function initializeShop() {
-
-    createCategoryMenu();
-
-    renderProducts();
-
-    updateCartDisplay();
-
-    updatePointsDisplay();
-
-    updateRewardStatus();
-
-    updateGiftShoppingProgress();
-
-    renderGiftOptions();
+    );
 
 }
 
 
-if (
-    document.readyState ===
-    "loading"
-) {
-
-    document.addEventListener(
-        "DOMContentLoaded",
-        initializeShop
-    );
-
-} else {
-
-    initializeShop();
-
-} 
-
 // ======================================================
-// LOGIN / SIGNUP STATUS
+// LOGIN STATUS
 // ======================================================
 
 function updateLoginStatus() {
@@ -3395,49 +2720,38 @@ function updateLoginStatus() {
     const user =
         getCurrentUser();
 
-
     document
         .querySelectorAll(
             ".login-required"
         )
-        .forEach(
-            element => {
+        .forEach(element => {
 
-                element.style.display =
-                    loggedIn
-                        ? "none"
-                        : "";
+            element.style.display =
+                loggedIn
+                    ? "none"
+                    : "";
 
-            }
-        );
-
+        });
 
     document
         .querySelectorAll(
             ".logout-button"
         )
-        .forEach(
-            element => {
+        .forEach(element => {
 
-                element.style.display =
-                    loggedIn
-                        ? ""
-                        : "none";
+            element.style.display =
+                loggedIn
+                    ? ""
+                    : "none";
 
-            }
-        );
-
+        });
 
     const accountName =
         document.getElementById(
             "accountName"
         );
 
-
-    if (
-        accountName &&
-        user
-    ) {
+    if (accountName && user) {
 
         accountName.textContent =
             `${user.firstName || ""} ${user.lastName || ""}`
@@ -3452,61 +2766,53 @@ function updateLoginStatus() {
 // LOGOUT
 // ======================================================
 
-document.addEventListener(
-    "click",
-    function(event) {
+function setupLogout() {
 
-        const target =
-            event.target instanceof Element
-                ? event.target
-                : null;
+    document.addEventListener(
+        "click",
+        function(event) {
 
+            const target =
+                event.target instanceof Element
+                    ? event.target
+                    : null;
 
-        if (
-            !target
-        ) {
-            return;
-        }
+            if (!target) {
+                return;
+            }
 
+            const button =
+                target.closest(
+                    "#logoutBtn, .logout-button"
+                );
 
-        const logoutButton =
-            target.closest(
-                "#logoutBtn, .logout-button"
+            if (!button) {
+                return;
+            }
+
+            event.preventDefault();
+
+            localStorage.removeItem(
+                "collectiveLoggedIn"
             );
 
+            localStorage.removeItem(
+                "collectiveUser"
+            );
 
-        if (
-            !logoutButton
-        ) {
-            return;
+            updateLoginStatus();
+
+            window.location.href =
+                "login.html";
+
         }
+    );
 
-
-        event.preventDefault();
-
-
-        localStorage.removeItem(
-            "collectiveLoggedIn"
-        );
-
-
-        localStorage.removeItem(
-            "collectiveUser"
-        );
-
-
-        updateLoginStatus();
-
-
-        window.location.href =
-            "login.html";
-
-    }
-);
+}
 
 
 // ======================================================
-// PROFILE DISPLAY
+// PROFILE
 // ======================================================
 
 function updateProfile() {
@@ -3514,114 +2820,73 @@ function updateProfile() {
     const user =
         getCurrentUser();
 
-
     const points =
         getPoints();
 
-
     const totalSpent =
         getTotalSpent();
-
 
     const firstName =
         document.getElementById(
             "profileFirstName"
         );
 
-
     const lastName =
         document.getElementById(
             "profileLastName"
         );
-
 
     const address =
         document.getElementById(
             "profileAddress"
         );
 
-
     const phone =
         document.getElementById(
             "profilePhone"
         );
-
 
     const profilePoints =
         document.getElementById(
             "profilePoints"
         );
 
-
     const profileSpent =
         document.getElementById(
             "profileTotalSpent"
         );
 
-
-    if (
-        firstName
-    ) {
-
+    if (firstName) {
         firstName.textContent =
-            user?.firstName ||
-            "";
-
+            user?.firstName || "";
     }
 
-
-    if (
-        lastName
-    ) {
-
+    if (lastName) {
         lastName.textContent =
-            user?.lastName ||
-            "";
-
+            user?.lastName || "";
     }
 
-
-    if (
-        address
-    ) {
-
+    if (address) {
         address.textContent =
-            user?.address ||
-            "";
-
+            user?.address || "";
     }
 
-
-    if (
-        phone
-    ) {
-
+    if (phone) {
         phone.textContent =
-            user?.phone ||
-            "";
-
+            user?.phone || "";
     }
 
-
-    if (
-        profilePoints
-    ) {
-
+    if (profilePoints) {
         profilePoints.textContent =
             points;
-
     }
 
-
-    if (
-        profileSpent
-    ) {
+    if (profileSpent) {
 
         profileSpent.textContent =
             `₦${totalSpent.toLocaleString()}`;
 
     }
-
 
     updateRewardStatus();
 
@@ -3637,27 +2902,18 @@ function updateFreeItemCards() {
     const totalSpent =
         getTotalSpent();
 
-
-    const cards =
-        document.querySelectorAll(
+    document
+        .querySelectorAll(
             ".free-item-card"
-        );
-
-
-    cards.forEach(
-        card => {
+        )
+        .forEach(card => {
 
             const required =
                 Number(
-                    card.dataset.required ||
-                    0
+                    card.dataset.required || 0
                 );
 
-
-            if (
-                totalSpent >=
-                required
-            ) {
+            if (totalSpent >= required) {
 
                 card.classList.add(
                     "unlocked"
@@ -3679,8 +2935,7 @@ function updateFreeItemCards() {
 
             }
 
-        }
-    );
+        });
 
 }
 
@@ -3694,55 +2949,43 @@ function getLocalOrderStatus() {
     return (
         localStorage.getItem(
             "collectiveOrderStatus"
-        ) ||
-        ""
+        ) || ""
     );
 
 }
-
 
 function updateOrderStatusDisplay() {
 
     const status =
         getLocalOrderStatus();
 
-
-    const elements =
-        document.querySelectorAll(
+    document
+        .querySelectorAll(
             ".order-status"
-        );
+        )
+        .forEach(element => {
 
-
-    elements.forEach(
-        element => {
-
-            if (
-                status ===
-                "approved"
-            ) {
+            if (status === "approved") {
 
                 element.textContent =
                     "APPROVED";
 
             } else if (
-                status ===
-                "rejected"
+                status === "rejected"
             ) {
 
                 element.textContent =
                     "REJECTED";
 
             } else if (
-                status ===
-                "delivered"
+                status === "delivered"
             ) {
 
                 element.textContent =
                     "DELIVERED";
 
             } else if (
-                status ===
-                "payment-checking"
+                status === "payment-checking"
             ) {
 
                 element.textContent =
@@ -3755,14 +2998,13 @@ function updateOrderStatusDisplay() {
 
             }
 
-        }
-    );
+        });
 
 }
 
 
 // ======================================================
-// FIREBASE ORDER STATUS LISTENER
+// FIREBASE ORDER STATUS
 // ======================================================
 
 async function checkFirebaseOrderStatus() {
@@ -3772,45 +3014,31 @@ async function checkFirebaseOrderStatus() {
             "collectivePendingOrder"
         );
 
-
-    if (
-        !pending
-    ) {
+    if (!pending) {
         return;
     }
 
-
     let pendingOrder;
-
 
     try {
 
         pendingOrder =
-            JSON.parse(
-                pending
-            );
+            JSON.parse(pending);
 
-    } catch (
-        error
-    ) {
+    } catch (error) {
 
         return;
 
     }
 
-
-    if (
-        !pendingOrder?.id
-    ) {
+    if (!pendingOrder?.id) {
         return;
     }
-
 
     try {
 
         const firebase =
             await firebaseReady;
-
 
         const snapshot =
             await firebase.getDocs(
@@ -3820,27 +3048,20 @@ async function checkFirebaseOrderStatus() {
                 )
             );
 
-
         snapshot.forEach(
             documentSnapshot => {
 
                 const order =
                     documentSnapshot.data();
 
-
                 if (
                     order.id !==
                     pendingOrder.id
                 ) {
-
                     return;
-
                 }
 
-
-                if (
-                    order.status
-                ) {
+                if (order.status) {
 
                     localStorage.setItem(
                         "collectiveOrderStatus",
@@ -3849,94 +3070,60 @@ async function checkFirebaseOrderStatus() {
 
                 }
 
-
                 if (
-                    order.status ===
-                        "approved" ||
-                    order.status ===
-                        "delivered"
+                    order.status === "approved" ||
+                    order.status === "delivered"
                 ) {
 
+                    const previousStatus =
+                        pendingOrder.status;
+
                     if (
-                        order.total
+                        previousStatus !== "approved" &&
+                        previousStatus !== "delivered"
                     ) {
 
-                        const previousStatus =
-                            pendingOrder.status;
-
-
-                        if (
-                            previousStatus !==
-                                "approved" &&
-                            previousStatus !==
-                                "delivered"
-                        ) {
-
-                            const spent =
-                                getTotalSpent();
-
-
-                            saveTotalSpent(
-                                spent +
-                                Number(
-                                    order.qualifyingSpend ||
-                                    order.originalTotal ||
-                                    order.total ||
-                                    0
-                                )
+                        const qualifyingSpend =
+                            Number(
+                                order.qualifyingSpend ||
+                                order.originalTotal ||
+                                order.total ||
+                                0
                             );
 
+                        saveTotalSpent(
+                            getTotalSpent() +
+                            qualifyingSpend
+                        );
 
-                            const earned =
-                                calculatePoints(
-                                    Number(
-                                        order.qualifyingSpend ||
-                                        order.originalTotal ||
-                                        order.total ||
-                                        0
-                                    )
-                                );
+                        savePoints(
+                            getPoints() +
+                            calculatePoints(
+                                qualifyingSpend
+                            )
+                        );
 
+                        cart = [];
 
-                            const currentPoints =
-                                getPoints();
+                        saveCart();
 
+                        clearSelectedFreeGiftProducts();
 
-                            savePoints(
-                                currentPoints +
-                                earned
-                            );
+                        pendingOrder.status =
+                            order.status;
 
+                        localStorage.setItem(
+                            "collectivePendingOrder",
+                            JSON.stringify(
+                                pendingOrder
+                            )
+                        );
 
-                            cart = [];
-
-                            saveCart();
-
-
-                            clearSelectedFreeGiftProducts();
-
-
-                            pendingOrder.status =
-                                order.status;
-
-
-                            localStorage.setItem(
-                                "collectivePendingOrder",
-                                JSON.stringify(
-                                    pendingOrder
-                                )
-                            );
-
-
-                            updateCartDisplay();
-
-                            updatePointsDisplay();
-
-                            updateRewardStatus();
-
-                            updateProfile();
-
-                        }
+                        updateCartDisplay();
+                        updatePointsDisplay();
+                        updateRewardStatus();
+                        updateProfile();
+                        updateFreeItemCards();
 
                     }
 
@@ -3945,12 +3132,9 @@ async function checkFirebaseOrderStatus() {
             }
         );
 
-
         updateOrderStatusDisplay();
 
-    } catch (
-        error
-    ) {
+    } catch (error) {
 
         console.error(
             "FIREBASE STATUS CHECK ERROR:",
@@ -3963,37 +3147,108 @@ async function checkFirebaseOrderStatus() {
 
 
 // ======================================================
-// CONTINUOUS ORDER STATUS CHECK
+// STORAGE SYNC
 // ======================================================
 
-setInterval(
-    function() {
+function setupStorageSync() {
 
-        checkFirebaseOrderStatus();
+    window.addEventListener(
+        "storage",
+        function(event) {
 
-    },
-    3000
-);
+            if (
+                event.key ===
+                "collectiveCart"
+            ) {
 
+                loadCart();
 
-// ======================================================
-// CART COUNT INITIALIZATION
-// ======================================================
+                updateCartDisplay();
 
-function initializeCart() {
+                updateGiftShoppingProgress();
 
-    updateCartDisplay();
+            }
+
+            if (
+                event.key ===
+                "collectivePoints"
+            ) {
+
+                updatePointsDisplay();
+                updateProfile();
+
+            }
+
+            if (
+                event.key ===
+                "collectiveTotalSpent"
+            ) {
+
+                updateRewardStatus();
+                updateProfile();
+                updateFreeItemCards();
+                updateGiftShoppingProgress();
+
+            }
+
+            if (
+                event.key ===
+                    "collectiveLoggedIn" ||
+                event.key ===
+                    "collectiveUser"
+            ) {
+
+                updateLoginStatus();
+                updateProfile();
+
+            }
+
+            if (
+                event.key ===
+                "collectiveOrderStatus"
+            ) {
+
+                updateOrderStatusDisplay();
+
+            }
+
+        }
+    );
 
 }
 
 
 // ======================================================
-// ALL PAGE INITIALIZATION
+// INITIALIZE EVERYTHING
 // ======================================================
 
 function initializeCollective() {
 
-    initializeCart();
+    loadCart();
+
+    createCategoryMenu();
+
+    renderProducts();
+
+    setupCartEvents();
+
+    setupCartItemEvents();
+
+    setupEscapeKey();
+
+    setupCategoryButton();
+
+    setupSearch();
+
+    setupAddToCart();
+
+    setupCheckout();
+
+    setupLogout();
+
+    setupStorageSync();
+
+    updateCartDisplay();
 
     updatePointsDisplay();
 
@@ -4013,21 +3268,27 @@ function initializeCollective() {
 
     checkFirebaseOrderStatus();
 
+    console.log(
+        "THE COLLECTIVE.CO SHOP SYSTEM READY"
+    );
+
 }
 
 
 // ======================================================
-// RUN AFTER PAGE LOAD
+// START ONCE
 // ======================================================
 
 if (
-    document.readyState ===
-    "loading"
+    document.readyState === "loading"
 ) {
 
     document.addEventListener(
         "DOMContentLoaded",
-        initializeCollective
+        initializeCollective,
+        {
+            once: true
+        }
     );
 
 } else {
@@ -4038,87 +3299,10 @@ if (
 
 
 // ======================================================
-// KEEP EVERYTHING UPDATED
+// CHECK ORDER STATUS EVERY 5 SECONDS
 // ======================================================
 
-window.addEventListener(
-    "storage",
-    function(event) {
-
-        if (
-            event.key ===
-            "collectivePoints"
-        ) {
-
-            updatePointsDisplay();
-
-            updateProfile();
-
-        }
-
-
-        if (
-            event.key ===
-            "collectiveTotalSpent"
-        ) {
-
-            updateRewardStatus();
-
-            updateProfile();
-
-            updateFreeItemCards();
-
-        }
-
-
-        if (
-            event.key ===
-            "collectiveLoggedIn" ||
-            event.key ===
-            "collectiveUser"
-        ) {
-
-            updateLoginStatus();
-
-            updateProfile();
-
-        }
-
-
-        if (
-            event.key ===
-            "collectiveOrderStatus"
-        ) {
-
-            updateOrderStatusDisplay();
-
-        }
-
-    }
-);
-
-
-// ======================================================
-// FINAL SHOP REFRESH
-// ======================================================
-
-setTimeout(
-    function() {
-
-        updateCartDisplay();
-
-        updatePointsDisplay();
-
-        updateRewardStatus();
-
-        updateLoginStatus();
-
-        updateProfile();
-
-        updateFreeItemCards();
-
-        updateOrderStatusDisplay();
-
-    },
-    500
+setInterval(
+    checkFirebaseOrderStatus,
+    5000
 );
