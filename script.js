@@ -710,133 +710,73 @@ function getCartTotal() {
 
 // ======================================================
 // FREE GIFT STORAGE
+// IMPORTANT: BOTH OLD AND NEW KEYS ARE SUPPORTED
 // ======================================================
-
-const SELECTED_GIFT_KEY = "collectiveSelectedFreeGifts";
-const OLD_GIFT_KEY = "collectiveFreeGifts";
-
-function readGiftStorage() {
-
-    let gifts = [];
-
-    try {
-
-        const newSaved =
-            JSON.parse(
-                localStorage.getItem(
-                    SELECTED_GIFT_KEY
-                ) || "[]"
-            );
-
-        if (
-            Array.isArray(newSaved) &&
-            newSaved.length > 0
-        ) {
-
-            gifts = newSaved;
-
-        } else {
-
-            const oldSaved =
-                JSON.parse(
-                    localStorage.getItem(
-                        OLD_GIFT_KEY
-                    ) || "[]"
-                );
-
-            if (Array.isArray(oldSaved)) {
-                gifts = oldSaved;
-            }
-
-        }
-
-    } catch (error) {
-
-        gifts = [];
-
-    }
-
-    return gifts;
-
-}
-
 
 function getSelectedFreeGiftProducts() {
 
-    const saved =
-        readGiftStorage();
+    try {
 
-    if (!Array.isArray(saved)) {
+        let gifts = JSON.parse(
+            localStorage.getItem(
+                "collectiveSelectedFreeGifts"
+            ) || "null"
+        );
+
+        if (
+            Array.isArray(gifts) &&
+            gifts.length > 0
+        ) {
+
+            return gifts;
+
+        }
+
+        gifts = JSON.parse(
+            localStorage.getItem(
+                "collectiveFreeGifts"
+            ) || "[]"
+        );
+
+        return Array.isArray(gifts)
+            ? gifts
+            : [];
+
+    } catch (error) {
+
         return [];
+
     }
-
-    return saved
-        .map(gift => {
-
-            if (
-                typeof gift === "string"
-            ) {
-
-                return products.find(
-                    product =>
-                        product.id === gift
-                ) || null;
-
-            }
-
-            if (
-                gift &&
-                typeof gift === "object"
-            ) {
-
-                if (gift.id) {
-
-                    return products.find(
-                        product =>
-                            product.id === gift.id
-                    ) || gift;
-
-                }
-
-            }
-
-            return null;
-
-        })
-        .filter(Boolean);
 
 }
 
-
 function saveSelectedFreeGiftProducts(gifts) {
 
-    const cleanGifts =
+    const safeGifts =
         Array.isArray(gifts)
             ? gifts
             : [];
 
     localStorage.setItem(
-        SELECTED_GIFT_KEY,
-        JSON.stringify(cleanGifts)
+        "collectiveSelectedFreeGifts",
+        JSON.stringify(safeGifts)
     );
 
-    // Keep old system compatible too.
     localStorage.setItem(
-        OLD_GIFT_KEY,
-        JSON.stringify(cleanGifts)
+        "collectiveFreeGifts",
+        JSON.stringify(safeGifts)
     );
 
 }
 
-
 function clearSelectedFreeGiftProducts() {
 
     localStorage.removeItem(
-        SELECTED_GIFT_KEY
+        "collectiveSelectedFreeGifts"
     );
 
     localStorage.removeItem(
-        OLD_GIFT_KEY
+        "collectiveFreeGifts"
     );
 
 }
@@ -849,33 +789,24 @@ function clearSelectedFreeGiftProducts() {
 function updateCartCount() {
 
     const count =
-        document.getElementById(
-            "cartCount"
-        );
+        document.getElementById("cartCount");
 
     if (count) {
-
         count.textContent =
             getCartQuantity();
-
     }
 
 }
-
 
 function updateCartDisplay() {
 
     updateCartCount();
 
     const cartItems =
-        document.getElementById(
-            "cartItems"
-        );
+        document.getElementById("cartItems");
 
     const cartTotal =
-        document.getElementById(
-            "cartTotal"
-        );
+        document.getElementById("cartTotal");
 
     if (!cartItems) {
         return;
@@ -884,57 +815,35 @@ function updateCartDisplay() {
     const selectedGifts =
         getSelectedFreeGiftProducts();
 
+    let html = "";
 
-    // ==================================================
-    // PAID ITEMS
-    // ==================================================
+    // ------------------------------
+    // PAID PRODUCTS
+    // ------------------------------
 
     if (cart.length === 0) {
 
-        cartItems.innerHTML = `
+        html += `
             <div class="empty-cart">
-                <div style="font-size:32px;margin-bottom:8px;">🛍️</div>
-                <p>Your cart is empty.</p>
-                ${
-                    selectedGifts.length > 0
-                        ? `<small>Your free gifts are saved below.</small>`
-                        : `<small>Add something you love.</small>`
-                }
+                Your cart is empty.
             </div>
         `;
 
     } else {
 
-        cartItems.innerHTML = "";
+        cart.forEach((item, index) => {
 
-        cart.forEach(
-            (item, index) => {
+            const quantity =
+                Number(item.quantity || 1);
 
-                const quantity =
-                    Math.max(
-                        1,
-                        Number(
-                            item.quantity || 1
-                        )
-                    );
+            const price =
+                Number(item.price || 0);
 
-                const price =
-                    Number(
-                        item.price || 0
-                    );
+            const itemTotal =
+                price * quantity;
 
-                const itemTotal =
-                    price * quantity;
-
-                const cartItem =
-                    document.createElement(
-                        "div"
-                    );
-
-                cartItem.className =
-                    "cart-item";
-
-                cartItem.innerHTML = `
+            html += `
+                <div class="cart-item">
 
                     <div class="cart-item-info">
 
@@ -948,15 +857,8 @@ function updateCartDisplay() {
                                 : ""
                         }
 
-                        ${
-                            item.size &&
-                            item.size !== "Not specified"
-                                ? `<small>Size: ${item.size}</small>`
-                                : ""
-                        }
-
                         <strong>
-                            ₦${price.toLocaleString()}
+                            ₦${itemTotal.toLocaleString()}
                         </strong>
 
                     </div>
@@ -987,10 +889,6 @@ function updateCartDisplay() {
 
                         </div>
 
-                        <strong class="cart-item-total">
-                            ₦${itemTotal.toLocaleString()}
-                        </strong>
-
                         <button
                             type="button"
                             class="remove-cart-item"
@@ -1001,110 +899,103 @@ function updateCartDisplay() {
 
                     </div>
 
-                `;
+                </div>
+            `;
 
-                cartItems.appendChild(
-                    cartItem
-                );
-
-            }
-        );
+        });
 
     }
 
 
-    // ==================================================
+    // ------------------------------
     // FREE GIFTS
-    // ==================================================
+    // ------------------------------
 
-    if (
-        selectedGifts.length > 0
-    ) {
+    if (selectedGifts.length > 0) {
 
-        const giftsSection =
-            document.createElement(
-                "div"
-            );
+        html += `
 
-        giftsSection.style.marginTop =
-            "20px";
+            <div
+                class="selected-free-gifts"
+                style="
+                    margin-top:18px;
+                    padding-top:18px;
+                    border-top:1px solid #DCEFF2;
+                "
+            >
 
-        giftsSection.style.paddingTop =
-            "18px";
+                <h3
+                    style="
+                        color:#304B52;
+                        margin:0 0 12px;
+                    "
+                >
+                    🎁 FREE GIFTS
+                </h3>
 
-        giftsSection.style.borderTop =
-            "1px solid #DCEFF2";
+                <div
+                    style="
+                        background:#F7F4EE;
+                        border-radius:14px;
+                        padding:8px 14px;
+                    "
+                >
 
-        giftsSection.innerHTML = `
+                    ${selectedGifts.map(gift => `
 
-            <div style="
-                color:#304B52;
-                font-weight:bold;
-                font-size:16px;
-                margin-bottom:10px;
-            ">
-                🎁 FREE GIFTS
-            </div>
+                        <div
+                            style="
+                                display:flex;
+                                justify-content:space-between;
+                                align-items:center;
+                                gap:10px;
+                                padding:10px 0;
+                                border-bottom:1px solid #E8F1F2;
+                            "
+                        >
 
-            <div style="
-                background:#F7F4EE;
-                border-radius:14px;
-                padding:10px 14px;
-            ">
-
-                ${selectedGifts.map(
-                    product => `
-
-                        <div style="
-                            display:flex;
-                            justify-content:space-between;
-                            align-items:center;
-                            gap:10px;
-                            padding:10px 0;
-                            border-bottom:1px solid #E8F1F2;
-                        ">
-
-                            <span style="
-                                color:#304B52;
-                            ">
-                                🎁 ${product.name}
+                            <span
+                                style="
+                                    color:#304B52;
+                                "
+                            >
+                                🎁 ${gift.name}
                             </span>
 
-                            <strong style="
-                                color:#304B52;
-                                white-space:nowrap;
-                            ">
+                            <strong
+                                style="
+                                    color:#304B52;
+                                    white-space:nowrap;
+                                "
+                            >
                                 FREE
                             </strong>
 
                         </div>
 
-                    `
-                ).join("")}
+                    `).join("")}
+
+                </div>
+
+                <p
+                    style="
+                        color:#71858A;
+                        font-size:12px;
+                        text-align:center;
+                        margin:10px 0 0;
+                    "
+                >
+                    Your selected gifts are FREE and do not
+                    increase your order total.
+                </p>
 
             </div>
 
-            <p style="
-                color:#71858A;
-                font-size:12px;
-                text-align:center;
-                margin:10px 0 0;
-            ">
-                Your selected gifts are free and do not add to your cart total.
-            </p>
-
         `;
-
-        cartItems.appendChild(
-            giftsSection
-        );
 
     }
 
-
-    // ==================================================
-    // TOTAL
-    // ==================================================
+    cartItems.innerHTML = html;
 
     if (cartTotal) {
 
@@ -1123,57 +1014,37 @@ function updateCartDisplay() {
 function openCart() {
 
     const popup =
-        document.getElementById(
-            "cartPopup"
-        );
+        document.getElementById("cartPopup");
 
     if (!popup) {
-
-        console.error(
-            "cartPopup was not found."
-        );
-
+        console.error("cartPopup was not found.");
         return;
-
     }
 
     updateCartDisplay();
 
-    popup.classList.add(
-        "open"
-    );
+    popup.classList.add("open");
 
-    popup.style.display =
-        "flex";
+    popup.style.display = "flex";
 
-    document.body.classList.add(
-        "cart-open"
-    );
+    document.body.classList.add("cart-open");
 
 }
-
 
 function closeCart() {
 
     const popup =
-        document.getElementById(
-            "cartPopup"
-        );
+        document.getElementById("cartPopup");
 
     if (!popup) {
         return;
     }
 
-    popup.classList.remove(
-        "open"
-    );
+    popup.classList.remove("open");
 
-    popup.style.display =
-        "none";
+    popup.style.display = "none";
 
-    document.body.classList.remove(
-        "cart-open"
-    );
+    document.body.classList.remove("cart-open");
 
 }
 
@@ -1185,20 +1056,13 @@ function closeCart() {
 function setupCartEvents() {
 
     const cartButton =
-        document.getElementById(
-            "cartBtn"
-        );
+        document.getElementById("cartBtn");
 
     const closeButton =
-        document.getElementById(
-            "closeCart"
-        );
+        document.getElementById("closeCart");
 
     const popup =
-        document.getElementById(
-            "cartPopup"
-        );
-
+        document.getElementById("cartPopup");
 
     if (cartButton) {
 
@@ -1216,7 +1080,6 @@ function setupCartEvents() {
 
     }
 
-
     if (closeButton) {
 
         closeButton.addEventListener(
@@ -1233,19 +1096,14 @@ function setupCartEvents() {
 
     }
 
-
     if (popup) {
 
         popup.addEventListener(
             "click",
             function(event) {
 
-                if (
-                    event.target === popup
-                ) {
-
+                if (event.target === popup) {
                     closeCart();
-
                 }
 
             }
@@ -1278,15 +1136,14 @@ function setupCartItemEvents() {
 
             // REMOVE
 
-            if (
-                target.classList.contains(
-                    "remove-cart-item"
-                )
-            ) {
+            const removeButton =
+                target.closest(".remove-cart-item");
+
+            if (removeButton) {
 
                 const index =
                     Number(
-                        target.dataset.index
+                        removeButton.dataset.index
                     );
 
                 if (
@@ -1294,10 +1151,7 @@ function setupCartItemEvents() {
                     cart[index]
                 ) {
 
-                    cart.splice(
-                        index,
-                        1
-                    );
+                    cart.splice(index, 1);
 
                     saveCart();
 
@@ -1314,15 +1168,14 @@ function setupCartItemEvents() {
 
             // MINUS
 
-            if (
-                target.classList.contains(
-                    "cart-minus"
-                )
-            ) {
+            const minusButton =
+                target.closest(".cart-minus");
+
+            if (minusButton) {
 
                 const index =
                     Number(
-                        target.dataset.index
+                        minusButton.dataset.index
                     );
 
                 if (
@@ -1335,9 +1188,7 @@ function setupCartItemEvents() {
                             cart[index].quantity || 1
                         );
 
-                    if (
-                        quantity > 1
-                    ) {
+                    if (quantity > 1) {
 
                         cart[index].quantity =
                             quantity - 1;
@@ -1359,15 +1210,14 @@ function setupCartItemEvents() {
 
             // PLUS
 
-            if (
-                target.classList.contains(
-                    "cart-plus"
-                )
-            ) {
+            const plusButton =
+                target.closest(".cart-plus");
+
+            if (plusButton) {
 
                 const index =
                     Number(
-                        target.dataset.index
+                        plusButton.dataset.index
                     );
 
                 if (
@@ -1380,9 +1230,7 @@ function setupCartItemEvents() {
                             cart[index].quantity || 1
                         );
 
-                    if (
-                        quantity < 10
-                    ) {
+                    if (quantity < 10) {
 
                         cart[index].quantity =
                             quantity + 1;
@@ -1406,7 +1254,7 @@ function setupCartItemEvents() {
 
 
 // ======================================================
-// ESCAPE KEY
+// ESCAPE
 // ======================================================
 
 function setupEscapeKey() {
@@ -1415,12 +1263,8 @@ function setupEscapeKey() {
         "keydown",
         function(event) {
 
-            if (
-                event.key === "Escape"
-            ) {
-
+            if (event.key === "Escape") {
                 closeCart();
-
             }
 
         }
@@ -1443,7 +1287,6 @@ function getPoints() {
 
 }
 
-
 function savePoints(points) {
 
     localStorage.setItem(
@@ -1458,7 +1301,6 @@ function savePoints(points) {
 
 }
 
-
 function calculatePoints(amount) {
 
     return Math.floor(
@@ -1467,15 +1309,11 @@ function calculatePoints(amount) {
 
 }
 
-
 function pointsToNaira(points) {
 
-    return Number(
-        points || 0
-    ) * 100;
+    return Number(points || 0) * 100;
 
 }
-
 
 function getMaxPointsUsable(points) {
 
@@ -1486,34 +1324,13 @@ function getMaxPointsUsable(points) {
 
 }
 
-
-function addPurchasePoints(amount) {
-
-    const earned =
-        calculatePoints(
-            amount
-        );
-
-    savePoints(
-        getPoints() + earned
-    );
-
-    updatePointsDisplay();
-
-    return earned;
-
-}
-
-
 function updatePointsDisplay() {
 
     const points =
         getPoints();
 
     document
-        .querySelectorAll(
-            ".points-balance"
-        )
+        .querySelectorAll(".points-balance")
         .forEach(element => {
 
             element.textContent =
@@ -1527,10 +1344,8 @@ function updatePointsDisplay() {
         );
 
     if (profilePoints) {
-
         profilePoints.textContent =
             points;
-
     }
 
 }
@@ -1550,7 +1365,6 @@ function getTotalSpent() {
 
 }
 
-
 function saveTotalSpent(amount) {
 
     localStorage.setItem(
@@ -1565,6 +1379,21 @@ function saveTotalSpent(amount) {
 
 }
 
+function addPurchasePoints(amount) {
+
+    const earned =
+        calculatePoints(amount);
+
+    savePoints(
+        getPoints() + earned
+    );
+
+    updatePointsDisplay();
+
+    return earned;
+
+}
+
 
 // ======================================================
 // REWARDS
@@ -1575,10 +1404,7 @@ function updateRewardStatus() {
     const totalSpent =
         getTotalSpent();
 
-
-    if (
-        totalSpent >= 50000
-    ) {
+    if (totalSpent >= 50000) {
 
         localStorage.setItem(
             "collectiveGift1",
@@ -1587,10 +1413,7 @@ function updateRewardStatus() {
 
     }
 
-
-    if (
-        totalSpent >= 100000
-    ) {
+    if (totalSpent >= 100000) {
 
         localStorage.setItem(
             "collectiveGift2",
@@ -1598,7 +1421,6 @@ function updateRewardStatus() {
         );
 
     }
-
 
     const gift1Status =
         document.getElementById(
@@ -1610,7 +1432,6 @@ function updateRewardStatus() {
             "gift2Status"
         );
 
-
     if (gift1Status) {
 
         gift1Status.textContent =
@@ -1619,7 +1440,6 @@ function updateRewardStatus() {
                 : "NOT UNLOCKED";
 
     }
-
 
     if (gift2Status) {
 
@@ -1637,9 +1457,7 @@ function updateRewardStatus() {
 // SEARCH
 // ======================================================
 
-let currentCategory =
-    "All";
-
+let currentCategory = "All";
 
 function filterProducts() {
 
@@ -1655,59 +1473,45 @@ function filterProducts() {
                 .trim()
             : "";
 
-
     const cards =
         document.querySelectorAll(
             ".product-card"
         );
 
-    let visible =
-        0;
+    let visible = 0;
 
+    cards.forEach(card => {
 
-    cards.forEach(
-        card => {
+        const name =
+            (
+                card.dataset.name || ""
+            ).toLowerCase();
 
-            const name =
-                (
-                    card.dataset.name ||
-                    ""
-                ).toLowerCase();
+        const category =
+            card.dataset.category || "";
 
-            const category =
-                card.dataset.category ||
-                "";
+        const matchesSearch =
+            name.includes(search);
 
-            const matchesSearch =
-                name.includes(
-                    search
-                );
+        const matchesCategory =
+            currentCategory === "All" ||
+            category === currentCategory;
 
-            const matchesCategory =
-                currentCategory === "All" ||
-                category === currentCategory;
+        if (
+            matchesSearch &&
+            matchesCategory
+        ) {
 
+            card.style.display = "";
+            visible++;
 
-            if (
-                matchesSearch &&
-                matchesCategory
-            ) {
+        } else {
 
-                card.style.display =
-                    "";
-
-                visible++;
-
-            } else {
-
-                card.style.display =
-                    "none";
-
-            }
+            card.style.display = "none";
 
         }
-    );
 
+    });
 
     const message =
         document.querySelector(
@@ -1727,7 +1531,7 @@ function filterProducts() {
 
 
 // ======================================================
-// CATEGORY MENU
+// CATEGORY
 // ======================================================
 
 function createCategoryMenu() {
@@ -1741,10 +1545,7 @@ function createCategoryMenu() {
         return;
     }
 
-
-    container.innerHTML =
-        "";
-
+    container.innerHTML = "";
 
     const categories = [
         "All",
@@ -1755,79 +1556,60 @@ function createCategoryMenu() {
         "Bags"
     ];
 
+    categories.forEach(category => {
 
-    categories.forEach(
-        category => {
+        const button =
+            document.createElement("button");
 
-            const button =
-                document.createElement(
-                    "button"
-                );
+        button.type = "button";
 
-            button.type =
-                "button";
+        button.className =
+            "category-button";
 
-            button.className =
-                "category-button";
+        button.textContent =
+            category === "All"
+                ? "ALL PRODUCTS"
+                : category.toUpperCase();
 
-            button.textContent =
-                category === "All"
-                    ? "ALL PRODUCTS"
-                    : category.toUpperCase();
+        if (category === currentCategory) {
 
+            button.classList.add(
+                "selected"
+            );
 
-            if (
-                category === currentCategory
-            ) {
+        }
+
+        button.addEventListener(
+            "click",
+            function() {
+
+                currentCategory =
+                    category;
+
+                document
+                    .querySelectorAll(
+                        ".category-button"
+                    )
+                    .forEach(btn =>
+                        btn.classList.remove(
+                            "selected"
+                        )
+                    );
 
                 button.classList.add(
                     "selected"
                 );
 
+                filterProducts();
+
             }
+        );
 
+        container.appendChild(button);
 
-            button.addEventListener(
-                "click",
-                function() {
-
-                    currentCategory =
-                        category;
-
-                    document
-                        .querySelectorAll(
-                            ".category-button"
-                        )
-                        .forEach(
-                            btn =>
-                                btn.classList.remove(
-                                    "selected"
-                                )
-                        );
-
-                    button.classList.add(
-                        "selected"
-                    );
-
-                    filterProducts();
-
-                }
-            );
-
-
-            container.appendChild(
-                button
-            );
-
-        }
-    );
+    });
 
 }
-
-
-// ======================================================
-// CATEGORY TOGGLE
-// ======================================================
 
 function setupCategoryButton() {
 
@@ -1841,16 +1623,9 @@ function setupCategoryButton() {
             ".collective-categories"
         );
 
-
-    if (
-        !button ||
-        !menu
-    ) {
-
+    if (!button || !menu) {
         return;
-
     }
-
 
     button.addEventListener(
         "click",
@@ -1858,21 +1633,10 @@ function setupCategoryButton() {
 
             event.preventDefault();
 
-
-            if (
-                menu.style.display === "none" ||
-                menu.style.display === ""
-            ) {
-
-                menu.style.display =
-                    "flex";
-
-            } else {
-
-                menu.style.display =
-                    "none";
-
-            }
+            menu.style.display =
+                menu.style.display === "flex"
+                    ? "none"
+                    : "flex";
 
         }
     );
@@ -1894,7 +1658,6 @@ function setupSearch() {
     if (!search) {
         return;
     }
-
 
     search.addEventListener(
         "input",
@@ -1918,140 +1681,115 @@ function renderProducts() {
             ".product-grid"
         );
 
-
     if (!container) {
-
         console.error(
             "productGrid was not found."
         );
-
         return;
-
     }
 
-
-    container.innerHTML =
-        "";
-
+    container.innerHTML = "";
 
     products
         .slice(0, 60)
-        .forEach(
-            product => {
+        .forEach(product => {
 
-                const card =
-                    document.createElement(
-                        "div"
-                    );
+            const card =
+                document.createElement("div");
 
-                card.className =
-                    "product-card";
+            card.className =
+                "product-card";
 
+            card.dataset.name =
+                product.name;
 
-                card.dataset.name =
-                    product.name;
+            card.dataset.category =
+                product.category;
 
-                card.dataset.category =
-                    product.category;
+            const colors =
+                product.colors || [];
 
+            let colorHTML = "";
 
-                const colors =
-                    product.colors || [];
+            if (colors.length > 0) {
 
+                colorHTML = `
 
-                let colorHTML =
-                    "";
+                    <div class="product-colors">
 
+                        <label>
+                            Shade
+                        </label>
 
-                if (
-                    colors.length > 0
-                ) {
-
-                    colorHTML = `
-
-                        <div class="product-colors">
-
-                            <label>
-                                Shade
-                            </label>
-
-                            <select class="product-color">
-
-                                ${colors.map(
-                                    color => `
-                                        <option value="${color}">
-                                            ${color}
-                                        </option>
-                                    `
-                                ).join("")}
-
-                            </select>
-
-                        </div>
-
-                    `;
-
-                }
-
-
-                card.innerHTML = `
-
-                    <div class="product-image">
-
-                        <span>
-                            ${product.name}
-                        </span>
-
-                    </div>
-
-
-                    <div class="product-info">
-
-                        <p class="product-category">
-                            ${product.category}
-                        </p>
-
-                        <h3>
-                            ${product.name}
-                        </h3>
-
-                        <p class="product-description">
-                            ${product.description || ""}
-                        </p>
-
-                        <p class="product-size">
-                            ${product.size}
-                        </p>
-
-                        <p class="product-price">
-                            ₦${Number(
-                                product.price
-                            ).toLocaleString()}
-                        </p>
-
-                        ${colorHTML}
-
-
-                        <button
-                            type="button"
-                            class="add-to-cart"
-                            data-product-id="${product.id}"
+                        <select
+                            class="product-color"
                         >
-                            ADD TO CART
-                        </button>
+
+                            ${colors.map(color => `
+                                <option value="${color}">
+                                    ${color}
+                                </option>
+                            `).join("")}
+
+                        </select>
 
                     </div>
 
                 `;
 
-
-                container.appendChild(
-                    card
-                );
-
             }
-        );
 
+            card.innerHTML = `
+
+                <div class="product-image">
+
+                    <span>
+                        ${product.name}
+                    </span>
+
+                </div>
+
+                <div class="product-info">
+
+                    <p class="product-category">
+                        ${product.category}
+                    </p>
+
+                    <h3>
+                        ${product.name}
+                    </h3>
+
+                    <p class="product-description">
+                        ${product.description || ""}
+                    </p>
+
+                    <p class="product-size">
+                        ${product.size}
+                    </p>
+
+                    <p class="product-price">
+                        ₦${Number(
+                            product.price
+                        ).toLocaleString()}
+                    </p>
+
+                    ${colorHTML}
+
+                    <button
+                        type="button"
+                        class="add-to-cart"
+                        data-product-id="${product.id}"
+                    >
+                        ADD TO CART
+                    </button>
+
+                </div>
+
+            `;
+
+            container.appendChild(card);
+
+        });
 
     filterProducts();
 
@@ -2073,72 +1811,56 @@ function setupAddToCart() {
                     ? event.target
                     : null;
 
-
             if (!target) {
                 return;
             }
-
 
             const button =
                 target.closest(
                     ".add-to-cart"
                 );
 
-
             if (!button) {
                 return;
             }
 
-
             event.preventDefault();
-
 
             const productId =
                 button.dataset.productId;
 
-
             const product =
                 products.find(
                     item =>
-                        item.id ===
-                        productId
+                        item.id === productId
                 );
-
 
             if (!product) {
                 return;
             }
-
 
             const card =
                 button.closest(
                     ".product-card"
                 );
 
-
             const colorSelect =
-                card
-                    ? card.querySelector(
-                        ".product-color"
-                    )
-                    : null;
-
+                card?.querySelector(
+                    ".product-color"
+                );
 
             const selectedColor =
                 colorSelect
                     ? colorSelect.value
                     : "";
 
-
             const existing =
                 cart.find(
                     item =>
                         item.id === product.id &&
-                        (
-                            item.color || ""
-                        ) === selectedColor
+                        (item.color || "") ===
+                        selectedColor
                 );
-
 
             if (existing) {
 
@@ -2147,10 +1869,7 @@ function setupAddToCart() {
                         existing.quantity || 1
                     );
 
-
-                if (
-                    quantity < 10
-                ) {
+                if (quantity < 10) {
 
                     existing.quantity =
                         quantity + 1;
@@ -2186,17 +1905,14 @@ function setupAddToCart() {
 
             }
 
-
             saveCart();
 
             updateCartDisplay();
 
             updateGiftShoppingProgress();
 
-
             button.textContent =
                 "ADDED ✓";
-
 
             setTimeout(
                 function() {
@@ -2223,141 +1939,15 @@ function getFreeGiftLevel() {
     const totalSpent =
         getTotalSpent();
 
-
-    if (
-        totalSpent >= 100000
-    ) {
-
+    if (totalSpent >= 100000) {
         return 10;
-
     }
 
-
-    if (
-        totalSpent >= 50000
-    ) {
-
+    if (totalSpent >= 50000) {
         return 5;
-
     }
-
 
     return 0;
-
-}
-
-
-// ======================================================
-// GIFT PROGRESS
-// ======================================================
-
-function updateGiftShoppingProgress() {
-
-    const total =
-        getCartTotal();
-
-
-    document
-        .querySelectorAll(
-            ".gift-progress"
-        )
-        .forEach(
-            element => {
-
-                if (
-                    total >= 100000
-                ) {
-
-                    element.textContent =
-                        "₦100,000 reward unlocked";
-
-                } else if (
-                    total >= 50000
-                ) {
-
-                    element.textContent =
-                        "₦50,000 reward unlocked";
-
-                } else {
-
-                    const remaining =
-                        Math.max(
-                            0,
-                            50000 - total
-                        );
-
-                    element.textContent =
-                        `₦${remaining.toLocaleString()} more to unlock your first reward`;
-
-                }
-
-            }
-        );
-
-
-    // Also update the Shop gift bar if it exists.
-
-    const amount =
-        document.getElementById(
-            "giftSpendAmount"
-        );
-
-    const fill =
-        document.getElementById(
-            "giftSpendFill"
-        );
-
-    const message =
-        document.getElementById(
-            "giftSpendMessage"
-        );
-
-
-    if (
-        amount
-    ) {
-
-        amount.textContent =
-            `₦${total.toLocaleString()} / ₦50,000`;
-
-    }
-
-
-    if (
-        fill
-    ) {
-
-        fill.style.width =
-            Math.min(
-                100,
-                (total / 50000) * 100
-            ) + "%";
-
-    }
-
-
-    if (
-        message
-    ) {
-
-        if (
-            total >= 50000
-        ) {
-
-            message.textContent =
-                "✓ ₦50,000 reached! Taking you to checkout...";
-
-        } else {
-
-            const remaining =
-                50000 - total;
-
-            message.textContent =
-                `Spend ₦${remaining.toLocaleString()} more to take away your 5 gifts.`;
-
-        }
-
-    }
 
 }
 
@@ -2373,19 +1963,14 @@ function renderGiftOptions() {
             "giftOptions"
         );
 
-
     if (!container) {
         return;
     }
 
-
     const unlocked =
         getFreeGiftLevel();
 
-
-    if (
-        unlocked <= 0
-    ) {
+    if (unlocked <= 0) {
 
         container.innerHTML = `
             <p>
@@ -2397,7 +1982,6 @@ function renderGiftOptions() {
 
     }
 
-
     const giftProducts =
         products
             .filter(
@@ -2405,377 +1989,292 @@ function renderGiftOptions() {
                     product.category === "Accessories" ||
                     product.category === "Skincare"
             )
-            .slice(
-                0,
-                unlocked
-            );
-
+            .slice(0, unlocked);
 
     const selected =
         getSelectedFreeGiftProducts();
 
-
     container.innerHTML =
-        giftProducts.map(
-            product => `
+        giftProducts.map(product => `
 
-                <label class="gift-option">
+            <label class="gift-option">
 
-                    <input
-                        type="checkbox"
-                        class="gift-checkbox"
-                        value="${product.id}"
-                        ${
-                            selected.some(
-                                gift =>
-                                    gift.id === product.id
-                            )
-                                ? "checked"
-                                : ""
-                        }
-                    >
+                <input
+                    type="checkbox"
+                    class="gift-checkbox"
+                    value="${product.id}"
+                    ${
+                        selected.some(
+                            gift =>
+                                gift.id === product.id
+                        )
+                            ? "checked"
+                            : ""
+                    }
+                >
 
-                    <span>
-                        ${product.name}
-                    </span>
+                <span>
+                    ${product.name}
+                </span>
 
-                </label>
+            </label>
 
-            `
-        ).join("");
+        `).join("");
 
 
     container
         .querySelectorAll(
             ".gift-checkbox"
         )
-        .forEach(
-            checkbox => {
+        .forEach(checkbox => {
 
-                checkbox.addEventListener(
-                    "change",
-                    function() {
+            checkbox.addEventListener(
+                "change",
+                function() {
 
-                        let gifts =
-                            getSelectedFreeGiftProducts();
+                    let gifts =
+                        getSelectedFreeGiftProducts();
 
-
-                        const product =
-                            products.find(
-                                item =>
-                                    item.id ===
-                                    checkbox.value
-                            );
-
-
-                        if (!product) {
-                            return;
-                        }
-
-
-                        if (
-                            checkbox.checked
-                        ) {
-
-                            if (
-                                gifts.length <
-                                unlocked
-                            ) {
-
-                                gifts.push(
-                                    product
-                                );
-
-                            } else {
-
-                                checkbox.checked =
-                                    false;
-
-                                alert(
-                                    `You can select up to ${unlocked} free item${unlocked === 1 ? "" : "s"}.`
-                                );
-
-                                return;
-
-                            }
-
-                        } else {
-
-                            gifts =
-                                gifts.filter(
-                                    gift =>
-                                        gift.id !==
-                                        product.id
-                                );
-
-                        }
-
-
-                        saveSelectedFreeGiftProducts(
-                            gifts
+                    const product =
+                        products.find(
+                            item =>
+                                item.id ===
+                                checkbox.value
                         );
 
+                    if (!product) {
+                        return;
+                    }
 
-                        // Immediately update cart.
-
-                        updateCartDisplay();
-
-
-                        // Show the gift-saved popup
-                        // when the required number is selected.
+                    if (checkbox.checked) {
 
                         if (
-                            gifts.length ===
+                            gifts.some(
+                                gift =>
+                                    gift.id ===
+                                    product.id
+                            )
+                        ) {
+
+                            return;
+
+                        }
+
+                        if (
+                            gifts.length <
                             unlocked
                         ) {
 
-                            showGiftSavedPopup(
-                                unlocked
+                            gifts.push(product);
+
+                        } else {
+
+                            checkbox.checked =
+                                false;
+
+                            alert(
+                                `You can select up to ${unlocked} free item${unlocked === 1 ? "" : "s"}.`
                             );
+
+                            return;
 
                         }
 
-                    }
-                );
+                    } else {
 
-            }
-        );
+                        gifts =
+                            gifts.filter(
+                                gift =>
+                                    gift.id !==
+                                    product.id
+                            );
+
+                    }
+
+                    saveSelectedFreeGiftProducts(
+                        gifts
+                    );
+
+                    updateCartDisplay();
+
+                    showGiftPickedPopup(
+                        gifts.length,
+                        unlocked
+                    );
+
+                }
+            );
+
+        });
 
 }
 
 
 // ======================================================
-// GIFT SAVED POPUP
+// GIFT PICKED POPUP
 // ======================================================
 
-function showGiftSavedPopup(
-    numberOfGifts
+function showGiftPickedPopup(
+    selectedCount,
+    unlocked
 ) {
+
+    if (
+        selectedCount !== unlocked ||
+        unlocked < 5
+    ) {
+        return;
+    }
 
     const old =
         document.getElementById(
-            "giftSavedPopup"
+            "giftPickedPopup"
         );
-
 
     if (old) {
         old.remove();
     }
 
-
     const popup =
-        document.createElement(
-            "div"
-        );
-
+        document.createElement("div");
 
     popup.id =
-        "giftSavedPopup";
-
+        "giftPickedPopup";
 
     popup.style.cssText = `
-
         position:fixed;
         inset:0;
-        z-index:100000;
-        background:rgba(48,75,82,0.45);
+        z-index:999999;
+        background:rgba(48,75,82,.45);
         display:flex;
         align-items:center;
         justify-content:center;
         padding:20px;
         box-sizing:border-box;
-
     `;
-
 
     popup.innerHTML = `
 
-        <div style="
-            width:min(450px,100%);
-            background:#FFFDF8;
-            border-radius:23px;
-            padding:32px 25px;
-            text-align:center;
-            box-shadow:0 18px 50px rgba(0,0,0,.2);
-        ">
+        <div
+            style="
+                width:min(440px,100%);
+                background:#FFFDF8;
+                border-radius:23px;
+                padding:32px 25px;
+                text-align:center;
+                box-shadow:0 18px 50px rgba(0,0,0,.2);
+            "
+        >
 
-            <div style="
-                font-size:45px;
-                margin-bottom:10px;
-            ">
+            <div
+                style="
+                    font-size:45px;
+                    margin-bottom:10px;
+                "
+            >
                 🎁
             </div>
 
-            <h2 style="
-                color:#304B52;
-                margin:8px 0 12px;
-            ">
-                Your ${numberOfGifts} gifts are saved!
+            <h2
+                style="
+                    color:#304B52;
+                    margin:8px 0 12px;
+                "
+            >
+                Your ${unlocked} gifts are saved!
             </h2>
 
-            <p style="
-                color:#71858A;
-                line-height:1.6;
-            ">
-                Your free gifts have been added to your cart.
+            <p
+                style="
+                    color:#71858A;
+                    line-height:1.6;
+                "
+            >
+                Spend ₦${unlocked === 5
+                    ? "50,000"
+                    : "100,000"}
+                on your purchases to take away
+                your free gifts.
             </p>
 
-            <p style="
-                color:#71858A;
-                line-height:1.6;
-            ">
-                They are completely free and will not increase your total.
+            <p
+                style="
+                    color:#71858A;
+                    line-height:1.6;
+                "
+            >
+                Your free gifts do not count
+                toward your spending target.
             </p>
 
             <button
                 type="button"
-                id="giftPopupContinue"
-                style="
-                    width:100%;
-                    padding:14px;
-                    border:none;
-                    border-radius:12px;
-                    background:#304B52;
-                    color:white;
-                    font-weight:bold;
-                    cursor:pointer;
-                    margin-top:8px;
-                "
+                id="giftPopupClose"
+                class="checkout-button"
             >
-                VIEW MY CART
+                OK
             </button>
 
         </div>
 
     `;
 
-
-    document.body.appendChild(
-        popup
-    );
-
+    document.body.appendChild(popup);
 
     document
-        .getElementById(
-            "giftPopupContinue"
-        )
+        .getElementById("giftPopupClose")
         ?.addEventListener(
             "click",
-            function() {
-
-                popup.remove();
-
-                openCart();
-
-            }
+            () => popup.remove()
         );
 
-
     setTimeout(
-        function() {
-
-            if (
-                document.body.contains(
-                    popup
-                )
-            ) {
-
-                popup.remove();
-
-            }
-
-        },
-        6000
+        () => popup.remove(),
+        5000
     );
 
 }
 
 
 // ======================================================
-// WATCH FOR GIFT SELECTION CHANGES
+// GIFT PROGRESS
 // ======================================================
 
-function setupGiftStorageWatcher() {
+function updateGiftShoppingProgress() {
 
-    let previous =
-        localStorage.getItem(
-            SELECTED_GIFT_KEY
-        ) || "";
+    const total =
+        getCartTotal();
 
+    document
+        .querySelectorAll(
+            ".gift-progress"
+        )
+        .forEach(element => {
 
-    setInterval(
-        function() {
+            if (total >= 100000) {
 
-            const current =
-                localStorage.getItem(
-                    SELECTED_GIFT_KEY
-                ) || "";
+                element.textContent =
+                    "₦100,000 reward unlocked";
 
+            } else if (total >= 50000) {
 
-            if (
-                current === previous
-            ) {
-                return;
-            }
+                element.textContent =
+                    "₦50,000 reward unlocked";
 
+            } else {
 
-            previous =
-                current;
+                const remaining =
+                    50000 - total;
 
-
-            updateCartDisplay();
-
-
-            let gifts = [];
-
-            try {
-
-                gifts =
-                    JSON.parse(
-                        current || "[]"
-                    );
-
-            } catch (
-                error
-            ) {
-
-                gifts = [];
+                element.textContent =
+                    `₦${Math.max(
+                        0,
+                        remaining
+                    ).toLocaleString()} more to unlock your first reward`;
 
             }
 
-
-            if (
-                Array.isArray(gifts) &&
-                gifts.length === 5
-            ) {
-
-                const popupAlreadyShown =
-                    sessionStorage.getItem(
-                        "collectiveGiftSavedPopupShown"
-                    );
-
-
-                if (
-                    popupAlreadyShown !==
-                    "true"
-                ) {
-
-                    sessionStorage.setItem(
-                        "collectiveGiftSavedPopupShown",
-                        "true"
-                    );
-
-                    showGiftSavedPopup(
-                        5
-                    );
-
-                }
-
-            }
-
-        },
-        300
-    );
+        });
 
 }
 
@@ -2794,7 +2293,6 @@ function isLoggedIn() {
 
 }
 
-
 function getCurrentUser() {
 
     try {
@@ -2805,9 +2303,7 @@ function getCurrentUser() {
             ) || "null"
         );
 
-    } catch (
-        error
-    ) {
+    } catch (error) {
 
         return null;
 
@@ -2815,26 +2311,18 @@ function getCurrentUser() {
 
 }
 
-
 function requireLogin() {
 
-    if (
-        isLoggedIn()
-    ) {
-
+    if (isLoggedIn()) {
         return true;
-
     }
-
 
     alert(
         "Please log in before checking out."
     );
 
-
     window.location.href =
         "login.html";
-
 
     return false;
 
@@ -2843,66 +2331,64 @@ function requireLogin() {
 
 // ======================================================
 // CHECKOUT ITEMS
+// PAID PRODUCTS + FREE GIFTS
 // ======================================================
 
 function getCheckoutItems() {
 
     const paidItems =
-        cart.map(
-            item => ({
-                ...item,
-                isFreeGift: false
-            })
-        );
+        cart.map(item => ({
+            ...item,
+            isFreeGift: false
+        }));
 
+    const gifts =
+        getSelectedFreeGiftProducts();
 
-    const giftItems =
-        getSelectedFreeGiftProducts()
-            .map(
-                product => ({
+    const freeItems =
+        gifts.map(product => ({
 
-                    id:
-                        "FREE-GIFT-" +
-                        product.id,
+            id:
+                "FREE-GIFT-" +
+                product.id,
 
-                    name:
-                        product.name,
+            name:
+                product.name,
 
-                    category:
-                        product.category,
+            category:
+                product.category,
 
-                    price:
-                        0,
+            price:
+                0,
 
-                    quantity:
-                        1,
+            quantity:
+                1,
 
-                    color:
-                        null,
+            color:
+                null,
 
-                    size:
-                        product.size,
+            size:
+                product.size,
 
-                    isFreeGift:
-                        true,
+            isFreeGift:
+                true,
 
-                    originalGiftPrice:
-                        product.price
+            originalGiftPrice:
+                product.price
 
-                })
-            );
-
+        }));
 
     return [
         ...paidItems,
-        ...giftItems
+        ...freeItems
     ];
 
 }
 
 
 // ======================================================
-// CHECKOUT
+// CHECKOUT FUNCTION
+// IMPORTANT: THIS WAS MISSING BEFORE
 // ======================================================
 
 function checkout() {
@@ -2912,11 +2398,13 @@ function checkout() {
 }
 
 
+// ======================================================
+// CREATE CHECKOUT MODAL
+// ======================================================
+
 function createCheckoutModal() {
 
-    if (
-        cart.length === 0
-    ) {
+    if (cart.length === 0) {
 
         alert(
             "Your cart is empty."
@@ -2926,68 +2414,49 @@ function createCheckoutModal() {
 
     }
 
-
-    if (
-        !requireLogin()
-    ) {
-
+    if (!requireLogin()) {
         return;
-
     }
-
 
     const oldModal =
         document.getElementById(
             "checkoutModal"
         );
 
-
     if (oldModal) {
         oldModal.remove();
     }
 
-
     const user =
         getCurrentUser() || {};
-
 
     const total =
         getCartTotal();
 
+    const selectedGifts =
+        getSelectedFreeGiftProducts();
 
     const availablePoints =
         getPoints();
-
 
     const maxUsablePoints =
         getMaxPointsUsable(
             availablePoints
         );
 
-
     const maxDiscount =
         pointsToNaira(
             maxUsablePoints
         );
 
-
-    const selectedGifts =
-        getSelectedFreeGiftProducts();
-
-
     const modal =
-        document.createElement(
-            "div"
-        );
-
+        document.createElement("div");
 
     modal.id =
         "checkoutModal";
 
-
     modal.className =
         "checkout-modal";
-
 
     modal.innerHTML = `
 
@@ -3005,7 +2474,6 @@ function createCheckoutModal() {
                 Checkout
             </h2>
 
-
             <div class="checkout-summary">
 
                 <p>
@@ -3014,6 +2482,50 @@ function createCheckoutModal() {
                         ₦${total.toLocaleString()}
                     </strong>
                 </p>
+
+                ${
+                    selectedGifts.length > 0
+                        ? `
+                            <div
+                                style="
+                                    margin:15px 0;
+                                    padding:14px;
+                                    background:#F7F4EE;
+                                    border-radius:14px;
+                                "
+                            >
+
+                                <strong
+                                    style="
+                                        color:#304B52;
+                                    "
+                                >
+                                    🎁 FREE GIFTS
+                                </strong>
+
+                                ${selectedGifts.map(gift => `
+                                    <div
+                                        style="
+                                            display:flex;
+                                            justify-content:space-between;
+                                            padding:7px 0;
+                                            color:#304B52;
+                                        "
+                                    >
+                                        <span>
+                                            🎁 ${gift.name}
+                                        </span>
+
+                                        <strong>
+                                            FREE
+                                        </strong>
+                                    </div>
+                                `).join("")}
+
+                            </div>
+                        `
+                        : ""
+                }
 
                 <p>
                     Available points:
@@ -3026,47 +2538,7 @@ function createCheckoutModal() {
                     1 point = ₦100 discount
                 </p>
 
-
-                ${
-                    selectedGifts.length > 0
-                        ? `
-                            <div style="
-                                margin-top:15px;
-                                padding:12px;
-                                background:#F7F4EE;
-                                border-radius:12px;
-                            ">
-
-                                <strong>
-                                    🎁 FREE GIFTS
-                                </strong>
-
-                                ${selectedGifts.map(
-                                    gift => `
-                                        <div style="
-                                            display:flex;
-                                            justify-content:space-between;
-                                            margin-top:7px;
-                                            font-size:13px;
-                                        ">
-                                            <span>
-                                                ${gift.name}
-                                            </span>
-
-                                            <strong>
-                                                FREE
-                                            </strong>
-                                        </div>
-                                    `
-                                ).join("")}
-
-                            </div>
-                        `
-                        : ""
-                }
-
             </div>
-
 
             <div class="checkout-form">
 
@@ -3077,14 +2549,12 @@ function createCheckoutModal() {
                     value="${user.firstName || ""}"
                 >
 
-
                 <input
                     id="checkoutLastName"
                     type="text"
                     placeholder="Last name"
                     value="${user.lastName || ""}"
                 >
-
 
                 <input
                     id="checkoutAddress"
@@ -3093,14 +2563,12 @@ function createCheckoutModal() {
                     value="${user.address || ""}"
                 >
 
-
                 <input
                     id="checkoutPhone"
                     type="tel"
                     placeholder="Phone number"
                     value="${user.phone || ""}"
                 >
-
 
                 <input
                     id="checkoutPoints"
@@ -3111,14 +2579,12 @@ function createCheckoutModal() {
                     placeholder="Points to use"
                 >
 
-
                 <small>
                     Maximum discount:
                     ₦${maxDiscount.toLocaleString()}
                 </small>
 
             </div>
-
 
             <button
                 type="button"
@@ -3132,10 +2598,7 @@ function createCheckoutModal() {
 
     `;
 
-
-    document.body.appendChild(
-        modal
-    );
+    document.body.appendChild(modal);
 
 
     document
@@ -3164,7 +2627,6 @@ function createCheckoutModal() {
                         ?.value
                         .trim();
 
-
                 const lastName =
                     document
                         .getElementById(
@@ -3172,7 +2634,6 @@ function createCheckoutModal() {
                         )
                         ?.value
                         .trim();
-
 
                 const address =
                     document
@@ -3182,7 +2643,6 @@ function createCheckoutModal() {
                         ?.value
                         .trim();
 
-
                 const phone =
                     document
                         .getElementById(
@@ -3191,17 +2651,14 @@ function createCheckoutModal() {
                         ?.value
                         .trim();
 
-
                 const pointsInput =
                     Number(
                         document
                             .getElementById(
                                 "checkoutPoints"
                             )
-                            ?.value ||
-                        0
+                            ?.value || 0
                     );
-
 
                 if (
                     !firstName ||
@@ -3218,7 +2675,6 @@ function createCheckoutModal() {
 
                 }
 
-
                 const pointsUsed =
                     Math.min(
                         Math.max(
@@ -3228,19 +2684,16 @@ function createCheckoutModal() {
                         maxUsablePoints
                     );
 
-
                 const discount =
                     pointsToNaira(
                         pointsUsed
                     );
-
 
                 const finalTotal =
                     Math.max(
                         0,
                         total - discount
                     );
-
 
                 const customer = {
 
@@ -3250,7 +2703,6 @@ function createCheckoutModal() {
                     phone
 
                 };
-
 
                 showPaymentModal(
                     modal,
@@ -3288,23 +2740,19 @@ function showPaymentModal(
                 ×
             </button>
 
-
             <h2>
                 Payment
             </h2>
 
-
             <p>
                 Amount to pay:
             </p>
-
 
             <h1>
                 ₦${Number(
                     total
                 ).toLocaleString()}
             </h1>
-
 
             <div class="payment-details">
 
@@ -3326,7 +2774,6 @@ function showPaymentModal(
                     </strong>
                 </p>
 
-
                 <h3>
                     SmartCash PSB
                 </h3>
@@ -3346,7 +2793,6 @@ function showPaymentModal(
                 </p>
 
             </div>
-
 
             <button
                 type="button"
@@ -3384,7 +2830,6 @@ function showPaymentModal(
                         "paidButton"
                     );
 
-
                 if (button) {
 
                     button.disabled =
@@ -3395,14 +2840,12 @@ function showPaymentModal(
 
                 }
 
-
                 const saved =
                     await createPendingOrder(
                         total,
                         pointsUsed,
                         customer
                     );
-
 
                 if (!saved) {
 
@@ -3420,9 +2863,7 @@ function showPaymentModal(
 
                 }
 
-
                 checkoutModal.remove();
-
 
                 showPaymentChecking();
 
@@ -3433,7 +2874,7 @@ function showPaymentModal(
 
 
 // ======================================================
-// CREATE FIREBASE ORDER
+// FIREBASE ORDER
 // ======================================================
 
 async function createPendingOrder(
@@ -3445,14 +2886,11 @@ async function createPendingOrder(
     const checkoutItems =
         getCheckoutItems();
 
-
     const originalPaidTotal =
         getCartTotal();
 
-
     const selectedGifts =
         getSelectedFreeGiftProducts();
-
 
     const order = {
 
@@ -3460,25 +2898,15 @@ async function createPendingOrder(
             "ORDER-" +
             Date.now(),
 
-
         customer,
 
-
         items:
-            checkoutItems.map(
-                item => ({
-                    ...item
-                })
-            ),
-
+            checkoutItems,
 
         paidItems:
-            cart.map(
-                item => ({
-                    ...item
-                })
-            ),
-
+            cart.map(item => ({
+                ...item
+            })),
 
         freeGifts:
             selectedGifts.map(
@@ -3505,24 +2933,18 @@ async function createPendingOrder(
                 })
             ),
 
-
         originalTotal:
             originalPaidTotal,
-
 
         qualifyingSpend:
             originalPaidTotal,
 
-
         pointsUsed,
-
 
         total,
 
-
         status:
             "payment-checking",
-
 
         createdAt:
             new Date().toISOString()
@@ -3534,7 +2956,6 @@ async function createPendingOrder(
 
         const firebase =
             await firebaseReady;
-
 
         await firebase.addDoc(
             firebase.collection(
@@ -3551,12 +2972,26 @@ async function createPendingOrder(
         );
 
 
-        const oldOrders =
-            JSON.parse(
-                localStorage.getItem(
-                    "collectiveOrders"
-                ) || "[]"
-            );
+        let oldOrders = [];
+
+        try {
+
+            oldOrders =
+                JSON.parse(
+                    localStorage.getItem(
+                        "collectiveOrders"
+                    ) || "[]"
+                );
+
+            if (!Array.isArray(oldOrders)) {
+                oldOrders = [];
+            }
+
+        } catch (error) {
+
+            oldOrders = [];
+
+        }
 
 
         localStorage.setItem(
@@ -3570,9 +3005,7 @@ async function createPendingOrder(
 
         localStorage.setItem(
             "collectivePendingOrder",
-            JSON.stringify(
-                order
-            )
+            JSON.stringify(order)
         );
 
 
@@ -3585,20 +3018,16 @@ async function createPendingOrder(
         return true;
 
 
-    } catch (
-        error
-    ) {
+    } catch (error) {
 
         console.error(
             "FIREBASE ORDER ERROR:",
             error
         );
 
-
         alert(
             "Your order could not be submitted right now. Please try again."
         );
-
 
         return false;
 
@@ -3618,25 +3047,18 @@ function showPaymentChecking() {
             "paymentCheckingModal"
         );
 
-
     if (old) {
         old.remove();
     }
 
-
     const modal =
-        document.createElement(
-            "div"
-        );
-
+        document.createElement("div");
 
     modal.id =
         "paymentCheckingModal";
 
-
     modal.className =
         "checkout-modal";
-
 
     modal.innerHTML = `
 
@@ -3670,11 +3092,7 @@ function showPaymentChecking() {
 
     `;
 
-
-    document.body.appendChild(
-        modal
-    );
-
+    document.body.appendChild(modal);
 
     document
         .getElementById(
@@ -3694,29 +3112,29 @@ function showPaymentChecking() {
 
 function setupCheckout() {
 
-    const checkoutButton =
-        document.getElementById(
-            "checkoutBtn"
-        );
-
-
-    if (!checkoutButton) {
-
-        console.warn(
-            "checkoutBtn was not found."
-        );
-
-        return;
-
-    }
-
-
-    checkoutButton.addEventListener(
+    document.addEventListener(
         "click",
         function(event) {
 
-            event.preventDefault();
+            const target =
+                event.target instanceof Element
+                    ? event.target
+                    : null;
 
+            if (!target) {
+                return;
+            }
+
+            const button =
+                target.closest(
+                    "#checkoutBtn"
+                );
+
+            if (!button) {
+                return;
+            }
+
+            event.preventDefault();
             event.stopPropagation();
 
             checkout();
@@ -3736,53 +3154,41 @@ function updateLoginStatus() {
     const loggedIn =
         isLoggedIn();
 
-
     const user =
         getCurrentUser();
-
 
     document
         .querySelectorAll(
             ".login-required"
         )
-        .forEach(
-            element => {
+        .forEach(element => {
 
-                element.style.display =
-                    loggedIn
-                        ? "none"
-                        : "";
+            element.style.display =
+                loggedIn
+                    ? "none"
+                    : "";
 
-            }
-        );
-
+        });
 
     document
         .querySelectorAll(
             ".logout-button"
         )
-        .forEach(
-            element => {
+        .forEach(element => {
 
-                element.style.display =
-                    loggedIn
-                        ? ""
-                        : "none";
+            element.style.display =
+                loggedIn
+                    ? ""
+                    : "none";
 
-            }
-        );
-
+        });
 
     const accountName =
         document.getElementById(
             "accountName"
         );
 
-
-    if (
-        accountName &&
-        user
-    ) {
+    if (accountName && user) {
 
         accountName.textContent =
             `${user.firstName || ""} ${user.lastName || ""}`
@@ -3808,38 +3214,30 @@ function setupLogout() {
                     ? event.target
                     : null;
 
-
             if (!target) {
                 return;
             }
-
 
             const button =
                 target.closest(
                     "#logoutBtn, .logout-button"
                 );
 
-
             if (!button) {
                 return;
             }
 
-
             event.preventDefault();
-
 
             localStorage.removeItem(
                 "collectiveLoggedIn"
             );
 
-
             localStorage.removeItem(
                 "collectiveUser"
             );
 
-
             updateLoginStatus();
-
 
             window.location.href =
                 "login.html";
@@ -3859,90 +3257,66 @@ function updateProfile() {
     const user =
         getCurrentUser();
 
-
     const points =
         getPoints();
 
-
     const totalSpent =
         getTotalSpent();
-
 
     const firstName =
         document.getElementById(
             "profileFirstName"
         );
 
-
     const lastName =
         document.getElementById(
             "profileLastName"
         );
-
 
     const address =
         document.getElementById(
             "profileAddress"
         );
 
-
     const phone =
         document.getElementById(
             "profilePhone"
         );
-
 
     const profilePoints =
         document.getElementById(
             "profilePoints"
         );
 
-
     const profileSpent =
         document.getElementById(
             "profileTotalSpent"
         );
 
-
     if (firstName) {
-
         firstName.textContent =
             user?.firstName || "";
-
     }
-
 
     if (lastName) {
-
         lastName.textContent =
             user?.lastName || "";
-
     }
-
 
     if (address) {
-
         address.textContent =
             user?.address || "";
-
     }
-
 
     if (phone) {
-
         phone.textContent =
             user?.phone || "";
-
     }
-
 
     if (profilePoints) {
-
         profilePoints.textContent =
             points;
-
     }
-
 
     if (profileSpent) {
 
@@ -3950,7 +3324,6 @@ function updateProfile() {
             `₦${totalSpent.toLocaleString()}`;
 
     }
-
 
     updateRewardStatus();
 
@@ -3966,47 +3339,40 @@ function updateFreeItemCards() {
     const totalSpent =
         getTotalSpent();
 
-
     document
         .querySelectorAll(
             ".free-item-card"
         )
-        .forEach(
-            card => {
+        .forEach(card => {
 
-                const required =
-                    Number(
-                        card.dataset.required ||
-                        0
-                    );
+            const required =
+                Number(
+                    card.dataset.required || 0
+                );
 
+            if (totalSpent >= required) {
 
-                if (
-                    totalSpent >= required
-                ) {
+                card.classList.add(
+                    "unlocked"
+                );
 
-                    card.classList.add(
-                        "unlocked"
-                    );
+                card.classList.remove(
+                    "locked"
+                );
 
-                    card.classList.remove(
-                        "locked"
-                    );
+            } else {
 
-                } else {
+                card.classList.add(
+                    "locked"
+                );
 
-                    card.classList.add(
-                        "locked"
-                    );
-
-                    card.classList.remove(
-                        "unlocked"
-                    );
-
-                }
+                card.classList.remove(
+                    "unlocked"
+                );
 
             }
-        );
+
+        });
 
 }
 
@@ -4025,57 +3391,51 @@ function getLocalOrderStatus() {
 
 }
 
-
 function updateOrderStatusDisplay() {
 
     const status =
         getLocalOrderStatus();
 
-
     document
         .querySelectorAll(
             ".order-status"
         )
-        .forEach(
-            element => {
+        .forEach(element => {
 
-                if (
-                    status === "approved"
-                ) {
+            if (status === "approved") {
 
-                    element.textContent =
-                        "APPROVED";
+                element.textContent =
+                    "APPROVED";
 
-                } else if (
-                    status === "rejected"
-                ) {
+            } else if (
+                status === "rejected"
+            ) {
 
-                    element.textContent =
-                        "REJECTED";
+                element.textContent =
+                    "REJECTED";
 
-                } else if (
-                    status === "delivered"
-                ) {
+            } else if (
+                status === "delivered"
+            ) {
 
-                    element.textContent =
-                        "DELIVERED";
+                element.textContent =
+                    "DELIVERED";
 
-                } else if (
-                    status === "payment-checking"
-                ) {
+            } else if (
+                status === "payment-checking"
+            ) {
 
-                    element.textContent =
-                        "PAYMENT CHECKING";
+                element.textContent =
+                    "PAYMENT CHECKING";
 
-                } else {
+            } else {
 
-                    element.textContent =
-                        "NO ACTIVE ORDER";
-
-                }
+                element.textContent =
+                    "NO ACTIVE ORDER";
 
             }
-        );
+
+        });
 
 }
 
@@ -4091,37 +3451,25 @@ async function checkFirebaseOrderStatus() {
             "collectivePendingOrder"
         );
 
-
     if (!pending) {
         return;
     }
 
-
     let pendingOrder;
-
 
     try {
 
         pendingOrder =
-            JSON.parse(
-                pending
-            );
+            JSON.parse(pending);
 
-    } catch (
-        error
-    ) {
+    } catch (error) {
 
         return;
 
     }
 
-
-    if (
-        !pendingOrder?.id
-    ) {
-
+    if (!pendingOrder?.id) {
         return;
-
     }
 
 
@@ -4129,7 +3477,6 @@ async function checkFirebaseOrderStatus() {
 
         const firebase =
             await firebaseReady;
-
 
         const snapshot =
             await firebase.getDocs(
@@ -4146,20 +3493,15 @@ async function checkFirebaseOrderStatus() {
                 const order =
                     documentSnapshot.data();
 
-
                 if (
                     order.id !==
                     pendingOrder.id
                 ) {
-
                     return;
-
                 }
 
 
-                if (
-                    order.status
-                ) {
+                if (order.status) {
 
                     localStorage.setItem(
                         "collectiveOrderStatus",
@@ -4208,9 +3550,7 @@ async function checkFirebaseOrderStatus() {
 
                         cart = [];
 
-
                         saveCart();
-
 
                         clearSelectedFreeGiftProducts();
 
@@ -4241,6 +3581,24 @@ async function checkFirebaseOrderStatus() {
 
                 }
 
+
+                if (
+                    order.status ===
+                    "rejected"
+                ) {
+
+                    pendingOrder.status =
+                        "rejected";
+
+                    localStorage.setItem(
+                        "collectivePendingOrder",
+                        JSON.stringify(
+                            pendingOrder
+                        )
+                    );
+
+                }
+
             }
         );
 
@@ -4248,9 +3606,7 @@ async function checkFirebaseOrderStatus() {
         updateOrderStatusDisplay();
 
 
-    } catch (
-        error
-    ) {
+    } catch (error) {
 
         console.error(
             "FIREBASE STATUS CHECK ERROR:",
@@ -4288,17 +3644,9 @@ function setupStorageSync() {
 
             if (
                 event.key ===
-                SELECTED_GIFT_KEY
-            ) {
-
-                updateCartDisplay();
-
-            }
-
-
-            if (
+                    "collectiveSelectedFreeGifts" ||
                 event.key ===
-                OLD_GIFT_KEY
+                    "collectiveFreeGifts"
             ) {
 
                 updateCartDisplay();
@@ -4330,6 +3678,8 @@ function setupStorageSync() {
                 updateFreeItemCards();
 
                 updateGiftShoppingProgress();
+
+                renderGiftOptions();
 
             }
 
@@ -4364,79 +3714,54 @@ function setupStorageSync() {
 
 
 // ======================================================
-// INITIALIZE EVERYTHING
+// INITIALIZE
 // ======================================================
 
 function initializeCollective() {
 
     loadCart();
 
-
     createCategoryMenu();
-
 
     renderProducts();
 
-
     setupCartEvents();
-
 
     setupCartItemEvents();
 
-
     setupEscapeKey();
-
 
     setupCategoryButton();
 
-
     setupSearch();
-
 
     setupAddToCart();
 
-
     setupCheckout();
-
 
     setupLogout();
 
-
     setupStorageSync();
-
-
-    setupGiftStorageWatcher();
-
 
     updateCartDisplay();
 
-
     updatePointsDisplay();
-
 
     updateRewardStatus();
 
-
     updateLoginStatus();
-
 
     updateProfile();
 
-
     updateFreeItemCards();
-
 
     updateOrderStatusDisplay();
 
-
     updateGiftShoppingProgress();
-
 
     renderGiftOptions();
 
-
     checkFirebaseOrderStatus();
-
 
     console.log(
         "THE COLLECTIVE.CO SHOP SYSTEM READY"
@@ -4469,7 +3794,7 @@ if (
 
 
 // ======================================================
-// CHECK ORDER STATUS EVERY 5 SECONDS
+// CHECK ORDER STATUS
 // ======================================================
 
 setInterval(
