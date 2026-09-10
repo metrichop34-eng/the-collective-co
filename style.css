@@ -953,3 +953,270 @@ p {
         text-align: center;
     }
 }
+
+/* =========================
+   CART POPUP
+========================= */
+
+.cart-popup {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.25);
+    align-items: center;
+    justify-content: center;
+    z-index: 4000;
+}
+
+.cart-popup.open {
+    display: flex;
+}
+
+.cart-box {
+    background: #FFFDF8;
+    width: 90%;
+    max-width: 550px;
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: 35px;
+    border-radius: 25px;
+    box-sizing: border-box;
+}
+
+
+/* =========================
+   CHECKOUT MODAL
+========================= */
+
+.checkout-modal {
+    display: flex !important;
+    position: fixed !important;
+    inset: 0 !important;
+    background: rgba(0, 0, 0, 0.35) !important;
+    align-items: center !important;
+    justify-content: center !important;
+    z-index: 10000 !important;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.checkout-box {
+    background: #FFFDF8;
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 35px;
+    border-radius: 25px;
+    box-sizing: border-box;
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.18);
+}
+
+.checkout-box h2 {
+    color: #304B52;
+    margin-top: 0;
+}
+
+.checkout-box p {
+    font-size: 14px;
+}
+
+.checkout-button {
+    border: none;
+    border-radius: 25px;
+    padding: 13px 25px;
+    background: #304B52;
+    color: #FFFDF8;
+    cursor: pointer;
+    font-size: 14px;
+    letter-spacing: 1px;
+}
+
+.checkout-button:hover {
+    opacity: 0.85;
+}
+
+
+/* =========================
+   GIFT SPEND POPUP
+========================= */
+
+#giftSpendPopup {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.25);
+    align-items: center;
+    justify-content: center;
+    z-index: 9000;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+#giftSpendPopup .gift-popup-box {
+    background: #FFFDF8;
+    width: 90%;
+    max-width: 500px;
+    padding: 40px 30px;
+    border-radius: 25px;
+    box-sizing: border-box;
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+}
+
+#giftSpendPopup h2 {
+    color: #304B52;
+    margin: 10px 0 15px;
+}
+
+#giftSpendPopup p {
+    font-size: 15px;
+    margin-bottom: 12px;
+}
+
+.gift-popup-icon {
+    font-size: 45px;
+}
+
+
+/* =========================
+   GIFT SPEND PROGRESS
+========================= */
+
+#giftSpendBar {
+    display: none;
+    width: 90%;
+    max-width: 900px;
+    margin: 25px auto;
+    background: #FFFDF8;
+    border: 1px solid #DCEFF2;
+    border-radius: 20px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+#giftSpendBar.active {
+    display: block;
+}
+
+.gift-spend-content {
+    width: 100%;
+}
+
+.gift-spend-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    color: #304B52;
+    font-size: 13px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+}
+
+.gift-spend-track {
+    width: 100%;
+    height: 12px;
+    background: #E8F1F2;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.gift-spend-fill {
+    width: 0%;
+    height: 100%;
+    background: #A8C9CE;
+    border-radius: 20px;
+    transition: width 0.3s ease;
+}
+
+.gift-spend-message {
+    margin-top: 10px;
+    color: #6F858A;
+    font-size: 13px;
+}
+
+
+/* =========================
+   GIFT PICKED POPUP
+========================= */
+
+#giftPickedPopup {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 10000 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: rgba(0, 0, 0, 0.25) !important;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+#giftPickedPopup > div {
+    background: #FFFDF8;
+    width: 90%;
+    max-width: 500px;
+    padding: 40px 30px;
+    border-radius: 25px;
+    box-sizing: border-box;
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+}
+
+#giftPickedPopup h2 {
+    color: #304B52;
+}
+
+#giftPickedPopup p {
+    color: #6F858A;
+    font-size: 15px;
+}
+
+
+/* =========================
+   PAYMENT MODAL
+========================= */
+
+.payment-modal {
+    display: flex !important;
+    position: fixed !important;
+    inset: 0 !important;
+    background: rgba(0, 0, 0, 0.35) !important;
+    align-items: center !important;
+    justify-content: center !important;
+    z-index: 11000 !important;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.payment-box {
+    background: #FFFDF8;
+    width: 90%;
+    max-width: 550px;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 35px;
+    border-radius: 25px;
+    box-sizing: border-box;
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.18);
+}
+
+.payment-box h2 {
+    color: #304B52;
+}
+
+.payment-box p {
+    font-size: 14px;
+}
+
+.payment-details {
+    background: #E8F1F2;
+    border-radius: 18px;
+    padding: 20px;
+    margin: 20px 0;
+    text-align: left;
+}
+
+.payment-details strong {
+    color: #304B52;
+}
