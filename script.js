@@ -1,4 +1,34 @@
 // ======================================================
+// FIREBASE CONNECTION
+// ======================================================
+
+const firebaseReady = Promise.all([
+    import("https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js"),
+    import("https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js")
+]).then(([firebaseApp, firestore]) => {
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyCkavvOeD4GEtUsq4S-QuTU4ejedf8CiL8",
+        authDomain: "the-collectiveco-orders.firebaseapp.com",
+        projectId: "the-collectiveco-orders",
+        storageBucket: "the-collectiveco-orders.firebasestorage.app",
+        messagingSenderId: "543435699346",
+        appId: "1:543435699346:web:886ff03c71fb546dc7a24b",
+        measurementId: "G-7GP25TW6JH"
+    };
+
+    const app = firebaseApp.initializeApp(firebaseConfig);
+
+    const db = firestore.getFirestore(app);
+
+    return {
+        db,
+        addDoc: firestore.addDoc,
+        collection: firestore.collection
+    };
+
+});
+// ======================================================
 // THE COLLECTIVE.CO — COMPLETE SHOP SYSTEM
 // CART + CHECKOUT + POINTS + FREE GIFTS + LOGIN
 // ======================================================
