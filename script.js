@@ -43,7 +43,9 @@ const firebaseReady = Promise.all([
 
 const productCatalog = [
 
+    // =========================
     // SKINCARE
+    // =========================
 
     {
         name: "Men's Perfume",
@@ -186,31 +188,37 @@ const productCatalog = [
         max: 1800
     },
 
+    // =========================
     // ACCESSORIES
+    // =========================
 
     {
         name: "Bead Bracelet Set",
         category: "Accessories",
         min: 3000,
-        max: 6000
+        max: 6000,
+        colors: ["Gold", "Silver", "Pink", "Black", "Mixed"]
     },
     {
         name: "Masculine Chain Bracelet",
         category: "Accessories",
         min: 1000,
-        max: 3500
+        max: 3500,
+        colors: ["Silver", "Gold", "Black"]
     },
     {
         name: "Chrome Heart Glasses",
         category: "Accessories",
         min: 15000,
-        max: 20000
+        max: 20000,
+        colors: ["Black", "Brown", "Clear"]
     },
     {
         name: "Glasses",
         category: "Accessories",
         min: 2000,
-        max: 5000
+        max: 5000,
+        colors: ["Black", "Brown", "Clear"]
     },
     {
         name: "Glasses Set of 3",
@@ -228,49 +236,57 @@ const productCatalog = [
         name: "Scrunchies",
         category: "Accessories",
         min: 1200,
-        max: 1200
+        max: 1200,
+        colors: ["Pink", "Black", "White", "Brown", "Mixed"]
     },
     {
         name: "Stanley Cup",
         category: "Accessories",
         min: 15000,
-        max: 15000
+        max: 15000,
+        colors: ["Pink", "Cream", "Blue", "Black", "Green"]
     },
     {
         name: "Body Floral Stanley Cup",
         category: "Accessories",
         min: 20000,
-        max: 20000
+        max: 20000,
+        colors: ["Pink", "Cream", "Blue", "Green"]
     },
     {
         name: "Headband",
         category: "Accessories",
         min: 1600,
-        max: 1600
+        max: 1600,
+        colors: ["Black", "White", "Pink", "Brown"]
     },
     {
         name: "Tote Bag",
         category: "Accessories",
         min: 10000,
-        max: 20000
+        max: 20000,
+        colors: ["Black", "Cream", "Brown", "Pink"]
     },
     {
         name: "Claw Clip",
         category: "Accessories",
         min: 2000,
-        max: 2500
+        max: 2500,
+        colors: ["Black", "Brown", "Cream", "Pink"]
     },
     {
         name: "Anklet",
         category: "Accessories",
         min: 1000,
-        max: 2000
+        max: 2000,
+        colors: ["Gold", "Silver"]
     },
     {
         name: "Necklace",
         category: "Accessories",
         min: 1000,
-        max: 3500
+        max: 3500,
+        colors: ["Gold", "Silver"]
     },
     {
         name: "Silver Bracelet",
@@ -288,232 +304,302 @@ const productCatalog = [
         name: "Vacuum Cups",
         category: "Accessories",
         min: 10000,
-        max: 20000
+        max: 20000,
+        colors: ["Pink", "Blue", "Cream", "Black"]
     },
 
+    // =========================
     // CLOTHING
+    // =========================
 
     {
         name: "Plain Tops",
         category: "Clothing",
         min: 6500,
-        max: 8000
+        max: 8000,
+        sizes: ["S", "M", "L"],
+        colors: ["Black", "White", "Grey", "Cream", "Pink", "Blue"]
     },
     {
         name: "Graphic Tops",
         category: "Clothing",
         min: 8000,
-        max: 10000
+        max: 10000,
+        sizes: ["S", "M", "L"],
+        colors: ["Black", "White", "Grey", "Pink", "Blue"]
     },
     {
         name: "Tube Tops",
         category: "Clothing",
         min: 5000,
-        max: 15000
+        max: 15000,
+        sizes: ["S", "M", "L"],
+        colors: ["Black", "White", "Pink", "Brown", "Cream"]
     },
     {
         name: "Jersey Tops",
         category: "Clothing",
         min: 8500,
-        max: 8500
+        max: 8500,
+        sizes: ["S", "M", "L"],
+        colors: ["Black", "White", "Blue", "Red", "Green"]
     },
     {
         name: "Hoodies",
         category: "Clothing",
         min: 9500,
-        max: 10000
+        max: 10000,
+        sizes: ["S", "M", "L"],
+        colors: ["Black", "White", "Grey", "Cream", "Brown"]
     },
     {
         name: "Zip-Up Hoodies",
         category: "Clothing",
         min: 9000,
-        max: 15000
+        max: 15000,
+        sizes: ["S", "M", "L"],
+        colors: ["Black", "White", "Grey", "Cream", "Brown"]
     },
     {
         name: "Plain Sweatpants",
         category: "Clothing",
         min: 10000,
-        max: 10000
+        max: 10000,
+        sizes: ["S", "M", "L"],
+        colors: ["Black", "Grey", "Cream", "Brown"]
     },
     {
         name: "Leopard Sweatpants",
         category: "Clothing",
         min: 15000,
-        max: 15000
+        max: 15000,
+        sizes: ["S", "M", "L"],
+        colors: ["Brown", "Black"]
     },
     {
         name: "Designer Sweatpants",
         category: "Clothing",
         min: 20000,
-        max: 20000
+        max: 20000,
+        sizes: ["S", "M", "L"],
+        colors: ["Black", "Grey", "Cream"]
     },
     {
         name: "Shorts",
         category: "Clothing",
         min: 10000,
-        max: 10000
+        max: 10000,
+        sizes: ["S", "M", "L"],
+        colors: ["Black", "White", "Grey", "Blue"]
     },
     {
         name: "Jean Bum Shorts",
         category: "Clothing",
         min: 5000,
-        max: 5000
+        max: 5000,
+        sizes: ["S", "M", "L"],
+        colors: ["Light Blue", "Dark Blue", "Black"]
     },
     {
         name: "Jeans",
         category: "Clothing",
         min: 10000,
-        max: 10000
+        max: 10000,
+        sizes: ["S", "M", "L"],
+        colors: ["Light Blue", "Dark Blue", "Black"]
     },
     {
         name: "Designed Jeans",
         category: "Clothing",
         min: 20000,
-        max: 20000
+        max: 20000,
+        sizes: ["S", "M", "L"],
+        colors: ["Light Blue", "Dark Blue", "Black"]
     },
     {
         name: "Bootcut Jeans",
         category: "Clothing",
         min: 10000,
-        max: 10000
+        max: 10000,
+        sizes: ["S", "M", "L"],
+        colors: ["Light Blue", "Dark Blue", "Black"]
     },
     {
         name: "Jeans Skirt",
         category: "Clothing",
         min: 6500,
-        max: 6500
+        max: 6500,
+        sizes: ["S", "M", "L"],
+        colors: ["Light Blue", "Dark Blue", "Black"]
     },
     {
         name: "Pleated Jeans Skirt",
         category: "Clothing",
         min: 6000,
-        max: 6000
+        max: 6000,
+        sizes: ["S", "M", "L"],
+        colors: ["Light Blue", "Dark Blue", "Black"]
     },
     {
         name: "Normal Shorts",
         category: "Clothing",
         min: 4000,
-        max: 4000
+        max: 4000,
+        sizes: ["S", "M", "L"],
+        colors: ["Black", "White", "Grey", "Blue"]
     },
 
+    // =========================
     // SHOES
+    // =========================
 
     {
         name: "Shoes",
         category: "Shoes",
         min: 15000,
-        max: 30000
+        max: 30000,
+        shoeSizes: ["36", "37", "38", "39", "40", "41", "42", "43", "44", "45"],
+        colors: ["Black", "White", "Brown", "Cream"]
     },
     {
         name: "Adidas Sambas",
         category: "Shoes",
         min: 30000,
-        max: 50000
+        max: 50000,
+        shoeSizes: ["36", "37", "38", "39", "40", "41", "42", "43", "44", "45"],
+        colors: ["Black", "White", "Cream", "Brown"]
     },
     {
         name: "Adidas Campus",
         category: "Shoes",
         min: 30000,
-        max: 50000
+        max: 50000,
+        shoeSizes: ["36", "37", "38", "39", "40", "41", "42", "43", "44", "45"],
+        colors: ["Black", "White", "Grey", "Pink", "Blue"]
     },
     {
         name: "Slides",
         category: "Shoes",
         min: 9000,
-        max: 9000
+        max: 9000,
+        shoeSizes: ["36", "37", "38", "39", "40", "41", "42", "43", "44", "45"],
+        colors: ["Black", "White", "Brown", "Cream", "Pink"]
     },
     {
         name: "Crocs",
         category: "Shoes",
         min: 10000,
-        max: 10000
+        max: 10000,
+        shoeSizes: ["36", "37", "38", "39", "40", "41", "42", "43", "44", "45"],
+        colors: ["Black", "White", "Cream", "Pink", "Green"]
     },
     {
         name: "Loafers",
         category: "Shoes",
         min: 15000,
-        max: 30000
+        max: 30000,
+        shoeSizes: ["36", "37", "38", "39", "40", "41", "42", "43", "44", "45"],
+        colors: ["Black", "Brown", "Cream"]
     },
     {
         name: "Clogs",
         category: "Shoes",
         min: 35000,
-        max: 70000
+        max: 70000,
+        shoeSizes: ["36", "37", "38", "39", "40", "41", "42", "43", "44", "45"],
+        colors: ["Black", "Cream", "Brown", "Grey"]
     },
     {
         name: "Timberland",
         category: "Shoes",
         min: 5000,
-        max: 40000
+        max: 40000,
+        shoeSizes: ["36", "37", "38", "39", "40", "41", "42", "43", "44", "45"],
+        colors: ["Brown", "Black", "Wheat"]
     },
     {
         name: "Vans",
         category: "Shoes",
         min: 5000,
-        max: 40000
+        max: 40000,
+        shoeSizes: ["36", "37", "38", "39", "40", "41", "42", "43", "44", "45"],
+        colors: ["Black", "White", "Checkerboard", "Brown"]
     },
     {
         name: "Puma",
         category: "Shoes",
         min: 25000,
-        max: 50000
+        max: 50000,
+        shoeSizes: ["36", "37", "38", "39", "40", "41", "42", "43", "44", "45"],
+        colors: ["Black", "White", "Grey", "Pink", "Blue"]
     },
 
+    // =========================
     // BAGS
+    // =========================
 
     {
         name: "Hermes Bags",
         category: "Bags",
         min: 35000,
-        max: 50000
+        max: 50000,
+        colors: ["Black", "Brown", "Cream", "White"]
     },
     {
         name: "Mini Gucci Bags",
         category: "Bags",
         min: 20000,
-        max: 50000
+        max: 50000,
+        colors: ["Black", "Brown", "Cream", "Pink"]
     },
     {
         name: "Gucci Bags",
         category: "Bags",
         min: 35000,
-        max: 60000
+        max: 60000,
+        colors: ["Black", "Brown", "Cream"]
     },
     {
         name: "Prada Bags",
         category: "Bags",
         min: 35000,
-        max: 60000
+        max: 60000,
+        colors: ["Black", "White", "Brown"]
     },
     {
         name: "Dior Bags",
         category: "Bags",
         min: 35000,
-        max: 70000
+        max: 70000,
+        colors: ["Black", "White", "Brown", "Cream"]
     },
     {
         name: "Chanel Bags",
         category: "Bags",
         min: 45000,
-        max: 70000
+        max: 70000,
+        colors: ["Black", "White", "Pink", "Cream"]
     },
     {
         name: "Louis Vuitton Bags",
         category: "Bags",
         min: 25000,
-        max: 70000
+        max: 70000,
+        colors: ["Brown", "Black", "Cream"]
     },
     {
         name: "Cartier Watches",
         category: "Bags",
         min: 20000,
-        max: 35000
+        max: 35000,
+        colors: ["Gold", "Silver", "Rose Gold"]
     },
     {
         name: "Cartier Glasses",
         category: "Bags",
         min: 15000,
-        max: 25000
+        max: 25000,
+        colors: ["Black", "Brown", "Clear"]
     }
 
 ];
@@ -536,7 +622,6 @@ function makePrice(min, max, number) {
     return Math.round(
         (min + step * (number - 1)) / 100
     ) * 100;
-
 }
 
 productCatalog.forEach(product => {
@@ -559,17 +644,15 @@ productCatalog.forEach(product => {
                 i
             ),
 
-            size:
-                product.size ||
-                "Not specified",
+            size: product.size || "Not specified",
 
-            description:
-                product.description ||
-                "",
+            sizes: product.sizes || [],
 
-            colors:
-                product.colors ||
-                [],
+            shoeSizes: product.shoeSizes || [],
+
+            description: product.description || "",
+
+            colors: product.colors || [],
 
             stock: 10
 
@@ -578,6 +661,33 @@ productCatalog.forEach(product => {
     }
 
 });
+
+
+// ======================================================
+// SHUFFLE PRODUCTS
+// ======================================================
+
+function shuffleProducts(array) {
+
+    const copy = [...array];
+
+    for (let i = copy.length - 1; i > 0; i--) {
+
+        const randomIndex =
+            Math.floor(
+                Math.random() * (i + 1)
+            );
+
+        [copy[i], copy[randomIndex]] =
+            [copy[randomIndex], copy[i]];
+
+    }
+
+    return copy;
+}
+
+const shuffledProducts =
+    shuffleProducts(products);
 
 
 // ======================================================
@@ -624,9 +734,7 @@ function getCartQuantity() {
     return cart.reduce(
         (total, item) =>
             total +
-            Number(
-                item.quantity || 0
-            ),
+            Number(item.quantity || 0),
         0
     );
 
@@ -647,7 +755,6 @@ function getCartTotal() {
 
 // ======================================================
 // FREE GIFT STORAGE
-// FIXED: ALWAYS RETURNS REAL PRODUCTS
 // ======================================================
 
 function getSelectedFreeGiftProducts() {
@@ -658,10 +765,6 @@ function getSelectedFreeGiftProducts() {
             localStorage.getItem(
                 "collectiveSelectedFreeGifts"
             );
-
-        /*
-         * Use old key if new key is missing.
-         */
 
         if (!saved) {
 
@@ -686,15 +789,7 @@ function getSelectedFreeGiftProducts() {
         return gifts
             .map(gift => {
 
-                /*
-                 * If only the product ID was saved,
-                 * find the real product.
-                 */
-
-                if (
-                    typeof gift ===
-                    "string"
-                ) {
+                if (typeof gift === "string") {
 
                     return products.find(
                         product =>
@@ -703,15 +798,9 @@ function getSelectedFreeGiftProducts() {
 
                 }
 
-                /*
-                 * If an object was saved,
-                 * find the real product using its ID.
-                 */
-
                 if (
                     gift &&
-                    typeof gift ===
-                    "object"
+                    typeof gift === "object"
                 ) {
 
                     if (gift.id) {
@@ -728,11 +817,6 @@ function getSelectedFreeGiftProducts() {
                         }
 
                     }
-
-                    /*
-                     * Also support old saved
-                     * objects using the name.
-                     */
 
                     if (gift.name) {
 
@@ -769,9 +853,7 @@ function getSelectedFreeGiftProducts() {
 
 }
 
-function saveSelectedFreeGiftProducts(
-    gifts
-) {
+function saveSelectedFreeGiftProducts(gifts) {
 
     const safeGifts =
         Array.isArray(gifts)
@@ -785,22 +867,19 @@ function saveSelectedFreeGiftProducts(
 
                         return products.find(
                             product =>
-                                product.id ===
-                                gift
+                                product.id === gift
                         );
 
                     }
 
                     if (
                         gift &&
-                        typeof gift ===
-                        "object"
+                        typeof gift === "object"
                     ) {
 
                         return products.find(
                             product =>
-                                product.id ===
-                                gift.id
+                                product.id === gift.id
                         ) || gift;
 
                     }
@@ -815,10 +894,6 @@ function saveSelectedFreeGiftProducts(
         "collectiveSelectedFreeGifts",
         JSON.stringify(safeGifts)
     );
-
-    /*
-     * Keep the old key synchronized.
-     */
 
     localStorage.setItem(
         "collectiveFreeGifts",
@@ -836,6 +911,363 @@ function clearSelectedFreeGiftProducts() {
     localStorage.removeItem(
         "collectiveFreeGifts"
     );
+
+}
+
+
+// ======================================================
+// GIFT FLOW
+// ======================================================
+
+function getGiftTarget() {
+
+    const gifts =
+        getSelectedFreeGiftProducts();
+
+    if (gifts.length === 10) {
+        return 100000;
+    }
+
+    if (gifts.length === 5) {
+        return 50000;
+    }
+
+    return 0;
+}
+
+function isGiftShoppingActive() {
+
+    return getGiftTarget() > 0;
+
+}
+
+function activateGiftFlow() {
+
+    const target =
+        getGiftTarget();
+
+    const bar =
+        document.getElementById(
+            "giftSpendBar"
+        );
+
+    if (!target) {
+
+        deactivateGiftFlow();
+
+        return;
+
+    }
+
+    localStorage.setItem(
+        "collectiveGiftFlowActive",
+        "true"
+    );
+
+    localStorage.setItem(
+        "collectiveGiftTarget",
+        String(target)
+    );
+
+    document.body.classList.add(
+        "gift-shopping-active"
+    );
+
+    if (bar) {
+        bar.style.display = "block";
+    }
+
+}
+
+function deactivateGiftFlow() {
+
+    localStorage.removeItem(
+        "collectiveGiftFlowActive"
+    );
+
+    localStorage.removeItem(
+        "collectiveGiftTarget"
+    );
+
+    document.body.classList.remove(
+        "gift-shopping-active"
+    );
+
+    const bar =
+        document.getElementById(
+            "giftSpendBar"
+        );
+
+    if (bar) {
+        bar.style.display = "none";
+    }
+
+}
+
+
+// ======================================================
+// GIFT POPUP
+// ======================================================
+
+function showGiftPickedPopup(
+    selectedCount,
+    unlocked
+) {
+
+    if (
+        selectedCount !== 5 &&
+        selectedCount !== 10
+    ) {
+        return;
+    }
+
+    if (selectedCount !== unlocked) {
+        return;
+    }
+
+    const old =
+        document.getElementById(
+            "giftPickedPopup"
+        );
+
+    if (old) {
+        old.remove();
+    }
+
+    const target =
+        selectedCount === 5
+            ? 50000
+            : 100000;
+
+    const popup =
+        document.createElement(
+            "div"
+        );
+
+    popup.id =
+        "giftPickedPopup";
+
+    popup.style.cssText = `
+        position:fixed;
+        inset:0;
+        z-index:999999;
+        background:rgba(48,75,82,.45);
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        padding:20px;
+        box-sizing:border-box;
+    `;
+
+    popup.innerHTML = `
+
+        <div
+            style="
+                width:min(440px,100%);
+                background:#FFFDF8;
+                border-radius:23px;
+                padding:32px 25px;
+                text-align:center;
+                box-shadow:0 18px 50px rgba(0,0,0,.2);
+            "
+        >
+
+            <div
+                style="
+                    font-size:45px;
+                    margin-bottom:10px;
+                "
+            >
+                🎁
+            </div>
+
+            <h2
+                style="
+                    color:#304B52;
+                    margin:8px 0 12px;
+                "
+            >
+                Your ${selectedCount} gifts are saved!
+            </h2>
+
+            <p
+                style="
+                    color:#71858A;
+                    line-height:1.6;
+                "
+            >
+                Spend
+                <strong>
+                    ₦${target.toLocaleString()}
+                </strong>
+                on your purchases to take away
+                your ${selectedCount} free gifts.
+            </p>
+
+            <p
+                style="
+                    color:#71858A;
+                    line-height:1.6;
+                "
+            >
+                Your free gifts do not count
+                toward your spending target.
+            </p>
+
+            <button
+                type="button"
+                id="giftPopupClose"
+                class="checkout-button"
+            >
+                OK
+            </button>
+
+        </div>
+    `;
+
+    document.body.appendChild(
+        popup
+    );
+
+    document
+        .getElementById(
+            "giftPopupClose"
+        )
+        ?.addEventListener(
+            "click",
+            () => popup.remove()
+        );
+
+}
+
+
+// ======================================================
+// GIFT PROGRESS BAR
+// ======================================================
+
+let giftCheckoutTriggered = false;
+
+function updateGiftShoppingProgress() {
+
+    const target =
+        getGiftTarget();
+
+    const bar =
+        document.getElementById(
+            "giftSpendBar"
+        );
+
+    const amount =
+        document.getElementById(
+            "giftSpendAmount"
+        );
+
+    const fill =
+        document.getElementById(
+            "giftSpendFill"
+        );
+
+    const message =
+        document.getElementById(
+            "giftSpendMessage"
+        );
+
+    // NORMAL SHOPPER
+    if (!target) {
+
+        giftCheckoutTriggered = false;
+
+        if (bar) {
+            bar.style.display = "none";
+        }
+
+        document.body.classList.remove(
+            "gift-shopping-active"
+        );
+
+        return;
+
+    }
+
+    activateGiftFlow();
+
+    const total =
+        getCartTotal();
+
+    const percentage =
+        Math.min(
+            (total / target) * 100,
+            100
+        );
+
+    if (amount) {
+
+        amount.textContent =
+            `₦${total.toLocaleString()} / ₦${target.toLocaleString()}`;
+
+    }
+
+    if (fill) {
+
+        fill.style.width =
+            `${percentage}%`;
+
+    }
+
+    if (total < target) {
+
+        giftCheckoutTriggered = false;
+
+        const remaining =
+            target - total;
+
+        if (message) {
+
+            message.textContent =
+                `Spend ₦${remaining.toLocaleString()} more to take away your ${target === 50000 ? 5 : 10} gifts.`;
+
+        }
+
+        return;
+
+    }
+
+    // TARGET REACHED
+
+    if (message) {
+
+        message.textContent =
+            `✓ ₦${target.toLocaleString()} reached! Taking you to checkout...`;
+
+    }
+
+    // HIDE BAR BEFORE CHECKOUT
+    if (bar) {
+        bar.style.display = "none";
+    }
+
+    document.body.classList.remove(
+        "gift-shopping-active"
+    );
+
+    localStorage.removeItem(
+        "collectiveGiftFlowActive"
+    );
+
+    if (!giftCheckoutTriggered) {
+
+        giftCheckoutTriggered = true;
+
+        setTimeout(
+            function() {
+
+                checkout();
+
+            },
+            350
+        );
+
+    }
 
 }
 
@@ -884,9 +1316,7 @@ function updateCartDisplay() {
     let html = "";
 
 
-    // ------------------------------
     // PAID PRODUCTS
-    // ------------------------------
 
     if (cart.length === 0) {
 
@@ -923,6 +1353,17 @@ function updateCartDisplay() {
                             <h3>
                                 ${item.name || "Product"}
                             </h3>
+
+                            ${
+                                item.size &&
+                                item.size !== "Not specified"
+                                    ? `
+                                        <small>
+                                            Size: ${item.size}
+                                        </small>
+                                    `
+                                    : ""
+                            }
 
                             ${
                                 item.color
@@ -977,7 +1418,6 @@ function updateCartDisplay() {
                         </div>
 
                     </div>
-
                 `;
 
             }
@@ -986,9 +1426,7 @@ function updateCartDisplay() {
     }
 
 
-    // ------------------------------
     // FREE GIFTS
-    // ------------------------------
 
     if (selectedGifts.length > 0) {
 
@@ -1034,25 +1472,15 @@ function updateCartDisplay() {
                             "
                         >
 
-                            <span
-                                style="
-                                    color:#304B52;
-                                "
-                            >
+                            <span style="color:#304B52;">
                                 🎁 ${gift.name || "Free Gift"}
                             </span>
 
-                            <strong
-                                style="
-                                    color:#304B52;
-                                    white-space:nowrap;
-                                "
-                            >
+                            <strong style="color:#304B52;">
                                 FREE
                             </strong>
 
                         </div>
-
                     `
                     ).join("")}
 
@@ -1071,7 +1499,6 @@ function updateCartDisplay() {
                 </p>
 
             </div>
-
         `;
 
     }
@@ -1163,59 +1590,44 @@ function setupCartEvents() {
             "cartPopup"
         );
 
-    if (cartButton) {
+    cartButton?.addEventListener(
+        "click",
+        function(event) {
 
-        cartButton.addEventListener(
-            "click",
-            function(event) {
+            event.preventDefault();
+            event.stopPropagation();
 
-                event.preventDefault();
+            openCart();
 
-                event.stopPropagation();
+        }
+    );
 
-                openCart();
+    closeButton?.addEventListener(
+        "click",
+        function(event) {
 
-            }
-        );
+            event.preventDefault();
+            event.stopPropagation();
 
-    }
+            closeCart();
 
-    if (closeButton) {
+        }
+    );
 
-        closeButton.addEventListener(
-            "click",
-            function(event) {
+    popup?.addEventListener(
+        "click",
+        function(event) {
 
-                event.preventDefault();
-
-                event.stopPropagation();
+            if (
+                event.target === popup
+            ) {
 
                 closeCart();
 
             }
-        );
 
-    }
-
-    if (popup) {
-
-        popup.addEventListener(
-            "click",
-            function(event) {
-
-                if (
-                    event.target ===
-                    popup
-                ) {
-
-                    closeCart();
-
-                }
-
-            }
-        );
-
-    }
+        }
+    );
 
 }
 
@@ -1231,15 +1643,13 @@ function setupCartItemEvents() {
         function(event) {
 
             const target =
-                event.target instanceof
-                Element
+                event.target instanceof Element
                     ? event.target
                     : null;
 
             if (!target) {
                 return;
             }
-
 
             const removeButton =
                 target.closest(
@@ -1275,7 +1685,6 @@ function setupCartItemEvents() {
 
             }
 
-
             const minusButton =
                 target.closest(
                     ".cart-minus"
@@ -1295,14 +1704,12 @@ function setupCartItemEvents() {
 
                     const quantity =
                         Number(
-                            cart[index]
-                                .quantity || 1
+                            cart[index].quantity || 1
                         );
 
                     if (quantity > 1) {
 
-                        cart[index]
-                            .quantity =
+                        cart[index].quantity =
                             quantity - 1;
 
                     }
@@ -1318,7 +1725,6 @@ function setupCartItemEvents() {
                 return;
 
             }
-
 
             const plusButton =
                 target.closest(
@@ -1339,14 +1745,12 @@ function setupCartItemEvents() {
 
                     const quantity =
                         Number(
-                            cart[index]
-                                .quantity || 1
+                            cart[index].quantity || 1
                         );
 
                     if (quantity < 10) {
 
-                        cart[index]
-                            .quantity =
+                        cart[index].quantity =
                             quantity + 1;
 
                     }
@@ -1377,12 +1781,18 @@ function setupEscapeKey() {
         "keydown",
         function(event) {
 
-            if (
-                event.key ===
-                "Escape"
-            ) {
+            if (event.key === "Escape") {
 
                 closeCart();
+
+                const checkoutModal =
+                    document.getElementById(
+                        "checkoutModal"
+                    );
+
+                if (checkoutModal) {
+                    checkoutModal.remove();
+                }
 
             }
 
@@ -1423,16 +1833,14 @@ function savePoints(points) {
 function calculatePoints(amount) {
 
     return Math.floor(
-        Number(amount || 0) /
-        1000
+        Number(amount || 0) / 1000
     );
 
 }
 
 function pointsToNaira(points) {
 
-    return Number(points || 0) *
-        100;
+    return Number(points || 0) * 100;
 
 }
 
@@ -1510,8 +1918,7 @@ function addPurchasePoints(amount) {
         calculatePoints(amount);
 
     savePoints(
-        getPoints() +
-        earned
+        getPoints() + earned
     );
 
     updatePointsDisplay();
@@ -1530,9 +1937,7 @@ function updateRewardStatus() {
     const totalSpent =
         getTotalSpent();
 
-    if (
-        totalSpent >= 50000
-    ) {
+    if (totalSpent >= 50000) {
 
         localStorage.setItem(
             "collectiveGift1",
@@ -1541,9 +1946,7 @@ function updateRewardStatus() {
 
     }
 
-    if (
-        totalSpent >= 100000
-    ) {
+    if (totalSpent >= 100000) {
 
         localStorage.setItem(
             "collectiveGift2",
@@ -1614,37 +2017,30 @@ function filterProducts() {
 
         const name =
             (
-                card.dataset.name ||
-                ""
+                card.dataset.name || ""
             ).toLowerCase();
 
         const category =
-            card.dataset.category ||
-            "";
+            card.dataset.category || "";
 
         const matchesSearch =
             name.includes(search);
 
         const matchesCategory =
-            currentCategory ===
-                "All" ||
-            category ===
-                currentCategory;
+            currentCategory === "All" ||
+            category === currentCategory;
 
         if (
             matchesSearch &&
             matchesCategory
         ) {
 
-            card.style.display =
-                "";
-
+            card.style.display = "";
             visible++;
 
         } else {
 
-            card.style.display =
-                "none";
+            card.style.display = "none";
 
         }
 
@@ -1701,8 +2097,7 @@ function createCategoryMenu() {
                     "button"
                 );
 
-            button.type =
-                "button";
+            button.type = "button";
 
             button.className =
                 "category-button";
@@ -1736,10 +2131,9 @@ function createCategoryMenu() {
                         )
                         .forEach(
                             btn =>
-                                btn.classList
-                                    .remove(
-                                        "selected"
-                                    )
+                                btn.classList.remove(
+                                    "selected"
+                                )
                         );
 
                     button.classList.add(
@@ -1772,10 +2166,7 @@ function setupCategoryButton() {
             ".collective-categories"
         );
 
-    if (
-        !button ||
-        !menu
-    ) {
+    if (!button || !menu) {
         return;
     }
 
@@ -1786,8 +2177,7 @@ function setupCategoryButton() {
             event.preventDefault();
 
             menu.style.display =
-                menu.style.display ===
-                    "flex"
+                menu.style.display === "flex"
                     ? "none"
                     : "flex";
 
@@ -1821,6 +2211,159 @@ function setupSearch() {
 
 
 // ======================================================
+// PRODUCT OPTION HTML
+// ======================================================
+
+function createProductOptions(product) {
+
+    let html = "";
+
+    // CLOTHING SIZE
+
+    if (
+        product.category === "Clothing"
+    ) {
+
+        html += `
+
+            <div
+                class="product-option"
+                style="margin:10px 0;"
+            >
+
+                <label>
+                    Size
+                </label>
+
+                <select
+                    class="product-size-select"
+                    style="
+                        width:100%;
+                        padding:9px;
+                        border:1px solid #C8D5D8;
+                        border-radius:8px;
+                        background:#FFFDF8;
+                        color:#304B52;
+                    "
+                >
+
+                    ${(product.sizes || ["S", "M", "L"])
+                        .map(
+                            size => `
+                                <option value="${size}">
+                                    ${size}
+                                </option>
+                            `
+                        )
+                        .join("")}
+
+                </select>
+
+            </div>
+        `;
+
+    }
+
+    // SHOES SIZE
+
+    if (
+        product.category === "Shoes"
+    ) {
+
+        html += `
+
+            <div
+                class="product-option"
+                style="margin:10px 0;"
+            >
+
+                <label>
+                    Shoe Size
+                </label>
+
+                <select
+                    class="product-shoe-size"
+                    style="
+                        width:100%;
+                        padding:9px;
+                        border:1px solid #C8D5D8;
+                        border-radius:8px;
+                        background:#FFFDF8;
+                        color:#304B52;
+                    "
+                >
+
+                    ${(product.shoeSizes || [
+                        "36","37","38","39","40",
+                        "41","42","43","44","45"
+                    ])
+                        .map(
+                            size => `
+                                <option value="${size}">
+                                    ${size}
+                                </option>
+                            `
+                        )
+                        .join("")}
+
+                </select>
+
+            </div>
+        `;
+
+    }
+
+    // COLORS
+
+    if (
+        product.colors &&
+        product.colors.length > 0
+    ) {
+
+        html += `
+
+            <div
+                class="product-colors"
+                style="margin:10px 0;"
+            >
+
+                <label>
+                    Color
+                </label>
+
+                <select
+                    class="product-color"
+                    style="
+                        width:100%;
+                        padding:9px;
+                        border:1px solid #C8D5D8;
+                        border-radius:8px;
+                        background:#FFFDF8;
+                        color:#304B52;
+                    "
+                >
+
+                    ${product.colors.map(
+                        color => `
+                            <option value="${color}">
+                                ${color}
+                            </option>
+                        `
+                    ).join("")}
+
+                </select>
+
+            </div>
+        `;
+
+    }
+
+    return html;
+
+}
+
+
+// ======================================================
 // RENDER PRODUCTS
 // ======================================================
 
@@ -1840,118 +2383,84 @@ function renderProducts() {
 
     container.innerHTML = "";
 
-    products
+    // SCATTER PRODUCTS
+    shuffledProducts
         .slice(0, 60)
-        .forEach(
-            product => {
+        .forEach(product => {
 
-                const card =
-                    document.createElement(
-                        "div"
-                    );
-
-                card.className =
-                    "product-card";
-
-                card.dataset.name =
-                    product.name;
-
-                card.dataset.category =
-                    product.category;
-
-                const colors =
-                    product.colors ||
-                    [];
-
-                let colorHTML =
-                    "";
-
-                if (
-                    colors.length > 0
-                ) {
-
-                    colorHTML = `
-
-                        <div class="product-colors">
-
-                            <label>
-                                Shade
-                            </label>
-
-                            <select
-                                class="product-color"
-                            >
-
-                                ${colors.map(
-                                    color => `
-                                    <option value="${color}">
-                                        ${color}
-                                    </option>
-                                `
-                                ).join("")}
-
-                            </select>
-
-                        </div>
-
-                    `;
-
-                }
-
-                card.innerHTML = `
-
-                    <div class="product-image">
-
-                        <span>
-                            ${product.name}
-                        </span>
-
-                    </div>
-
-                    <div class="product-info">
-
-                        <p class="product-category">
-                            ${product.category}
-                        </p>
-
-                        <h3>
-                            ${product.name}
-                        </h3>
-
-                        <p class="product-description">
-                            ${product.description || ""}
-                        </p>
-
-                        <p class="product-size">
-                            ${product.size}
-                        </p>
-
-                        <p class="product-price">
-                            ₦${Number(
-                                product.price
-                            ).toLocaleString()}
-                        </p>
-
-                        ${colorHTML}
-
-                        <button
-                            type="button"
-                            class="add-to-cart"
-                            data-product-id="${product.id}"
-                        >
-                            ADD TO CART
-                        </button>
-
-                    </div>
-
-                `;
-
-                container.appendChild(
-                    card
+            const card =
+                document.createElement(
+                    "div"
                 );
 
-            }
-        );
+            card.className =
+                "product-card";
+
+            card.dataset.name =
+                product.name;
+
+            card.dataset.category =
+                product.category;
+
+            card.innerHTML = `
+
+                <div class="product-image">
+
+                    <span>
+                        ${product.name}
+                    </span>
+
+                </div>
+
+                <div class="product-info">
+
+                    <p class="product-category">
+                        ${product.category}
+                    </p>
+
+                    <h3>
+                        ${product.name}
+                    </h3>
+
+                    <p class="product-description">
+                        ${product.description || ""}
+                    </p>
+
+                    ${
+                        product.size &&
+                        product.size !== "Not specified"
+                            ? `
+                                <p class="product-size">
+                                    ${product.size}
+                                </p>
+                            `
+                            : ""
+                    }
+
+                    <p class="product-price">
+                        ₦${Number(
+                            product.price
+                        ).toLocaleString()}
+                    </p>
+
+                    ${createProductOptions(product)}
+
+                    <button
+                        type="button"
+                        class="add-to-cart"
+                        data-product-id="${product.id}"
+                    >
+                        ADD TO CART
+                    </button>
+
+                </div>
+            `;
+
+            container.appendChild(
+                card
+            );
+
+        });
 
     filterProducts();
 
@@ -1969,8 +2478,7 @@ function setupAddToCart() {
         function(event) {
 
             const target =
-                event.target instanceof
-                Element
+                event.target instanceof Element
                     ? event.target
                     : null;
 
@@ -1990,14 +2498,12 @@ function setupAddToCart() {
             event.preventDefault();
 
             const productId =
-                button.dataset
-                    .productId;
+                button.dataset.productId;
 
             const product =
                 products.find(
                     item =>
-                        item.id ===
-                        productId
+                        item.id === productId
                 );
 
             if (!product) {
@@ -2014,31 +2520,53 @@ function setupAddToCart() {
                     ".product-color"
                 );
 
+            const sizeSelect =
+                card?.querySelector(
+                    ".product-size-select"
+                );
+
+            const shoeSizeSelect =
+                card?.querySelector(
+                    ".product-shoe-size"
+                );
+
             const selectedColor =
                 colorSelect
                     ? colorSelect.value
                     : "";
 
+            let selectedSize =
+                product.size ||
+                "Not specified";
+
+            if (sizeSelect) {
+                selectedSize =
+                    sizeSelect.value;
+            }
+
+            if (shoeSizeSelect) {
+                selectedSize =
+                    shoeSizeSelect.value;
+            }
+
             const existing =
                 cart.find(
                     item =>
-                        item.id ===
-                            product.id &&
+                        item.id === product.id &&
                         (item.color || "") ===
-                            selectedColor
+                            selectedColor &&
+                        (item.size || "") ===
+                            selectedSize
                 );
 
             if (existing) {
 
                 const quantity =
                     Number(
-                        existing.quantity ||
-                        1
+                        existing.quantity || 1
                     );
 
-                if (
-                    quantity < 10
-                ) {
+                if (quantity < 10) {
 
                     existing.quantity =
                         quantity + 1;
@@ -2049,26 +2577,19 @@ function setupAddToCart() {
 
                 cart.push({
 
-                    id:
-                        product.id,
+                    id: product.id,
 
-                    name:
-                        product.name,
+                    name: product.name,
 
-                    category:
-                        product.category,
+                    category: product.category,
 
-                    price:
-                        product.price,
+                    price: product.price,
 
-                    size:
-                        product.size,
+                    size: selectedSize,
 
-                    color:
-                        selectedColor,
+                    color: selectedColor,
 
-                    quantity:
-                        1
+                    quantity: 1
 
                 });
 
@@ -2108,20 +2629,12 @@ function getFreeGiftLevel() {
     const totalSpent =
         getTotalSpent();
 
-    if (
-        totalSpent >= 100000
-    ) {
-
+    if (totalSpent >= 100000) {
         return 10;
-
     }
 
-    if (
-        totalSpent >= 50000
-    ) {
-
+    if (totalSpent >= 50000) {
         return 5;
-
     }
 
     return 0;
@@ -2147,9 +2660,7 @@ function renderGiftOptions() {
     const unlocked =
         getFreeGiftLevel();
 
-    if (
-        unlocked <= 0
-    ) {
+    if (unlocked <= 0) {
 
         container.innerHTML = `
             <p>
@@ -2161,19 +2672,22 @@ function renderGiftOptions() {
 
     }
 
+    /*
+     * Give the customer enough different products
+     * to choose 5 or 10 gifts from.
+     */
+
     const giftProducts =
-        products
-            .filter(
+        shuffleProducts(
+            products.filter(
                 product =>
-                    product.category ===
-                        "Accessories" ||
-                    product.category ===
-                        "Skincare"
+                    product.category === "Accessories" ||
+                    product.category === "Skincare"
             )
-            .slice(
-                0,
-                unlocked
-            );
+        ).slice(
+            0,
+            unlocked === 10 ? 20 : 12
+        );
 
     const selected =
         getSelectedFreeGiftProducts();
@@ -2183,7 +2697,15 @@ function renderGiftOptions() {
             .map(
                 product => `
 
-                    <label class="gift-option">
+                    <label
+                        class="gift-option"
+                        style="
+                            display:flex;
+                            align-items:center;
+                            gap:10px;
+                            margin:8px 0;
+                        "
+                    >
 
                         <input
                             type="checkbox"
@@ -2201,15 +2723,13 @@ function renderGiftOptions() {
                         >
 
                         <span>
-                            ${product.name}
+                            ${product.name || "Free Gift"}
                         </span>
 
                     </label>
-
                 `
             )
             .join("");
-
 
     container
         .querySelectorAll(
@@ -2236,41 +2756,37 @@ function renderGiftOptions() {
                             return;
                         }
 
-                        if (
-                            checkbox.checked
-                        ) {
+                        if (checkbox.checked) {
+
+                            const max =
+                                unlocked;
 
                             if (
-                                gifts.some(
-                                    gift =>
-                                        gift.id ===
-                                        product.id
-                                )
+                                gifts.length >= max
                             ) {
+
+                                checkbox.checked =
+                                    false;
+
+                                alert(
+                                    `You can select up to ${max} free items.`
+                                );
 
                                 return;
 
                             }
 
                             if (
-                                gifts.length <
-                                unlocked
+                                !gifts.some(
+                                    gift =>
+                                        gift.id ===
+                                        product.id
+                                )
                             ) {
 
                                 gifts.push(
                                     product
                                 );
-
-                            } else {
-
-                                checkbox.checked =
-                                    false;
-
-                                alert(
-                                    `You can select up to ${unlocked} free item${unlocked === 1 ? "" : "s"}.`
-                                );
-
-                                return;
 
                             }
 
@@ -2291,219 +2807,22 @@ function renderGiftOptions() {
 
                         updateCartDisplay();
 
-                        /*
-                         * SHOW THE CORRECT
-                         * ₦50K OR ₦100K POPUP
-                         */
+                        if (
+                            gifts.length === 5 ||
+                            gifts.length === 10
+                        ) {
 
-                        showGiftPickedPopup(
-                            gifts.length,
-                            unlocked
-                        );
+                            showGiftPickedPopup(
+                                gifts.length,
+                                unlocked
+                            );
+
+                        }
+
+                        updateGiftShoppingProgress();
 
                     }
                 );
-
-            }
-        );
-
-}
-
-
-// ======================================================
-// GIFT PICKED POPUP
-// ₦50K = 5 GIFTS
-// ₦100K = 10 GIFTS
-// ======================================================
-
-function showGiftPickedPopup(
-    selectedCount,
-    unlocked
-) {
-
-    if (
-        selectedCount !==
-        unlocked
-    ) {
-        return;
-    }
-
-    if (
-        unlocked !== 5 &&
-        unlocked !== 10
-    ) {
-        return;
-    }
-
-    const old =
-        document.getElementById(
-            "giftPickedPopup"
-        );
-
-    if (old) {
-        old.remove();
-    }
-
-    const target =
-        unlocked === 5
-            ? 50000
-            : 100000;
-
-    const popup =
-        document.createElement(
-            "div"
-        );
-
-    popup.id =
-        "giftPickedPopup";
-
-    popup.style.cssText = `
-        position:fixed;
-        inset:0;
-        z-index:999999;
-        background:rgba(48,75,82,.45);
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        padding:20px;
-        box-sizing:border-box;
-    `;
-
-    popup.innerHTML = `
-
-        <div
-            style="
-                width:min(440px,100%);
-                background:#FFFDF8;
-                border-radius:23px;
-                padding:32px 25px;
-                text-align:center;
-                box-shadow:0 18px 50px rgba(0,0,0,.2);
-            "
-        >
-
-            <div
-                style="
-                    font-size:45px;
-                    margin-bottom:10px;
-                "
-            >
-                🎁
-            </div>
-
-            <h2
-                style="
-                    color:#304B52;
-                    margin:8px 0 12px;
-                "
-            >
-                Your ${unlocked} gifts are saved!
-            </h2>
-
-            <p
-                style="
-                    color:#71858A;
-                    line-height:1.6;
-                "
-            >
-                Spend
-                <strong>
-                    ₦${target.toLocaleString()}
-                </strong>
-                on your purchases to take away
-                your ${unlocked} free gifts.
-            </p>
-
-            <p
-                style="
-                    color:#71858A;
-                    line-height:1.6;
-                "
-            >
-                Your free gifts do not count
-                toward your spending target.
-            </p>
-
-            <button
-                type="button"
-                id="giftPopupClose"
-                class="checkout-button"
-            >
-                OK
-            </button>
-
-        </div>
-
-    `;
-
-    document.body.appendChild(
-        popup
-    );
-
-    const closeButton =
-        document.getElementById(
-            "giftPopupClose"
-        );
-
-    if (closeButton) {
-
-        closeButton.addEventListener(
-            "click",
-            function() {
-
-                popup.remove();
-
-            }
-        );
-
-    }
-
-}
-
-
-// ======================================================
-// GIFT PROGRESS
-// ======================================================
-
-function updateGiftShoppingProgress() {
-
-    const total =
-        getCartTotal();
-
-    document
-        .querySelectorAll(
-            ".gift-progress"
-        )
-        .forEach(
-            element => {
-
-                if (
-                    total >= 100000
-                ) {
-
-                    element.textContent =
-                        "₦100,000 reward unlocked";
-
-                } else if (
-                    total >= 50000
-                ) {
-
-                    element.textContent =
-                        "₦50,000 reward unlocked";
-
-                } else {
-
-                    const remaining =
-                        50000 -
-                        total;
-
-                    element.textContent =
-                        `₦${Math.max(
-                            0,
-                            remaining
-                        ).toLocaleString()} more to unlock your first reward`;
-
-                }
 
             }
         );
@@ -2545,12 +2864,8 @@ function getCurrentUser() {
 
 function requireLogin() {
 
-    if (
-        isLoggedIn()
-    ) {
-
+    if (isLoggedIn()) {
         return true;
-
     }
 
     alert(
@@ -2567,7 +2882,6 @@ function requireLogin() {
 
 // ======================================================
 // CHECKOUT ITEMS
-// PAID PRODUCTS + FREE GIFTS
 // ======================================================
 
 function getCheckoutItems() {
@@ -2592,31 +2906,26 @@ function getCheckoutItems() {
                     product.id,
 
                 name:
-                    product.name,
+                    product.name || "Free Gift",
 
                 category:
                     product.category,
 
-                price:
-                    0,
+                price: 0,
 
-                quantity:
-                    1,
+                quantity: 1,
 
-                color:
-                    null,
+                color: null,
 
                 size:
                     product.size ||
                     "Not specified",
 
-                isFreeGift:
-                    true,
+                isFreeGift: true,
 
                 originalGiftPrice:
                     Number(
-                        product.price ||
-                        0
+                        product.price || 0
                     )
 
             })
@@ -2636,9 +2945,33 @@ function getCheckoutItems() {
 
 function checkout() {
 
+    // If automatic gift checkout happens,
+    // the progress bar is removed first.
+
+    const bar =
+        document.getElementById(
+            "giftSpendBar"
+        );
+
+    if (bar) {
+        bar.style.display = "none";
+    }
+
+    document.body.classList.remove(
+        "gift-shopping-active"
+    );
+
     createCheckoutModal();
 
 }
+
+
+// IMPORTANT:
+// Make checkout globally available to the
+// old inline shop flow as well.
+
+window.checkout =
+    checkout;
 
 
 // ======================================================
@@ -2647,9 +2980,7 @@ function checkout() {
 
 function createCheckoutModal() {
 
-    if (
-        cart.length === 0
-    ) {
+    if (cart.length === 0) {
 
         alert(
             "Your cart is empty."
@@ -2659,12 +2990,8 @@ function createCheckoutModal() {
 
     }
 
-    if (
-        !requireLogin()
-    ) {
-
+    if (!requireLogin()) {
         return;
-
     }
 
     const oldModal =
@@ -2677,8 +3004,7 @@ function createCheckoutModal() {
     }
 
     const user =
-        getCurrentUser() ||
-        {};
+        getCurrentUser() || {};
 
     const total =
         getCartTotal();
@@ -2710,19 +3036,54 @@ function createCheckoutModal() {
     modal.className =
         "checkout-modal";
 
+    modal.style.cssText = `
+        position:fixed;
+        inset:0;
+        z-index:1000000;
+        background:rgba(48,75,82,.45);
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        padding:20px;
+        box-sizing:border-box;
+    `;
+
     modal.innerHTML = `
 
-        <div class="checkout-box">
+        <div
+            class="checkout-box"
+            style="
+                width:min(520px,100%);
+                max-height:90vh;
+                overflow-y:auto;
+                background:#FFFDF8;
+                border-radius:23px;
+                padding:30px 25px;
+                box-sizing:border-box;
+                position:relative;
+                box-shadow:0 18px 50px rgba(0,0,0,.2);
+            "
+        >
 
             <button
                 type="button"
                 class="checkout-close"
                 id="checkoutClose"
+                style="
+                    position:absolute;
+                    right:15px;
+                    top:10px;
+                    border:none;
+                    background:none;
+                    font-size:30px;
+                    color:#304B52;
+                    cursor:pointer;
+                "
             >
                 ×
             </button>
 
-            <h2>
+            <h2 style="color:#304B52;">
                 Checkout
             </h2>
 
@@ -2738,7 +3099,6 @@ function createCheckoutModal() {
                 ${
                     selectedGifts.length > 0
                         ? `
-
                             <div
                                 style="
                                     margin:15px 0;
@@ -2748,41 +3108,32 @@ function createCheckoutModal() {
                                 "
                             >
 
-                                <strong
-                                    style="
-                                        color:#304B52;
-                                    "
-                                >
+                                <strong style="color:#304B52;">
                                     🎁 FREE GIFTS
                                 </strong>
 
                                 ${selectedGifts.map(
                                     gift => `
+                                        <div
+                                            style="
+                                                display:flex;
+                                                justify-content:space-between;
+                                                padding:7px 0;
+                                                color:#304B52;
+                                            "
+                                        >
+                                            <span>
+                                                🎁 ${gift.name || "Free Gift"}
+                                            </span>
 
-                                    <div
-                                        style="
-                                            display:flex;
-                                            justify-content:space-between;
-                                            padding:7px 0;
-                                            color:#304B52;
-                                        "
-                                    >
-
-                                        <span>
-                                            🎁 ${gift.name || "Free Gift"}
-                                        </span>
-
-                                        <strong>
-                                            FREE
-                                        </strong>
-
-                                    </div>
-
-                                `
+                                            <strong>
+                                                FREE
+                                            </strong>
+                                        </div>
+                                    `
                                 ).join("")}
 
                             </div>
-
                         `
                         : ""
                 }
@@ -2855,13 +3206,11 @@ function createCheckoutModal() {
             </button>
 
         </div>
-
     `;
 
     document.body.appendChild(
         modal
     );
-
 
     document
         .getElementById(
@@ -2871,7 +3220,6 @@ function createCheckoutModal() {
             "click",
             () => modal.remove()
         );
-
 
     document
         .getElementById(
@@ -2919,8 +3267,7 @@ function createCheckoutModal() {
                             .getElementById(
                                 "checkoutPoints"
                             )
-                            ?.value ||
-                        0
+                            ?.value || 0
                     );
 
                 if (
@@ -2955,8 +3302,7 @@ function createCheckoutModal() {
                 const finalTotal =
                     Math.max(
                         0,
-                        total -
-                        discount
+                        total - discount
                     );
 
                 const customer = {
@@ -2994,17 +3340,40 @@ function showPaymentModal(
 
     checkoutModal.innerHTML = `
 
-        <div class="checkout-box">
+        <div
+            class="checkout-box"
+            style="
+                width:min(520px,100%);
+                max-height:90vh;
+                overflow-y:auto;
+                background:#FFFDF8;
+                border-radius:23px;
+                padding:30px 25px;
+                box-sizing:border-box;
+                position:relative;
+                box-shadow:0 18px 50px rgba(0,0,0,.2);
+            "
+        >
 
             <button
                 type="button"
                 class="checkout-close"
                 id="paymentClose"
+                style="
+                    position:absolute;
+                    right:15px;
+                    top:10px;
+                    border:none;
+                    background:none;
+                    font-size:30px;
+                    color:#304B52;
+                    cursor:pointer;
+                "
             >
                 ×
             </button>
 
-            <h2>
+            <h2 style="color:#304B52;">
                 Payment
             </h2>
 
@@ -3067,9 +3436,7 @@ function showPaymentModal(
             </button>
 
         </div>
-
     `;
-
 
     document
         .getElementById(
@@ -3079,7 +3446,6 @@ function showPaymentModal(
             "click",
             () => checkoutModal.remove()
         );
-
 
     document
         .getElementById(
@@ -3096,8 +3462,7 @@ function showPaymentModal(
 
                 if (button) {
 
-                    button.disabled =
-                        true;
+                    button.disabled = true;
 
                     button.textContent =
                         "SUBMITTING...";
@@ -3115,8 +3480,7 @@ function showPaymentModal(
 
                     if (button) {
 
-                        button.disabled =
-                            false;
+                        button.disabled = false;
 
                         button.textContent =
                             "I HAVE PAID";
@@ -3182,21 +3546,18 @@ async function createPendingOrder(
                         product.id,
 
                     name:
-                        product.name,
+                        product.name || "Free Gift",
 
                     category:
                         product.category,
 
-                    price:
-                        0,
+                    price: 0,
 
-                    quantity:
-                        1,
+                    quantity: 1,
 
                     originalGiftPrice:
                         Number(
-                            product.price ||
-                            0
+                            product.price || 0
                         )
 
                 })
@@ -3220,7 +3581,6 @@ async function createPendingOrder(
 
     };
 
-
     try {
 
         const firebase =
@@ -3234,12 +3594,6 @@ async function createPendingOrder(
             order
         );
 
-        console.log(
-            "ORDER SAVED TO FIREBASE",
-            order
-        );
-
-
         let oldOrders = [];
 
         try {
@@ -3252,9 +3606,7 @@ async function createPendingOrder(
                 );
 
             if (
-                !Array.isArray(
-                    oldOrders
-                )
+                !Array.isArray(oldOrders)
             ) {
 
                 oldOrders = [];
@@ -3267,7 +3619,6 @@ async function createPendingOrder(
 
         }
 
-
         localStorage.setItem(
             "collectiveOrders",
             JSON.stringify([
@@ -3276,18 +3627,15 @@ async function createPendingOrder(
             ])
         );
 
-
         localStorage.setItem(
             "collectivePendingOrder",
             JSON.stringify(order)
         );
 
-
         localStorage.setItem(
             "collectiveOrderStatus",
             "payment-checking"
         );
-
 
         return true;
 
@@ -3335,9 +3683,31 @@ function showPaymentChecking() {
     modal.className =
         "checkout-modal";
 
+    modal.style.cssText = `
+        position:fixed;
+        inset:0;
+        z-index:1000000;
+        background:rgba(48,75,82,.45);
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        padding:20px;
+        box-sizing:border-box;
+    `;
+
     modal.innerHTML = `
 
-        <div class="checkout-box">
+        <div
+            class="checkout-box"
+            style="
+                width:min(520px,100%);
+                background:#FFFDF8;
+                border-radius:23px;
+                padding:30px 25px;
+                text-align:center;
+                box-shadow:0 18px 50px rgba(0,0,0,.2);
+            "
+        >
 
             <h2>
                 Payment Checking
@@ -3364,7 +3734,6 @@ function showPaymentChecking() {
             </button>
 
         </div>
-
     `;
 
     document.body.appendChild(
@@ -3394,8 +3763,7 @@ function setupCheckout() {
         function(event) {
 
             const target =
-                event.target instanceof
-                Element
+                event.target instanceof Element
                     ? event.target
                     : null;
 
@@ -3496,8 +3864,7 @@ function setupLogout() {
         function(event) {
 
             const target =
-                event.target instanceof
-                Element
+                event.target instanceof Element
                     ? event.target
                     : null;
 
@@ -3583,32 +3950,28 @@ function updateProfile() {
     if (firstName) {
 
         firstName.textContent =
-            user?.firstName ||
-            "";
+            user?.firstName || "";
 
     }
 
     if (lastName) {
 
         lastName.textContent =
-            user?.lastName ||
-            "";
+            user?.lastName || "";
 
     }
 
     if (address) {
 
         address.textContent =
-            user?.address ||
-            "";
+            user?.address || "";
 
     }
 
     if (phone) {
 
         phone.textContent =
-            user?.phone ||
-            "";
+            user?.phone || "";
 
     }
 
@@ -3649,14 +4012,11 @@ function updateFreeItemCards() {
 
                 const required =
                     Number(
-                        card.dataset
-                            .required ||
-                        0
+                        card.dataset.required || 0
                     );
 
                 if (
-                    totalSpent >=
-                    required
+                    totalSpent >= required
                 ) {
 
                     card.classList.add(
@@ -3712,24 +4072,21 @@ function updateOrderStatusDisplay() {
             element => {
 
                 if (
-                    status ===
-                    "approved"
+                    status === "approved"
                 ) {
 
                     element.textContent =
                         "APPROVED";
 
                 } else if (
-                    status ===
-                    "rejected"
+                    status === "rejected"
                 ) {
 
                     element.textContent =
                         "REJECTED";
 
                 } else if (
-                    status ===
-                    "delivered"
+                    status === "delivered"
                 ) {
 
                     element.textContent =
@@ -3813,9 +4170,7 @@ async function checkFirebaseOrderStatus() {
                     order.id !==
                     pendingOrder.id
                 ) {
-
                     return;
-
                 }
 
                 if (order.status) {
@@ -3838,10 +4193,8 @@ async function checkFirebaseOrderStatus() {
                         pendingOrder.status;
 
                     if (
-                        previousStatus !==
-                            "approved" &&
-                        previousStatus !==
-                            "delivered"
+                        previousStatus !== "approved" &&
+                        previousStatus !== "delivered"
                     ) {
 
                         const qualifyingSpend =
@@ -3891,6 +4244,8 @@ async function checkFirebaseOrderStatus() {
                         updateFreeItemCards();
 
                         renderGiftOptions();
+
+                        deactivateGiftFlow();
 
                     }
 
@@ -3964,6 +4319,8 @@ function setupStorageSync() {
 
                 renderGiftOptions();
 
+                updateGiftShoppingProgress();
+
             }
 
             if (
@@ -4023,6 +4380,43 @@ function setupStorageSync() {
 
 
 // ======================================================
+// KEEP GIFT BAR CORRECT
+// This also prevents the old inline shop script
+// from leaving the bar visible for normal shoppers.
+// ======================================================
+
+function startGiftFlowWatcher() {
+
+    setInterval(
+        function() {
+
+            const gifts =
+                getSelectedFreeGiftProducts();
+
+            // NORMAL SHOPPING
+            if (
+                gifts.length !== 5 &&
+                gifts.length !== 10
+            ) {
+
+                giftCheckoutTriggered = false;
+
+                deactivateGiftFlow();
+
+                return;
+
+            }
+
+            updateGiftShoppingProgress();
+
+        },
+        300
+    );
+
+}
+
+
+// ======================================================
 // INITIALIZE
 // ======================================================
 
@@ -4070,6 +4464,8 @@ function initializeCollective() {
 
     renderGiftOptions();
 
+    startGiftFlowWatcher();
+
     checkFirebaseOrderStatus();
 
     console.log(
@@ -4084,8 +4480,7 @@ function initializeCollective() {
 // ======================================================
 
 if (
-    document.readyState ===
-    "loading"
+    document.readyState === "loading"
 ) {
 
     document.addEventListener(
