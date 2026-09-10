@@ -24,10 +24,17 @@ const firebaseReady = Promise.all([
     return {
         db,
         addDoc: firestore.addDoc,
-        collection: firestore.collection
+        collection: firestore.collection,
+        getDocs: firestore.getDocs,
+        query: firestore.query,
+        orderBy: firestore.orderBy,
+        doc: firestore.doc,
+        updateDoc: firestore.updateDoc
     };
 
 });
+
+
 // ======================================================
 // THE COLLECTIVE.CO — COMPLETE SHOP SYSTEM
 // CART + CHECKOUT + POINTS + FREE GIFTS + LOGIN
@@ -40,7 +47,10 @@ const firebaseReady = Promise.all([
 
 const productCatalog = [
 
+    // ==================================================
     // SKINCARE
+    // ==================================================
+
     {
         name: "Men's Perfume",
         category: "Skincare",
@@ -49,82 +59,123 @@ const productCatalog = [
         size: "100 ml",
         description: "A masculine perfume."
     },
+
     {
         name: "Body Butter",
         category: "Skincare",
         min: 5000,
-        max: 9500
+        max: 9500,
+        size: "Not specified"
     },
+
     {
         name: "Sunscreen",
         category: "Skincare",
         min: 4000,
-        max: 9000
+        max: 9000,
+        size: "Not specified"
     },
+
     {
         name: "Face Cleanser",
         category: "Skincare",
         min: 7500,
-        max: 10000
+        max: 10000,
+        size: "Not specified"
     },
+
     {
         name: "Body Scrub",
         category: "Skincare",
         min: 4000,
-        max: 8000
+        max: 8000,
+        size: "Not specified"
     },
+
     {
         name: "Face Serum",
         category: "Skincare",
         min: 1500,
-        max: 4500
+        max: 4500,
+        size: "Not specified"
     },
+
     {
         name: "Lip Mask",
         category: "Skincare",
         min: 1000,
-        max: 3000
+        max: 3000,
+        size: "Not specified"
     },
+
     {
         name: "Rhode Lip Gloss",
         category: "Skincare",
         min: 10000,
         max: 15000,
-        colors: ["Clear", "Pink", "Brown"]
+        size: "Not specified",
+        colors: [
+            "Clear",
+            "Pink",
+            "Brown"
+        ]
     },
+
     {
         name: "SHEGLAM Lip Gloss",
         category: "Skincare",
         min: 10000,
         max: 15000,
-        colors: ["Clear", "Pink", "Nude", "Brown"]
+        size: "Not specified",
+        colors: [
+            "Clear",
+            "Pink",
+            "Nude",
+            "Brown"
+        ]
     },
+
     {
         name: "USHAS Lip Gloss",
         category: "Skincare",
         min: 10000,
         max: 15000,
-        colors: ["Clear", "Pink", "Nude", "Brown"]
+        size: "Not specified",
+        colors: [
+            "Clear",
+            "Pink",
+            "Nude",
+            "Brown"
+        ]
     },
+
     {
         name: "Clear Normal Lip Gloss",
         category: "Skincare",
         min: 1000,
         max: 2000,
-        colors: ["Clear"]
+        size: "Not specified",
+        colors: [
+            "Clear"
+        ]
     },
+
     {
         name: "Lip Balm",
         category: "Skincare",
         min: 1000,
-        max: 2000
+        max: 2000,
+        size: "Not specified"
     },
+
     {
         name: "Shower Gel",
         category: "Skincare",
         min: 12000,
-        max: 12000
+        max: 12000,
+        size: "Not specified"
     },
+
     {
         name: "Men's Fragrance Perfume",
         category: "Skincare",
@@ -132,6 +183,7 @@ const productCatalog = [
         max: 10000,
         size: "50 ml"
     },
+
     {
         name: "Women's Fragrance Perfume",
         category: "Skincare",
@@ -139,147 +191,180 @@ const productCatalog = [
         max: 10000,
         size: "50 ml"
     },
+
     {
         name: "Body Lotion",
         category: "Skincare",
         min: 8000,
-        max: 12000
+        max: 12000,
+        size: "Not specified"
     },
+
     {
         name: "Face Moisturizer",
         category: "Skincare",
         min: 3000,
-        max: 7000
+        max: 7000,
+        size: "Not specified"
     },
+
     {
         name: "Face Toner",
         category: "Skincare",
         min: 6500,
-        max: 10000
+        max: 10000,
+        size: "Not specified"
     },
+
     {
         name: "Body Oil",
         category: "Skincare",
         min: 6000,
-        max: 10000
+        max: 10000,
+        size: "Not specified"
     },
+
     {
         name: "Face Mask",
         category: "Skincare",
         min: 1000,
-        max: 4500
+        max: 4500,
+        size: "Not specified"
     },
+
     {
         name: "Lip Oil",
         category: "Skincare",
         min: 1000,
-        max: 2000
+        max: 2000,
+        size: "Not specified"
     },
+
     {
         name: "Pimple Patch",
         category: "Skincare",
         min: 500,
-        max: 1800
+        max: 1800,
+        size: "Not specified"
     },
 
 
+    // ==================================================
     // ACCESSORIES
+    // ==================================================
+
     {
         name: "Bead Bracelet Set",
         category: "Accessories",
         min: 3000,
         max: 6000
     },
+
     {
         name: "Masculine Chain Bracelet",
         category: "Accessories",
         min: 1000,
         max: 3500
     },
+
     {
         name: "Chrome Heart Glasses",
         category: "Accessories",
         min: 15000,
         max: 20000
     },
+
     {
         name: "Glasses",
         category: "Accessories",
         min: 2000,
         max: 5000
     },
+
     {
         name: "Glasses Set of 3",
         category: "Accessories",
         min: 4000,
         max: 5000
     },
+
     {
         name: "Glasses Set of 5",
         category: "Accessories",
         min: 5000,
         max: 10000
     },
+
     {
         name: "Scrunchies",
         category: "Accessories",
         min: 1200,
         max: 1200
     },
+
     {
         name: "Stanley Cup",
         category: "Accessories",
         min: 15000,
         max: 15000
     },
+
     {
         name: "Body Floral Stanley Cup",
         category: "Accessories",
         min: 20000,
         max: 20000
     },
+
     {
         name: "Headband",
         category: "Accessories",
         min: 1600,
         max: 1600
     },
+
     {
         name: "Tote Bag",
         category: "Accessories",
         min: 10000,
         max: 20000
     },
+
     {
         name: "Claw Clip",
         category: "Accessories",
         min: 2000,
         max: 2500
     },
+
     {
         name: "Anklet",
         category: "Accessories",
         min: 1000,
         max: 2000
     },
+
     {
         name: "Necklace",
         category: "Accessories",
         min: 1000,
         max: 3500
     },
+
     {
         name: "Silver Bracelet",
         category: "Accessories",
         min: 3500,
         max: 3500
     },
+
     {
         name: "Gold Bracelet",
         category: "Accessories",
         min: 3500,
         max: 3500
     },
+
     {
         name: "Vacuum Cups",
         category: "Accessories",
@@ -288,103 +373,122 @@ const productCatalog = [
     },
 
 
+    // ==================================================
     // CLOTHING
+    // ==================================================
+
     {
         name: "Plain Tops",
         category: "Clothing",
         min: 6500,
         max: 8000
     },
+
     {
         name: "Graphic Tops",
         category: "Clothing",
         min: 8000,
         max: 10000
     },
+
     {
         name: "Tube Tops",
         category: "Clothing",
         min: 5000,
         max: 15000
     },
+
     {
         name: "Jersey Tops",
         category: "Clothing",
         min: 8500,
         max: 8500
     },
+
     {
         name: "Hoodies",
         category: "Clothing",
         min: 9500,
         max: 10000
     },
+
     {
         name: "Zip-Up Hoodies",
         category: "Clothing",
         min: 9000,
         max: 15000
     },
+
     {
         name: "Plain Sweatpants",
         category: "Clothing",
         min: 10000,
         max: 10000
     },
+
     {
         name: "Leopard Sweatpants",
         category: "Clothing",
         min: 15000,
         max: 15000
     },
+
     {
         name: "Designer Sweatpants",
         category: "Clothing",
         min: 20000,
         max: 20000
     },
+
     {
         name: "Shorts",
         category: "Clothing",
         min: 10000,
         max: 10000
     },
+
     {
         name: "Jean Bum Shorts",
         category: "Clothing",
         min: 5000,
         max: 5000
     },
+
     {
         name: "Jeans",
         category: "Clothing",
         min: 10000,
         max: 10000
     },
+
     {
         name: "Designed Jeans",
         category: "Clothing",
         min: 20000,
         max: 20000
     },
+
     {
         name: "Bootcut Jeans",
         category: "Clothing",
         min: 10000,
         max: 10000
     },
+
     {
         name: "Jeans Skirt",
         category: "Clothing",
         min: 6500,
         max: 6500
     },
+
     {
         name: "Pleated Jeans Skirt",
         category: "Clothing",
         min: 6000,
         max: 6000
     },
+
     {
         name: "Normal Shorts",
         category: "Clothing",
@@ -393,61 +497,73 @@ const productCatalog = [
     },
 
 
+    // ==================================================
     // SHOES
+    // ==================================================
+
     {
         name: "Shoes",
         category: "Shoes",
         min: 15000,
         max: 30000
     },
+
     {
         name: "Adidas Sambas",
         category: "Shoes",
         min: 30000,
         max: 50000
     },
+
     {
         name: "Adidas Campus",
         category: "Shoes",
         min: 30000,
         max: 50000
     },
+
     {
         name: "Slides",
         category: "Shoes",
         min: 9000,
         max: 9000
     },
+
     {
         name: "Crocs",
         category: "Shoes",
         min: 10000,
         max: 10000
     },
+
     {
         name: "Loafers",
         category: "Shoes",
         min: 15000,
         max: 30000
     },
+
     {
         name: "Clogs",
         category: "Shoes",
         min: 35000,
         max: 70000
     },
+
     {
         name: "Timberland",
         category: "Shoes",
         min: 5000,
         max: 40000
     },
+
     {
         name: "Vans",
         category: "Shoes",
         min: 5000,
         max: 40000
     },
+
     {
         name: "Puma",
         category: "Shoes",
@@ -456,61 +572,73 @@ const productCatalog = [
     },
 
 
+    // ==================================================
     // BAGS
+    // ==================================================
+
     {
         name: "Hermes Bags",
         category: "Bags",
         min: 35000,
         max: 50000
     },
+
     {
         name: "Mini Gucci Bags",
         category: "Bags",
         min: 20000,
         max: 50000
     },
+
     {
         name: "Gucci Bags",
         category: "Bags",
         min: 35000,
         max: 60000
     },
+
     {
         name: "Prada Bags",
         category: "Bags",
         min: 35000,
         max: 60000
     },
+
     {
         name: "Dior Bags",
         category: "Bags",
         min: 35000,
         max: 70000
     },
+
     {
         name: "Chanel Bags",
         category: "Bags",
         min: 45000,
         max: 70000
     },
+
     {
         name: "Louis Vuitton Bags",
         category: "Bags",
         min: 25000,
         max: 70000
     },
+
     {
         name: "Cartier Watches",
         category: "Bags",
         min: 20000,
         max: 35000
     },
+
     {
         name: "Cartier Glasses",
         category: "Bags",
         min: 15000,
         max: 25000
     }
+
 ];
 
 
@@ -520,103 +648,125 @@ const productCatalog = [
 
 const products = [];
 
-function makePrice(min, max, number) {
 
-    if (min === max) {
+function makePrice(
+    min,
+    max,
+    number
+) {
+
+    if (
+        min === max
+    ) {
         return min;
     }
 
-    const step = (max - min) / 29;
+
+    const step =
+        (max - min) / 29;
+
 
     return Math.round(
-        (min + step * (number - 1)) / 100
+        (
+            min +
+            step *
+            (number - 1)
+        ) / 100
     ) * 100;
-}
-
-
-productCatalog.forEach(product => {
-
-    for (let i = 1; i <= 30; i++) {
-
-        products.push({
-            id: `${product.name}-${i}`,
-            name: product.name,
-            listing: i,
-            category: product.category,
-            price: makePrice(
-                product.min,
-                product.max,
-                i
-            ),
-            size: product.size || "Not specified",
-            description: product.description || "",
-            colors: product.colors || [],
-            stock: 10
-        });
-
-    }
-
-});
-
-
-// ======================================================
-// SAFE STORAGE
-// ======================================================
-
-function getStoredArray(key) {
-
-    try {
-
-        const data = JSON.parse(
-            localStorage.getItem(key) || "[]"
-        );
-
-        return Array.isArray(data)
-            ? data
-            : [];
-
-    } catch (error) {
-
-        return [];
-
-    }
 
 }
 
 
-function setStoredArray(key, value) {
+productCatalog.forEach(
+    product => {
 
-    try {
+        for (
+            let i = 1;
+            i <= 30;
+            i++
+        ) {
 
-        localStorage.setItem(
-            key,
-            JSON.stringify(value)
-        );
+            products.push({
 
-    } catch (error) {
+                id:
+                    `${product.name}-${i}`,
 
-        console.error(
-            "Could not save data:",
-            error
-        );
+                name:
+                    product.name,
+
+                listing:
+                    i,
+
+                category:
+                    product.category,
+
+                price:
+                    makePrice(
+                        product.min,
+                        product.max,
+                        i
+                    ),
+
+                size:
+                    product.size ||
+                    "Not specified",
+
+                description:
+                    product.description ||
+                    "",
+
+                colors:
+                    product.colors ||
+                    [],
+
+                stock:
+                    10
+
+            });
+
+        }
 
     }
-
-}
+);
 
 
 // ======================================================
 // CART
 // ======================================================
 
-let cart = getStoredArray("collectiveCart");
+let cart = [];
+
+
+try {
+
+    cart =
+        JSON.parse(
+            localStorage.getItem(
+                "collectiveCart"
+            ) || "[]"
+        );
+
+
+    if (
+        !Array.isArray(cart)
+    ) {
+
+        cart = [];
+
+    }
+
+} catch (error) {
+
+    cart = [];
+
+}
 
 
 function saveCart() {
 
-    setStoredArray(
+    localStorage.setItem(
         "collectiveCart",
-        cart
+        JSON.stringify(cart)
     );
 
 }
@@ -625,8 +775,17 @@ function saveCart() {
 function getCartQuantity() {
 
     return cart.reduce(
-        (total, item) =>
-            total + Number(item.quantity || 0),
+        (
+            total,
+            item
+        ) => {
+
+            return total +
+                Number(
+                    item.quantity || 0
+                );
+
+        },
         0
     );
 
@@ -636,73 +795,24 @@ function getCartQuantity() {
 function getCartTotal() {
 
     return cart.reduce(
-        (total, item) =>
-            total +
-            Number(item.price || 0) *
-            Number(item.quantity || 0),
+        (
+            total,
+            item
+        ) => {
+
+            return total +
+                (
+                    Number(
+                        item.price || 0
+                    ) *
+                    Number(
+                        item.quantity || 0
+                    )
+                );
+
+        },
         0
     );
-
-}
-
-
-// ======================================================
-// FREE GIFTS
-// ======================================================
-
-function getSelectedFreeGiftIds() {
-
-    return getStoredArray(
-        "collectiveSelectedFreeGifts"
-    );
-
-}
-
-
-function getSelectedFreeGiftProducts() {
-
-    const giftIds =
-        getSelectedFreeGiftIds();
-
-    return giftIds
-        .map(id =>
-            products.find(
-                product =>
-                    String(product.id) ===
-                    String(id)
-            )
-        )
-        .filter(Boolean);
-
-}
-
-
-function getCheckoutItems() {
-
-    const paidItems =
-        cart.map(item => ({
-            ...item,
-            isFreeGift: false
-        }));
-
-    const giftItems =
-        getSelectedFreeGiftProducts()
-            .map(product => ({
-                id: "FREE-GIFT-" + product.id,
-                name: product.name,
-                category: product.category,
-                price: 0,
-                quantity: 1,
-                color: null,
-                size: product.size,
-                isFreeGift: true,
-                originalGiftPrice: product.price
-            }));
-
-    return [
-        ...paidItems,
-        ...giftItems
-    ];
 
 }
 
@@ -713,13 +823,20 @@ function getCheckoutItems() {
 
 function updateCartCount() {
 
-    const cartCount =
-        document.getElementById("cartCount");
+    const count =
+        document.getElementById(
+            "cartCount"
+        );
 
-    if (!cartCount) return;
 
-    cartCount.textContent =
-        getCartQuantity();
+    if (
+        count
+    ) {
+
+        count.textContent =
+            getCartQuantity();
+
+    }
 
 }
 
@@ -728,115 +845,138 @@ function updateCartDisplay() {
 
     updateCartCount();
 
+
     const cartItems =
-        document.getElementById("cartItems");
+        document.getElementById(
+            "cartItems"
+        );
+
 
     const cartTotal =
-        document.getElementById("cartTotal");
+        document.getElementById(
+            "cartTotal"
+        );
 
-    if (!cartItems) return;
 
-
-    if (cart.length === 0) {
-
-        cartItems.innerHTML = `
-            <div class="empty-cart">
-                <div class="empty-cart-icon">🛍️</div>
-                <p>Your cart is empty.</p>
-                <small>Add something you love.</small>
-            </div>
-        `;
-
-        if (cartTotal) {
-            cartTotal.textContent = "₦0";
-        }
-
+    if (
+        !cartItems
+    ) {
         return;
     }
 
 
-    cartItems.innerHTML = "";
+    if (
+        cart.length === 0
+    ) {
 
-
-    cart.forEach((item, index) => {
-
-        const price =
-            Number(item.price) || 0;
-
-        const quantity =
-            Number(item.quantity) || 0;
-
-        const itemTotal =
-            price * quantity;
-
-
-        const cartItem =
-            document.createElement("div");
-
-        cartItem.className =
-            "cart-item";
-
-
-        cartItem.innerHTML = `
-            <div class="cart-item-info">
-
-                <h3>${item.name}</h3>
-
-                ${
-                    item.color
-                        ? `<small>Shade: ${item.color}</small>`
-                        : ""
-                }
-
-                <strong>
-                    ₦${price.toLocaleString()}
-                </strong>
-
-            </div>
-
-            <div class="cart-item-actions">
-
-                <div class="cart-quantity">
-
-                    <button
-                        type="button"
-                        class="cart-minus"
-                        data-index="${index}">
-                        −
-                    </button>
-
-                    <span>${quantity}</span>
-
-                    <button
-                        type="button"
-                        class="cart-plus"
-                        data-index="${index}">
-                        +
-                    </button>
-
-                </div>
-
-                <strong class="cart-item-total">
-                    ₦${itemTotal.toLocaleString()}
-                </strong>
-
-                <button
-                    type="button"
-                    class="remove-cart-item"
-                    data-index="${index}">
-                    Remove
-                </button>
-
+        cartItems.innerHTML = `
+            <div class="empty-cart">
+                Your cart is empty.
             </div>
         `;
 
+        if (
+            cartTotal
+        ) {
 
-        cartItems.appendChild(cartItem);
+            cartTotal.textContent =
+                "₦0";
 
-    });
+        }
+
+        return;
+
+    }
 
 
-    if (cartTotal) {
+    cartItems.innerHTML =
+        cart.map(
+            (
+                item,
+                index
+            ) => {
+
+                const quantity =
+                    Number(
+                        item.quantity || 1
+                    );
+
+
+                const price =
+                    Number(
+                        item.price || 0
+                    );
+
+
+                return `
+
+                    <div class="cart-item">
+
+                        <div class="cart-item-info">
+
+                            <strong>
+                                ${item.name || "Product"}
+                            </strong>
+
+                            <span>
+                                ${item.color
+                                    ? `Shade: ${item.color}`
+                                    : ""}
+                            </span>
+
+                            <span>
+                                ₦${(
+                                    price *
+                                    quantity
+                                ).toLocaleString()}
+                            </span>
+
+                        </div>
+
+
+                        <div class="cart-controls">
+
+                            <button
+                                type="button"
+                                class="cart-minus"
+                                data-index="${index}"
+                            >
+                                −
+                            </button>
+
+                            <span>
+                                ${quantity}
+                            </span>
+
+                            <button
+                                type="button"
+                                class="cart-plus"
+                                data-index="${index}"
+                            >
+                                +
+                            </button>
+
+                            <button
+                                type="button"
+                                class="remove-cart-item"
+                                data-index="${index}"
+                            >
+                                Remove
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                `;
+
+            }
+        ).join("");
+
+
+    if (
+        cartTotal
+    ) {
 
         cartTotal.textContent =
             `₦${getCartTotal().toLocaleString()}`;
@@ -847,19 +987,28 @@ function updateCartDisplay() {
 
 
 // ======================================================
-// CART OPEN / CLOSE
+// OPEN / CLOSE CART
 // ======================================================
 
 function openCart() {
 
     const popup =
-        document.getElementById("cartPopup");
+        document.getElementById(
+            "cartPopup"
+        );
 
-    if (!popup) return;
 
-    updateCartDisplay();
+    if (
+        !popup
+    ) {
+        return;
+    }
 
-    popup.style.display = "flex";
+
+    popup.classList.add(
+        "open"
+    );
+
 
     document.body.classList.add(
         "cart-open"
@@ -871,11 +1020,22 @@ function openCart() {
 function closeCart() {
 
     const popup =
-        document.getElementById("cartPopup");
+        document.getElementById(
+            "cartPopup"
+        );
 
-    if (!popup) return;
 
-    popup.style.display = "none";
+    if (
+        !popup
+    ) {
+        return;
+    }
+
+
+    popup.classList.remove(
+        "open"
+    );
+
 
     document.body.classList.remove(
         "cart-open"
@@ -883,10 +1043,6 @@ function closeCart() {
 
 }
 
-
-// ======================================================
-// CART EVENTS
-// ======================================================
 
 document.addEventListener(
     "click",
@@ -897,7 +1053,12 @@ document.addEventListener(
                 ? event.target
                 : null;
 
-        if (!target) return;
+
+        if (
+            !target
+        ) {
+            return;
+        }
 
 
         if (
@@ -910,6 +1071,7 @@ document.addEventListener(
             openCart();
 
             return;
+
         }
 
 
@@ -923,6 +1085,7 @@ document.addEventListener(
             closeCart();
 
             return;
+
         }
 
 
@@ -933,24 +1096,38 @@ document.addEventListener(
         ) {
 
             const index =
-                Number(target.dataset.index);
+                Number(
+                    target.dataset.index
+                );
+
 
             if (
                 Number.isInteger(index) &&
                 cart[index]
             ) {
 
-                cart.splice(index, 1);
+                cart.splice(
+                    index,
+                    1
+                );
 
                 saveCart();
 
                 updateCartDisplay();
 
-                updateGiftShoppingProgress();
+                if (
+                    typeof updateGiftShoppingProgress ===
+                    "function"
+                ) {
+
+                    updateGiftShoppingProgress();
+
+                }
 
             }
 
             return;
+
         }
 
 
@@ -961,7 +1138,10 @@ document.addEventListener(
         ) {
 
             const index =
-                Number(target.dataset.index);
+                Number(
+                    target.dataset.index
+                );
+
 
             if (
                 Number.isInteger(index) &&
@@ -969,7 +1149,9 @@ document.addEventListener(
             ) {
 
                 if (
-                    Number(cart[index].quantity) > 1
+                    Number(
+                        cart[index].quantity
+                    ) > 1
                 ) {
 
                     cart[index].quantity--;
@@ -980,11 +1162,19 @@ document.addEventListener(
 
                 updateCartDisplay();
 
-                updateGiftShoppingProgress();
+                if (
+                    typeof updateGiftShoppingProgress ===
+                    "function"
+                ) {
+
+                    updateGiftShoppingProgress();
+
+                }
 
             }
 
             return;
+
         }
 
 
@@ -995,29 +1185,20 @@ document.addEventListener(
         ) {
 
             const index =
-                Number(target.dataset.index);
+                Number(
+                    target.dataset.index
+                );
+
 
             if (
                 Number.isInteger(index) &&
                 cart[index]
             ) {
 
-                const product =
-                    products.find(
-                        p =>
-                            p.id ===
-                            cart[index].id
-                    );
-
-                const maximum =
-                    product
-                        ? product.stock
-                        : 10;
-
-
                 if (
-                    Number(cart[index].quantity) <
-                    maximum
+                    Number(
+                        cart[index].quantity
+                    ) < 10
                 ) {
 
                     cart[index].quantity++;
@@ -1028,29 +1209,49 @@ document.addEventListener(
 
                 updateCartDisplay();
 
-                updateGiftShoppingProgress();
+                if (
+                    typeof updateGiftShoppingProgress ===
+                    "function"
+                ) {
+
+                    updateGiftShoppingProgress();
+
+                }
 
             }
 
             return;
+
         }
 
     }
 );
 
 
+// ======================================================
+// CART OUTSIDE CLICK
+// ======================================================
+
 document.addEventListener(
     "click",
     function(event) {
 
-        const popup =
+        const cartPopup =
             document.getElementById(
                 "cartPopup"
             );
 
-        if (!popup) return;
 
-        if (event.target === popup) {
+        if (
+            !cartPopup
+        ) {
+            return;
+        }
+
+
+        if (
+            event.target === cartPopup
+        ) {
 
             closeCart();
 
@@ -1064,7 +1265,9 @@ document.addEventListener(
     "keydown",
     function(event) {
 
-        if (event.key === "Escape") {
+        if (
+            event.key === "Escape"
+        ) {
 
             closeCart();
 
@@ -1089,7 +1292,9 @@ function getPoints() {
 }
 
 
-function savePoints(points) {
+function savePoints(
+    points
+) {
 
     localStorage.setItem(
         "collectivePoints",
@@ -1104,7 +1309,9 @@ function savePoints(points) {
 }
 
 
-function calculatePoints(amount) {
+function calculatePoints(
+    amount
+) {
 
     return Math.floor(
         Number(amount) / 1000
@@ -1113,14 +1320,18 @@ function calculatePoints(amount) {
 }
 
 
-function pointsToNaira(points) {
+function pointsToNaira(
+    points
+) {
 
     return Number(points) * 100;
 
 }
 
 
-function getMaxPointsUsable(points) {
+function getMaxPointsUsable(
+    points
+) {
 
     return Math.min(
         Number(points) || 0,
@@ -1130,16 +1341,27 @@ function getMaxPointsUsable(points) {
 }
 
 
-function addPurchasePoints(amount) {
+function addPurchasePoints(
+    amount
+) {
 
     const earned =
-        calculatePoints(amount);
+        calculatePoints(
+            amount
+        );
+
+
+    const current =
+        getPoints();
+
 
     savePoints(
-        getPoints() + earned
+        current + earned
     );
 
+
     updatePointsDisplay();
+
 
     return earned;
 
@@ -1153,13 +1375,17 @@ function updatePointsDisplay() {
 
 
     document
-        .querySelectorAll(".points-balance")
-        .forEach(element => {
+        .querySelectorAll(
+            ".points-balance"
+        )
+        .forEach(
+            element => {
 
-            element.textContent =
-                `${points} points`;
+                element.textContent =
+                    `${points} points`;
 
-        });
+            }
+        );
 
 
     const profilePoints =
@@ -1168,7 +1394,9 @@ function updatePointsDisplay() {
         );
 
 
-    if (profilePoints) {
+    if (
+        profilePoints
+    ) {
 
         profilePoints.textContent =
             points;
@@ -1193,7 +1421,9 @@ function getTotalSpent() {
 }
 
 
-function saveTotalSpent(amount) {
+function saveTotalSpent(
+    amount
+) {
 
     localStorage.setItem(
         "collectiveTotalSpent",
@@ -1209,7 +1439,7 @@ function saveTotalSpent(amount) {
 
 
 // ======================================================
-// REWARD STATUS
+// REWARDS / PROFILE STATUS
 // ======================================================
 
 function updateRewardStatus() {
@@ -1218,7 +1448,9 @@ function updateRewardStatus() {
         getTotalSpent();
 
 
-    if (totalSpent >= 50000) {
+    if (
+        totalSpent >= 50000
+    ) {
 
         localStorage.setItem(
             "collectiveGift1",
@@ -1228,7 +1460,9 @@ function updateRewardStatus() {
     }
 
 
-    if (totalSpent >= 100000) {
+    if (
+        totalSpent >= 100000
+    ) {
 
         localStorage.setItem(
             "collectiveGift2",
@@ -1243,13 +1477,16 @@ function updateRewardStatus() {
             "gift1Status"
         );
 
+
     const gift2Status =
         document.getElementById(
             "gift2Status"
         );
 
 
-    if (gift1Status) {
+    if (
+        gift1Status
+    ) {
 
         gift1Status.textContent =
             totalSpent >= 50000
@@ -1259,7 +1496,9 @@ function updateRewardStatus() {
     }
 
 
-    if (gift2Status) {
+    if (
+        gift2Status
+    ) {
 
         gift2Status.textContent =
             totalSpent >= 100000
@@ -1275,20 +1514,11 @@ function updateRewardStatus() {
 // SEARCH + CATEGORY
 // ======================================================
 
-let currentCategory = "All";
-
-let filteredProducts = [];
-
-let productsShown = 0;
-
-const PRODUCTS_PER_LOAD = 60;
+let currentCategory =
+    "All";
 
 
-// ======================================================
-// GET FILTERED PRODUCTS
-// ======================================================
-
-function getFilteredProducts() {
+function filterProducts() {
 
     const searchInput =
         document.getElementById(
@@ -1304,274 +1534,80 @@ function getFilteredProducts() {
             : "";
 
 
-    return products.filter(product => {
-
-        const matchesSearch =
-            product.name
-                .toLowerCase()
-                .includes(search);
-
-
-        const matchesCategory =
-            currentCategory === "All" ||
-            product.category ===
-            currentCategory;
-
-
-        return (
-            matchesSearch &&
-            matchesCategory
-        );
-
-    });
-
-}
-
-
-// ======================================================
-// RENDER PRODUCTS
-// ======================================================
-
-function renderProducts() {
-
-    const grid =
-        document.querySelector(
-            ".product-grid"
+    const cards =
+        document.querySelectorAll(
+            ".product-card"
         );
 
 
-    if (!grid) return;
+    let visible = 0;
 
 
-    grid.innerHTML = "";
+    cards.forEach(
+        card => {
 
+            const name =
+                (
+                    card.dataset.name ||
+                    ""
+                ).toLowerCase();
 
-    productsShown = 0;
 
+            const category =
+                card.dataset.category ||
+                "";
 
-    filteredProducts =
-        getFilteredProducts();
 
+            const matchesSearch =
+                name.includes(
+                    search
+                );
 
-    renderNextProducts();
 
-}
+            const matchesCategory =
+                currentCategory ===
+                "All" ||
+                category ===
+                currentCategory;
 
 
-// ======================================================
-// RENDER NEXT BATCH
-// ======================================================
+            if (
+                matchesSearch &&
+                matchesCategory
+            ) {
 
-function renderNextProducts() {
+                card.style.display =
+                    "";
 
-    const grid =
-        document.querySelector(
-            ".product-grid"
-        );
+                visible++;
 
+            } else {
 
-    if (!grid) return;
-
-
-    const start =
-        productsShown;
-
-
-    const end =
-        Math.min(
-            start + PRODUCTS_PER_LOAD,
-            filteredProducts.length
-        );
-
-
-    const fragment =
-        document.createDocumentFragment();
-
-
-    for (
-        let i = start;
-        i < end;
-        i++
-    ) {
-
-        fragment.appendChild(
-            createProductCard(
-                filteredProducts[i]
-            )
-        );
-
-    }
-
-
-    grid.appendChild(fragment);
-
-
-    productsShown = end;
-
-
-    updateLoadMoreButton();
-
-    updateNoProductsMessage();
-
-}
-
-
-// ======================================================
-// LOAD MORE BUTTON
-// ======================================================
-
-function updateLoadMoreButton() {
-
-    let button =
-        document.getElementById(
-            "loadMoreProducts"
-        );
-
-
-    const grid =
-        document.querySelector(
-            ".product-grid"
-        );
-
-
-    if (!grid) return;
-
-
-    if (
-        productsShown >=
-        filteredProducts.length
-    ) {
-
-        if (button) {
-            button.remove();
-        }
-
-        return;
-
-    }
-
-
-    if (!button) {
-
-        button =
-            document.createElement(
-                "button"
-            );
-
-        button.id =
-            "loadMoreProducts";
-
-        button.type =
-            "button";
-
-        button.textContent =
-            "LOAD MORE PRODUCTS";
-
-
-        button.style.display =
-            "block";
-
-        button.style.margin =
-            "30px auto";
-
-        button.style.padding =
-            "13px 25px";
-
-        button.style.border =
-            "0";
-
-        button.style.borderRadius =
-            "12px";
-
-        button.style.cursor =
-            "pointer";
-
-        button.style.fontWeight =
-            "bold";
-
-        button.style.background =
-            "#304B52";
-
-        button.style.color =
-            "#FFFFFF";
-
-
-        button.addEventListener(
-            "click",
-            function() {
-
-                renderNextProducts();
+                card.style.display =
+                    "none";
 
             }
-        );
+
+        }
+    );
 
 
-        grid.parentNode.appendChild(
-            button
-        );
-
-    }
-
-}
-
-
-// ======================================================
-// NO PRODUCTS MESSAGE
-// ======================================================
-
-function updateNoProductsMessage() {
-
-    const grid =
-        document.querySelector(
-            ".product-grid"
-        );
-
-
-    if (!grid) return;
-
-
-    let message =
+    const message =
         document.querySelector(
             ".no-products"
         );
 
 
-    if (!message) {
+    if (
+        message
+    ) {
 
-        message =
-            document.createElement(
-                "p"
-            );
-
-        message.className =
-            "no-products";
-
-        message.textContent =
-            "No products found.";
-
-        grid.parentNode.insertBefore(
-            message,
-            grid
-        );
+        message.style.display =
+            visible === 0
+                ? "block"
+                : "none";
 
     }
-
-
-    message.style.display =
-        filteredProducts.length === 0
-            ? "block"
-            : "none";
-
-}
-
-
-// ======================================================
-// FILTER PRODUCTS
-// ======================================================
-
-function filterProducts() {
-
-    renderProducts();
 
 }
 
@@ -1582,16 +1618,21 @@ function filterProducts() {
 
 function createCategoryMenu() {
 
-    const container =
+    const categoryContainer =
         document.querySelector(
             ".collective-categories"
         );
 
 
-    if (!container) return;
+    if (
+        !categoryContainer
+    ) {
+        return;
+    }
 
 
-    container.innerHTML = "";
+    categoryContainer.innerHTML =
+        "";
 
 
     const categories = [
@@ -1653,9 +1694,10 @@ function createCategoryMenu() {
                         )
                         .forEach(
                             btn =>
-                                btn.classList.remove(
-                                    "selected"
-                                )
+                                btn.classList
+                                    .remove(
+                                        "selected"
+                                    )
                         );
 
 
@@ -1664,13 +1706,13 @@ function createCategoryMenu() {
                     );
 
 
-                    renderProducts();
+                    filterProducts();
 
                 }
             );
 
 
-            container.appendChild(
+            categoryContainer.appendChild(
                 button
             );
 
@@ -1694,7 +1736,11 @@ document.addEventListener(
                 : null;
 
 
-        if (!target) return;
+        if (
+            !target
+        ) {
+            return;
+        }
 
 
         if (
@@ -1711,19 +1757,29 @@ document.addEventListener(
                 );
 
 
-            if (!menu) return;
+            if (
+                !menu
+            ) {
+                return;
+            }
 
 
-            const hidden =
+            if (
                 menu.style.display ===
                     "none" ||
-                menu.style.display === "";
+                menu.style.display ===
+                    ""
+            ) {
 
+                menu.style.display =
+                    "flex";
 
-            menu.style.display =
-                hidden
-                    ? "flex"
-                    : "none";
+            } else {
+
+                menu.style.display =
+                    "none";
+
+            }
 
         }
 
@@ -1742,16 +1798,175 @@ document.addEventListener(
         if (
             event.target &&
             event.target.id ===
-                "productSearch"
+            "productSearch"
         ) {
 
-            renderProducts();
+            filterProducts();
 
         }
 
     }
 );
 
+// ======================================================
+// RENDER PRODUCTS
+// ======================================================
+
+function renderProducts() {
+
+    const container =
+        document.getElementById(
+            "productGrid"
+        ) ||
+        document.querySelector(
+            ".product-grid"
+        );
+
+
+    if (
+        !container
+    ) {
+        return;
+    }
+
+
+    container.innerHTML =
+        "";
+
+
+    products
+        .slice(
+            0,
+            60
+        )
+        .forEach(
+            product => {
+
+                const card =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                card.className =
+                    "product-card";
+
+
+                card.dataset.name =
+                    product.name;
+
+
+                card.dataset.category =
+                    product.category;
+
+
+                const colors =
+                    product.colors ||
+                    [];
+
+
+                let colorHTML =
+                    "";
+
+
+                if (
+                    colors.length
+                ) {
+
+                    colorHTML = `
+
+                        <div class="product-colors">
+
+                            <label>
+                                Shade
+                            </label>
+
+                            <select
+                                class="product-color"
+                            >
+
+                                ${colors
+                                    .map(
+                                        color => `
+                                            <option value="${color}">
+                                                ${color}
+                                            </option>
+                                        `
+                                    )
+                                    .join("")}
+
+                            </select>
+
+                        </div>
+
+                    `;
+
+                }
+
+
+                card.innerHTML = `
+
+                    <div class="product-image">
+                        <span>
+                            ${product.name}
+                        </span>
+                    </div>
+
+                    <div class="product-info">
+
+                        <p class="product-category">
+                            ${product.category}
+                        </p>
+
+                        <h3>
+                            ${product.name}
+                        </h3>
+
+                        <p class="product-description">
+                            ${product.description || ""}
+                        </p>
+
+                        <p class="product-size">
+                            ${product.size}
+                        </p>
+
+                        <p class="product-price">
+                            ₦${Number(
+                                product.price
+                            ).toLocaleString()}
+                        </p>
+
+                        ${colorHTML}
+
+                        <button
+                            type="button"
+                            class="add-to-cart"
+                            data-product-id="${product.id}"
+                        >
+                            ADD TO CART
+                        </button>
+
+                    </div>
+
+                `;
+
+
+                container.appendChild(
+                    card
+                );
+
+            }
+        );
+
+
+    filterProducts();
+
+}
+
+
+// ======================================================
+// ADD PRODUCT TO CART
+// ======================================================
 
 document.addEventListener(
     "click",
@@ -1763,444 +1978,523 @@ document.addEventListener(
                 : null;
 
 
-        if (!target) return;
+        if (
+            !target
+        ) {
+            return;
+        }
+
+
+        const button =
+            target.closest(
+                ".add-to-cart"
+            );
 
 
         if (
-            target.id ===
-            "searchButton"
+            !button
+        ) {
+            return;
+        }
+
+
+        event.preventDefault();
+
+
+        const productId =
+            button.dataset.productId;
+
+
+        const product =
+            products.find(
+                item =>
+                    item.id ===
+                    productId
+            );
+
+
+        if (
+            !product
+        ) {
+            return;
+        }
+
+
+        const card =
+            button.closest(
+                ".product-card"
+            );
+
+
+        const colorSelect =
+            card
+                ? card.querySelector(
+                    ".product-color"
+                )
+                : null;
+
+
+        const selectedColor =
+            colorSelect
+                ? colorSelect.value
+                : "";
+
+
+        const existing =
+            cart.find(
+                item =>
+                    item.id ===
+                        product.id &&
+                    (
+                        item.color ||
+                        ""
+                    ) ===
+                        selectedColor
+            );
+
+
+        if (
+            existing
         ) {
 
-            event.preventDefault();
+            if (
+                Number(
+                    existing.quantity
+                ) < 10
+            ) {
 
-            renderProducts();
+                existing.quantity++;
+
+            }
+
+        } else {
+
+            cart.push({
+
+                id:
+                    product.id,
+
+                name:
+                    product.name,
+
+                category:
+                    product.category,
+
+                price:
+                    product.price,
+
+                size:
+                    product.size,
+
+                color:
+                    selectedColor,
+
+                quantity:
+                    1
+
+            });
 
         }
+
+
+        saveCart();
+
+        updateCartDisplay();
+
+
+        if (
+            typeof updateGiftShoppingProgress ===
+            "function"
+        ) {
+
+            updateGiftShoppingProgress();
+
+        }
+
+
+        button.textContent =
+            "ADDED ✓";
+
+
+        setTimeout(
+            function() {
+
+                button.textContent =
+                    "ADD TO CART";
+
+            },
+            1000
+        );
 
     }
 );
 
 
 // ======================================================
-// PRODUCT CARD
+// FREE GIFTS
 // ======================================================
 
-function createProductCard(product) {
+function getFreeGiftLevel() {
 
-    const card =
-        document.createElement(
-            "div"
-        );
-
-
-    card.className =
-        "product-card";
-
-
-    card.dataset.name =
-        product.name;
-
-
-    card.dataset.category =
-        product.category;
-
-
-    let colorOption = "";
+    const totalSpent =
+        getTotalSpent();
 
 
     if (
-        product.colors &&
-        product.colors.length
+        totalSpent >= 100000
     ) {
 
-        colorOption = `
-            <label>
-                Shade / Colour
-            </label>
-
-            <select class="product-color">
-
-                <option value="">
-                    Choose
-                </option>
-
-                ${product.colors
-                    .map(
-                        color =>
-                            `<option value="${color}">
-                                ${color}
-                            </option>`
-                    )
-                    .join("")}
-
-            </select>
-        `;
+        return 10;
 
     }
 
 
-    card.innerHTML = `
-        <div class="product-image">
+    if (
+        totalSpent >= 50000
+    ) {
 
-            <span>
-                Product Image
-            </span>
-
-        </div>
-
-        <div class="product-information">
-
-            <small>
-                ${product.category}
-            </small>
-
-            <h3>
-                ${product.name}
-            </h3>
-
-            ${
-                product.description
-                    ? `
-                        <p>
-                            ${product.description}
-                        </p>
-                      `
-                    : ""
-            }
-
-            <p>
-                Size: ${product.size}
-            </p>
-
-            <strong class="product-price">
-                ₦${product.price.toLocaleString()}
-            </strong>
-
-            ${colorOption}
-
-            <p class="stock-status">
-                In stock
-            </p>
-
-            <div class="quantity-box">
-
-                <button
-                    class="quantity-minus"
-                    type="button">
-                    −
-                </button>
-
-                <span class="quantity-number">
-                    1
-                </span>
-
-                <button
-                    class="quantity-plus"
-                    type="button">
-                    +
-                </button>
-
-            </div>
-
-            <button
-                class="add-to-cart"
-                type="button">
-                ADD TO CART
-            </button>
-
-        </div>
-    `;
-
-
-    let quantity = 1;
-
-
-    const minus =
-        card.querySelector(
-            ".quantity-minus"
-        );
-
-
-    const plus =
-        card.querySelector(
-            ".quantity-plus"
-        );
-
-
-    const number =
-        card.querySelector(
-            ".quantity-number"
-        );
-
-
-    if (minus) {
-
-        minus.addEventListener(
-            "click",
-            function() {
-
-                if (quantity > 1) {
-
-                    quantity--;
-
-                    number.textContent =
-                        quantity;
-
-                }
-
-            }
-        );
+        return 5;
 
     }
 
 
-    if (plus) {
+    return 0;
 
-        plus.addEventListener(
-            "click",
-            function() {
+}
 
-                if (
-                    quantity <
-                    product.stock
-                ) {
 
-                    quantity++;
+function getSelectedFreeGiftProducts() {
 
-                    number.textContent =
-                        quantity;
+    try {
 
-                }
-
-            }
+        return JSON.parse(
+            localStorage.getItem(
+                "collectiveFreeGifts"
+            ) || "[]"
         );
+
+    } catch (
+        error
+    ) {
+
+        return [];
 
     }
 
-
-    const addButton =
-        card.querySelector(
-            ".add-to-cart"
-        );
+}
 
 
-    if (addButton) {
+function saveSelectedFreeGiftProducts(
+    gifts
+) {
 
-        addButton.addEventListener(
-            "click",
-            function() {
+    localStorage.setItem(
+        "collectiveFreeGifts",
+        JSON.stringify(
+            gifts
+        )
+    );
 
-                const selectedColor =
-                    card.querySelector(
-                        ".product-color"
-                    );
-
-
-                if (
-                    selectedColor &&
-                    !selectedColor.value
-                ) {
-
-                    alert(
-                        "Please choose a shade / colour first."
-                    );
-
-                    return;
-
-                }
+}
 
 
-                const color =
-                    selectedColor
-                        ? selectedColor.value
-                        : null;
+function clearSelectedFreeGiftProducts() {
 
-
-                const existing =
-                    cart.find(
-                        item =>
-                            item.id ===
-                                product.id &&
-                            item.color ===
-                                color
-                    );
-
-
-                if (existing) {
-
-                    existing.quantity =
-                        Math.min(
-                            Number(
-                                existing.quantity
-                            ) + quantity,
-                            product.stock
-                        );
-
-                } else {
-
-                    cart.push({
-
-                        id:
-                            product.id,
-
-                        name:
-                            product.name,
-
-                        price:
-                            product.price,
-
-                        quantity:
-                            quantity,
-
-                        color:
-                            color
-
-                    });
-
-                }
-
-
-                saveCart();
-
-                updateCartDisplay();
-
-                updateGiftShoppingProgress();
-
-
-                addButton.textContent =
-                    "ADDED ✓";
-
-
-                setTimeout(
-                    function() {
-
-                        addButton.textContent =
-                            "ADD TO CART";
-
-                    },
-                    1200
-                );
-
-            }
-        );
-
-    }
-
-
-    return card;
+    localStorage.removeItem(
+        "collectiveFreeGifts"
+    );
 
 }
 
 
 // ======================================================
-// DISPLAY PRODUCTS
+// GIFT SHOPPING PROGRESS
 // ======================================================
 
-function displayProducts() {
+function updateGiftShoppingProgress() {
 
-    const grid =
-        document.querySelector(
-            ".product-grid"
+    const total =
+        getCartTotal();
+
+
+    const elements =
+        document.querySelectorAll(
+            ".gift-progress"
         );
 
 
-    if (!grid) {
+    elements.forEach(
+        element => {
 
-        console.warn(
-            "THE COLLECTIVE.CO: .product-grid was not found in shop.html"
+            let text =
+                "";
+
+
+            if (
+                total >= 100000
+            ) {
+
+                text =
+                    "₦100,000 reward unlocked";
+
+            } else if (
+                total >= 50000
+            ) {
+
+                text =
+                    "₦50,000 reward unlocked";
+
+            } else {
+
+                const remaining =
+                    Math.max(
+                        0,
+                        50000 - total
+                    );
+
+
+                text =
+                    `₦${remaining.toLocaleString()} more to unlock your first reward`;
+
+            }
+
+
+            element.textContent =
+                text;
+
+        }
+    );
+
+}
+
+
+// ======================================================
+// GIFT SELECTION
+// ======================================================
+
+function renderGiftOptions() {
+
+    const container =
+        document.getElementById(
+            "giftOptions"
         );
+
+
+    if (
+        !container
+    ) {
+        return;
+    }
+
+
+    const unlocked =
+        getFreeGiftLevel();
+
+
+    if (
+        unlocked <= 0
+    ) {
+
+        container.innerHTML = `
+            <p>
+                Spend ₦50,000 to unlock free gifts.
+            </p>
+        `;
 
         return;
 
     }
 
 
-    createCategoryMenu();
+    const giftProducts =
+        products
+            .filter(
+                product =>
+                    product.category ===
+                    "Accessories" ||
+                    product.category ===
+                    "Skincare"
+            )
+            .slice(
+                0,
+                unlocked
+            );
 
-    renderProducts();
 
-    updateCartDisplay();
+    container.innerHTML =
+        giftProducts
+            .map(
+                product => `
+
+                    <label class="gift-option">
+
+                        <input
+                            type="checkbox"
+                            class="gift-checkbox"
+                            value="${product.id}"
+                        >
+
+                        <span>
+                            ${product.name}
+                        </span>
+
+                    </label>
+
+                `
+            )
+            .join("");
+
+
+    const selected =
+        getSelectedFreeGiftProducts();
+
+
+    container
+        .querySelectorAll(
+            ".gift-checkbox"
+        )
+        .forEach(
+            checkbox => {
+
+                checkbox.checked =
+                    selected.some(
+                        gift =>
+                            gift.id ===
+                            checkbox.value
+                    );
+
+
+                checkbox.addEventListener(
+                    "change",
+                    function() {
+
+                        let gifts =
+                            getSelectedFreeGiftProducts();
+
+
+                        const product =
+                            products.find(
+                                item =>
+                                    item.id ===
+                                    checkbox.value
+                            );
+
+
+                        if (
+                            !product
+                        ) {
+                            return;
+                        }
+
+
+                        if (
+                            checkbox.checked
+                        ) {
+
+                            if (
+                                gifts.length <
+                                unlocked
+                            ) {
+
+                                gifts.push(
+                                    product
+                                );
+
+                            } else {
+
+                                checkbox.checked =
+                                    false;
+
+                                alert(
+                                    `You can select up to ${unlocked} free item${unlocked === 1 ? "" : "s"}.`
+                                );
+
+                                return;
+
+                            }
+
+                        } else {
+
+                            gifts =
+                                gifts.filter(
+                                    gift =>
+                                        gift.id !==
+                                        product.id
+                                );
+
+                        }
+
+
+                        saveSelectedFreeGiftProducts(
+                            gifts
+                        );
+
+                    }
+                );
+
+            }
+        );
 
 }
 
 
 // ======================================================
-// CHECKOUT MODAL
+// LOGIN HELPERS
 // ======================================================
 
-function showCheckoutModal(content) {
+function isLoggedIn() {
 
-    const oldModal =
-        document.getElementById(
-            "collectiveCheckoutModal"
+    return (
+        localStorage.getItem(
+            "collectiveLoggedIn"
+        ) === "true"
+    );
+
+}
+
+
+function getCurrentUser() {
+
+    try {
+
+        return JSON.parse(
+            localStorage.getItem(
+                "collectiveUser"
+            ) || "null"
         );
 
+    } catch (
+        error
+    ) {
 
-    if (oldModal) {
+        return null;
 
-        oldModal.remove();
+    }
+
+}
+
+
+function requireLogin() {
+
+    if (
+        isLoggedIn()
+    ) {
+
+        return true;
 
     }
 
 
-    const modal =
-        document.createElement(
-            "div"
-        );
-
-
-    modal.id =
-        "collectiveCheckoutModal";
-
-
-    Object.assign(
-        modal.style,
-        {
-            position: "fixed",
-            inset: "0",
-            background: "rgba(48,75,82,0.45)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            zIndex: "99999",
-            padding: "20px"
-        }
+    alert(
+        "Please log in before checking out."
     );
 
 
-    const box =
-        document.createElement(
-            "div"
-        );
+    window.location.href =
+        "login.html";
 
 
-    Object.assign(
-        box.style,
-        {
-            background: "#FFFDF8",
-            width: "100%",
-            maxWidth: "560px",
-            maxHeight: "90vh",
-            overflowY: "auto",
-            borderRadius: "22px",
-            padding: "30px",
-            boxSizing: "border-box",
-            textAlign: "center",
-            boxShadow: "0 15px 45px rgba(0,0,0,0.18)"
-        }
-    );
-
-
-    box.innerHTML =
-        content;
-
-
-    modal.appendChild(box);
-
-    document.body.appendChild(modal);
-
-
-    return modal;
+    return false;
 
 }
 
@@ -2209,9 +2503,22 @@ function showCheckoutModal(content) {
 // CHECKOUT
 // ======================================================
 
-function checkout() {
+function getCheckoutItems() {
 
-    if (cart.length === 0) {
+    return cart.map(
+        item => ({
+            ...item
+        })
+    );
+
+}
+
+
+function createCheckoutModal() {
+
+    if (
+        cart.length === 0
+    ) {
 
         alert(
             "Your cart is empty."
@@ -2222,902 +2529,458 @@ function checkout() {
     }
 
 
-    const loggedIn =
-        localStorage.getItem(
-            "collectiveLoggedIn"
-        ) === "true";
-
-
-    if (!loggedIn) {
-
-        const answer =
-            confirm(
-                "You need to log in before checkout. Go to the login page?"
-            );
-
-
-        if (answer) {
-
-            window.location.href =
-                "login.html";
-
-        }
-
+    if (
+        !requireLogin()
+    ) {
 
         return;
 
     }
 
 
-    startCheckout();
+    const existingModal =
+        document.getElementById(
+            "checkoutModal"
+        );
 
-}
+
+    if (
+        existingModal
+    ) {
+
+        existingModal.remove();
+
+    }
 
 
-// ======================================================
-// START CHECKOUT
-// ======================================================
+    const user =
+        getCurrentUser() ||
+        {};
 
-function startCheckout() {
+
+    const modal =
+        document.createElement(
+            "div"
+        );
+
+
+    modal.id =
+        "checkoutModal";
+
+
+    modal.className =
+        "checkout-modal";
+
 
     const total =
         getCartTotal();
 
 
-    const currentPoints =
+    const availablePoints =
         getPoints();
 
 
-    if (currentPoints <= 0) {
-
-        showCustomerDetails(
-            total,
-            0
-        );
-
-        return;
-
-    }
-
-
-    const modal =
-        showCheckoutModal(`
-
-            <h2>
-                Do you want to use your points?
-            </h2>
-
-            <p>
-                You currently have
-                <strong>
-                    ${currentPoints} points
-                </strong>.
-            </p>
-
-            <p>
-                1 point = ₦100 discount.
-            </p>
-
-            <div
-                style="
-                    display:flex;
-                    gap:12px;
-                    justify-content:center;
-                    margin-top:25px;
-                    flex-wrap:wrap;
-                "
-            >
-
-                <button
-                    id="usePointsYes"
-                    type="button"
-                    style="
-                        padding:13px 24px;
-                        border:0;
-                        border-radius:12px;
-                        cursor:pointer;
-                        background:#304B52;
-                        color:white;
-                        font-weight:bold;
-                    "
-                >
-                    YES
-                </button>
-
-                <button
-                    id="usePointsNo"
-                    type="button"
-                    style="
-                        padding:13px 24px;
-                        border:1px solid #304B52;
-                        border-radius:12px;
-                        cursor:pointer;
-                        background:white;
-                        color:#304B52;
-                        font-weight:bold;
-                    "
-                >
-                    NO
-                </button>
-
-            </div>
-        `);
-
-
-    const yes =
-        document.getElementById(
-            "usePointsYes"
+    const maxUsablePoints =
+        getMaxPointsUsable(
+            availablePoints
         );
 
 
-    const no =
-        document.getElementById(
-            "usePointsNo"
+    const maxDiscount =
+        pointsToNaira(
+            maxUsablePoints
         );
 
 
-    if (yes) {
+    modal.innerHTML = `
 
-        yes.addEventListener(
-            "click",
-            function() {
-
-                showPointsInput(
-                    total,
-                    currentPoints
-                );
-
-            }
-        );
-
-    }
-
-
-    if (no) {
-
-        no.addEventListener(
-            "click",
-            function() {
-
-                modal.remove();
-
-                showCustomerDetails(
-                    total,
-                    0
-                );
-
-            }
-        );
-
-    }
-
-}
-
-
-// ======================================================
-// POINTS INPUT
-// ======================================================
-
-function showPointsInput(
-    total,
-    currentPoints
-) {
-
-    const maximumPoints =
-        Math.min(
-            currentPoints,
-            200,
-            Math.floor(total / 100)
-        );
-
-
-    if (maximumPoints <= 0) {
-
-        showCustomerDetails(
-            total,
-            0
-        );
-
-        return;
-
-    }
-
-
-    const modal =
-        showCheckoutModal(`
-
-            <h2>
-                How many points do you want to use?
-            </h2>
-
-            <p>
-                1 point = ₦100 discount.
-            </p>
-
-            <input
-                id="pointsToUse"
-                type="number"
-                min="1"
-                max="${maximumPoints}"
-                placeholder="Enter points"
-                style="
-                    width:100%;
-                    box-sizing:border-box;
-                    padding:14px;
-                    border:1px solid #C8D5D8;
-                    border-radius:12px;
-                    margin:15px 0 8px;
-                    font-size:16px;
-                    text-align:center;
-                "
-            >
-
-            <p
-                style="
-                    font-size:13px;
-                    margin-bottom:20px;
-                "
-            >
-                Maximum ${maximumPoints} points
-            </p>
+        <div class="checkout-box">
 
             <button
-                id="applyPoints"
                 type="button"
-                style="
-                    padding:13px 25px;
-                    border:0;
-                    border-radius:12px;
-                    cursor:pointer;
-                    background:#304B52;
-                    color:white;
-                    font-weight:bold;
-                "
+                class="checkout-close"
+                id="checkoutClose"
             >
-                APPLY POINTS
+                ×
             </button>
-        `);
-
-
-    const apply =
-        document.getElementById(
-            "applyPoints"
-        );
-
-
-    if (!apply) return;
-
-
-    apply.addEventListener(
-        "click",
-        function() {
-
-            const input =
-                document.getElementById(
-                    "pointsToUse"
-                );
-
-
-            if (!input) return;
-
-
-            const points =
-                Number(input.value);
-
-
-            if (
-                !Number.isInteger(points) ||
-                points < 1 ||
-                points > maximumPoints
-            ) {
-
-                alert(
-                    `Please enter between 1 and ${maximumPoints} points.`
-                );
-
-                return;
-
-            }
-
-
-            const discount =
-                pointsToNaira(points);
-
-
-            const newTotal =
-                Math.max(
-                    0,
-                    total - discount
-                );
-
-
-            modal.remove();
-
-
-            showCustomerDetails(
-                newTotal,
-                points
-            );
-
-        }
-    );
-
-}
-
-
-// ======================================================
-// CUSTOMER DETAILS
-// ======================================================
-
-function showCustomerDetails(
-    total,
-    pointsUsed
-) {
-
-    const checkoutItems =
-        getCheckoutItems();
-
-
-    const paidItems =
-        checkoutItems.filter(
-            item =>
-                !item.isFreeGift
-        );
-
-
-    const giftItems =
-        checkoutItems.filter(
-            item =>
-                item.isFreeGift
-        );
-
-
-    const modal =
-        showCheckoutModal(`
 
             <h2>
-                ENTER:
+                Checkout
             </h2>
 
-            <div
-                style="
-                    text-align:left;
-                    margin:20px 0;
-                    padding:16px;
-                    background:#F7F4EE;
-                    border-radius:14px;
-                "
-            >
+            <div class="checkout-summary">
 
-                <h3
-                    style="
-                        color:#304B52;
-                        margin-top:0;
-                    "
-                >
-                    Your Order
-                </h3>
+                <p>
+                    Order total:
+                    <strong>
+                        ₦${total.toLocaleString()}
+                    </strong>
+                </p>
 
-                ${
-                    paidItems.length
-                        ? paidItems
-                            .map(
-                                item => `
-                                    <div
-                                        style="
-                                            display:flex;
-                                            justify-content:space-between;
-                                            gap:10px;
-                                            padding:7px 0;
-                                        "
-                                    >
+                <p>
+                    Available points:
+                    <strong>
+                        ${availablePoints}
+                    </strong>
+                </p>
 
-                                        <span>
-                                            ${item.name}
-                                            × ${item.quantity}
-                                            ${
-                                                item.color
-                                                    ? `(${item.color})`
-                                                    : ""
-                                            }
-                                        </span>
-
-                                        <strong>
-                                            ₦${
-                                                (
-                                                    Number(item.price) *
-                                                    Number(item.quantity)
-                                                ).toLocaleString()
-                                            }
-                                        </strong>
-
-                                    </div>
-                                `
-                            )
-                            .join("")
-                        : ""
-                }
-
-                ${
-                    giftItems.length
-                        ? `
-                            <div
-                                style="
-                                    border-top:1px solid #DCEFF2;
-                                    margin-top:8px;
-                                    padding-top:10px;
-                                "
-                            >
-
-                                <strong>
-                                    🎁 FREE GIFTS
-                                </strong>
-
-                                ${giftItems
-                                    .map(
-                                        item => `
-                                            <div
-                                                style="
-                                                    display:flex;
-                                                    justify-content:space-between;
-                                                    padding:7px 0;
-                                                "
-                                            >
-
-                                                <span>
-                                                    ${item.name}
-                                                </span>
-
-                                                <strong>
-                                                    ₦0
-                                                </strong>
-
-                                            </div>
-                                        `
-                                    )
-                                    .join("")}
-
-                            </div>
-                          `
-                        : ""
-                }
+                <p>
+                    1 point = ₦100 discount
+                </p>
 
             </div>
 
 
-            <div
-                style="
-                    text-align:left;
-                    margin-top:20px;
-                "
-            >
-
-                <label>
-                    First name
-                </label>
+            <div class="checkout-form">
 
                 <input
                     id="checkoutFirstName"
                     type="text"
                     placeholder="First name"
-                    style="
-                        width:100%;
-                        box-sizing:border-box;
-                        padding:13px;
-                        margin:7px 0 15px;
-                        border:1px solid #C8D5D8;
-                        border-radius:10px;
-                    "
+                    value="${user.firstName || ""}"
                 >
-
-                <label>
-                    Last name
-                </label>
 
                 <input
                     id="checkoutLastName"
                     type="text"
                     placeholder="Last name"
-                    style="
-                        width:100%;
-                        box-sizing:border-box;
-                        padding:13px;
-                        margin:7px 0 15px;
-                        border:1px solid #C8D5D8;
-                        border-radius:10px;
-                    "
+                    value="${user.lastName || ""}"
                 >
-
-                <label>
-                    House address
-                </label>
 
                 <input
                     id="checkoutAddress"
                     type="text"
                     placeholder="House address"
-                    style="
-                        width:100%;
-                        box-sizing:border-box;
-                        padding:13px;
-                        margin:7px 0 15px;
-                        border:1px solid #C8D5D8;
-                        border-radius:10px;
-                    "
+                    value="${user.address || ""}"
                 >
-
-                <label>
-                    Phone number
-                </label>
 
                 <input
                     id="checkoutPhone"
                     type="tel"
                     placeholder="Phone number"
-                    style="
-                        width:100%;
-                        box-sizing:border-box;
-                        padding:13px;
-                        margin:7px 0 15px;
-                        border:1px solid #C8D5D8;
-                        border-radius:10px;
-                    "
+                    value="${user.phone || ""}"
                 >
 
-            </div>
+                <input
+                    id="checkoutPoints"
+                    type="number"
+                    min="0"
+                    max="${maxUsablePoints}"
+                    value="0"
+                    placeholder="Points to use"
+                >
 
-
-            <div
-                style="
-                    margin-top:10px;
-                    padding:15px;
-                    border-radius:12px;
-                    background:#F7F4EE;
-                "
-            >
-
-                <strong>
-                    Total: ₦${total.toLocaleString()}
-                </strong>
-
-                ${
-                    pointsUsed > 0
-                        ? `
-                            <br>
-
-                            <small>
-                                ${pointsUsed}
-                                points used —
-                                ₦${pointsToNaira(
-                                    pointsUsed
-                                ).toLocaleString()}
-                                discount
-                            </small>
-                          `
-                        : ""
-                }
+                <small>
+                    Maximum discount:
+                    ₦${maxDiscount.toLocaleString()}
+                </small>
 
             </div>
 
 
             <button
-                id="continueToTransfer"
                 type="button"
-                style="
-                    margin-top:20px;
-                    padding:14px 25px;
-                    border:0;
-                    border-radius:12px;
-                    cursor:pointer;
-                    background:#304B52;
-                    color:white;
-                    font-weight:bold;
-                    width:100%;
-                "
+                id="continuePayment"
+                class="checkout-button"
             >
-                CONTINUE
+                CONTINUE TO PAYMENT
             </button>
 
-        `);
+        </div>
+
+    `;
 
 
-    const continueButton =
-        document.getElementById(
-            "continueToTransfer"
+    document.body.appendChild(
+        modal
+    );
+
+
+    document
+        .getElementById(
+            "checkoutClose"
+        )
+        ?.addEventListener(
+            "click",
+            function() {
+
+                modal.remove();
+
+            }
         );
 
 
-    if (!continueButton) return;
+    document
+        .getElementById(
+            "continuePayment"
+        )
+        ?.addEventListener(
+            "click",
+            function() {
+
+                const firstName =
+                    document
+                        .getElementById(
+                            "checkoutFirstName"
+                        )
+                        ?.value
+                        .trim();
 
 
-    continueButton.addEventListener(
-        "click",
-        function() {
-
-            const firstName =
-                document.getElementById(
-                    "checkoutFirstName"
-                ).value.trim();
-
-
-            const lastName =
-                document.getElementById(
-                    "checkoutLastName"
-                ).value.trim();
+                const lastName =
+                    document
+                        .getElementById(
+                            "checkoutLastName"
+                        )
+                        ?.value
+                        .trim();
 
 
-            const address =
-                document.getElementById(
-                    "checkoutAddress"
-                ).value.trim();
+                const address =
+                    document
+                        .getElementById(
+                            "checkoutAddress"
+                        )
+                        ?.value
+                        .trim();
 
 
-            const phone =
-                document.getElementById(
-                    "checkoutPhone"
-                ).value.trim();
+                const phone =
+                    document
+                        .getElementById(
+                            "checkoutPhone"
+                        )
+                        ?.value
+                        .trim();
 
 
-            if (
-                !firstName ||
-                !lastName ||
-                !address ||
-                !phone
-            ) {
+                const pointsInput =
+                    Number(
+                        document
+                            .getElementById(
+                                "checkoutPoints"
+                            )
+                            ?.value || 0
+                    );
 
-                alert(
-                    "Please fill in all the fields."
+
+                if (
+                    !firstName ||
+                    !lastName ||
+                    !address ||
+                    !phone
+                ) {
+
+                    alert(
+                        "Please fill in all your details."
+                    );
+
+                    return;
+
+                }
+
+
+                const pointsUsed =
+                    Math.min(
+                        Math.max(
+                            0,
+                            pointsInput
+                        ),
+                        maxUsablePoints
+                    );
+
+
+                const discount =
+                    pointsToNaira(
+                        pointsUsed
+                    );
+
+
+                const finalTotal =
+                    Math.max(
+                        0,
+                        total - discount
+                    );
+
+
+                const customer = {
+
+                    firstName:
+                        firstName,
+
+                    lastName:
+                        lastName,
+
+                    address:
+                        address,
+
+                    phone:
+                        phone
+
+                };
+
+
+                showPaymentModal(
+                    modal,
+                    finalTotal,
+                    pointsUsed,
+                    customer
                 );
 
-                return;
-
             }
-
-
-            modal.remove();
-
-
-            showTransferConfirmation(
-                total,
-                pointsUsed,
-                {
-                    firstName,
-                    lastName,
-                    address,
-                    phone
-                }
-            );
-
-        }
-    );
+        );
 
 }
 
 
 // ======================================================
-// BANK TRANSFER
+// PAYMENT MODAL
 // ======================================================
 
-function showTransferConfirmation(
+function showPaymentModal(
+    checkoutModal,
     total,
     pointsUsed,
     customer
 ) {
 
-    const checkoutItems =
-        getCheckoutItems();
+    checkoutModal.innerHTML = `
 
+        <div class="checkout-box">
 
-    const giftItems =
-        checkoutItems.filter(
-            item =>
-                item.isFreeGift
-        );
-
-
-    const modal =
-        showCheckoutModal(`
+            <button
+                type="button"
+                class="checkout-close"
+                id="paymentClose"
+            >
+                ×
+            </button>
 
             <h2>
-                BANK TRANSFER
+                Payment
             </h2>
 
             <p>
-                Your total is:
+                Amount to pay:
             </p>
 
-            <h2>
-                ₦${total.toLocaleString()}
-            </h2>
-
-            ${
-                pointsUsed > 0
-                    ? `
-                        <p>
-                            ${pointsUsed}
-                            points used —
-                            ₦${pointsToNaira(
-                                pointsUsed
-                            ).toLocaleString()}
-                            discount
-                        </p>
-                      `
-                    : ""
-            }
-
-            ${
-                giftItems.length
-                    ? `
-                        <div
-                            style="
-                                background:#DCEFF2;
-                                border-radius:14px;
-                                padding:12px;
-                                margin:15px 0;
-                                color:#304B52;
-                            "
-                        >
-
-                            🎁
-                            <strong>
-                                ${giftItems.length}
-                                free gifts included
-                            </strong>
-
-                            <br>
-
-                            <small>
-                                Free gifts total: ₦0
-                            </small>
-
-                        </div>
-                      `
-                    : ""
-            }
-
-            <p
-                style="
-                    font-size:14px;
-                    margin-top:20px;
-                "
-            >
-                Please transfer the exact amount
-                to one of the accounts below.
-            </p>
+            <h1>
+                ₦${Number(
+                    total
+                ).toLocaleString()}
+            </h1>
 
 
-            <div
-                style="
-                    background:#F7F4EE;
-                    border-radius:15px;
-                    padding:18px;
-                    margin-top:20px;
-                    text-align:left;
-                "
-            >
+            <div class="payment-details">
 
-                <strong>
-                    GTBank (GTB)
-                </strong>
+                <h3>
+                    GTBank
+                </h3>
 
                 <p>
                     Account Name:
-                    ADESANYA EYINJU CAYLA
+                    <strong>
+                        ADESANYA EYINJU CAYLA
+                    </strong>
                 </p>
 
                 <p>
                     Account Number:
-                    0708648701
+                    <strong>
+                        0708648701
+                    </strong>
                 </p>
 
-            </div>
 
-
-            <div
-                style="
-                    font-weight:bold;
-                    font-size:18px;
-                    margin:15px 0;
-                "
-            >
-                OR
-            </div>
-
-
-            <div
-                style="
-                    background:#F7F4EE;
-                    border-radius:15px;
-                    padding:18px;
-                    text-align:left;
-                "
-            >
-
-                <strong>
+                <h3>
                     SmartCash PSB
-                </strong>
+                </h3>
 
                 <p>
                     Account Name:
-                    Ololade Adesanya
+                    <strong>
+                        Ololade Adesanya
+                    </strong>
                 </p>
 
                 <p>
                     Account Number:
-                    9123930679
+                    <strong>
+                        9123930679
+                    </strong>
                 </p>
 
             </div>
-
-
-            <p
-                style="
-                    font-size:12px;
-                    color:#71858A;
-                    margin-top:18px;
-                "
-            >
-                Bank transfer only.
-            </p>
 
 
             <button
-                id="paidButton"
                 type="button"
-                style="
-                    margin-top:22px;
-                    padding:14px 25px;
-                    border:0;
-                    border-radius:12px;
-                    cursor:pointer;
-                    background:#304B52;
-                    color:white;
-                    font-weight:bold;
-                    width:100%;
-                "
+                id="paidButton"
+                class="checkout-button"
             >
                 I HAVE PAID
             </button>
 
-        `);
+        </div>
+
+    `;
 
 
-    const paidButton =
-        document.getElementById(
-            "paidButton"
+    document
+        .getElementById(
+            "paymentClose"
+        )
+        ?.addEventListener(
+            "click",
+            function() {
+
+                checkoutModal.remove();
+
+            }
         );
 
 
-    if (!paidButton) return;
+    document
+        .getElementById(
+            "paidButton"
+        )
+        ?.addEventListener(
+            "click",
+            async function() {
+
+                const saved =
+                    await createPendingOrder(
+                        total,
+                        pointsUsed,
+                        customer
+                    );
 
 
-    paidButton.addEventListener(
-        "click",
-        function() {
+                if (
+                    !saved
+                ) {
 
-            createPendingOrder(
-                total,
-                pointsUsed,
-                customer
-            );
+                    return;
+
+                }
 
 
-            modal.remove();
+                checkoutModal.remove();
 
 
-            showPaymentChecking();
+                showPaymentChecking();
 
-        }
-    );
+            }
+        );
 
 }
 
 
 // ======================================================
-// CREATE ORDER
+// CREATE ORDER — FIREBASE
 // ======================================================
 
-function createPendingOrder(
+async function createPendingOrder(
     total,
     pointsUsed,
     customer
@@ -3158,6 +3021,7 @@ function createPendingOrder(
             getSelectedFreeGiftProducts()
                 .map(
                     product => ({
+
                         id:
                             product.id,
 
@@ -3175,6 +3039,7 @@ function createPendingOrder(
 
                         originalGiftPrice:
                             product.price
+
                     })
                 ),
 
@@ -3199,31 +3064,80 @@ function createPendingOrder(
     };
 
 
-    const orders =
-        getStoredArray(
-            "collectiveOrders"
+    try {
+
+        const firebase =
+            await firebaseReady;
+
+
+        await firebase.addDoc(
+            firebase.collection(
+                firebase.db,
+                "orders"
+            ),
+            order
         );
 
 
-    orders.push(order);
+        console.log(
+            "ORDER SAVED TO FIREBASE",
+            order
+        );
 
 
-    setStoredArray(
-        "collectiveOrders",
-        orders
-    );
+        const oldOrders =
+            JSON.parse(
+                localStorage.getItem(
+                    "collectiveOrders"
+                ) || "[]"
+            );
 
 
-    localStorage.setItem(
-        "collectivePendingOrder",
-        JSON.stringify(order)
-    );
+        localStorage.setItem(
+            "collectiveOrders",
+            JSON.stringify(
+                [
+                    ...oldOrders,
+                    order
+                ]
+            )
+        );
 
 
-    localStorage.setItem(
-        "collectiveOrderStatus",
-        "payment-checking"
-    );
+        localStorage.setItem(
+            "collectivePendingOrder",
+            JSON.stringify(
+                order
+            )
+        );
+
+
+        localStorage.setItem(
+            "collectiveOrderStatus",
+            "payment-checking"
+        );
+
+
+        return true;
+
+    } catch (
+        error
+    ) {
+
+        console.error(
+            "FIREBASE ORDER ERROR:",
+            error
+        );
+
+
+        alert(
+            "Your order could not be submitted right now. Please try again."
+        );
+
+
+        return false;
+
+    }
 
 }
 
@@ -3234,74 +3148,78 @@ function createPendingOrder(
 
 function showPaymentChecking() {
 
-    const modal =
-        showCheckoutModal(`
-
-            <div
-                style="
-                    padding:25px 10px;
-                "
-            >
-
-                <div
-                    style="
-                        font-size:45px;
-                        margin-bottom:15px;
-                    "
-                >
-                    ⏳
-                </div>
-
-                <h2>
-                    Checking to see if money has been received
-                </h2>
-
-                <p>
-                    Please wait while your payment
-                    is being checked.
-                </p>
-
-                <p
-                    style="
-                        font-size:13px;
-                        margin-top:20px;
-                    "
-                >
-                    You can close this screen
-                    and return later.
-                </p>
-
-                <button
-                    id="closePaymentChecking"
-                    type="button"
-                    style="
-                        margin-top:20px;
-                        padding:12px 22px;
-                        border:1px solid #304B52;
-                        border-radius:12px;
-                        background:white;
-                        color:#304B52;
-                        cursor:pointer;
-                        font-weight:bold;
-                    "
-                >
-                    CLOSE
-                </button>
-
-            </div>
-
-        `);
-
-
-    const closeButton =
+    const existing =
         document.getElementById(
-            "closePaymentChecking"
+            "paymentCheckingModal"
         );
 
 
-    if (closeButton) {
+    if (
+        existing
+    ) {
 
-        closeButton.addEventListener(
+        existing.remove();
+
+    }
+
+
+    const modal =
+        document.createElement(
+            "div"
+        );
+
+
+    modal.id =
+        "paymentCheckingModal";
+
+
+    modal.className =
+        "checkout-modal";
+
+
+    modal.innerHTML = `
+
+        <div class="checkout-box">
+
+            <h2>
+                Payment Checking
+            </h2>
+
+            <p>
+                Your payment has been submitted.
+            </p>
+
+            <p>
+                Your order is now waiting for approval.
+            </p>
+
+            <div class="payment-status">
+                PAYMENT CHECKING
+            </div>
+
+            <button
+                type="button"
+                id="closePaymentChecking"
+                class="checkout-button"
+            >
+                OK
+            </button>
+
+        </div>
+
+    `;
+
+
+    document.body.appendChild(
+        modal
+    );
+
+
+    document
+        .getElementById(
+            "closePaymentChecking"
+        )
+        ?.addEventListener(
             "click",
             function() {
 
@@ -3309,8 +3227,6 @@ function showPaymentChecking() {
 
             }
         );
-
-    }
 
 }
 
@@ -3329,17 +3245,98 @@ document.addEventListener(
                 : null;
 
 
-        if (!target) return;
+        if (
+            !target
+        ) {
+            return;
+        }
+
+
+        const checkoutButton =
+            target.closest(
+                "#checkoutBtn, .checkout-btn, [data-checkout]"
+            );
 
 
         if (
-            target.id ===
-            "checkoutBtn"
+            !checkoutButton
+        ) {
+            return;
+        }
+
+
+        event.preventDefault();
+
+
+        createCheckoutModal();
+
+    }
+);
+
+
+// ======================================================
+// STORAGE SYNC
+// ======================================================
+
+window.addEventListener(
+    "storage",
+    function(event) {
+
+        if (
+            event.key ===
+            "collectiveCart"
         ) {
 
-            event.preventDefault();
+            try {
 
-            checkout();
+                cart =
+                    JSON.parse(
+                        event.newValue ||
+                        "[]"
+                    );
+
+            } catch (
+                error
+            ) {
+
+                cart = [];
+
+            }
+
+
+            updateCartDisplay();
+
+
+            if (
+                typeof updateGiftShoppingProgress ===
+                "function"
+            ) {
+
+                updateGiftShoppingProgress();
+
+            }
+
+        }
+
+
+        if (
+            event.key ===
+            "collectivePoints"
+        ) {
+
+            updatePointsDisplay();
+
+        }
+
+
+        if (
+            event.key ===
+            "collectiveTotalSpent"
+        ) {
+
+            updateRewardStatus();
+
+            updateGiftShoppingProgress();
 
         }
 
@@ -3348,162 +3345,103 @@ document.addEventListener(
 
 
 // ======================================================
-// ₦50,000 FREE-GIFT SHOPPING PROGRESS
+// INITIALIZE SHOP
 // ======================================================
 
-function updateGiftShoppingProgress() {
+function initializeShop() {
 
-    const selectedGifts =
-        getSelectedFreeGiftIds();
+    createCategoryMenu();
+
+    renderProducts();
+
+    updateCartDisplay();
+
+    updatePointsDisplay();
+
+    updateRewardStatus();
+
+    updateGiftShoppingProgress();
+
+    renderGiftOptions();
+
+}
+
+
+if (
+    document.readyState ===
+    "loading"
+) {
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        initializeShop
+    );
+
+} else {
+
+    initializeShop();
+
+} 
+
+// ======================================================
+// LOGIN / SIGNUP STATUS
+// ======================================================
+
+function updateLoginStatus() {
+
+    const loggedIn =
+        isLoggedIn();
+
+    const user =
+        getCurrentUser();
+
+
+    document
+        .querySelectorAll(
+            ".login-required"
+        )
+        .forEach(
+            element => {
+
+                element.style.display =
+                    loggedIn
+                        ? "none"
+                        : "";
+
+            }
+        );
+
+
+    document
+        .querySelectorAll(
+            ".logout-button"
+        )
+        .forEach(
+            element => {
+
+                element.style.display =
+                    loggedIn
+                        ? ""
+                        : "none";
+
+            }
+        );
+
+
+    const accountName =
+        document.getElementById(
+            "accountName"
+        );
 
 
     if (
-        selectedGifts.length !== 5
+        accountName &&
+        user
     ) {
 
-        const bar =
-            document.getElementById(
-                "giftSpendBar"
-            );
-
-
-        if (bar) {
-
-            bar.style.display =
-                "none";
-
-        }
-
-
-        document.body.classList.remove(
-            "gift-shopping-active"
-        );
-
-
-        return;
-
-    }
-
-
-    const target = 50000;
-
-
-    const paidShoppingTotal =
-        getCartTotal();
-
-
-    const bar =
-        document.getElementById(
-            "giftSpendBar"
-        );
-
-
-    const amount =
-        document.getElementById(
-            "giftSpendAmount"
-        );
-
-
-    const fill =
-        document.getElementById(
-            "giftSpendFill"
-        );
-
-
-    const message =
-        document.getElementById(
-            "giftSpendMessage"
-        );
-
-
-    if (bar) {
-
-        bar.style.display =
-            "block";
-
-    }
-
-
-    document.body.classList.add(
-        "gift-shopping-active"
-    );
-
-
-    const percentage =
-        Math.min(
-            (paidShoppingTotal / target) *
-            100,
-            100
-        );
-
-
-    if (amount) {
-
-        amount.textContent =
-            `₦${paidShoppingTotal.toLocaleString()} / ₦50,000`;
-
-    }
-
-
-    if (fill) {
-
-        fill.style.width =
-            percentage + "%";
-
-    }
-
-
-    if (
-        paidShoppingTotal <
-        target
-    ) {
-
-        const remaining =
-            target -
-            paidShoppingTotal;
-
-
-        if (message) {
-
-            message.textContent =
-                `Spend ₦${remaining.toLocaleString()} more to take away your 5 gifts.`;
-
-        }
-
-
-        return;
-
-    }
-
-
-    if (message) {
-
-        message.textContent =
-            "✓ ₦50,000 reached! Taking you to checkout...";
-
-    }
-
-
-    if (
-        localStorage.getItem(
-            "collectiveGiftCheckoutStarted"
-        ) !== "true"
-    ) {
-
-        localStorage.setItem(
-            "collectiveGiftCheckoutStarted",
-            "true"
-        );
-
-
-        setTimeout(
-            function() {
-
-                checkout();
-
-            },
-            1000
-        );
+        accountName.textContent =
+            `${user.firstName || ""} ${user.lastName || ""}`
+                .trim();
 
     }
 
@@ -3511,457 +3449,7 @@ function updateGiftShoppingProgress() {
 
 
 // ======================================================
-// SIGN UP
-// ======================================================
-
-function setupSignup() {
-
-    const createAccountBtn =
-        document.getElementById(
-            "createAccountBtn"
-        );
-
-
-    if (!createAccountBtn) return;
-
-
-    createAccountBtn.addEventListener(
-        "click",
-        function() {
-
-            const nameInput =
-                document.getElementById(
-                    "signupName"
-                );
-
-
-            const emailInput =
-                document.getElementById(
-                    "signupEmail"
-                );
-
-
-            const passwordInput =
-                document.getElementById(
-                    "signupPassword"
-                );
-
-
-            if (
-                !nameInput ||
-                !emailInput ||
-                !passwordInput
-            ) return;
-
-
-            const name =
-                nameInput.value.trim();
-
-
-            const email =
-                emailInput.value.trim();
-
-
-            const password =
-                passwordInput.value;
-
-
-            if (
-                !name ||
-                !email ||
-                !password
-            ) {
-
-                alert(
-                    "Please fill in all the fields."
-                );
-
-                return;
-
-            }
-
-
-            const user = {
-
-                name:
-                    name,
-
-                email:
-                    email,
-
-                password:
-                    password
-
-            };
-
-
-            localStorage.setItem(
-                "collectiveUser",
-                JSON.stringify(user)
-            );
-
-
-            localStorage.setItem(
-                "collectiveLoggedIn",
-                "false"
-            );
-
-
-            localStorage.setItem(
-                "collectivePoints",
-                "0"
-            );
-
-
-            localStorage.setItem(
-                "collectiveTotalSpent",
-                "0"
-            );
-
-
-            localStorage.removeItem(
-                "collectiveGift1"
-            );
-
-
-            localStorage.removeItem(
-                "collectiveGift2"
-            );
-
-
-            localStorage.removeItem(
-                "collectiveSelectedFreeGifts"
-            );
-
-
-            alert(
-                "Account created successfully!"
-            );
-
-
-            window.location.href =
-                "login.html";
-
-        }
-    );
-
-}
-
-
-// ======================================================
-// LOGIN
-// ======================================================
-
-function setupLogin() {
-
-    const loginBtn =
-        document.getElementById(
-            "loginBtn"
-        );
-
-
-    if (!loginBtn) return;
-
-
-    loginBtn.addEventListener(
-        "click",
-        function() {
-
-            const emailInput =
-                document.getElementById(
-                    "loginEmail"
-                );
-
-
-            const passwordInput =
-                document.getElementById(
-                    "loginPassword"
-                );
-
-
-            if (
-                !emailInput ||
-                !passwordInput
-            ) return;
-
-
-            const email =
-                emailInput.value.trim();
-
-
-            const password =
-                passwordInput.value;
-
-
-            if (
-                !email ||
-                !password
-            ) {
-
-                alert(
-                    "Please enter your email and password."
-                );
-
-                return;
-
-            }
-
-
-            let savedUser = null;
-
-
-            try {
-
-                savedUser =
-                    JSON.parse(
-                        localStorage.getItem(
-                            "collectiveUser"
-                        ) || "null"
-                    );
-
-            } catch (error) {
-
-                savedUser = null;
-
-            }
-
-
-            if (!savedUser) {
-
-                alert(
-                    "No account found. Please sign up first."
-                );
-
-                return;
-
-            }
-
-
-            if (
-                email.toLowerCase() !==
-                    String(
-                        savedUser.email
-                    ).toLowerCase() ||
-                password !==
-                    savedUser.password
-            ) {
-
-                alert(
-                    "Incorrect email or password."
-                );
-
-                return;
-
-            }
-
-
-            localStorage.setItem(
-                "collectiveLoggedIn",
-                "true"
-            );
-
-
-            alert(
-                "Login successful!"
-            );
-
-
-            window.location.href =
-                "profile.html";
-
-        }
-    );
-
-}
-
-
-// ======================================================
-// PROFILE
-// ======================================================
-
-function setupProfile() {
-
-    const profileName =
-        document.getElementById(
-            "profileName"
-        );
-
-
-    const profileEmail =
-        document.getElementById(
-            "profileEmail"
-        );
-
-
-    const profilePoints =
-        document.getElementById(
-            "profilePoints"
-        );
-
-
-    const profileGreeting =
-        document.getElementById(
-            "profileGreeting"
-        );
-
-
-    const profileInitial =
-        document.getElementById(
-            "profileInitial"
-        );
-
-
-    const gift1Status =
-        document.getElementById(
-            "gift1Status"
-        );
-
-
-    const gift2Status =
-        document.getElementById(
-            "gift2Status"
-        );
-
-
-    const logoutBtn =
-        document.getElementById(
-            "logoutBtn"
-        );
-
-
-    let savedUser = null;
-
-
-    try {
-
-        savedUser =
-            JSON.parse(
-                localStorage.getItem(
-                    "collectiveUser"
-                ) || "null"
-            );
-
-    } catch (error) {
-
-        savedUser = null;
-
-    }
-
-
-    if (!savedUser) {
-
-        if (profileName) {
-
-            profileName.textContent =
-                "Please log in";
-
-        }
-
-
-        if (profileEmail) {
-
-            profileEmail.textContent =
-                "You need to log in to view your profile.";
-
-        }
-
-
-        return;
-
-    }
-
-
-    if (profileName) {
-
-        profileName.textContent =
-            savedUser.name;
-
-    }
-
-
-    if (profileEmail) {
-
-        profileEmail.textContent =
-            savedUser.email;
-
-    }
-
-
-    if (profileGreeting) {
-
-        profileGreeting.textContent =
-            `Welcome back, ${savedUser.name}.`;
-
-    }
-
-
-    if (profileInitial) {
-
-        profileInitial.textContent =
-            savedUser.name
-                .charAt(0)
-                .toUpperCase();
-
-    }
-
-
-    if (profilePoints) {
-
-        profilePoints.textContent =
-            getPoints();
-
-    }
-
-
-    if (gift1Status) {
-
-        gift1Status.textContent =
-            getTotalSpent() >= 50000
-                ? "✓ UNLOCKED"
-                : "NOT UNLOCKED";
-
-    }
-
-
-    if (gift2Status) {
-
-        gift2Status.textContent =
-            getTotalSpent() >= 100000
-                ? "✓ UNLOCKED"
-                : "NOT UNLOCKED";
-
-    }
-
-
-    if (logoutBtn) {
-
-        logoutBtn.addEventListener(
-            "click",
-            function() {
-
-                localStorage.removeItem(
-                    "collectiveLoggedIn"
-                );
-
-
-                alert(
-                    "You have been logged out."
-                );
-
-
-                window.location.href =
-                    "login.html";
-
-            }
-        );
-
-    }
-
-}
-
-
-// ======================================================
-// PROFILE CARD NAVIGATION
+// LOGOUT
 // ======================================================
 
 document.addEventListener(
@@ -3974,35 +3462,635 @@ document.addEventListener(
                 : null;
 
 
-        if (!target) return;
+        if (
+            !target
+        ) {
+            return;
+        }
 
 
-        const earnCard =
+        const logoutButton =
             target.closest(
-                ".earn-card"
+                "#logoutBtn, .logout-button"
             );
 
 
-        if (earnCard) {
-
-            window.location.href =
-                "shop.html";
-
+        if (
+            !logoutButton
+        ) {
             return;
+        }
+
+
+        event.preventDefault();
+
+
+        localStorage.removeItem(
+            "collectiveLoggedIn"
+        );
+
+
+        localStorage.removeItem(
+            "collectiveUser"
+        );
+
+
+        updateLoginStatus();
+
+
+        window.location.href =
+            "login.html";
+
+    }
+);
+
+
+// ======================================================
+// PROFILE DISPLAY
+// ======================================================
+
+function updateProfile() {
+
+    const user =
+        getCurrentUser();
+
+
+    const points =
+        getPoints();
+
+
+    const totalSpent =
+        getTotalSpent();
+
+
+    const firstName =
+        document.getElementById(
+            "profileFirstName"
+        );
+
+
+    const lastName =
+        document.getElementById(
+            "profileLastName"
+        );
+
+
+    const address =
+        document.getElementById(
+            "profileAddress"
+        );
+
+
+    const phone =
+        document.getElementById(
+            "profilePhone"
+        );
+
+
+    const profilePoints =
+        document.getElementById(
+            "profilePoints"
+        );
+
+
+    const profileSpent =
+        document.getElementById(
+            "profileTotalSpent"
+        );
+
+
+    if (
+        firstName
+    ) {
+
+        firstName.textContent =
+            user?.firstName ||
+            "";
+
+    }
+
+
+    if (
+        lastName
+    ) {
+
+        lastName.textContent =
+            user?.lastName ||
+            "";
+
+    }
+
+
+    if (
+        address
+    ) {
+
+        address.textContent =
+            user?.address ||
+            "";
+
+    }
+
+
+    if (
+        phone
+    ) {
+
+        phone.textContent =
+            user?.phone ||
+            "";
+
+    }
+
+
+    if (
+        profilePoints
+    ) {
+
+        profilePoints.textContent =
+            points;
+
+    }
+
+
+    if (
+        profileSpent
+    ) {
+
+        profileSpent.textContent =
+            `₦${totalSpent.toLocaleString()}`;
+
+    }
+
+
+    updateRewardStatus();
+
+}
+
+
+// ======================================================
+// FREE ITEM CARDS
+// ======================================================
+
+function updateFreeItemCards() {
+
+    const totalSpent =
+        getTotalSpent();
+
+
+    const cards =
+        document.querySelectorAll(
+            ".free-item-card"
+        );
+
+
+    cards.forEach(
+        card => {
+
+            const required =
+                Number(
+                    card.dataset.required ||
+                    0
+                );
+
+
+            if (
+                totalSpent >=
+                required
+            ) {
+
+                card.classList.add(
+                    "unlocked"
+                );
+
+                card.classList.remove(
+                    "locked"
+                );
+
+            } else {
+
+                card.classList.add(
+                    "locked"
+                );
+
+                card.classList.remove(
+                    "unlocked"
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+// ======================================================
+// ORDER STATUS
+// ======================================================
+
+function getLocalOrderStatus() {
+
+    return (
+        localStorage.getItem(
+            "collectiveOrderStatus"
+        ) ||
+        ""
+    );
+
+}
+
+
+function updateOrderStatusDisplay() {
+
+    const status =
+        getLocalOrderStatus();
+
+
+    const elements =
+        document.querySelectorAll(
+            ".order-status"
+        );
+
+
+    elements.forEach(
+        element => {
+
+            if (
+                status ===
+                "approved"
+            ) {
+
+                element.textContent =
+                    "APPROVED";
+
+            } else if (
+                status ===
+                "rejected"
+            ) {
+
+                element.textContent =
+                    "REJECTED";
+
+            } else if (
+                status ===
+                "delivered"
+            ) {
+
+                element.textContent =
+                    "DELIVERED";
+
+            } else if (
+                status ===
+                "payment-checking"
+            ) {
+
+                element.textContent =
+                    "PAYMENT CHECKING";
+
+            } else {
+
+                element.textContent =
+                    "NO ACTIVE ORDER";
+
+            }
+
+        }
+    );
+
+}
+
+
+// ======================================================
+// FIREBASE ORDER STATUS LISTENER
+// ======================================================
+
+async function checkFirebaseOrderStatus() {
+
+    const pending =
+        localStorage.getItem(
+            "collectivePendingOrder"
+        );
+
+
+    if (
+        !pending
+    ) {
+        return;
+    }
+
+
+    let pendingOrder;
+
+
+    try {
+
+        pendingOrder =
+            JSON.parse(
+                pending
+            );
+
+    } catch (
+        error
+    ) {
+
+        return;
+
+    }
+
+
+    if (
+        !pendingOrder?.id
+    ) {
+        return;
+    }
+
+
+    try {
+
+        const firebase =
+            await firebaseReady;
+
+
+        const snapshot =
+            await firebase.getDocs(
+                firebase.collection(
+                    firebase.db,
+                    "orders"
+                )
+            );
+
+
+        snapshot.forEach(
+            documentSnapshot => {
+
+                const order =
+                    documentSnapshot.data();
+
+
+                if (
+                    order.id !==
+                    pendingOrder.id
+                ) {
+
+                    return;
+
+                }
+
+
+                if (
+                    order.status
+                ) {
+
+                    localStorage.setItem(
+                        "collectiveOrderStatus",
+                        order.status
+                    );
+
+                }
+
+
+                if (
+                    order.status ===
+                        "approved" ||
+                    order.status ===
+                        "delivered"
+                ) {
+
+                    if (
+                        order.total
+                    ) {
+
+                        const previousStatus =
+                            pendingOrder.status;
+
+
+                        if (
+                            previousStatus !==
+                                "approved" &&
+                            previousStatus !==
+                                "delivered"
+                        ) {
+
+                            const spent =
+                                getTotalSpent();
+
+
+                            saveTotalSpent(
+                                spent +
+                                Number(
+                                    order.qualifyingSpend ||
+                                    order.originalTotal ||
+                                    order.total ||
+                                    0
+                                )
+                            );
+
+
+                            const earned =
+                                calculatePoints(
+                                    Number(
+                                        order.qualifyingSpend ||
+                                        order.originalTotal ||
+                                        order.total ||
+                                        0
+                                    )
+                                );
+
+
+                            const currentPoints =
+                                getPoints();
+
+
+                            savePoints(
+                                currentPoints +
+                                earned
+                            );
+
+
+                            cart = [];
+
+                            saveCart();
+
+
+                            clearSelectedFreeGiftProducts();
+
+
+                            pendingOrder.status =
+                                order.status;
+
+
+                            localStorage.setItem(
+                                "collectivePendingOrder",
+                                JSON.stringify(
+                                    pendingOrder
+                                )
+                            );
+
+
+                            updateCartDisplay();
+
+                            updatePointsDisplay();
+
+                            updateRewardStatus();
+
+                            updateProfile();
+
+                        }
+
+                    }
+
+                }
+
+            }
+        );
+
+
+        updateOrderStatusDisplay();
+
+    } catch (
+        error
+    ) {
+
+        console.error(
+            "FIREBASE STATUS CHECK ERROR:",
+            error
+        );
+
+    }
+
+}
+
+
+// ======================================================
+// CONTINUOUS ORDER STATUS CHECK
+// ======================================================
+
+setInterval(
+    function() {
+
+        checkFirebaseOrderStatus();
+
+    },
+    3000
+);
+
+
+// ======================================================
+// CART COUNT INITIALIZATION
+// ======================================================
+
+function initializeCart() {
+
+    updateCartDisplay();
+
+}
+
+
+// ======================================================
+// ALL PAGE INITIALIZATION
+// ======================================================
+
+function initializeCollective() {
+
+    initializeCart();
+
+    updatePointsDisplay();
+
+    updateRewardStatus();
+
+    updateLoginStatus();
+
+    updateProfile();
+
+    updateFreeItemCards();
+
+    updateOrderStatusDisplay();
+
+    updateGiftShoppingProgress();
+
+    renderGiftOptions();
+
+    checkFirebaseOrderStatus();
+
+}
+
+
+// ======================================================
+// RUN AFTER PAGE LOAD
+// ======================================================
+
+if (
+    document.readyState ===
+    "loading"
+) {
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        initializeCollective
+    );
+
+} else {
+
+    initializeCollective();
+
+}
+
+
+// ======================================================
+// KEEP EVERYTHING UPDATED
+// ======================================================
+
+window.addEventListener(
+    "storage",
+    function(event) {
+
+        if (
+            event.key ===
+            "collectivePoints"
+        ) {
+
+            updatePointsDisplay();
+
+            updateProfile();
 
         }
 
 
-        const giftCard =
-            target.closest(
-                ".gift-card"
-            );
+        if (
+            event.key ===
+            "collectiveTotalSpent"
+        ) {
+
+            updateRewardStatus();
+
+            updateProfile();
+
+            updateFreeItemCards();
+
+        }
 
 
-        if (giftCard) {
+        if (
+            event.key ===
+            "collectiveLoggedIn" ||
+            event.key ===
+            "collectiveUser"
+        ) {
 
-            window.location.href =
-                "free-gifts.html";
+            updateLoginStatus();
+
+            updateProfile();
+
+        }
+
+
+        if (
+            event.key ===
+            "collectiveOrderStatus"
+        ) {
+
+            updateOrderStatusDisplay();
 
         }
 
@@ -4011,14 +4099,11 @@ document.addEventListener(
 
 
 // ======================================================
-// START EVERYTHING
+// FINAL SHOP REFRESH
 // ======================================================
 
-document.addEventListener(
-    "DOMContentLoaded",
+setTimeout(
     function() {
-
-        displayProducts();
 
         updateCartDisplay();
 
@@ -4026,59 +4111,14 @@ document.addEventListener(
 
         updateRewardStatus();
 
-        setupSignup();
+        updateLoginStatus();
 
-        setupLogin();
+        updateProfile();
 
-        setupProfile();
+        updateFreeItemCards();
 
-        updateGiftShoppingProgress();
+        updateOrderStatusDisplay();
 
-
-        // Synchronize cart between pages/tabs
-        window.addEventListener(
-            "storage",
-            function(event) {
-
-                if (
-                    event.key ===
-                    "collectiveCart"
-                ) {
-
-                    cart =
-                        getStoredArray(
-                            "collectiveCart"
-                        );
-
-
-                    updateCartDisplay();
-
-                    updateGiftShoppingProgress();
-
-                }
-
-
-                if (
-                    event.key ===
-                    "collectivePoints"
-                ) {
-
-                    updatePointsDisplay();
-
-                }
-
-
-                if (
-                    event.key ===
-                    "collectiveTotalSpent"
-                ) {
-
-                    updateRewardStatus();
-
-                }
-
-            }
-        );
-
-    }
+    },
+    500
 );
