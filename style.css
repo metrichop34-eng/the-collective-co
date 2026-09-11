@@ -188,23 +188,42 @@ p {
    PRODUCTS
 ========================= */
 
-.product-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 25px;
-    width: 90%;
-    max-width: 1100px;
-    margin: 40px auto;
+/*
+   IMPORTANT:
+   Both .product-grid and .products-grid are supported
+   because the shop script may use either name.
+*/
+
+.product-grid,
+.products-grid,
+#productsGrid {
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 25px !important;
+    width: 90% !important;
+    max-width: 1200px !important;
+    margin: 40px auto !important;
+    align-items: start !important;
+    box-sizing: border-box !important;
 }
 
+/* Individual product cards */
+
 .product-card {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    min-width: 0 !important;
     background-color: #FFFDF8;
     border: 1px solid #DCEFF2;
     border-radius: 20px;
     padding: 20px;
     box-sizing: border-box;
     text-align: center;
+    overflow: hidden;
 }
+
+/* Product image */
 
 .product-image {
     width: 100%;
@@ -216,20 +235,41 @@ p {
     justify-content: center;
     margin-bottom: 20px;
     color: #6F858A;
+    box-sizing: border-box;
+    overflow: hidden;
 }
 
-.product-information small {
+.product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Product information */
+
+.product-information,
+.product-info {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.product-information small,
+.product-info small {
     color: #6F858A;
     letter-spacing: 1px;
 }
 
-.product-information h3 {
+.product-information h3,
+.product-info h3 {
     color: #304B52;
     font-size: 20px;
     margin: 10px 0;
+    line-height: 1.3;
 }
 
-.product-information p {
+.product-information p,
+.product-info p {
     font-size: 14px;
     margin: 8px 0;
 }
@@ -239,6 +279,7 @@ p {
     color: #304B52;
     font-size: 18px;
     margin: 15px 0;
+    font-weight: 600;
 }
 
 .stock-status {
@@ -247,17 +288,27 @@ p {
 }
 
 /* =========================
-   COLOUR SELECTOR
+   PRODUCT OPTIONS
 ========================= */
 
+.product-option-label {
+    display: block;
+    color: #6F858A;
+    font-size: 12px;
+    letter-spacing: 1px;
+    margin: 12px 0 6px;
+}
+
+.product-size,
 .product-color {
     width: 80%;
     padding: 10px;
-    margin: 10px auto;
+    margin: 6px auto;
     border: 1px solid #A8C9CE;
     border-radius: 10px;
     background-color: #FFFDF8;
     color: #304B52;
+    box-sizing: border-box;
 }
 
 /* =========================
@@ -304,6 +355,7 @@ p {
     font-size: 14px;
     letter-spacing: 1px;
     cursor: pointer;
+    margin-top: auto;
 }
 
 .add-to-cart:hover {
@@ -843,6 +895,15 @@ p {
    MOBILE
 ========================= */
 
+@media (max-width: 1100px) {
+
+    .product-grid,
+    .products-grid,
+    #productsGrid {
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    }
+}
+
 @media (max-width: 900px) {
 
     .reward-grid {
@@ -851,6 +912,12 @@ p {
 
     nav {
         gap: 30px;
+    }
+
+    .product-grid,
+    .products-grid,
+    #productsGrid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
     }
 }
 
@@ -871,9 +938,11 @@ p {
         font-size: 38px;
     }
 
-    .product-grid {
-        grid-template-columns: 1fr;
-        width: 90%;
+    .product-grid,
+    .products-grid,
+    #productsGrid {
+        grid-template-columns: 1fr !important;
+        width: 90% !important;
     }
 
     .search-bar {
@@ -983,7 +1052,6 @@ p {
     box-sizing: border-box;
 }
 
-
 /* =========================
    CHECKOUT MODAL
 ========================= */
@@ -1036,7 +1104,6 @@ p {
     opacity: 0.85;
 }
 
-
 /* =========================
    GIFT SPEND POPUP
 ========================= */
@@ -1076,7 +1143,6 @@ p {
 .gift-popup-icon {
     font-size: 45px;
 }
-
 
 /* =========================
    GIFT SPEND PROGRESS
@@ -1136,7 +1202,6 @@ p {
     font-size: 13px;
 }
 
-
 /* =========================
    GIFT PICKED POPUP
 ========================= */
@@ -1171,7 +1236,6 @@ p {
     color: #6F858A;
     font-size: 15px;
 }
-
 
 /* =========================
    PAYMENT MODAL
