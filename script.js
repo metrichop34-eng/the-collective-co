@@ -1,14 +1,11 @@
-```javascript
 /* =========================================================
    THE COLLECTIVE.CO — COMPLETE SHOP SYSTEM
 ========================================================= */
 
-/* =========================================================
-   FIREBASE
-========================================================= */
+/* ========================= FIREBASE ========================= */
 
 const firebaseConfig = {
-    apiKey: "AIzaSyCkavvOeD4GEtUsq4S-QuTU4ejedf8CiL8",
+    apiKey: "AIzaSyCkavvOeD4GEtUsq4S-QuTU4ejedf8Ci8",
     authDomain: "the-collectiveco-orders.firebaseapp.com",
     projectId: "the-collectiveco-orders",
     storageBucket: "the-collectiveco-orders.firebasestorage.app",
@@ -19,7 +16,7 @@ const firebaseConfig = {
 
 let firebaseDB = null;
 
-(async function loadFirebase() {
+(async function () {
     try {
         const { initializeApp } = await import(
             "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js"
@@ -28,10 +25,7 @@ let firebaseDB = null;
         const {
             getFirestore,
             collection,
-            addDoc,
-            doc,
-            getDoc,
-            updateDoc
+            addDoc
         } = await import(
             "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js"
         );
@@ -41,10 +35,7 @@ let firebaseDB = null;
         firebaseDB = {
             db: getFirestore(app),
             collection,
-            addDoc,
-            doc,
-            getDoc,
-            updateDoc
+            addDoc
         };
 
         console.log("Firebase connected.");
@@ -53,9 +44,7 @@ let firebaseDB = null;
     }
 })();
 
-/* =========================================================
-   PRODUCT CREATOR
-========================================================= */
+/* ========================= PRODUCT CREATOR ========================= */
 
 function makeProducts(category, products) {
     const result = [];
@@ -71,9 +60,10 @@ function makeProducts(category, products) {
                 const max = item.price[1];
                 const step = (max - min) / Math.max(count - 1, 1);
 
-                price = Math.round(
-                    (min + step * (i - 1)) / 100
-                ) * 100;
+                price =
+                    Math.round(
+                        (min + step * (i - 1)) / 100
+                    ) * 100;
             }
 
             result.push({
@@ -94,438 +84,120 @@ function makeProducts(category, products) {
     return result;
 }
 
-/* =========================================================
-   PRODUCT CATALOG
-========================================================= */
+/* ========================= PRODUCT CATALOG ========================= */
 
 const productCatalog = [
 
     ...makeProducts("Skincare", [
-        {
-            name: "Men's Perfume",
-            price: [12000, 20000],
-            size: "100 ml",
-            description: "A masculine perfume."
-        },
-        {
-            name: "Body Butter",
-            price: [5000, 9500]
-        },
-        {
-            name: "Sunscreen",
-            price: [4000, 9000]
-        },
-        {
-            name: "Face Cleanser",
-            price: [7500, 10000]
-        },
-        {
-            name: "Body Scrub",
-            price: [4000, 8000]
-        },
-        {
-            name: "Face Serum",
-            price: [1500, 4500]
-        },
-        {
-            name: "Lip Mask",
-            price: [1000, 3000]
-        },
-        {
-            name: "Rhode Lip Gloss",
-            price: [10000, 15000],
-            colors: ["Clear", "Pink", "Brown"]
-        },
-        {
-            name: "SHEGLAM Lip Gloss",
-            price: [10000, 15000],
-            colors: ["Clear", "Pink", "Nude", "Brown"]
-        },
-        {
-            name: "USHAS Lip Gloss",
-            price: [10000, 15000],
-            colors: ["Clear", "Pink", "Nude", "Brown"]
-        },
-        {
-            name: "Clear Normal Lip Gloss",
-            price: [1000, 2000],
-            colors: ["Clear"]
-        },
-        {
-            name: "Lip Balm",
-            price: [1000, 2000]
-        },
-        {
-            name: "Shower Gel",
-            price: 12000
-        },
-        {
-            name: "Men's Fragrance Perfume",
-            price: [9000, 10000],
-            size: "50 ml"
-        },
-        {
-            name: "Women's Fragrance Perfume",
-            price: [9000, 10000],
-            size: "50 ml"
-        },
-        {
-            name: "Body Lotion",
-            price: [8000, 12000]
-        },
-        {
-            name: "Face Moisturizer",
-            price: [3000, 7000]
-        },
-        {
-            name: "Face Toner",
-            price: [6500, 10000]
-        },
-        {
-            name: "Body Oil",
-            price: [6000, 10000]
-        },
-        {
-            name: "Face Mask",
-            price: [1000, 4500]
-        },
-        {
-            name: "Lip Oil",
-            price: [1000, 2000]
-        },
-        {
-            name: "Pimple Patch",
-            price: [500, 1800]
-        }
+        { name:"Men's Perfume", price:[12000,20000], size:"100 ml", description:"A masculine perfume." },
+        { name:"Body Butter", price:[5000,9500] },
+        { name:"Sunscreen", price:[4000,9000] },
+        { name:"Face Cleanser", price:[7500,10000] },
+        { name:"Body Scrub", price:[4000,8000] },
+        { name:"Face Serum", price:[1500,4500] },
+        { name:"Lip Mask", price:[1000,3000] },
+        { name:"Rhode Lip Gloss", price:[10000,15000], colors:["Clear","Pink","Brown"] },
+        { name:"SHEGLAM Lip Gloss", price:[10000,15000], colors:["Clear","Pink","Nude","Brown"] },
+        { name:"USHAS Lip Gloss", price:[10000,15000], colors:["Clear","Pink","Nude","Brown"] },
+        { name:"Clear Normal Lip Gloss", price:[1000,2000], colors:["Clear"] },
+        { name:"Lip Balm", price:[1000,2000] },
+        { name:"Shower Gel", price:12000 },
+        { name:"Men's Fragrance Perfume", price:[9000,10000], size:"50 ml" },
+        { name:"Women's Fragrance Perfume", price:[9000,10000], size:"50 ml" },
+        { name:"Body Lotion", price:[8000,12000] },
+        { name:"Face Moisturizer", price:[3000,7000] },
+        { name:"Face Toner", price:[6500,10000] },
+        { name:"Body Oil", price:[6000,10000] },
+        { name:"Face Mask", price:[1000,4500] },
+        { name:"Lip Oil", price:[1000,2000] },
+        { name:"Pimple Patch", price:[500,1800] }
     ]),
 
     ...makeProducts("Accessories", [
-        {
-            name: "Bead Bracelet Set",
-            price: [3000, 6000],
-            colors: ["Black", "White", "Pink", "Brown", "Blue"]
-        },
-        {
-            name: "Masculine Chain Bracelet",
-            price: [1000, 3500],
-            colors: ["Silver", "Gold", "Black"]
-        },
-        {
-            name: "Chrome Heart Glasses",
-            price: [15000, 20000],
-            colors: ["Black", "White", "Brown"]
-        },
-        {
-            name: "Glasses",
-            price: [2000, 5000],
-            colors: ["Black", "Brown", "Clear"]
-        },
-        {
-            name: "Glasses Set of 3",
-            price: [4000, 5000]
-        },
-        {
-            name: "Glasses Set of 5",
-            price: [5000, 10000]
-        },
-        {
-            name: "Scrunchies",
-            price: 1200,
-            colors: ["Black", "White", "Pink", "Brown", "Blue"]
-        },
-        {
-            name: "Stanley Cup",
-            price: 15000,
-            colors: ["White", "Pink", "Black", "Blue"]
-        },
-        {
-            name: "Body Floral Stanley Cup",
-            price: 20000,
-            colors: ["Pink", "White", "Blue"]
-        },
-        {
-            name: "Headband",
-            price: 1600,
-            colors: ["Black", "White", "Pink", "Brown"]
-        },
-        {
-            name: "Tote Bag",
-            price: [10000, 20000],
-            colors: ["Black", "White", "Brown", "Pink"]
-        },
-        {
-            name: "Claw Clip",
-            price: [2000, 2500],
-            colors: ["Black", "White", "Brown", "Pink"]
-        },
-        {
-            name: "Anklet",
-            price: [1000, 2000],
-            colors: ["Silver", "Gold"]
-        },
-        {
-            name: "Necklace",
-            price: [1000, 3500],
-            colors: ["Silver", "Gold"]
-        },
-        {
-            name: "Silver Bracelet",
-            price: 3500
-        },
-        {
-            name: "Gold Bracelet",
-            price: 3500
-        },
-        {
-            name: "Vacuum Cups",
-            price: [10000, 20000],
-            colors: ["White", "Black", "Pink", "Blue"]
-        }
+        { name:"Bead Bracelet Set", price:[3000,6000], colors:["Black","White","Pink","Brown","Blue"] },
+        { name:"Masculine Chain Bracelet", price:[1000,3500], colors:["Silver","Gold","Black"] },
+        { name:"Chrome Heart Glasses", price:[15000,20000], colors:["Black","White","Brown"] },
+        { name:"Glasses", price:[2000,5000], colors:["Black","Brown","Clear"] },
+        { name:"Glasses Set of 3", price:[4000,5000] },
+        { name:"Glasses Set of 5", price:[5000,10000] },
+        { name:"Scrunchies", price:1200, colors:["Black","White","Pink","Brown","Blue"] },
+        { name:"Stanley Cup", price:15000, colors:["White","Pink","Black","Blue"] },
+        { name:"Body Floral Stanley Cup", price:20000, colors:["Pink","White","Blue"] },
+        { name:"Headband", price:1600, colors:["Black","White","Pink","Brown"] },
+        { name:"Tote Bag", price:[10000,20000], colors:["Black","White","Brown","Pink"] },
+        { name:"Claw Clip", price:[2000,2500], colors:["Black","White","Brown","Pink"] },
+        { name:"Anklet", price:[1000,2000], colors:["Silver","Gold"] },
+        { name:"Necklace", price:[1000,3500], colors:["Silver","Gold"] },
+        { name:"Silver Bracelet", price:3500 },
+        { name:"Gold Bracelet", price:3500 },
+        { name:"Vacuum Cups", price:[10000,20000], colors:["White","Black","Pink","Blue"] }
     ]),
 
     ...makeProducts("Clothing", [
-        {
-            name: "Plain Tops",
-            price: [6500, 8000],
-            sizes: ["S", "M", "L"],
-            colors: ["Black", "White", "Grey", "Brown", "Pink", "Blue"]
-        },
-        {
-            name: "Graphic Tops",
-            price: [8000, 10000],
-            sizes: ["S", "M", "L"],
-            colors: ["Black", "White", "Grey", "Brown", "Pink", "Blue"]
-        },
-        {
-            name: "Tube Tops",
-            price: [5000, 15000],
-            sizes: ["S", "M", "L"],
-            colors: ["Black", "White", "Grey", "Brown", "Pink", "Blue"]
-        },
-        {
-            name: "Jersey Tops",
-            price: 8500,
-            sizes: ["S", "M", "L"],
-            colors: ["Black", "White", "Grey", "Blue"]
-        },
-        {
-            name: "Hoodies",
-            price: [9500, 10000],
-            sizes: ["S", "M", "L"],
-            colors: ["Black", "White", "Grey", "Brown", "Pink", "Blue"]
-        },
-        {
-            name: "Zip-Up Hoodies",
-            price: [9000, 15000],
-            sizes: ["S", "M", "L"],
-            colors: ["Black", "White", "Grey", "Brown", "Pink", "Blue"]
-        },
-        {
-            name: "Plain Sweatpants",
-            price: 10000,
-            sizes: ["S", "M", "L"],
-            colors: ["Black", "White", "Grey", "Brown"]
-        },
-        {
-            name: "Leopard Sweatpants",
-            price: 15000,
-            sizes: ["S", "M", "L"],
-            colors: ["Brown", "Black"]
-        },
-        {
-            name: "Designer Sweatpants",
-            price: 20000,
-            sizes: ["S", "M", "L"],
-            colors: ["Black", "White", "Grey", "Brown"]
-        },
-        {
-            name: "Shorts",
-            price: 10000,
-            sizes: ["S", "M", "L"],
-            colors: ["Black", "White", "Grey", "Brown", "Blue"]
-        },
-        {
-            name: "Jean Bum Shorts",
-            price: 5000,
-            sizes: ["S", "M", "L"],
-            colors: ["Blue", "Black", "Grey"]
-        },
-        {
-            name: "Jeans",
-            price: 10000,
-            sizes: ["S", "M", "L"],
-            colors: ["Blue", "Black", "Grey"]
-        },
-        {
-            name: "Designed Jeans",
-            price: 20000,
-            sizes: ["S", "M", "L"],
-            colors: ["Blue", "Black", "Grey"]
-        },
-        {
-            name: "Bootcut Jeans",
-            price: 10000,
-            sizes: ["S", "M", "L"],
-            colors: ["Blue", "Black", "Grey"]
-        },
-        {
-            name: "Jeans Skirt",
-            price: 6500,
-            sizes: ["S", "M", "L"],
-            colors: ["Blue", "Black", "Grey"]
-        },
-        {
-            name: "Pleated Jeans Skirt",
-            price: 6000,
-            sizes: ["S", "M", "L"],
-            colors: ["Blue", "Black", "Grey"]
-        },
-        {
-            name: "Normal Shorts",
-            price: 4000,
-            sizes: ["S", "M", "L"],
-            colors: ["Black", "White", "Grey", "Brown", "Pink", "Blue"]
-        }
+        { name:"Plain Tops", price:[6500,8000], sizes:["S","M","L"], colors:["Black","White","Grey","Brown","Pink","Blue"] },
+        { name:"Graphic Tops", price:[8000,10000], sizes:["S","M","L"], colors:["Black","White","Grey","Brown","Pink","Blue"] },
+        { name:"Tube Tops", price:[5000,15000], sizes:["S","M","L"], colors:["Black","White","Grey","Brown","Pink","Blue"] },
+        { name:"Jersey Tops", price:8500, sizes:["S","M","L"], colors:["Black","White","Grey","Blue"] },
+        { name:"Hoodies", price:[9500,10000], sizes:["S","M","L"], colors:["Black","White","Grey","Brown","Pink","Blue"] },
+        { name:"Zip-Up Hoodies", price:[9000,15000], sizes:["S","M","L"], colors:["Black","White","Grey","Brown","Pink","Blue"] },
+        { name:"Plain Sweatpants", price:10000, sizes:["S","M","L"], colors:["Black","White","Grey","Brown"] },
+        { name:"Leopard Sweatpants", price:15000, sizes:["S","M","L"], colors:["Brown","Black"] },
+        { name:"Designer Sweatpants", price:20000, sizes:["S","M","L"], colors:["Black","White","Grey","Brown"] },
+        { name:"Shorts", price:10000, sizes:["S","M","L"], colors:["Black","White","Grey","Brown","Blue"] },
+        { name:"Jean Bum Shorts", price:5000, sizes:["S","M","L"], colors:["Blue","Black","Grey"] },
+        { name:"Jeans", price:10000, sizes:["S","M","L"], colors:["Blue","Black","Grey"] },
+        { name:"Designed Jeans", price:20000, sizes:["S","M","L"], colors:["Blue","Black","Grey"] },
+        { name:"Bootcut Jeans", price:10000, sizes:["S","M","L"], colors:["Blue","Black","Grey"] },
+        { name:"Jeans Skirt", price:6500, sizes:["S","M","L"], colors:["Blue","Black","Grey"] },
+        { name:"Pleated Jeans Skirt", price:6000, sizes:["S","M","L"], colors:["Blue","Black","Grey"] },
+        { name:"Normal Shorts", price:4000, sizes:["S","M","L"], colors:["Black","White","Grey","Brown","Pink","Blue"] }
     ]),
 
     ...makeProducts("Shoes", [
-        {
-            name: "Shoes",
-            price: [15000, 30000],
-            sizes: ["36", "37", "38", "39", "40", "41", "42", "43", "44", "45"],
-            colors: ["Black", "White", "Brown", "Grey"]
-        },
-        {
-            name: "Adidas Sambas",
-            price: [30000, 50000],
-            sizes: ["36", "37", "38", "39", "40", "41", "42", "43", "44", "45"],
-            colors: ["Black", "White", "Brown"]
-        },
-        {
-            name: "Adidas Campus",
-            price: [30000, 50000],
-            sizes: ["36", "37", "38", "39", "40", "41", "42", "43", "44", "45"],
-            colors: ["Black", "White", "Grey", "Brown"]
-        },
-        {
-            name: "Slides",
-            price: 9000,
-            sizes: ["36", "37", "38", "39", "40", "41", "42", "43", "44", "45"],
-            colors: ["Black", "White", "Brown"]
-        },
-        {
-            name: "Crocs",
-            price: 10000,
-            sizes: ["36", "37", "38", "39", "40", "41", "42", "43", "44", "45"],
-            colors: ["Black", "White", "Brown", "Pink", "Blue"]
-        },
-        {
-            name: "Loafers",
-            price: [15000, 30000],
-            sizes: ["36", "37", "38", "39", "40", "41", "42", "43", "44", "45"],
-            colors: ["Black", "Brown"]
-        },
-        {
-            name: "Clogs",
-            price: [35000, 70000],
-            sizes: ["36", "37", "38", "39", "40", "41", "42", "43", "44", "45"],
-            colors: ["Black", "White", "Brown", "Grey"]
-        },
-        {
-            name: "Timberland",
-            price: [5000, 40000],
-            sizes: ["36", "37", "38", "39", "40", "41", "42", "43", "44", "45"],
-            colors: ["Black", "Brown", "Wheat"]
-        },
-        {
-            name: "Vans",
-            price: [5000, 40000],
-            sizes: ["36", "37", "38", "39", "40", "41", "42", "43", "44", "45"],
-            colors: ["Black", "White", "Grey"]
-        },
-        {
-            name: "Puma",
-            price: [25000, 50000],
-            sizes: ["36", "37", "38", "39", "40", "41", "42", "43", "44", "45"],
-            colors: ["Black", "White", "Grey", "Pink"]
-        }
+        { name:"Shoes", price:[15000,30000], sizes:["36","37","38","39","40","41","42","43","44","45"], colors:["Black","White","Brown","Grey"] },
+        { name:"Adidas Sambas", price:[30000,50000], sizes:["36","37","38","39","40","41","42","43","44","45"], colors:["Black","White","Brown"] },
+        { name:"Adidas Campus", price:[30000,50000], sizes:["36","37","38","39","40","41","42","43","44","45"], colors:["Black","White","Grey","Brown"] },
+        { name:"Slides", price:9000, sizes:["36","37","38","39","40","41","42","43","44","45"], colors:["Black","White","Brown"] },
+        { name:"Crocs", price:10000, sizes:["36","37","38","39","40","41","42","43","44","45"], colors:["Black","White","Brown","Pink","Blue"] },
+        { name:"Loafers", price:[15000,30000], sizes:["36","37","38","39","40","41","42","43","44","45"], colors:["Black","Brown"] },
+        { name:"Clogs", price:[35000,70000], sizes:["36","37","38","39","40","41","42","43","44","45"], colors:["Black","White","Brown","Grey"] },
+        { name:"Timberland", price:[5000,40000], sizes:["36","37","38","39","40","41","42","43","44","45"], colors:["Black","Brown","Wheat"] },
+        { name:"Vans", price:[5000,40000], sizes:["36","37","38","39","40","41","42","43","44","45"], colors:["Black","White","Grey"] },
+        { name:"Puma", price:[25000,50000], sizes:["36","37","38","39","40","41","42","43","44","45"], colors:["Black","White","Grey","Pink"] }
     ]),
 
     ...makeProducts("Bags", [
-        {
-            name: "Hermes Bags",
-            price: [35000, 50000],
-            colors: ["Black", "White", "Brown"]
-        },
-        {
-            name: "Mini Gucci Bags",
-            price: [20000, 50000],
-            colors: ["Black", "White", "Brown", "Pink"]
-        },
-        {
-            name: "Gucci Bags",
-            price: [35000, 60000],
-            colors: ["Black", "White", "Brown"]
-        },
-        {
-            name: "Prada Bags",
-            price: [35000, 60000],
-            colors: ["Black", "White", "Brown"]
-        },
-        {
-            name: "Dior Bags",
-            price: [35000, 70000],
-            colors: ["Black", "White", "Brown"]
-        },
-        {
-            name: "Chanel Bags",
-            price: [45000, 70000],
-            colors: ["Black", "White", "Brown", "Pink"]
-        },
-        {
-            name: "Louis Vuitton Bags",
-            price: [25000, 70000],
-            colors: ["Black", "White", "Brown"]
-        },
-        {
-            name: "Cartier Watches",
-            price: [20000, 35000],
-            colors: ["Gold", "Silver"]
-        },
-        {
-            name: "Cartier Glasses",
-            price: [15000, 25000],
-            colors: ["Black", "Brown", "Clear"]
-        }
+        { name:"Hermes Bags", price:[35000,50000], colors:["Black","White","Brown"] },
+        { name:"Mini Gucci Bags", price:[20000,50000], colors:["Black","White","Brown","Pink"] },
+        { name:"Gucci Bags", price:[35000,60000], colors:["Black","White","Brown"] },
+        { name:"Prada Bags", price:[35000,60000], colors:["Black","White","Brown"] },
+        { name:"Dior Bags", price:[35000,70000], colors:["Black","White","Brown"] },
+        { name:"Chanel Bags", price:[45000,70000], colors:["Black","White","Brown","Pink"] },
+        { name:"Louis Vuitton Bags", price:[25000,70000], colors:["Black","White","Brown"] },
+        { name:"Cartier Watches", price:[20000,35000], colors:["Gold","Silver"] },
+        { name:"Cartier Glasses", price:[15000,25000], colors:["Black","Brown","Clear"] }
     ])
 ];
 
-/* =========================================================
-   STORAGE KEYS
-========================================================= */
+/* ========================= STORAGE ========================= */
 
 const CART_KEY = "collectiveCart";
 const POINTS_KEY = "collectivePoints";
 const TOTAL_SPENT_KEY = "collectiveTotalSpent";
-
 const GIFT_KEY = "collectiveSelectedFreeGifts";
 const OLD_GIFT_KEY = "collectiveFreeGifts";
-
 const GIFT_FLOW_KEY = "collectiveGiftFlowActive";
 const GIFT_POPUP_KEY = "collectiveGiftPopupShown";
 
 let automaticGiftCheckoutStarted = false;
 
-/* =========================================================
-   STORAGE HELPERS
-========================================================= */
+/* ========================= HELPERS ========================= */
 
 function getCart() {
     try {
         const cart = JSON.parse(
             localStorage.getItem(CART_KEY) || "[]"
         );
-
         return Array.isArray(cart) ? cart : [];
     } catch {
         return [];
@@ -533,18 +205,8 @@ function getCart() {
 }
 
 function saveCart(cart) {
-    localStorage.setItem(
-        CART_KEY,
-        JSON.stringify(cart)
-    );
-
+    localStorage.setItem(CART_KEY, JSON.stringify(cart));
     updateCartDisplay();
-}
-
-function getPoints() {
-    return Number(
-        localStorage.getItem(POINTS_KEY) || "0"
-    );
 }
 
 function getTotalSpent() {
@@ -555,18 +217,15 @@ function getTotalSpent() {
 
 function getCartTotal() {
     return getCart().reduce(
-        (total, item) => {
-            return total +
-                Number(item.price || 0) *
-                Number(item.quantity || 1);
-        },
+        (total, item) =>
+            total +
+            Number(item.price || 0) *
+            Number(item.quantity || 1),
         0
     );
 }
 
-/* =========================================================
-   FREE GIFTS
-========================================================= */
+/* ========================= FREE GIFTS ========================= */
 
 function getSelectedFreeGiftProducts() {
     let gifts = [];
@@ -579,7 +238,7 @@ function getSelectedFreeGiftProducts() {
         gifts = [];
     }
 
-    if (!Array.isArray(gifts) || gifts.length === 0) {
+    if (!Array.isArray(gifts) || !gifts.length) {
         try {
             gifts = JSON.parse(
                 localStorage.getItem(OLD_GIFT_KEY) || "[]"
@@ -589,22 +248,16 @@ function getSelectedFreeGiftProducts() {
         }
     }
 
-    if (!Array.isArray(gifts)) {
-        return [];
-    }
+    if (!Array.isArray(gifts)) return [];
 
     return gifts
         .map(gift => {
-            if (
-                gift &&
-                typeof gift === "object" &&
-                gift.id
-            ) {
-                const found = productCatalog.find(
-                    product => product.id === gift.id
+            if (gift && typeof gift === "object" && gift.id) {
+                return (
+                    productCatalog.find(
+                        product => product.id === gift.id
+                    ) || gift
                 );
-
-                return found || gift;
             }
 
             if (typeof gift === "string") {
@@ -619,21 +272,18 @@ function getSelectedFreeGiftProducts() {
 }
 
 function saveSelectedFreeGiftProducts(gifts) {
-    const safeGifts =
-        Array.isArray(gifts) ? gifts : [];
-
     localStorage.setItem(
         GIFT_KEY,
-        JSON.stringify(safeGifts)
+        JSON.stringify(gifts)
     );
 
     localStorage.setItem(
         OLD_GIFT_KEY,
-        JSON.stringify(safeGifts)
+        JSON.stringify(gifts)
     );
 
-    updateCartDisplay();
     updateGiftProgress();
+    updateCartDisplay();
 }
 
 function clearSelectedFreeGiftProducts() {
@@ -644,12 +294,9 @@ function clearSelectedFreeGiftProducts() {
 
     automaticGiftCheckoutStarted = false;
 
-    const bar =
-        document.getElementById("giftSpendBar");
+    const bar = document.getElementById("giftSpendBar");
 
-    if (bar) {
-        bar.style.display = "none";
-    }
+    if (bar) bar.style.display = "none";
 
     document.body.classList.remove(
         "gift-shopping-active"
@@ -659,77 +306,121 @@ function clearSelectedFreeGiftProducts() {
 function getFreeGiftLevel() {
     const spent = getTotalSpent();
 
-    if (spent >= 100000) {
-        return 10;
-    }
-
-    if (spent >= 50000) {
-        return 5;
-    }
+    if (spent >= 100000) return 10;
+    if (spent >= 50000) return 5;
 
     return 0;
 }
 
-/* =========================================================
-   GIFT POPUP
-========================================================= */
+/* ========================= GIFT PROGRESS ========================= */
+
+function updateGiftProgress() {
+    const selected = getSelectedFreeGiftProducts();
+    const bar = document.getElementById("giftSpendBar");
+    const amount = document.getElementById("giftSpendAmount");
+    const fill = document.getElementById("giftSpendFill");
+    const message = document.getElementById("giftSpendMessage");
+
+    const giftFlow =
+        localStorage.getItem(GIFT_FLOW_KEY) === "true";
+
+    /*
+       NORMAL SHOPPING:
+       Absolutely no gift bar.
+    */
+
+    if (!giftFlow) {
+        if (bar) bar.style.display = "none";
+
+        document.body.classList.remove(
+            "gift-shopping-active"
+        );
+
+        automaticGiftCheckoutStarted = false;
+        return;
+    }
+
+    /*
+       Gift flow only starts after all required
+       gifts have been selected.
+    */
+
+    if (selected.length !== 5 && selected.length !== 10) {
+        if (bar) bar.style.display = "none";
+        return;
+    }
+
+    const target =
+        selected.length === 10
+            ? 100000
+            : 50000;
+
+    const total = getCartTotal();
+
+    const percentage = Math.min(
+        (total / target) * 100,
+        100
+    );
+
+    if (bar) bar.style.display = "block";
+
+    document.body.classList.add(
+        "gift-shopping-active"
+    );
+
+    if (amount) {
+        amount.textContent =
+            `₦${total.toLocaleString()} / ₦${target.toLocaleString()}`;
+    }
+
+    if (fill) {
+        fill.style.width = `${percentage}%`;
+    }
+
+    if (message) {
+        if (total >= target) {
+            message.textContent =
+                `✓ ₦${target.toLocaleString()} reached!`;
+        } else {
+            message.textContent =
+                `Spend ₦${(
+                    target - total
+                ).toLocaleString()} more to take away your ${selected.length} gifts.`;
+        }
+    }
+
+    if (
+        total >= target &&
+        !automaticGiftCheckoutStarted
+    ) {
+        automaticGiftCheckoutStarted = true;
+
+        if (bar) bar.style.display = "none";
+
+        document.body.classList.remove(
+            "gift-shopping-active"
+        );
+
+        setTimeout(() => {
+            checkout();
+        }, 500);
+    }
+}
+
+/* ========================= GIFT POPUP ========================= */
 
 function showGiftPickedPopup(selectedCount, unlocked) {
     if (
         selectedCount !== unlocked ||
         unlocked < 5
-    ) {
-        return;
-    }
+    ) return;
 
     const target =
-        unlocked === 10 ? 100000 : 50000;
+        unlocked === 10
+            ? 100000
+            : 50000;
 
-    const existing =
-        document.getElementById(
-            "giftSpendPopup"
-        );
-
-    if (existing) {
-        const title =
-            existing.querySelector("h2");
-
-        const paragraphs =
-            existing.querySelectorAll("p");
-
-        if (title) {
-            title.textContent =
-                `Your ${unlocked} gifts are saved!`;
-        }
-
-        if (paragraphs[0]) {
-            paragraphs[0].innerHTML =
-                `Spend <strong>₦${target.toLocaleString()}</strong> on your purchases to take away your ${unlocked} free gifts.`;
-        }
-
-        if (paragraphs[1]) {
-            paragraphs[1].textContent =
-                `Your free gifts do not count toward the ₦${target.toLocaleString()}.`;
-        }
-
-        existing.style.display = "flex";
-
-        setTimeout(() => {
-            existing.style.display = "none";
-        }, 5000);
-    }
-
-    const old =
-        document.getElementById(
-            "giftPickedPopup"
-        );
-
-    if (old) {
-        old.remove();
-    }
-
-    const popup =
-        document.createElement("div");
+    const popup = document.createElement("div");
 
     popup.id = "giftPickedPopup";
 
@@ -740,7 +431,7 @@ function showGiftPickedPopup(selectedCount, unlocked) {
         display:flex;
         align-items:center;
         justify-content:center;
-        background:rgba(48,75,82,0.45);
+        background:rgba(48,75,82,.45);
         padding:20px;
         box-sizing:border-box;
     `;
@@ -752,29 +443,24 @@ function showGiftPickedPopup(selectedCount, unlocked) {
             border-radius:23px;
             padding:32px 25px;
             text-align:center;
-            box-shadow:0 18px 50px rgba(0,0,0,0.2);
+            box-shadow:0 18px 50px rgba(0,0,0,.2);
         ">
 
-            <div style="
-                font-size:45px;
-                margin-bottom:10px;
-            ">🎁</div>
+            <div style="font-size:45px;">🎁</div>
 
-            <h2 style="
-                color:#304B52;
-                margin:8px 0 12px;
-            ">
+            <h2 style="color:#304B52;">
                 Your ${unlocked} gifts are saved!
             </h2>
 
             <p style="
                 color:#71858A;
                 line-height:1.6;
-                font-size:15px;
             ">
-                Spend <strong>₦${target.toLocaleString()}</strong>
-                on your purchases to take away your
-                ${unlocked} free gifts.
+                Spend <strong>
+                    ₦${target.toLocaleString()}
+                </strong>
+                on your purchases to take away
+                your ${unlocked} free gifts.
             </p>
 
             <p style="
@@ -782,8 +468,8 @@ function showGiftPickedPopup(selectedCount, unlocked) {
                 line-height:1.6;
                 font-size:14px;
             ">
-                Your free gifts do not count toward the
-                ₦${target.toLocaleString()}.
+                Your free gifts do not count toward
+                the ₦${target.toLocaleString()}.
             </p>
 
             <button
@@ -801,6 +487,7 @@ function showGiftPickedPopup(selectedCount, unlocked) {
             >
                 OK
             </button>
+
         </div>
     `;
 
@@ -814,152 +501,19 @@ function showGiftPickedPopup(selectedCount, unlocked) {
         );
 
     setTimeout(() => {
-        if (popup.parentNode) {
-            popup.remove();
-        }
+        if (popup.parentNode) popup.remove();
     }, 5000);
 }
 
-/* =========================================================
-   GIFT PROGRESS BAR
-========================================================= */
-
-function updateGiftProgress() {
-    const selected =
-        getSelectedFreeGiftProducts();
-
-    const bar =
-        document.getElementById(
-            "giftSpendBar"
-        );
-
-    const amount =
-        document.getElementById(
-            "giftSpendAmount"
-        );
-
-    const fill =
-        document.getElementById(
-            "giftSpendFill"
-        );
-
-    const message =
-        document.getElementById(
-            "giftSpendMessage"
-        );
-
-    /*
-     * THE BAR ONLY EXISTS DURING FREE-GIFT SHOPPING.
-     */
-
-    const giftFlow =
-        localStorage.getItem(
-            GIFT_FLOW_KEY
-        ) === "true";
-
-    if (
-        !giftFlow ||
-        (selected.length !== 5 &&
-        selected.length !== 10)
-    ) {
-        if (bar) {
-            bar.style.display = "none";
-        }
-
-        document.body.classList.remove(
-            "gift-shopping-active"
-        );
-
-        automaticGiftCheckoutStarted = false;
-
-        return;
-    }
-
-    const target =
-        selected.length === 10
-            ? 100000
-            : 50000;
-
-    const total =
-        getCartTotal();
-
-    const percentage =
-        Math.min(
-            (total / target) * 100,
-            100
-        );
-
-    if (bar) {
-        bar.style.display = "block";
-    }
-
-    document.body.classList.add(
-        "gift-shopping-active"
-    );
-
-    if (amount) {
-        amount.textContent =
-            `₦${total.toLocaleString()} / ₦${target.toLocaleString()}`;
-    }
-
-    if (fill) {
-        fill.style.width =
-            `${percentage}%`;
-    }
-
-    if (message) {
-        if (total >= target) {
-            message.textContent =
-                `✓ ₦${target.toLocaleString()} reached!`;
-        } else {
-            const remaining =
-                target - total;
-
-            message.textContent =
-                `Spend ₦${remaining.toLocaleString()} more to take away your ${selected.length} gifts.`;
-        }
-    }
-
-    /*
-     * AUTOMATIC CHECKOUT ONLY FOR GIFT FLOW.
-     */
-
-    if (
-        total >= target &&
-        !automaticGiftCheckoutStarted
-    ) {
-        automaticGiftCheckoutStarted = true;
-
-        if (bar) {
-            bar.style.display = "none";
-        }
-
-        document.body.classList.remove(
-            "gift-shopping-active"
-        );
-
-        setTimeout(() => {
-            checkout();
-        }, 500);
-    }
-}
-
-/* =========================================================
-   GIFT OPTIONS
-========================================================= */
+/* ========================= GIFT OPTIONS ========================= */
 
 function renderGiftOptions() {
     const container =
-        document.getElementById(
-            "giftOptions"
-        );
+        document.getElementById("giftOptions");
 
-    if (!container) {
-        return;
-    }
+    if (!container) return;
 
-    const unlocked =
-        getFreeGiftLevel();
+    const unlocked = getFreeGiftLevel();
 
     container.innerHTML = "";
 
@@ -973,15 +527,15 @@ function renderGiftOptions() {
                 when you unlock them.
             </p>
         `;
-
         return;
     }
 
     const giftProducts =
         productCatalog
-            .filter(product =>
-                product.category === "Accessories" ||
-                product.category === "Skincare"
+            .filter(
+                product =>
+                    product.category === "Accessories" ||
+                    product.category === "Skincare"
             )
             .slice(0, unlocked);
 
@@ -989,11 +543,6 @@ function renderGiftOptions() {
         getSelectedFreeGiftProducts();
 
     giftProducts.forEach(product => {
-        const checked =
-            selected.some(
-                gift => gift.id === product.id
-            );
-
         const label =
             document.createElement("label");
 
@@ -1010,13 +559,15 @@ function renderGiftOptions() {
             document.createElement("input");
 
         checkbox.type = "checkbox";
-        checkbox.checked = checked;
-        checkbox.dataset.productId =
-            product.id;
+
+        checkbox.checked =
+            selected.some(
+                gift => gift.id === product.id
+            );
 
         checkbox.addEventListener(
             "change",
-            function() {
+            function () {
                 let gifts =
                     getSelectedFreeGiftProducts();
 
@@ -1030,20 +581,19 @@ function renderGiftOptions() {
                         gifts.push(product);
                     }
                 } else {
-                    gifts =
-                        gifts.filter(
-                            gift =>
-                                gift.id !== product.id
-                        );
+                    gifts = gifts.filter(
+                        gift =>
+                            gift.id !== product.id
+                    );
                 }
 
-                saveSelectedFreeGiftProducts(
-                    gifts
-                );
+                saveSelectedFreeGiftProducts(gifts);
 
-                if (
-                    gifts.length === unlocked
-                ) {
+                /*
+                 * REQUIRED NUMBER OF GIFTS SELECTED.
+                 */
+
+                if (gifts.length === unlocked) {
                     localStorage.setItem(
                         GIFT_FLOW_KEY,
                         "true"
@@ -1062,7 +612,13 @@ function renderGiftOptions() {
                     );
 
                     updateGiftProgress();
+
                 } else {
+                    /*
+                     * If they haven't finished selecting
+                     * gifts, they are NOT in spending mode.
+                     */
+
                     localStorage.removeItem(
                         GIFT_FLOW_KEY
                     );
@@ -1073,8 +629,7 @@ function renderGiftOptions() {
                         );
 
                     if (bar) {
-                        bar.style.display =
-                            "none";
+                        bar.style.display = "none";
                     }
 
                     document.body.classList.remove(
@@ -1087,50 +642,36 @@ function renderGiftOptions() {
         label.appendChild(checkbox);
 
         label.appendChild(
-            document.createTextNode(
-                product.name
-            )
+            document.createTextNode(product.name)
         );
 
         container.appendChild(label);
     });
 }
 
-/* =========================================================
-   CART DISPLAY
-========================================================= */
+/* ========================= CART ========================= */
 
 function updateCartDisplay() {
     const cart = getCart();
-    const gifts =
-        getSelectedFreeGiftProducts();
+    const gifts = getSelectedFreeGiftProducts();
 
     const count =
-        document.getElementById(
-            "cartCount"
-        );
+        document.getElementById("cartCount");
 
     const items =
-        document.getElementById(
-            "cartItems"
-        );
+        document.getElementById("cartItems");
 
     const totalElement =
-        document.getElementById(
-            "cartTotal"
-        );
+        document.getElementById("cartTotal");
 
     if (count) {
-        const quantity =
+        count.textContent =
             cart.reduce(
                 (total, item) =>
                     total +
                     Number(item.quantity || 1),
                 0
             );
-
-        count.textContent =
-            quantity;
     }
 
     if (items) {
@@ -1140,138 +681,130 @@ function updateCartDisplay() {
             cart.length === 0 &&
             gifts.length === 0
         ) {
-            items.innerHTML = `
-                <p class="empty-cart">
+            items.innerHTML =
+                `<p class="empty-cart">
                     Your cart is empty.
-                </p>
-            `;
-        } else {
-            cart.forEach(
-                (item, index) => {
-                    const quantity =
-                        Number(
-                            item.quantity || 1
-                        );
-
-                    const itemTotal =
-                        Number(item.price || 0) *
-                        quantity;
-
-                    const div =
-                        document.createElement(
-                            "div"
-                        );
-
-                    div.className =
-                        "cart-item";
-
-                    div.innerHTML = `
-                        <div class="cart-item-info">
-
-                            <h3>
-                                ${item.name || item.listing || "Product"}
-                            </h3>
-
-                            <small>
-                                ${item.category || ""}
-                            </small>
-
-                            ${
-                                item.size
-                                    ? `<small>Size: ${item.size}</small>`
-                                    : ""
-                            }
-
-                            ${
-                                item.color
-                                    ? `<small>Shade: ${item.color}</small>`
-                                    : ""
-                            }
-
-                            <strong>
-                                ₦${Number(item.price || 0).toLocaleString()}
-                            </strong>
-
-                        </div>
-
-                        <div class="cart-item-actions">
-
-                            <div class="cart-quantity">
-
-                                <button
-                                    type="button"
-                                    data-action="minus"
-                                    data-index="${index}">
-                                    −
-                                </button>
-
-                                <span>
-                                    ${quantity}
-                                </span>
-
-                                <button
-                                    type="button"
-                                    data-action="plus"
-                                    data-index="${index}">
-                                    +
-                                </button>
-
-                            </div>
-
-                            <strong class="cart-item-total">
-                                ₦${itemTotal.toLocaleString()}
-                            </strong>
-
-                            <button
-                                type="button"
-                                class="remove-cart-item"
-                                data-index="${index}">
-                                Remove
-                            </button>
-
-                        </div>
-                    `;
-
-                    items.appendChild(div);
-                }
-            );
-
-            gifts.forEach(gift => {
-                const div =
-                    document.createElement(
-                        "div"
-                    );
-
-                div.className =
-                    "cart-item";
-
-                div.innerHTML = `
-                    <div class="cart-item-info">
-
-                        <h3>
-                            🎁 ${gift.name || gift.listing || "Free Gift"}
-                        </h3>
-
-                        <small>
-                            FREE GIFT
-                        </small>
-
-                        <strong>
-                            ₦0
-                        </strong>
-
-                    </div>
-
-                    <div>
-                        <strong>
-                            FREE
-                        </strong>
-                    </div>
-                `;
-
-                items.appendChild(div);
-            });
+                </p>`;
         }
+
+        cart.forEach((item, index) => {
+            const quantity =
+                Number(item.quantity || 1);
+
+            const itemTotal =
+                Number(item.price || 0) *
+                quantity;
+
+            const div =
+                document.createElement("div");
+
+            div.className = "cart-item";
+
+            div.innerHTML = `
+                <div class="cart-item-info">
+
+                    <h3>
+                        ${item.name || item.listing || "Product"}
+                    </h3>
+
+                    <small>
+                        ${item.category || ""}
+                    </small>
+
+                    ${
+                        item.size
+                            ? `<small>Size: ${item.size}</small>`
+                            : ""
+                    }
+
+                    ${
+                        item.color
+                            ? `<small>Shade: ${item.color}</small>`
+                            : ""
+                    }
+
+                    <strong>
+                        ₦${Number(
+                            item.price || 0
+                        ).toLocaleString()}
+                    </strong>
+
+                </div>
+
+                <div class="cart-item-actions">
+
+                    <div class="cart-quantity">
+
+                        <button
+                            type="button"
+                            data-action="minus"
+                            data-index="${index}"
+                        >
+                            −
+                        </button>
+
+                        <span>
+                            ${quantity}
+                        </span>
+
+                        <button
+                            type="button"
+                            data-action="plus"
+                            data-index="${index}"
+                        >
+                            +
+                        </button>
+
+                    </div>
+
+                    <strong class="cart-item-total">
+                        ₦${itemTotal.toLocaleString()}
+                    </strong>
+
+                    <button
+                        type="button"
+                        class="remove-cart-item"
+                        data-index="${index}"
+                    >
+                        Remove
+                    </button>
+
+                </div>
+            `;
+
+            items.appendChild(div);
+        });
+
+        gifts.forEach(gift => {
+            const div =
+                document.createElement("div");
+
+            div.className = "cart-item";
+
+            div.innerHTML = `
+                <div class="cart-item-info">
+
+                    <h3>
+                        🎁 ${gift.name || "Free Gift"}
+                    </h3>
+
+                    <small>
+                        FREE GIFT
+                    </small>
+
+                    <strong>
+                        ₦0
+                    </strong>
+
+                </div>
+
+                <div>
+                    <strong>FREE</strong>
+                </div>
+            `;
+
+            items.appendChild(div);
+        });
     }
 
     if (totalElement) {
@@ -1282,24 +815,14 @@ function updateCartDisplay() {
     updateGiftProgress();
 }
 
-/* =========================================================
-   CART CONTROLS
-========================================================= */
-
 function changeCartQuantity(index, amount) {
     const cart = getCart();
 
-    if (!cart[index]) {
-        return;
-    }
-
-    const current =
-        Number(
-            cart[index].quantity || 1
-        );
+    if (!cart[index]) return;
 
     const next =
-        current + amount;
+        Number(cart[index].quantity || 1) +
+        amount;
 
     if (next <= 0) {
         cart.splice(index, 1);
@@ -1319,15 +842,9 @@ function removeCartItem(index) {
     saveCart(cart);
 }
 
-/* =========================================================
-   ADD TO CART
-========================================================= */
+/* ========================= ADD TO CART ========================= */
 
-function addToCart(
-    product,
-    color = "",
-    size = ""
-) {
+function addToCart(product, color = "", size = "") {
     const cart = getCart();
 
     const existing =
@@ -1351,8 +868,8 @@ function addToCart(
             listing: product.listing,
             category: product.category,
             price: product.price,
-            size: size,
-            color: color,
+            size,
+            color,
             quantity: 1
         });
     }
@@ -1364,9 +881,7 @@ function addToCart(
     );
 }
 
-/* =========================================================
-   SMALL MESSAGE
-========================================================= */
+/* ========================= MESSAGE ========================= */
 
 function showSmallMessage(message) {
     const old =
@@ -1374,9 +889,7 @@ function showSmallMessage(message) {
             "collectiveSmallMessage"
         );
 
-    if (old) {
-        old.remove();
-    }
+    if (old) old.remove();
 
     const box =
         document.createElement("div");
@@ -1395,33 +908,43 @@ function showSmallMessage(message) {
         padding:12px 22px;
         border-radius:25px;
         font-size:13px;
-        box-shadow:0 8px 25px rgba(0,0,0,0.15);
+        box-shadow:0 8px 25px rgba(0,0,0,.15);
     `;
 
-    box.textContent =
-        message;
+    box.textContent = message;
 
     document.body.appendChild(box);
 
     setTimeout(() => {
-        if (box.parentNode) {
-            box.remove();
-        }
+        if (box.parentNode) box.remove();
     }, 2200);
 }
 
-/* =========================================================
-   PRODUCT DISPLAY
-========================================================= */
+/* ========================= MIX PRODUCTS ========================= */
 
-function renderProducts(
-    products = productCatalog
-) {
-    /*
-     * SUPPORTS THE DIFFERENT PRODUCT CONTAINER
-     * NAMES USED IN THE SHOP.
-     */
+/*
+   Creates a mixed/scattered product order.
+   Products from different categories and different
+   product types are spread throughout the shop.
+*/
 
+function shuffleProducts(products) {
+    const array = [...products];
+
+    for (let i = array.length - 1; i > 0; i--) {
+        const j =
+            Math.floor(Math.random() * (i + 1));
+
+        [array[i], array[j]] =
+            [array[j], array[i]];
+    }
+
+    return array;
+}
+
+/* ========================= PRODUCT DISPLAY ========================= */
+
+function renderProducts(products = productCatalog) {
     const grid =
         document.getElementById("productGrid") ||
         document.getElementById("productsGrid") ||
@@ -1432,38 +955,37 @@ function renderProducts(
         document.querySelector(".no-products");
 
     if (!grid) {
-        console.error(
-            "Product grid was not found."
-        );
+        console.error("Product grid was not found.");
         return;
     }
 
     grid.innerHTML = "";
 
-    if (
-        !products ||
-        products.length === 0
-    ) {
-        if (noProducts) {
-            noProducts.style.display =
-                "block";
-        }
+    if (!products || products.length === 0) {
+        if (noProducts)
+            noProducts.style.display = "block";
 
         return;
     }
 
-    if (noProducts) {
-        noProducts.style.display =
-            "none";
-    }
+    if (noProducts)
+        noProducts.style.display = "none";
 
     /*
-     * SHOW PRODUCTS AS INDIVIDUAL CARDS.
-     */
+       IMPORTANT:
+       Only MIX when displaying ALL PRODUCTS.
+       Search/category results stay logically filtered.
+    */
 
-    products
+    const displayProducts =
+        products === productCatalog
+            ? shuffleProducts(products)
+            : products;
+
+    displayProducts
         .slice(0, 60)
         .forEach(product => {
+
             const card =
                 document.createElement("div");
 
@@ -1474,7 +996,7 @@ function renderProducts(
 
             if (
                 Array.isArray(product.colors) &&
-                product.colors.length > 0
+                product.colors.length
             ) {
                 colorHTML = `
                     <select
@@ -1501,7 +1023,7 @@ function renderProducts(
 
             if (
                 Array.isArray(product.sizes) &&
-                product.sizes.length > 0
+                product.sizes.length
             ) {
                 sizeHTML = `
                     <select
@@ -1522,14 +1044,9 @@ function renderProducts(
                             .join("")}
                     </select>
                 `;
-            } else if (
-                product.size
-            ) {
-                sizeHTML = `
-                    <p>
-                        Size: ${product.size}
-                    </p>
-                `;
+            } else if (product.size) {
+                sizeHTML =
+                    `<p>Size: ${product.size}</p>`;
             }
 
             card.innerHTML = `
@@ -1554,7 +1071,9 @@ function renderProducts(
                     ${sizeHTML}
 
                     <strong class="product-price">
-                        ₦${Number(product.price).toLocaleString()}
+                        ₦${Number(
+                            product.price
+                        ).toLocaleString()}
                     </strong>
 
                     <div class="stock-status">
@@ -1574,81 +1093,65 @@ function renderProducts(
                 </div>
             `;
 
-            const button =
-                card.querySelector(
-                    ".add-to-cart"
+            card
+                .querySelector(".add-to-cart")
+                ?.addEventListener(
+                    "click",
+                    () => {
+
+                        const colorSelect =
+                            card.querySelector(
+                                ".product-color"
+                            );
+
+                        const sizeSelect =
+                            card.querySelector(
+                                ".product-size"
+                            );
+
+                        const color =
+                            colorSelect
+                                ? colorSelect.value
+                                : "";
+
+                        const size =
+                            sizeSelect
+                                ? sizeSelect.value
+                                : product.size || "";
+
+                        if (
+                            product.sizes?.length &&
+                            !size
+                        ) {
+                            showSmallMessage(
+                                "Please select a size."
+                            );
+                            return;
+                        }
+
+                        if (
+                            product.colors?.length &&
+                            !color
+                        ) {
+                            showSmallMessage(
+                                "Please select a color."
+                            );
+                            return;
+                        }
+
+                        addToCart(
+                            product,
+                            color,
+                            size
+                        );
+                    }
                 );
-
-            button?.addEventListener(
-                "click",
-                () => {
-                    const colorSelect =
-                        card.querySelector(
-                            ".product-color"
-                        );
-
-                    const sizeSelect =
-                        card.querySelector(
-                            ".product-size"
-                        );
-
-                    const color =
-                        colorSelect
-                            ? colorSelect.value
-                            : "";
-
-                    const size =
-                        sizeSelect
-                            ? sizeSelect.value
-                            : product.size || "";
-
-                    /*
-                     * CLOTHING AND SHOES MUST
-                     * HAVE A SIZE SELECTED.
-                     */
-
-                    if (
-                        product.sizes &&
-                        product.sizes.length > 0 &&
-                        !size
-                    ) {
-                        showSmallMessage(
-                            "Please select a size."
-                        );
-                        return;
-                    }
-
-                    /*
-                     * PRODUCTS WITH COLORS MUST
-                     * HAVE A COLOR SELECTED.
-                     */
-
-                    if (
-                        product.colors &&
-                        product.colors.length > 0 &&
-                        !color
-                    ) {
-                        showSmallMessage(
-                            "Please select a color."
-                        );
-                        return;
-                    }
-
-                    addToCart(
-                        product,
-                        color,
-                        size
-                    );
-                }
-            );
 
             grid.appendChild(card);
         });
 }
 
-/* =========================================================
-   SEARCH
-========================================================= */
+/* ========================= SEARCH ========================= */
 
 function setupSearch() {
     const input =
@@ -1661,9 +1164,7 @@ function setupSearch() {
             "searchButton"
         );
 
-    if (!input) {
-        return;
-    }
+    if (!input) return;
 
     function search() {
         const term =
@@ -1677,13 +1178,14 @@ function setupSearch() {
                     product.name
                         .toLowerCase()
                         .includes(term) ||
-
                     product.category
                         .toLowerCase()
                         .includes(term)
             );
 
-        renderProducts(results);
+        renderProducts(
+            term ? results : productCatalog
+        );
     }
 
     input.addEventListener(
@@ -1697,9 +1199,7 @@ function setupSearch() {
     );
 }
 
-/* =========================================================
-   CATEGORY MENU
-========================================================= */
+/* ========================= CATEGORY ========================= */
 
 function setupCategories() {
     const menu =
@@ -1712,9 +1212,7 @@ function setupCategories() {
             "categoryBtn"
         );
 
-    if (!menu) {
-        return;
-    }
+    if (!menu) return;
 
     const categories = [
         "All Products",
@@ -1728,26 +1226,23 @@ function setupCategories() {
     menu.innerHTML = "";
 
     categories.forEach(category => {
+
         const btn =
             document.createElement("button");
 
         btn.className =
             "category-button";
 
-        if (
-            category === "All Products"
-        ) {
-            btn.classList.add(
-                "selected"
-            );
+        if (category === "All Products") {
+            btn.classList.add("selected");
         }
 
-        btn.textContent =
-            category;
+        btn.textContent = category;
 
         btn.addEventListener(
             "click",
             () => {
+
                 document
                     .querySelectorAll(
                         ".category-button"
@@ -1758,17 +1253,10 @@ function setupCategories() {
                         )
                     );
 
-                btn.classList.add(
-                    "selected"
-                );
+                btn.classList.add("selected");
 
-                if (
-                    category ===
-                    "All Products"
-                ) {
-                    renderProducts(
-                        productCatalog
-                    );
+                if (category === "All Products") {
+                    renderProducts(productCatalog);
                 } else {
                     renderProducts(
                         productCatalog.filter(
@@ -1787,6 +1275,7 @@ function setupCategories() {
     button?.addEventListener(
         "click",
         event => {
+
             event.preventDefault();
 
             menu.style.display =
@@ -1797,33 +1286,22 @@ function setupCategories() {
     );
 }
 
-/* =========================================================
-   CART POPUP
-========================================================= */
+/* ========================= CART POPUP ========================= */
 
 function openCart() {
-    const popup =
-        document.getElementById(
-            "cartPopup"
-        );
-
-    if (popup) {
-        popup.classList.add("open");
-    }
+    document
+        .getElementById("cartPopup")
+        ?.classList.add("open");
 }
 
 function closeCart() {
-    const popup =
-        document.getElementById(
-            "cartPopup"
-        );
-
-    if (popup) {
-        popup.classList.remove("open");
-    }
+    document
+        .getElementById("cartPopup")
+        ?.classList.remove("open");
 }
 
 function setupCart() {
+
     document
         .getElementById("cartBtn")
         ?.addEventListener(
@@ -1838,69 +1316,62 @@ function setupCart() {
             closeCart
         );
 
-    const items =
-        document.getElementById(
-            "cartItems"
+    document
+        .getElementById("cartItems")
+        ?.addEventListener(
+            "click",
+            event => {
+
+                const button =
+                    event.target.closest(
+                        "button"
+                    );
+
+                if (!button) return;
+
+                const index =
+                    Number(
+                        button.dataset.index
+                    );
+
+                if (
+                    button.dataset.action ===
+                    "plus"
+                ) {
+                    changeCartQuantity(
+                        index,
+                        1
+                    );
+                }
+
+                if (
+                    button.dataset.action ===
+                    "minus"
+                ) {
+                    changeCartQuantity(
+                        index,
+                        -1
+                    );
+                }
+
+                if (
+                    button.classList.contains(
+                        "remove-cart-item"
+                    )
+                ) {
+                    removeCartItem(index);
+                }
+            }
         );
-
-    items?.addEventListener(
-        "click",
-        event => {
-            const button =
-                event.target.closest(
-                    "button"
-                );
-
-            if (!button) {
-                return;
-            }
-
-            const index =
-                Number(
-                    button.dataset.index
-                );
-
-            if (
-                button.dataset.action ===
-                "plus"
-            ) {
-                changeCartQuantity(
-                    index,
-                    1
-                );
-            }
-
-            if (
-                button.dataset.action ===
-                "minus"
-            ) {
-                changeCartQuantity(
-                    index,
-                    -1
-                );
-            }
-
-            if (
-                button.classList.contains(
-                    "remove-cart-item"
-                )
-            ) {
-                removeCartItem(index);
-            }
-        }
-    );
 }
 
-/* =========================================================
-   CHECKOUT
-========================================================= */
+/* ========================= CHECKOUT ========================= */
 
 let checkoutOpening = false;
 
 function checkout() {
-    if (checkoutOpening) {
-        return;
-    }
+
+    if (checkoutOpening) return;
 
     checkoutOpening = true;
 
@@ -1910,11 +1381,10 @@ function checkout() {
 
     const cart = getCart();
 
-    if (cart.length === 0) {
+    if (!cart.length) {
         showSmallMessage(
             "Your cart is empty."
         );
-
         return;
     }
 
@@ -1942,30 +1412,22 @@ function checkout() {
 
 window.checkout = checkout;
 window.getCartTotal = getCartTotal;
-window.updateCartDisplay =
-    updateCartDisplay;
+window.updateCartDisplay = updateCartDisplay;
 
-/* =========================================================
-   CHECKOUT MODAL
-========================================================= */
+/* ========================= CHECKOUT MODAL ========================= */
 
 function createCheckoutModal() {
+
     const old =
         document.getElementById(
             "collectiveCheckoutModal"
         );
 
-    if (old) {
-        old.remove();
-    }
+    if (old) old.remove();
 
     const cart = getCart();
-
-    const gifts =
-        getSelectedFreeGiftProducts();
-
-    const paidTotal =
-        getCartTotal();
+    const gifts = getSelectedFreeGiftProducts();
+    const paidTotal = getCartTotal();
 
     const modal =
         document.createElement("div");
@@ -1977,7 +1439,7 @@ function createCheckoutModal() {
         position:fixed;
         inset:0;
         z-index:100000;
-        background:rgba(48,75,82,0.45);
+        background:rgba(48,75,82,.45);
         display:flex;
         align-items:center;
         justify-content:center;
@@ -1994,21 +1456,16 @@ function createCheckoutModal() {
             border-radius:25px;
             padding:32px;
             box-sizing:border-box;
-            box-shadow:0 18px 50px rgba(0,0,0,0.2);
-            text-align:left;
+            box-shadow:0 18px 50px rgba(0,0,0,.2);
         ">
 
             <div style="
                 display:flex;
                 justify-content:space-between;
                 align-items:center;
-                gap:20px;
             ">
 
-                <h2 style="
-                    color:#304B52;
-                    margin:0;
-                ">
+                <h2 style="color:#304B52;">
                     Checkout
                 </h2>
 
@@ -2028,9 +1485,7 @@ function createCheckoutModal() {
 
             </div>
 
-            <div style="
-                margin-top:20px;
-            ">
+            <div style="margin-top:20px;">
 
                 ${cart.map(item => `
                     <div style="
@@ -2045,13 +1500,11 @@ function createCheckoutModal() {
                         <span>
                             ${item.name}
                             × ${item.quantity || 1}
-
                             ${
                                 item.size
                                     ? ` • Size: ${item.size}`
                                     : ""
                             }
-
                             ${
                                 item.color
                                     ? ` • ${item.color}`
@@ -2070,7 +1523,7 @@ function createCheckoutModal() {
                 `).join("")}
 
                 ${
-                    gifts.length > 0
+                    gifts.length
                         ? `
                             <div style="
                                 margin-top:18px;
@@ -2079,9 +1532,7 @@ function createCheckoutModal() {
                                 background:#E8F1F2;
                             ">
 
-                                <strong style="
-                                    color:#304B52;
-                                ">
+                                <strong>
                                     🎁 Your Free Gifts
                                 </strong>
 
@@ -2090,9 +1541,8 @@ function createCheckoutModal() {
                                         <div style="
                                             margin-top:8px;
                                             color:#6F858A;
-                                            font-size:14px;
                                         ">
-                                            ${gift.name || "Free Gift"}
+                                            ${gift.name}
                                             — FREE
                                         </div>
                                     `
@@ -2113,9 +1563,7 @@ function createCheckoutModal() {
                     font-size:19px;
                 ">
 
-                    <strong>
-                        Total to pay
-                    </strong>
+                    <strong>Total to pay</strong>
 
                     <strong>
                         ₦${paidTotal.toLocaleString()}
@@ -2169,19 +1617,16 @@ function createCheckoutModal() {
         );
 }
 
-/* =========================================================
-   PAYMENT MODAL
-========================================================= */
+/* ========================= PAYMENT ========================= */
 
 function showPaymentModal() {
+
     const old =
         document.getElementById(
             "collectivePaymentModal"
         );
 
-    if (old) {
-        old.remove();
-    }
+    if (old) old.remove();
 
     const modal =
         document.createElement("div");
@@ -2189,14 +1634,13 @@ function showPaymentModal() {
     modal.id =
         "collectivePaymentModal";
 
-    const total =
-        getCartTotal();
+    const total = getCartTotal();
 
     modal.style.cssText = `
         position:fixed;
         inset:0;
         z-index:100001;
-        background:rgba(48,75,82,0.45);
+        background:rgba(48,75,82,.45);
         display:flex;
         align-items:center;
         justify-content:center;
@@ -2213,21 +1657,14 @@ function showPaymentModal() {
             border-radius:25px;
             padding:32px;
             box-sizing:border-box;
-            box-shadow:0 18px 50px rgba(0,0,0,0.2);
-            text-align:left;
+            box-shadow:0 18px 50px rgba(0,0,0,.2);
         ">
 
-            <h2 style="
-                color:#304B52;
-                margin-top:0;
-            ">
+            <h2 style="color:#304B52;">
                 Payment
             </h2>
 
-            <p style="
-                color:#6F858A;
-                font-size:14px;
-            ">
+            <p style="color:#6F858A;">
                 Amount to pay:
                 <strong style="color:#304B52;">
                     ₦${total.toLocaleString()}
@@ -2243,11 +1680,7 @@ function showPaymentModal() {
                 line-height:1.8;
             ">
 
-                <strong>
-                    GTBank
-                </strong>
-
-                <br>
+                <strong>GTBank</strong><br>
 
                 Account Name:
                 <strong>
@@ -2263,11 +1696,7 @@ function showPaymentModal() {
 
                 <br><br>
 
-                <strong>
-                    SmartCash PSB
-                </strong>
-
-                <br>
+                <strong>SmartCash PSB</strong><br>
 
                 Account Name:
                 <strong>
@@ -2348,26 +1777,19 @@ function showPaymentModal() {
         ?.addEventListener(
             "click",
             async () => {
+
                 const button =
                     document.getElementById(
                         "paymentMadeButton"
                     );
 
-                if (!button) {
-                    return;
-                }
+                if (!button) return;
 
                 button.disabled = true;
-
                 button.textContent =
                     "SUBMITTING ORDER...";
 
                 await createPendingOrder();
-
-                /*
-                 * KEEP THE CART UNTIL THE ORDER
-                 * HAS BEEN SUBMITTED.
-                 */
 
                 modal.remove();
 
@@ -2378,18 +1800,13 @@ function showPaymentModal() {
         );
 }
 
-/* =========================================================
-   FIREBASE ORDER
-========================================================= */
+/* ========================= FIREBASE ORDER ========================= */
 
 async function createPendingOrder() {
+
     const cart = getCart();
-
-    const gifts =
-        getSelectedFreeGiftProducts();
-
-    const paidTotal =
-        getCartTotal();
+    const gifts = getSelectedFreeGiftProducts();
+    const paidTotal = getCartTotal();
 
     const customer =
         localStorage.getItem(
@@ -2411,11 +1828,10 @@ async function createPendingOrder() {
             new Date().toISOString()
     };
 
-    if (
-        firebaseDB &&
-        firebaseDB.db
-    ) {
+    if (firebaseDB?.db) {
+
         try {
+
             await firebaseDB.addDoc(
                 firebaseDB.collection(
                     firebaseDB.db,
@@ -2423,15 +1839,6 @@ async function createPendingOrder() {
                 ),
                 order
             );
-
-            console.log(
-                "Order saved to Firebase."
-            );
-
-            /*
-             * AFTER SUCCESSFULLY SAVING THE ORDER,
-             * CLEAR THE SHOPPING CART.
-             */
 
             localStorage.removeItem(
                 CART_KEY
@@ -2442,6 +1849,7 @@ async function createPendingOrder() {
             updateCartDisplay();
 
         } catch (error) {
+
             console.error(
                 "Could not save order:",
                 error
@@ -2452,26 +1860,47 @@ async function createPendingOrder() {
                 JSON.stringify(order)
             );
         }
+
     } else {
+
         localStorage.setItem(
             "collectivePendingOrder",
             JSON.stringify(order)
         );
-
-        console.log(
-            "Firebase still loading. Order saved locally."
-        );
     }
 }
 
-/* =========================================================
-   STORAGE SYNC
-========================================================= */
+/* ========================= CHECKOUT BUTTON ========================= */
+
+function setupCheckout() {
+
+    const button =
+        document.getElementById(
+            "checkoutBtn"
+        );
+
+    if (!button) return;
+
+    button.addEventListener(
+        "click",
+        event => {
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            checkout();
+        }
+    );
+}
+
+/* ========================= STORAGE SYNC ========================= */
 
 function setupStorageSync() {
+
     window.addEventListener(
         "storage",
         event => {
+
             if (
                 [
                     CART_KEY,
@@ -2480,10 +1909,9 @@ function setupStorageSync() {
                     POINTS_KEY,
                     TOTAL_SPENT_KEY,
                     GIFT_FLOW_KEY
-                ].includes(
-                    event.key
-                )
+                ].includes(event.key)
             ) {
+
                 updateCartDisplay();
                 renderGiftOptions();
                 updateGiftProgress();
@@ -2500,176 +1928,30 @@ function setupStorageSync() {
     );
 }
 
-/* =========================================================
-   CHECKOUT BUTTON
-========================================================= */
-
-function setupCheckout() {
-    const button =
-        document.getElementById(
-            "checkoutBtn"
-        );
-
-    if (!button) {
-        return;
-    }
-
-    button.addEventListener(
-        "click",
-        function(event) {
-            event.preventDefault();
-            event.stopPropagation();
-
-            /*
-             * NORMAL MANUAL CHECKOUT.
-             *
-             * FREE-GIFT CHECKOUT IS AUTOMATIC
-             * WHEN THE TARGET IS REACHED.
-             */
-
-            checkout();
-        }
-    );
-}
-
-/* =========================================================
-   INITIALISE SAVED GIFT FLOW
-========================================================= */
-
-function initialiseSavedGiftFlow() {
-    const gifts =
-        getSelectedFreeGiftProducts();
-
-    const bar =
-        document.getElementById(
-            "giftSpendBar"
-        );
-
-    /*
-     * NO 5 OR 10 GIFTS = NO GIFT BAR.
-     */
-
-    if (
-        gifts.length !== 5 &&
-        gifts.length !== 10
-    ) {
-        if (bar) {
-            bar.style.display =
-                "none";
-        }
-
-        document.body.classList.remove(
-            "gift-shopping-active"
-        );
-
-        return;
-    }
-
-    const unlocked =
-        gifts.length;
-
-    localStorage.setItem(
-        GIFT_FLOW_KEY,
-        "true"
-    );
-
-    document.body.classList.add(
-        "gift-shopping-active"
-    );
-
-    if (bar) {
-        bar.style.display =
-            "block";
-    }
-
-    const target =
-        unlocked === 10
-            ? 100000
-            : 50000;
-
-    const popup =
-        document.getElementById(
-            "giftSpendPopup"
-        );
-
-    if (popup) {
-        const title =
-            popup.querySelector("h2");
-
-        const paragraphs =
-            popup.querySelectorAll("p");
-
-        if (title) {
-            title.textContent =
-                `Your ${unlocked} gifts are saved!`;
-        }
-
-        if (paragraphs[0]) {
-            paragraphs[0].innerHTML =
-                `Spend <strong>₦${target.toLocaleString()}</strong> on your purchases to take away your ${unlocked} free gifts.`;
-        }
-
-        if (paragraphs[1]) {
-            paragraphs[1].textContent =
-                `Your free gifts do not count toward the ₦${target.toLocaleString()}.`;
-        }
-
-        if (
-            localStorage.getItem(
-                GIFT_POPUP_KEY
-            ) !== "true"
-        ) {
-            popup.style.display =
-                "flex";
-
-            localStorage.setItem(
-                GIFT_POPUP_KEY,
-                "true"
-            );
-
-            setTimeout(() => {
-                popup.style.display =
-                    "none";
-            }, 5000);
-        }
-    }
-
-    automaticGiftCheckoutStarted =
-        false;
-
-    updateGiftProgress();
-}
-
-/* =========================================================
-   INITIALISE EVERYTHING
-========================================================= */
+/* ========================= INITIALISE ========================= */
 
 document.addEventListener(
     "DOMContentLoaded",
-    function() {
+    () => {
+
         console.log(
             "THE COLLECTIVE.CO shop loaded."
         );
 
-        renderProducts(
-            productCatalog
-        );
+        /*
+         * MIXED PRODUCT DISPLAY
+         */
+        renderProducts(productCatalog);
 
         setupSearch();
-
         setupCategories();
-
         setupCart();
-
         setupCheckout();
 
         updateCartDisplay();
-
         renderGiftOptions();
-
-        initialiseSavedGiftFlow();
+        updateGiftProgress();
 
         setupStorageSync();
     }
 );
-```
