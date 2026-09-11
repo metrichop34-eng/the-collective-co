@@ -1,5 +1,5 @@
 /* =========================================================
-   THE COLLECTIVE.CO — COMPLETE SHOP SYSTEM
+   THE COLLECTIVE.CO — SHOP SYSTEM
    ========================================================= */
 
 
@@ -21,19 +21,14 @@ let firebaseDB = null;
 
 (async function loadFirebase() {
     try {
-        const {
-            initializeApp
-        } = await import(
+        const { initializeApp } = await import(
             "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js"
         );
 
         const {
             getFirestore,
             collection,
-            addDoc,
-            doc,
-            getDoc,
-            updateDoc
+            addDoc
         } = await import(
             "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js"
         );
@@ -43,10 +38,7 @@ let firebaseDB = null;
         firebaseDB = {
             db: getFirestore(app),
             collection,
-            addDoc,
-            doc,
-            getDoc,
-            updateDoc
+            addDoc
         };
 
         console.log("Firebase connected.");
@@ -57,7 +49,7 @@ let firebaseDB = null;
 
 
 /* =========================================================
-   PRODUCT CATALOG
+   PRODUCT CREATOR
 ========================================================= */
 
 function makeProducts(category, products) {
@@ -67,13 +59,15 @@ function makeProducts(category, products) {
         const count = item.count || 30;
 
         for (let i = 1; i <= count; i++) {
+
             let price = item.price;
 
             if (Array.isArray(item.price)) {
+
                 const min = item.price[0];
                 const max = item.price[1];
 
-                const step = (max - min) / (count - 1);
+                const step = (max - min) / Math.max(count - 1, 1);
 
                 price = Math.round(
                     (min + step * (i - 1)) / 100
@@ -84,8 +78,8 @@ function makeProducts(category, products) {
                 id: `${item.name}-${i}`,
                 name: item.name,
                 listing: `${item.name} ${i}`,
-                category: category,
-                price: price,
+                category,
+                price,
                 description: item.description || "",
                 size: item.size || "Not specified",
                 colors: item.colors || [],
@@ -97,6 +91,10 @@ function makeProducts(category, products) {
     return result;
 }
 
+
+/* =========================================================
+   PRODUCT CATALOG
+========================================================= */
 
 const productCatalog = [
 
@@ -422,12 +420,45 @@ const productCatalog = [
             price: [15000, 25000]
         }
     ])
-
 ];
 
 
 /* =========================================================
-   LOCAL STORAGE KEYS
+   SCATTER PRODUCTS
+   ========================================================= */
+
+function shuffleProducts(products) {
+
+    const shuffled = [...products];
+
+    for (let i = shuffled.length - 1; i > 0; i--) {
+
+        const randomIndex =
+            Math.floor(Math.random() * (i + 1));
+
+        [
+            shuffled[i],
+            shuffled[randomIndex]
+        ] = [
+            shuffled[randomIndex],
+            shuffled[i]
+        ];
+    }
+
+    return shuffled;
+}
+
+
+/*
+ * The catalog stays intact.
+ * Only the shop display order is shuffled.
+ */
+const scatteredProducts =
+    shuffleProducts(productCatalog);
+
+
+/* =========================================================
+   LOCAL STORAGE
 ========================================================= */
 
 const CART_KEY = "collectiveCart";
@@ -440,25 +471,35 @@ const OLD_GIFT_KEY = "collectiveFreeGifts";
 const GIFT_FLOW_KEY = "collectiveGiftFlowActive";
 const GIFT_POPUP_KEY = "collectiveGiftPopupShown";
 
+let automaticCheckoutStarted = false;
+
 
 /* =========================================================
-   BASIC STORAGE HELPERS
+   STORAGE HELPERS
 ========================================================= */
 
 function getCart() {
-    try {
-        const cart = JSON.parse(
-            localStorage.getItem(CART_KEY) || "[]"
-        );
 
-        return Array.isArray(cart) ? cart : [];
+    try {
+
+        const cart =
+            JSON.parse(
+                localStorage.getItem(CART_KEY) || "[]"
+            );
+
+        return Array.isArray(cart)
+            ? cart
+            : [];
+
     } catch {
+
         return [];
     }
 }
 
 
 function saveCart(cart) {
+
     localStorage.setItem(
         CART_KEY,
         JSON.stringify(cart)
@@ -469,6 +510,7 @@ function saveCart(cart) {
 
 
 function getPoints() {
+
     return Number(
         localStorage.getItem(POINTS_KEY) || "0"
     );
@@ -476,6 +518,7 @@ function getPoints() {
 
 
 function getTotalSpent() {
+
     return Number(
         localStorage.getItem(TOTAL_SPENT_KEY) || "0"
     );
@@ -483,10 +526,14 @@ function getTotalSpent() {
 
 
 function getCartTotal() {
+
     return getCart().reduce(
         (total, item) => {
+
             return total +
-                (Number(item.price) * Number(item.quantity || 1));
+                Number(item.price) *
+                Number(item.quantity || 1);
+
         },
         0
     );
@@ -502,29 +549,44 @@ function getSelectedFreeGiftProducts() {
     let gifts = [];
 
     try {
-        gifts = JSON.parse(
-            localStorage.getItem(GIFT_KEY) || "[]"
-        );
+
+        gifts =
+            JSON.parse(
+                localStorage.getItem(GIFT_KEY) || "[]"
+            );
+
     } catch {
+
         gifts = [];
     }
 
-    if (!Array.isArray(gifts) || gifts.length === 0) {
+
+    if (
+        !Array.isArray(gifts) ||
+        gifts.length === 0
+    ) {
 
         try {
-            gifts = JSON.parse(
-                localStorage.getItem(OLD_GIFT_KEY) || "[]"
-            );
+
+            gifts =
+                JSON.parse(
+                    localStorage.getItem(
+                        OLD_GIFT_KEY
+                    ) || "[]"
+                );
+
         } catch {
+
             gifts = [];
         }
     }
+
 
     if (!Array.isArray(gifts)) {
         return [];
     }
 
-    /* Convert old IDs into full products */
+
     return gifts
         .map(gift => {
 
@@ -533,18 +595,24 @@ function getSelectedFreeGiftProducts() {
                 typeof gift === "object" &&
                 gift.id
             ) {
-                const found = productCatalog.find(
-                    product => product.id === gift.id
-                );
 
-                return found || gift;
+                return (
+                    productCatalog.find(
+                        product =>
+                            product.id === gift.id
+                    ) || gift
+                );
             }
+
 
             if (typeof gift === "string") {
+
                 return productCatalog.find(
-                    product => product.id === gift
+                    product =>
+                        product.id === gift
                 );
             }
+
 
             return null;
         })
@@ -559,6 +627,7 @@ function saveSelectedFreeGiftProducts(gifts) {
             ? gifts
             : [];
 
+
     localStorage.setItem(
         GIFT_KEY,
         JSON.stringify(safeGifts)
@@ -569,9 +638,12 @@ function saveSelectedFreeGiftProducts(gifts) {
         JSON.stringify(safeGifts)
     );
 
-    updateCartDisplay();
+
+    updateGiftSelectionBar();
 
     updateGiftProgress();
+
+    updateCartDisplay();
 }
 
 
@@ -581,22 +653,256 @@ function clearSelectedFreeGiftProducts() {
     localStorage.removeItem(OLD_GIFT_KEY);
     localStorage.removeItem(GIFT_FLOW_KEY);
     localStorage.removeItem(GIFT_POPUP_KEY);
+
+    document.body.classList.remove(
+        "gift-shopping-active"
+    );
+
+    hideGiftUI();
 }
 
 
+/* =========================================================
+   GIFT LEVEL
+========================================================= */
+
 function getFreeGiftLevel() {
 
-    const spent = getTotalSpent();
+    const spent =
+        getTotalSpent();
+
 
     if (spent >= 100000) {
         return 10;
     }
 
+
     if (spent >= 50000) {
         return 5;
     }
 
+
     return 0;
+}
+
+
+/* =========================================================
+   GIFT UI
+========================================================= */
+
+function hideGiftUI() {
+
+    const bar =
+        document.getElementById(
+            "giftSpendBar"
+        );
+
+    if (bar) {
+        bar.style.display = "none";
+    }
+
+
+    const selectionBar =
+        document.getElementById(
+            "giftSelectionBar"
+        );
+
+    if (selectionBar) {
+        selectionBar.remove();
+    }
+
+
+    document.body.classList.remove(
+        "gift-shopping-active"
+    );
+}
+
+
+function createGiftSelectionBar() {
+
+    let bar =
+        document.getElementById(
+            "giftSelectionBar"
+        );
+
+
+    if (bar) {
+        return bar;
+    }
+
+
+    bar =
+        document.createElement("div");
+
+    bar.id =
+        "giftSelectionBar";
+
+
+    bar.style.cssText = `
+        width:100%;
+        max-width:700px;
+        margin:20px auto;
+        padding:18px;
+        box-sizing:border-box;
+        background:#E8F1F2;
+        border-radius:18px;
+        text-align:center;
+        color:#304B52;
+    `;
+
+
+    bar.innerHTML = `
+
+        <strong
+            id="giftSelectionText"
+            style="
+                display:block;
+                margin-bottom:10px;
+                font-size:16px;
+            "
+        >
+            0 gifts selected
+        </strong>
+
+        <div style="
+            width:100%;
+            height:10px;
+            background:#D5E4E6;
+            border-radius:20px;
+            overflow:hidden;
+        ">
+
+            <div
+                id="giftSelectionFill"
+                style="
+                    width:0%;
+                    height:100%;
+                    background:#304B52;
+                    border-radius:20px;
+                    transition:width .3s ease;
+                "
+            ></div>
+
+        </div>
+
+    `;
+
+
+    const container =
+        document.getElementById(
+            "giftOptions"
+        );
+
+
+    if (container) {
+
+        container.parentNode.insertBefore(
+            bar,
+            container
+        );
+
+    } else {
+
+        document.body.prepend(bar);
+    }
+
+
+    return bar;
+}
+
+
+function updateGiftSelectionBar() {
+
+    const selected =
+        getSelectedFreeGiftProducts();
+
+    const unlocked =
+        getFreeGiftLevel();
+
+
+    /*
+     * NEVER show this during normal shopping.
+     */
+
+    if (
+        !localStorage.getItem(
+            GIFT_FLOW_KEY
+        ) === "true"
+    ) {
+        hideGiftUI();
+        return;
+    }
+
+
+    if (
+        selected.length === 0 &&
+        unlocked === 0
+    ) {
+        hideGiftUI();
+        return;
+    }
+
+
+    if (
+        selected.length !== 5 &&
+        selected.length !== 10
+    ) {
+
+        if (
+            !document.body.classList.contains(
+                "gift-shopping-active"
+            )
+        ) {
+            return;
+        }
+    }
+
+
+    if (
+        !document.body.classList.contains(
+            "gift-shopping-active"
+        )
+    ) {
+        return;
+    }
+
+
+    const target =
+        unlocked === 10
+            ? 10
+            : 5;
+
+
+    const bar =
+        createGiftSelectionBar();
+
+
+    const text =
+        document.getElementById(
+            "giftSelectionText"
+        );
+
+    const fill =
+        document.getElementById(
+            "giftSelectionFill"
+        );
+
+
+    if (text) {
+
+        text.textContent =
+            `${selected.length} / ${target} gifts selected`;
+    }
+
+
+    if (fill) {
+
+        fill.style.width =
+            Math.min(
+                (selected.length / target) * 100,
+                100
+            ) + "%";
+    }
 }
 
 
@@ -604,17 +910,7 @@ function getFreeGiftLevel() {
    GIFT POPUP
 ========================================================= */
 
-function showGiftPickedPopup(
-    selectedCount,
-    unlocked
-) {
-
-    if (
-        selectedCount !== unlocked ||
-        unlocked < 5
-    ) {
-        return;
-    }
+function showGiftSpendPopup(unlocked) {
 
     const target =
         unlocked === 10
@@ -622,10 +918,9 @@ function showGiftPickedPopup(
             : 50000;
 
 
-    /* Remove old popup */
     const old =
         document.getElementById(
-            "giftPickedPopup"
+            "giftSpendPopupDynamic"
         );
 
     if (old) {
@@ -633,58 +928,12 @@ function showGiftPickedPopup(
     }
 
 
-    /*
-     * ALSO USE THE EXISTING POPUP
-     * FROM SHOP.HTML
-     */
-
-    const existing =
-        document.getElementById(
-            "giftSpendPopup"
-        );
-
-    if (existing) {
-
-        const title =
-            existing.querySelector("h2");
-
-        const paragraphs =
-            existing.querySelectorAll("p");
-
-        if (title) {
-            title.textContent =
-                `Your ${unlocked} gifts are saved!`;
-        }
-
-        if (paragraphs[0]) {
-            paragraphs[0].innerHTML =
-                `Spend <strong>₦${target.toLocaleString()}</strong> on your purchases to take away your ${unlocked} free gifts.`;
-        }
-
-        if (paragraphs[1]) {
-            paragraphs[1].textContent =
-                `Your free gifts do not count toward the ₦${target.toLocaleString()}.`;
-        }
-
-        existing.style.display = "flex";
-
-        setTimeout(() => {
-            existing.style.display = "none";
-        }, 5000);
-    }
-
-
-    /*
-     * CREATE A BACKUP POPUP TOO
-     * SO THE MESSAGE WORKS EVEN IF
-     * SHOP.HTML CHANGES LATER.
-     */
-
     const popup =
         document.createElement("div");
 
     popup.id =
-        "giftPickedPopup";
+        "giftSpendPopupDynamic";
+
 
     popup.style.cssText = `
         position:fixed;
@@ -693,25 +942,29 @@ function showGiftPickedPopup(
         display:flex;
         align-items:center;
         justify-content:center;
-        background:rgba(48,75,82,0.45);
+        background:rgba(48,75,82,.45);
         padding:20px;
         box-sizing:border-box;
     `;
 
+
     popup.innerHTML = `
+
         <div style="
             width:min(450px,100%);
             background:#FFFDF8;
             border-radius:23px;
             padding:32px 25px;
             text-align:center;
-            box-shadow:0 18px 50px rgba(0,0,0,0.2);
+            box-shadow:0 18px 50px rgba(0,0,0,.2);
         ">
 
             <div style="
                 font-size:45px;
                 margin-bottom:10px;
-            ">🎁</div>
+            ">
+                🎁
+            </div>
 
             <h2 style="
                 color:#304B52;
@@ -725,7 +978,10 @@ function showGiftPickedPopup(
                 line-height:1.6;
                 font-size:15px;
             ">
-                Spend <strong>₦${target.toLocaleString()}</strong>
+                Spend
+                <strong>
+                    ₦${target.toLocaleString()}
+                </strong>
                 on your purchases to take away
                 your ${unlocked} free gifts.
             </p>
@@ -735,12 +991,12 @@ function showGiftPickedPopup(
                 line-height:1.6;
                 font-size:14px;
             ">
-                Your free gifts do not count
-                toward the ₦${target.toLocaleString()}.
+                Your free gifts do not count toward
+                the ₦${target.toLocaleString()}.
             </p>
 
             <button
-                id="giftPopupClose"
+                id="giftSpendPopupOK"
                 type="button"
                 style="
                     margin-top:12px;
@@ -752,52 +1008,102 @@ function showGiftPickedPopup(
                     cursor:pointer;
                 "
             >
-                OK
+                GO SHOPPING
             </button>
 
         </div>
     `;
 
+
     document.body.appendChild(popup);
 
+
     document
-        .getElementById("giftPopupClose")
+        .getElementById(
+            "giftSpendPopupOK"
+        )
         ?.addEventListener(
             "click",
-            () => popup.remove()
-        );
+            () => {
 
-    setTimeout(() => {
-        if (popup.parentNode) {
-            popup.remove();
-        }
-    }, 5000);
+                popup.remove();
+
+                localStorage.setItem(
+                    GIFT_FLOW_KEY,
+                    "true"
+                );
+
+                localStorage.removeItem(
+                    GIFT_POPUP_KEY
+                );
+
+                document.body.classList.add(
+                    "gift-shopping-active"
+                );
+
+                hideGiftUI();
+
+                /*
+                 * Automatically return to shop.
+                 */
+
+                window.location.href =
+                    "shop.html";
+            }
+        );
 }
 
 
 /* =========================================================
-   GIFT PROGRESS BAR
+   GIFT PROGRESS
 ========================================================= */
 
 function updateGiftProgress() {
 
+    /*
+     * Absolutely nothing shows during
+     * ordinary shopping.
+     */
+
+    if (
+        localStorage.getItem(
+            GIFT_FLOW_KEY
+        ) !== "true"
+    ) {
+
+        hideGiftUI();
+        return;
+    }
+
+
     const selected =
         getSelectedFreeGiftProducts();
+
 
     if (
         selected.length !== 5 &&
         selected.length !== 10
     ) {
+
+        hideGiftUI();
         return;
     }
+
+
+    document.body.classList.add(
+        "gift-shopping-active"
+    );
+
 
     const target =
         selected.length === 10
             ? 100000
             : 50000;
 
+
     const total =
         getCartTotal();
+
 
     const percentage =
         Math.min(
@@ -827,13 +1133,13 @@ function updateGiftProgress() {
         );
 
 
-    if (bar) {
-        bar.style.display = "block";
+    if (!bar) {
+        return;
     }
 
-    document.body.classList.add(
-        "gift-shopping-active"
-    );
+
+    bar.style.display =
+        "block";
 
 
     if (amount) {
@@ -844,6 +1150,7 @@ function updateGiftProgress() {
 
 
     if (fill) {
+
         fill.style.width =
             percentage + "%";
     }
@@ -865,6 +1172,34 @@ function updateGiftProgress() {
                 `Spend ₦${remaining.toLocaleString()} more to take away your ${selected.length} gifts.`;
         }
     }
+
+
+    /*
+     * Automatically go to checkout
+     * once the target is reached.
+     */
+
+    if (
+        total >= target &&
+        !automaticCheckoutStarted
+    ) {
+
+        automaticCheckoutStarted = true;
+
+        setTimeout(() => {
+
+            showSmallMessage(
+                "Target reached! Taking you to checkout..."
+            );
+
+            setTimeout(() => {
+
+                checkout();
+
+            }, 1200);
+
+        }, 500);
+    }
 }
 
 
@@ -879,30 +1214,51 @@ function renderGiftOptions() {
             "giftOptions"
         );
 
+
     if (!container) {
         return;
     }
 
+
     const unlocked =
         getFreeGiftLevel();
+
 
     container.innerHTML = "";
 
 
-    if (unlocked === 0) {
+    /*
+     * Normal shopping:
+     * NOTHING gift-related appears.
+     */
 
-        container.innerHTML = `
-            <p style="
-                color:#71858A;
-                font-size:14px;
-            ">
-                Free gifts will appear here
-                when you unlock them.
-            </p>
-        `;
+    if (
+        localStorage.getItem(
+            GIFT_FLOW_KEY
+        ) !== "true"
+    ) {
+
+        hideGiftUI();
+
+        container.innerHTML = "";
 
         return;
     }
+
+
+    if (unlocked === 0) {
+
+        hideGiftUI();
+
+        container.innerHTML = "";
+
+        return;
+    }
+
+
+    document.body.classList.add(
+        "gift-shopping-active"
+    );
 
 
     const giftProducts =
@@ -930,6 +1286,7 @@ function renderGiftOptions() {
         const label =
             document.createElement("label");
 
+
         label.style.cssText = `
             display:flex;
             align-items:center;
@@ -943,6 +1300,7 @@ function renderGiftOptions() {
         const checkbox =
             document.createElement("input");
 
+
         checkbox.type =
             "checkbox";
 
@@ -955,13 +1313,24 @@ function renderGiftOptions() {
 
         checkbox.addEventListener(
             "change",
-            function () {
+            function() {
 
                 let gifts =
                     getSelectedFreeGiftProducts();
 
 
                 if (this.checked) {
+
+                    if (
+                        gifts.length >= unlocked
+                    ) {
+
+                        this.checked =
+                            false;
+
+                        return;
+                    }
+
 
                     if (
                         !gifts.some(
@@ -988,6 +1357,15 @@ function renderGiftOptions() {
                 );
 
 
+                updateGiftSelectionBar();
+
+
+                /*
+                 * Once the customer picks all
+                 * required gifts, show the note
+                 * and send them back to Shop.
+                 */
+
                 if (
                     gifts.length === unlocked
                 ) {
@@ -997,12 +1375,13 @@ function renderGiftOptions() {
                         "true"
                     );
 
-                    localStorage.removeItem(
-                        GIFT_POPUP_KEY
+                    localStorage.setItem(
+                        GIFT_POPUP_KEY,
+                        "true"
                     );
 
-                    showGiftPickedPopup(
-                        gifts.length,
+
+                    showGiftSpendPopup(
                         unlocked
                     );
                 }
@@ -1014,16 +1393,23 @@ function renderGiftOptions() {
             checkbox
         );
 
+
         label.appendChild(
             document.createTextNode(
                 product.name
             )
         );
 
+
         container.appendChild(
             label
         );
     });
+
+
+    createGiftSelectionBar();
+
+    updateGiftSelectionBar();
 }
 
 
@@ -1097,6 +1483,7 @@ function updateCartDisplay() {
                             item.quantity || 1
                         );
 
+
                     const itemTotal =
                         Number(item.price) *
                         quantity;
@@ -1107,11 +1494,13 @@ function updateCartDisplay() {
                             "div"
                         );
 
+
                     div.className =
                         "cart-item";
 
 
                     div.innerHTML = `
+
                         <div class="cart-item-info">
 
                             <h3>
@@ -1134,6 +1523,7 @@ function updateCartDisplay() {
 
                         </div>
 
+
                         <div class="cart-item-actions">
 
                             <div class="cart-quantity">
@@ -1141,7 +1531,8 @@ function updateCartDisplay() {
                                 <button
                                     type="button"
                                     data-action="minus"
-                                    data-index="${index}">
+                                    data-index="${index}"
+                                >
                                     −
                                 </button>
 
@@ -1152,25 +1543,30 @@ function updateCartDisplay() {
                                 <button
                                     type="button"
                                     data-action="plus"
-                                    data-index="${index}">
+                                    data-index="${index}"
+                                >
                                     +
                                 </button>
 
                             </div>
 
+
                             <strong class="cart-item-total">
                                 ₦${itemTotal.toLocaleString()}
                             </strong>
 
+
                             <button
                                 type="button"
                                 class="remove-cart-item"
-                                data-index="${index}">
+                                data-index="${index}"
+                            >
                                 Remove
                             </button>
 
                         </div>
                     `;
+
 
                     items.appendChild(
                         div
@@ -1178,8 +1574,6 @@ function updateCartDisplay() {
                 }
             );
 
-
-            /* FREE GIFTS */
 
             gifts.forEach(
                 gift => {
@@ -1189,11 +1583,13 @@ function updateCartDisplay() {
                             "div"
                         );
 
+
                     div.className =
                         "cart-item";
 
 
                     div.innerHTML = `
+
                         <div class="cart-item-info">
 
                             <h3>
@@ -1210,12 +1606,15 @@ function updateCartDisplay() {
 
                         </div>
 
+
                         <div>
                             <strong>
                                 FREE
                             </strong>
                         </div>
+
                     `;
+
 
                     items.appendChild(
                         div
@@ -1238,25 +1637,25 @@ function updateCartDisplay() {
 
 
 /* =========================================================
-   CART CONTROLS
+   CART QUANTITY
 ========================================================= */
 
-function changeCartQuantity(
-    index,
-    amount
-) {
+function changeCartQuantity(index, amount) {
 
     const cart =
         getCart();
+
 
     if (!cart[index]) {
         return;
     }
 
+
     const current =
         Number(
             cart[index].quantity || 1
         );
+
 
     const next =
         current + amount;
@@ -1288,10 +1687,12 @@ function removeCartItem(index) {
     const cart =
         getCart();
 
+
     cart.splice(
         index,
         1
     );
+
 
     saveCart(cart);
 }
@@ -1326,19 +1727,28 @@ function addToCart(product, color = "") {
     } else {
 
         cart.push({
+
             id: product.id,
+
             name: product.name,
+
             listing: product.listing,
+
             category: product.category,
+
             price: product.price,
+
             size: product.size,
+
             color: color,
+
             quantity: 1
         });
     }
 
 
     saveCart(cart);
+
 
     showSmallMessage(
         `${product.name} added to cart.`
@@ -1357,6 +1767,7 @@ function showSmallMessage(message) {
             "collectiveSmallMessage"
         );
 
+
     if (old) {
         old.remove();
     }
@@ -1366,6 +1777,7 @@ function showSmallMessage(message) {
         document.createElement(
             "div"
         );
+
 
     box.id =
         "collectiveSmallMessage";
@@ -1382,11 +1794,13 @@ function showSmallMessage(message) {
         padding:12px 22px;
         border-radius:25px;
         font-size:13px;
-        box-shadow:0 8px 25px rgba(0,0,0,0.15);
+        box-shadow:0 8px 25px rgba(0,0,0,.15);
     `;
+
 
     box.textContent =
         message;
+
 
     document.body.appendChild(
         box
@@ -1408,7 +1822,7 @@ function showSmallMessage(message) {
 ========================================================= */
 
 function renderProducts(
-    products = productCatalog
+    products = scatteredProducts
 ) {
 
     const grid =
@@ -1416,10 +1830,12 @@ function renderProducts(
             "productGrid"
         );
 
+
     const noProducts =
         document.querySelector(
             ".no-products"
         );
+
 
     if (!grid) {
         return;
@@ -1449,7 +1865,17 @@ function renderProducts(
     }
 
 
-    products
+    /*
+     * Shuffle EVERY normal shop display.
+     * This prevents the same product type
+     * from sitting together.
+     */
+
+    const displayProducts =
+        shuffleProducts(products);
+
+
+    displayProducts
         .slice(0, 60)
         .forEach(product => {
 
@@ -1457,6 +1883,7 @@ function renderProducts(
                 document.createElement(
                     "div"
                 );
+
 
             card.className =
                 "product-card";
@@ -1471,6 +1898,7 @@ function renderProducts(
             ) {
 
                 colorHTML = `
+
                     <select
                         class="product-color"
                         data-product-id="${product.id}"
@@ -1497,6 +1925,7 @@ function renderProducts(
                 <div class="product-image">
                     🛍️
                 </div>
+
 
                 <div class="product-information">
 
@@ -1556,10 +1985,12 @@ function renderProducts(
                             ".product-color"
                         );
 
+
                     const color =
                         colorSelect
                             ? colorSelect.value
                             : "";
+
 
                     addToCart(
                         product,
@@ -1587,10 +2018,12 @@ function setupSearch() {
             "productSearch"
         );
 
+
     const button =
         document.getElementById(
             "searchButton"
         );
+
 
     if (!input) {
         return;
@@ -1608,9 +2041,12 @@ function setupSearch() {
         const results =
             productCatalog.filter(
                 product =>
+
                     product.name
                         .toLowerCase()
-                        .includes(term) ||
+                        .includes(term)
+
+                    ||
 
                     product.category
                         .toLowerCase()
@@ -1648,10 +2084,12 @@ function setupCategories() {
             "categoryMenu"
         );
 
+
     const button =
         document.getElementById(
             "categoryBtn"
         );
+
 
     if (!menu) {
         return;
@@ -1679,6 +2117,7 @@ function setupCategories() {
                     "button"
                 );
 
+
             btn.className =
                 "category-button";
 
@@ -1687,6 +2126,7 @@ function setupCategories() {
                 category ===
                 "All Products"
             ) {
+
                 btn.classList.add(
                     "selected"
                 );
@@ -1724,7 +2164,7 @@ function setupCategories() {
                     ) {
 
                         renderProducts(
-                            productCatalog
+                            scatteredProducts
                         );
 
                     } else {
@@ -1754,9 +2194,9 @@ function setupCategories() {
 
             event.preventDefault();
 
+
             menu.style.display =
-                menu.style.display ===
-                "flex"
+                menu.style.display === "flex"
                     ? "none"
                     : "flex";
         }
@@ -1775,6 +2215,7 @@ function openCart() {
             "cartPopup"
         );
 
+
     if (popup) {
 
         popup.classList.add(
@@ -1790,6 +2231,7 @@ function closeCart() {
         document.getElementById(
             "cartPopup"
         );
+
 
     if (popup) {
 
@@ -1832,6 +2274,7 @@ function setupCart() {
                 event.target.closest(
                     "button"
                 );
+
 
             if (!button) {
                 return;
@@ -1896,12 +2339,16 @@ function checkout() {
         return;
     }
 
+
     checkoutOpening = true;
 
 
     setTimeout(() => {
-        checkoutOpening = false;
-    }, 500);
+
+        checkoutOpening =
+            false;
+
+    }, 700);
 
 
     const cart =
@@ -1921,7 +2368,10 @@ function checkout() {
     const loggedIn =
         localStorage.getItem(
             "collectiveLoggedIn"
-        ) === "true" ||
+        ) === "true"
+
+        ||
+
         localStorage.getItem(
             "loggedIn"
         ) === "true";
@@ -1933,8 +2383,10 @@ function checkout() {
             "Please log in before checking out."
         );
 
+
         window.location.href =
             "login.html";
+
 
         return;
     }
@@ -1944,16 +2396,13 @@ function checkout() {
 }
 
 
-/*
- * IMPORTANT:
- * MAKE CHECKOUT GLOBAL
- */
-
 window.checkout =
     checkout;
 
+
 window.getCartTotal =
     getCartTotal;
+
 
 window.updateCartDisplay =
     updateCartDisplay;
@@ -1970,6 +2419,7 @@ function createCheckoutModal() {
             "collectiveCheckoutModal"
         );
 
+
     if (old) {
         old.remove();
     }
@@ -1978,8 +2428,10 @@ function createCheckoutModal() {
     const cart =
         getCart();
 
+
     const gifts =
         getSelectedFreeGiftProducts();
+
 
     const paidTotal =
         getCartTotal();
@@ -1990,6 +2442,7 @@ function createCheckoutModal() {
             "div"
         );
 
+
     modal.id =
         "collectiveCheckoutModal";
 
@@ -1998,7 +2451,7 @@ function createCheckoutModal() {
         position:fixed;
         inset:0;
         z-index:100000;
-        background:rgba(48,75,82,0.45);
+        background:rgba(48,75,82,.45);
         display:flex;
         align-items:center;
         justify-content:center;
@@ -2017,7 +2470,7 @@ function createCheckoutModal() {
             border-radius:25px;
             padding:32px;
             box-sizing:border-box;
-            box-shadow:0 18px 50px rgba(0,0,0,0.2);
+            box-shadow:0 18px 50px rgba(0,0,0,.2);
             text-align:left;
         ">
 
@@ -2034,6 +2487,7 @@ function createCheckoutModal() {
                 ">
                     Checkout
                 </h2>
+
 
                 <button
                     id="closeCheckoutModal"
@@ -2052,11 +2506,10 @@ function createCheckoutModal() {
             </div>
 
 
-            <div style="
-                margin-top:20px;
-            ">
+            <div style="margin-top:20px;">
 
                 ${cart.map(item => `
+
                     <div style="
                         display:flex;
                         justify-content:space-between;
@@ -2076,6 +2529,7 @@ function createCheckoutModal() {
                             }
                         </span>
 
+
                         <strong>
                             ₦${(
                                 Number(item.price) *
@@ -2084,12 +2538,14 @@ function createCheckoutModal() {
                         </strong>
 
                     </div>
+
                 `).join("")}
 
 
                 ${
                     gifts.length > 0
                         ? `
+
                             <div style="
                                 margin-top:18px;
                                 padding:15px;
@@ -2105,6 +2561,7 @@ function createCheckoutModal() {
 
                                 ${gifts.map(
                                     gift => `
+
                                         <div style="
                                             margin-top:8px;
                                             color:#6F858A;
@@ -2113,10 +2570,12 @@ function createCheckoutModal() {
                                             ${gift.name}
                                             — FREE
                                         </div>
+
                                     `
                                 ).join("")}
 
                             </div>
+
                         `
                         : ""
                 }
@@ -2135,6 +2594,7 @@ function createCheckoutModal() {
                     <strong>
                         Total to pay
                     </strong>
+
 
                     <strong>
                         ₦${paidTotal.toLocaleString()}
@@ -2199,15 +2659,27 @@ function createCheckoutModal() {
 
 
 /* =========================================================
-   PAYMENT MODAL
+   PAYMENT
 ========================================================= */
 
 function showPaymentModal() {
+
+    const old =
+        document.getElementById(
+            "collectivePaymentModal"
+        );
+
+
+    if (old) {
+        old.remove();
+    }
+
 
     const modal =
         document.createElement(
             "div"
         );
+
 
     modal.id =
         "collectivePaymentModal";
@@ -2221,7 +2693,7 @@ function showPaymentModal() {
         position:fixed;
         inset:0;
         z-index:100001;
-        background:rgba(48,75,82,0.45);
+        background:rgba(48,75,82,.45);
         display:flex;
         align-items:center;
         justify-content:center;
@@ -2240,7 +2712,7 @@ function showPaymentModal() {
             border-radius:25px;
             padding:32px;
             box-sizing:border-box;
-            box-shadow:0 18px 50px rgba(0,0,0,0.2);
+            box-shadow:0 18px 50px rgba(0,0,0,.2);
             text-align:left;
         ">
 
@@ -2257,7 +2729,10 @@ function showPaymentModal() {
                 font-size:14px;
             ">
                 Amount to pay:
-                <strong style="color:#304B52;">
+
+                <strong style="
+                    color:#304B52;
+                ">
                     ₦${total.toLocaleString()}
                 </strong>
             </p>
@@ -2391,8 +2866,10 @@ function showPaymentModal() {
                         "paymentMadeButton"
                     );
 
+
                 button.disabled =
                     true;
+
 
                 button.textContent =
                     "SUBMITTING ORDER...";
@@ -2403,9 +2880,19 @@ function showPaymentModal() {
 
                 modal.remove();
 
+
                 showSmallMessage(
                     "Order submitted successfully."
                 );
+
+
+                /*
+                 * Gift flow is finished after
+                 * checkout/order submission.
+                 */
+
+                clearSelectedFreeGiftProducts();
+
             }
         );
 }
@@ -2420,8 +2907,10 @@ async function createPendingOrder() {
     const cart =
         getCart();
 
+
     const gifts =
         getSelectedFreeGiftProducts();
+
 
     const paidTotal =
         getCartTotal();
@@ -2430,22 +2919,28 @@ async function createPendingOrder() {
     const customer =
         localStorage.getItem(
             "collectiveUser"
-        ) ||
+        )
+
+        ||
+
         localStorage.getItem(
             "user"
-        ) ||
+        )
+
+        ||
+
         "Customer";
 
 
     const order = {
 
-        customer: customer,
+        customer,
 
         items: cart,
 
         freeGifts: gifts,
 
-        paidTotal: paidTotal,
+        paidTotal,
 
         qualifyingSpend: paidTotal,
 
@@ -2471,6 +2966,7 @@ async function createPendingOrder() {
                 order
             );
 
+
             console.log(
                 "Order saved to Firebase."
             );
@@ -2482,11 +2978,11 @@ async function createPendingOrder() {
                 error
             );
 
+
             localStorage.setItem(
                 "collectivePendingOrder",
                 JSON.stringify(order)
             );
-
         }
 
     } else {
@@ -2494,10 +2990,6 @@ async function createPendingOrder() {
         localStorage.setItem(
             "collectivePendingOrder",
             JSON.stringify(order)
-        );
-
-        console.log(
-            "Firebase still loading. Order saved locally."
         );
     }
 }
@@ -2519,7 +3011,8 @@ function setupStorageSync() {
                     GIFT_KEY,
                     OLD_GIFT_KEY,
                     POINTS_KEY,
-                    TOTAL_SPENT_KEY
+                    TOTAL_SPENT_KEY,
+                    GIFT_FLOW_KEY
                 ].includes(
                     event.key
                 )
@@ -2528,6 +3021,8 @@ function setupStorageSync() {
                 updateCartDisplay();
 
                 renderGiftOptions();
+
+                updateGiftSelectionBar();
 
                 updateGiftProgress();
             }
@@ -2539,6 +3034,8 @@ function setupStorageSync() {
         () => {
 
             updateCartDisplay();
+
+            updateGiftSelectionBar();
 
             updateGiftProgress();
 
@@ -2559,21 +3056,18 @@ function setupCheckout() {
             "checkoutBtn"
         );
 
+
     if (!button) {
         return;
     }
 
-
-    /*
-     * This listener is deliberately attached
-     * directly to the real checkout button.
-     */
 
     button.addEventListener(
         "click",
         function(event) {
 
             event.preventDefault();
+
             event.stopPropagation();
 
             checkout();
@@ -2583,7 +3077,7 @@ function setupCheckout() {
 
 
 /* =========================================================
-   FIX EXISTING SHOP GIFT POPUP
+   START SAVED GIFT FLOW
 ========================================================= */
 
 function initialiseSavedGiftFlow() {
@@ -2592,28 +3086,38 @@ function initialiseSavedGiftFlow() {
         getSelectedFreeGiftProducts();
 
 
+    /*
+     * If there are no selected gifts,
+     * this is NORMAL SHOPPING.
+     */
+
     if (
         gifts.length !== 5 &&
         gifts.length !== 10
     ) {
+
+        hideGiftUI();
+
         return;
     }
 
 
-    const unlocked =
-        gifts.length;
+    /*
+     * Only activate gift shopping if
+     * the customer has actually entered
+     * the gift flow.
+     */
 
+    if (
+        localStorage.getItem(
+            GIFT_FLOW_KEY
+        ) !== "true"
+    ) {
 
-    const target =
-        unlocked === 10
-            ? 100000
-            : 50000;
+        hideGiftUI();
 
-
-    localStorage.setItem(
-        GIFT_FLOW_KEY,
-        "true"
-    );
+        return;
+    }
 
 
     document.body.classList.add(
@@ -2621,105 +3125,14 @@ function initialiseSavedGiftFlow() {
     );
 
 
-    const bar =
-        document.getElementById(
-            "giftSpendBar"
-        );
-
-
-    if (bar) {
-        bar.style.display =
-            "block";
-    }
-
-
-    /*
-     * Update the existing HTML popup
-     * every time so it has the correct
-     * 5 or 10 gift wording.
-     */
-
-    const popup =
-        document.getElementById(
-            "giftSpendPopup"
-        );
-
-
-    if (popup) {
-
-        const title =
-            popup.querySelector("h2");
-
-        const paragraphs =
-            popup.querySelectorAll("p");
-
-
-        if (title) {
-
-            title.textContent =
-                `Your ${unlocked} gifts are saved!`;
-        }
-
-
-        if (paragraphs[0]) {
-
-            paragraphs[0].innerHTML =
-                `Spend <strong>₦${target.toLocaleString()}</strong> on your purchases to take away your ${unlocked} free gifts.`;
-        }
-
-
-        if (paragraphs[1]) {
-
-            paragraphs[1].textContent =
-                `Your free gifts do not count toward the ₦${target.toLocaleString()}.`;
-        }
-    }
-
-
-    /*
-     * SHOW THE POPUP.
-     *
-     * We intentionally reset the old
-     * popup flag here so it doesn't get
-     * permanently stuck after testing.
-     */
-
-    if (
-        localStorage.getItem(
-            GIFT_POPUP_KEY
-        ) !== "true"
-    ) {
-
-        if (popup) {
-
-            popup.style.display =
-                "flex";
-
-            localStorage.setItem(
-                GIFT_POPUP_KEY,
-                "true"
-            );
-
-
-            setTimeout(
-                () => {
-
-                    popup.style.display =
-                        "none";
-
-                },
-                5000
-            );
-        }
-    }
-
+    updateGiftSelectionBar();
 
     updateGiftProgress();
 }
 
 
 /* =========================================================
-   INITIALISE EVERYTHING
+   INITIALISE
 ========================================================= */
 
 document.addEventListener(
@@ -2731,31 +3144,28 @@ document.addEventListener(
         );
 
 
+        /*
+         * Normal shop starts scattered.
+         */
+
         renderProducts(
-            productCatalog
+            scatteredProducts
         );
 
 
         setupSearch();
 
-
         setupCategories();
-
 
         setupCart();
 
-
         setupCheckout();
-
 
         updateCartDisplay();
 
-
         renderGiftOptions();
 
-
         initialiseSavedGiftFlow();
-
 
         setupStorageSync();
 
