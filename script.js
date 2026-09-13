@@ -1,15 +1,8 @@
-```javascript
 /* =========================================================
    THE COLLECTIVE.CO — COMPLETE SHOP SYSTEM
 ========================================================= */
 
 /* ========================= FIREBASE ========================= */
-
-/*
-   IMPORTANT:
-   This is the NEW Firebase API key that was tested
-   successfully with your project.
-*/
 
 const firebaseConfig = {
     apiKey: "AIzaSyAiFa8h-LM0tKlfLZ9OyqlsgkMtDU5oj1s",
@@ -40,6 +33,7 @@ let firebaseDB = null;
             query,
             where,
             updateDoc,
+            setDoc,
             doc
         } =
             await import(
@@ -57,6 +51,7 @@ let firebaseDB = null;
             query,
             where,
             updateDoc,
+            setDoc,
             doc
         };
 
@@ -65,15 +60,20 @@ let firebaseDB = null;
         );
 
         /*
-           Once Firebase is ready, check whether the shop
-           has an order whose status has changed in Admin.
+           Make sure the existing Shop catalog exists
+           inside Firestore for Admin Products.
         */
-        startOrderStatusSync();
+        await syncShopProductsToFirebase();
 
         /*
-           Load any products that Admin has edited.
+           Load any products that Admin has already edited.
         */
         await loadAdminProductChanges();
+
+        /*
+           Start checking the current customer's order.
+        */
+        startOrderStatusSync();
 
     } catch (error) {
 
@@ -927,8 +927,178 @@ const productCatalog = [
 
 
 /* =========================================================
+   MAKE PRODUCT CATALOG AVAILABLE TO ADMIN / OTHER PAGES
+========================================================= */
+
+window.collectiveProductCatalog =
+    productCatalog;
+
+
+/* =========================================================
+   SYNC SHOP PRODUCTS TO FIREBASE
+========================================================= */
+
+/*
+   IMPORTANT:
+
+   The Shop originally creates its products locally
+   inside script.js.
+
+   Admin Products, however, reads from Firestore.
+
+   This function creates the missing product documents
+   in Firestore WITHOUT overwriting products that already
+   exist there.
+
+   Therefore:
+
+   - Existing Admin edits stay safe.
+   - New Shop products appear in Admin.
+   - Admin can edit those same products.
+   - The Shop can then load those edits.
+*/
+
+async function syncShopProductsToFirebase() {
+
+    if (
+        !firebaseDB?.db ||
+        !firebaseDB?.setDoc
+    ) {
+        return;
+    }
+
+    try {
+
+        const productsRef =
+            firebaseDB.collection(
+                firebaseDB.db,
+                "products"
+            );
+
+        const snapshot =
+            await firebaseDB.getDocs(
+                productsRef
+            );
+
+        const existingIds =
+            new Set();
+
+        snapshot.forEach(
+            docSnap => {
+
+                const data =
+                    docSnap.data();
+
+                existingIds.add(
+                    data.id ||
+                    docSnap.id
+                );
+
+            }
+        );
+
+        let added =
+            0;
+
+        for (
+            const product
+            of productCatalog
+        ) {
+
+            if (
+                existingIds.has(
+                    product.id
+                )
+            ) {
+                continue;
+            }
+
+            await firebaseDB.setDoc(
+                firebaseDB.doc(
+                    firebaseDB.db,
+                    "products",
+                    product.id
+                ),
+                {
+                    id:
+                        product.id,
+
+                    name:
+                        product.name,
+
+                    listing:
+                        product.listing,
+
+                    category:
+                        product.category,
+
+                    price:
+                        Number(
+                            product.price || 0
+                        ),
+
+                    description:
+                        product.description || "",
+
+                    size:
+                        product.size || "",
+
+                    sizes:
+                        Array.isArray(
+                            product.sizes
+                        )
+                            ? product.sizes
+                            : [],
+
+                    colors:
+                        Array.isArray(
+                            product.colors
+                        )
+                            ? product.colors
+                            : [],
+
+                    stock:
+                        Number(
+                            product.stock ?? 10
+                        ),
+
+                    image:
+                        product.image || "",
+
+                    imageUrl:
+                        product.imageUrl || "",
+
+                    createdAt:
+                        new Date().toISOString(),
+
+                    updatedAt:
+                        new Date().toISOString()
+                }
+            );
+
+            added++;
+
+        }
+
+        console.log(
+            `Product sync complete. ${added} new products added to Firebase.`
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Could not sync Shop products to Firebase:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================================================
    ADMIN PRODUCT OVERRIDES
-   ========================================================= */
+========================================================= */
 
 const ADMIN_PRODUCTS_KEY =
     "collectiveAdminProductOverrides";
@@ -937,11 +1107,7 @@ let adminProductOverrides = {};
 
 
 /*
-   Admin can save an edited version of an existing product
-   in Firestore.
-
-   The shop then applies that edited information to the
-   existing product instead of creating a separate catalog.
+   Load products that Admin has edited.
 */
 
 async function loadAdminProductChanges() {
@@ -990,9 +1156,16 @@ async function loadAdminProductChanges() {
 
         applyAdminProductChanges();
 
-        renderProducts(
-            productCatalog
-        );
+        if (
+            document.readyState !==
+            "loading"
+        ) {
+
+            renderProducts(
+                productCatalog
+            );
+
+        }
 
         console.log(
             "Admin product changes loaded."
@@ -1005,11 +1178,6 @@ async function loadAdminProductChanges() {
             error
         );
 
-        /*
-           If Firebase is temporarily unavailable,
-           use previously cached changes.
-        */
-
         try {
 
             adminProductOverrides =
@@ -1021,6 +1189,17 @@ async function loadAdminProductChanges() {
 
             applyAdminProductChanges();
 
+            if (
+                document.readyState !==
+                "loading"
+            ) {
+
+                renderProducts(
+                    productCatalog
+                );
+
+            }
+
         } catch {
 
             adminProductOverrides = {};
@@ -1028,11 +1207,13 @@ async function loadAdminProductChanges() {
         }
 
     }
+
 }
 
 
 /*
-   Apply Admin edits to the SAME products used by the Shop.
+   Apply Admin edits to the SAME products
+   used by the Shop.
 */
 
 function applyAdminProductChanges() {
@@ -1051,45 +1232,57 @@ function applyAdminProductChanges() {
         if (
             edited.name !== undefined
         ) {
+
             product.name =
                 edited.name;
+
         }
 
         if (
             edited.listing !== undefined
         ) {
+
             product.listing =
                 edited.listing;
+
         }
 
         if (
             edited.category !== undefined
         ) {
+
             product.category =
                 edited.category;
+
         }
 
         if (
             edited.price !== undefined
         ) {
+
             product.price =
                 Number(
                     edited.price
                 );
+
         }
 
         if (
             edited.description !== undefined
         ) {
+
             product.description =
                 edited.description;
+
         }
 
         if (
             edited.size !== undefined
         ) {
+
             product.size =
                 edited.size;
+
         }
 
         if (
@@ -1097,8 +1290,10 @@ function applyAdminProductChanges() {
                 edited.sizes
             )
         ) {
+
             product.sizes =
                 edited.sizes;
+
         }
 
         if (
@@ -1106,31 +1301,39 @@ function applyAdminProductChanges() {
                 edited.colors
             )
         ) {
+
             product.colors =
                 edited.colors;
+
         }
 
         if (
             edited.stock !== undefined
         ) {
+
             product.stock =
                 Number(
                     edited.stock
                 );
+
         }
 
         if (
             edited.image !== undefined
         ) {
+
             product.image =
                 edited.image;
+
         }
 
         if (
             edited.imageUrl !== undefined
         ) {
+
             product.imageUrl =
                 edited.imageUrl;
+
         }
 
     });
@@ -1256,10 +1459,16 @@ function generateOrderNumber() {
         .slice(-2) +
         String(
             now.getMonth() + 1
-        ).padStart(2, "0") +
+        ).padStart(
+            2,
+            "0"
+        ) +
         String(
             now.getDate()
-        ).padStart(2, "0");
+        ).padStart(
+            2,
+            "0"
+        );
 
     const random =
         Math.floor(
@@ -1376,6 +1585,7 @@ function saveSelectedFreeGiftProducts(
     );
 
     updateGiftProgress();
+
     updateCartDisplay();
 
 }
@@ -1408,8 +1618,10 @@ function clearSelectedFreeGiftProducts() {
         );
 
     if (bar) {
+
         bar.style.display =
             "none";
+
     }
 
     document.body.classList.remove(
@@ -1427,13 +1639,17 @@ function getFreeGiftLevel() {
     if (
         spent >= 100000
     ) {
+
         return 10;
+
     }
 
     if (
         spent >= 50000
     ) {
+
         return 5;
+
     }
 
     return 0;
@@ -1476,8 +1692,10 @@ function updateGiftProgress() {
     if (!giftFlow) {
 
         if (bar) {
+
             bar.style.display =
                 "none";
+
         }
 
         document.body.classList.remove(
@@ -1488,6 +1706,7 @@ function updateGiftProgress() {
             false;
 
         return;
+
     }
 
     if (
@@ -1496,11 +1715,14 @@ function updateGiftProgress() {
     ) {
 
         if (bar) {
+
             bar.style.display =
                 "none";
+
         }
 
         return;
+
     }
 
     const target =
@@ -1521,8 +1743,10 @@ function updateGiftProgress() {
         );
 
     if (bar) {
+
         bar.style.display =
             "block";
+
     }
 
     document.body.classList.add(
@@ -1573,8 +1797,10 @@ function updateGiftProgress() {
             true;
 
         if (bar) {
+
             bar.style.display =
                 "none";
+
         }
 
         document.body.classList.remove(
@@ -1583,7 +1809,9 @@ function updateGiftProgress() {
 
         setTimeout(
             () => {
+
                 checkout();
+
             },
             500
         );
@@ -1604,7 +1832,9 @@ function showGiftPickedPopup(
         selectedCount !== unlocked ||
         unlocked < 5
     ) {
+
         return;
+
     }
 
     const target =
@@ -1708,7 +1938,9 @@ function showGiftPickedPopup(
             if (
                 popup.parentNode
             ) {
+
                 popup.remove();
+
             }
 
         },
@@ -1752,6 +1984,7 @@ function renderGiftOptions() {
         `;
 
         return;
+
     }
 
     const giftProducts =
@@ -2322,7 +2555,9 @@ function showSmallMessage(
             if (
                 box.parentNode
             ) {
+
                 box.remove();
+
             }
 
         },
@@ -2402,6 +2637,7 @@ function renderProducts(
         );
 
         return;
+
     }
 
     grid.innerHTML =
@@ -2420,6 +2656,7 @@ function renderProducts(
         }
 
         return;
+
     }
 
     if (noProducts) {
@@ -2638,6 +2875,7 @@ function renderProducts(
                                 );
 
                                 return;
+
                             }
 
                             if (
@@ -2650,6 +2888,7 @@ function renderProducts(
                                 );
 
                                 return;
+
                             }
 
                             addToCart(
@@ -2987,8 +3226,10 @@ function checkout() {
 
     setTimeout(
         () => {
+
             checkoutOpening =
                 false;
+
         },
         700
     );
@@ -3003,6 +3244,7 @@ function checkout() {
         );
 
         return;
+
     }
 
     const loggedIn =
@@ -3023,6 +3265,7 @@ function checkout() {
             "login.html";
 
         return;
+
     }
 
     createCheckoutModal();
@@ -3475,6 +3718,7 @@ function createCheckoutModal() {
                         "block";
 
                     return;
+
                 }
 
                 localStorage.setItem(
@@ -3797,11 +4041,6 @@ async function createPendingOrder() {
         checkoutCustomer.address ||
         "";
 
-    /*
-       Split full name so Admin can show
-       first and last name if needed.
-    */
-
     const nameParts =
         fullName
             .trim()
@@ -3820,16 +4059,6 @@ async function createPendingOrder() {
 
     const createdAt =
         new Date().toISOString();
-
-    /*
-       Every item gets its own snapshot of:
-       name
-       price
-       quantity
-       size
-       color
-       line total
-    */
 
     const orderItems =
         cart.map(
@@ -3935,11 +4164,6 @@ async function createPendingOrder() {
 
     };
 
-    /*
-       THIS is the order that gets sent to Firebase.
-       Admin can use every field below.
-    */
-
     const order = {
 
         orderNumber,
@@ -4020,13 +4244,6 @@ async function createPendingOrder() {
 
     };
 
-
-    /*
-       Save the current order number locally.
-       This lets the Shop check Firebase later and
-       show the customer when Admin changes the status.
-    */
-
     localStorage.setItem(
         ORDER_NUMBER_KEY,
         orderNumber
@@ -4038,7 +4255,6 @@ async function createPendingOrder() {
             order
         )
     );
-
 
     if (
         !firebaseDB?.db
@@ -4052,8 +4268,8 @@ async function createPendingOrder() {
         );
 
         return true;
-    }
 
+    }
 
     try {
 
@@ -4065,10 +4281,6 @@ async function createPendingOrder() {
                 ),
                 order
             );
-
-        /*
-           Save the Firebase document ID too.
-        */
 
         localStorage.setItem(
             "collectiveFirebaseOrderId",
@@ -4091,10 +4303,6 @@ async function createPendingOrder() {
 
         updateCartDisplay();
 
-        /*
-           Start watching this order for Admin changes.
-        */
-
         startOrderStatusSync();
 
         return true;
@@ -4105,10 +4313,6 @@ async function createPendingOrder() {
             "Could not save order:",
             error
         );
-
-        /*
-           Keep the complete order locally so it isn't lost.
-        */
 
         localStorage.setItem(
             "collectivePendingOrder",
@@ -4127,21 +4331,6 @@ async function createPendingOrder() {
 /* =========================================================
    ORDER STATUS SYNC
 ========================================================= */
-
-/*
-   The customer Shop checks Firebase for the order number
-   saved after checkout.
-
-   When Admin changes:
-
-   Payment Checking
-   Payment Seen
-   Packed
-   Shipped
-   Delivered
-
-   the Shop receives the new status.
-*/
 
 let orderStatusSyncStarted =
     false;
@@ -4205,11 +4394,6 @@ async function checkCurrentOrderStatus() {
             )
         );
 
-        /*
-           Keep a simple status value available
-           for profile/order pages.
-        */
-
         localStorage.setItem(
             "collectiveOrderStatus",
             latestOrder.status ||
@@ -4229,10 +4413,6 @@ async function checkCurrentOrderStatus() {
             latestOrder.status ||
             "processing"
         );
-
-        /*
-           Also expose the full current order.
-        */
 
         window.collectiveCurrentOrder =
             latestOrder;
@@ -4260,21 +4440,14 @@ function startOrderStatusSync() {
     orderStatusSyncStarted =
         true;
 
-    /*
-       Check immediately.
-    */
-
     setTimeout(
         () => {
+
             checkCurrentOrderStatus();
+
         },
         1000
     );
-
-    /*
-       Then keep checking so an Admin change
-       can reach the Shop.
-    */
 
     setInterval(
         () => {
@@ -4375,9 +4548,7 @@ document.addEventListener(
         );
 
         /*
-           Show the original catalog immediately.
-           This means products do NOT have to wait
-           for Firebase before appearing.
+           Products appear immediately.
         */
 
         renderProducts(
@@ -4404,4 +4575,3 @@ document.addEventListener(
 
     }
 );
-```
