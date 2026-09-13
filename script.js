@@ -1,11 +1,18 @@
+```javascript
 /* =========================================================
    THE COLLECTIVE.CO — COMPLETE SHOP SYSTEM
 ========================================================= */
 
 /* ========================= FIREBASE ========================= */
 
+/*
+   IMPORTANT:
+   This is the NEW Firebase API key that was tested
+   successfully with your project.
+*/
+
 const firebaseConfig = {
-    apiKey: "AIzaSyCkavvOeD4GEtUsq4S-QuTU4ejedf8Ci8",
+    apiKey: "AIzaSyAiFa8h-LM0tKlfLZ9OyqlsgkMtDU5oj1s",
     authDomain: "the-collectiveco-orders.firebaseapp.com",
     projectId: "the-collectiveco-orders",
     storageBucket: "the-collectiveco-orders.firebasestorage.app",
@@ -17,221 +24,1254 @@ const firebaseConfig = {
 let firebaseDB = null;
 
 (async function () {
+
     try {
-        const { initializeApp } = await import(
-            "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js"
-        );
+
+        const { initializeApp } =
+            await import(
+                "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js"
+            );
 
         const {
             getFirestore,
             collection,
-            addDoc
-        } = await import(
-            "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js"
-        );
+            addDoc,
+            getDocs,
+            query,
+            where,
+            updateDoc,
+            doc
+        } =
+            await import(
+                "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js"
+            );
 
-        const app = initializeApp(firebaseConfig);
+        const app =
+            initializeApp(firebaseConfig);
 
         firebaseDB = {
             db: getFirestore(app),
             collection,
-            addDoc
+            addDoc,
+            getDocs,
+            query,
+            where,
+            updateDoc,
+            doc
         };
 
-        console.log("Firebase connected.");
+        console.log(
+            "Firebase connected."
+        );
+
+        /*
+           Once Firebase is ready, check whether the shop
+           has an order whose status has changed in Admin.
+        */
+        startOrderStatusSync();
+
+        /*
+           Load any products that Admin has edited.
+        */
+        await loadAdminProductChanges();
+
     } catch (error) {
-        console.error("Firebase connection error:", error);
+
+        console.error(
+            "Firebase connection error:",
+            error
+        );
+
     }
+
 })();
+
 
 /* ========================= PRODUCT CREATOR ========================= */
 
-function makeProducts(category, products) {
+function makeProducts(
+    category,
+    products
+) {
+
     const result = [];
 
     products.forEach(item => {
-        const count = item.count || 30;
 
-        for (let i = 1; i <= count; i++) {
-            let price = item.price;
+        const count =
+            item.count || 30;
 
-            if (Array.isArray(item.price)) {
-                const min = item.price[0];
-                const max = item.price[1];
-                const step = (max - min) / Math.max(count - 1, 1);
+        for (
+            let i = 1;
+            i <= count;
+            i++
+        ) {
+
+            let price =
+                item.price;
+
+            if (
+                Array.isArray(
+                    item.price
+                )
+            ) {
+
+                const min =
+                    item.price[0];
+
+                const max =
+                    item.price[1];
+
+                const step =
+                    (max - min) /
+                    Math.max(
+                        count - 1,
+                        1
+                    );
 
                 price =
                     Math.round(
-                        (min + step * (i - 1)) / 100
+                        (
+                            min +
+                            step *
+                            (i - 1)
+                        ) / 100
                     ) * 100;
             }
 
             result.push({
-                id: `${item.name}-${i}`,
-                name: item.name,
-                listing: `${item.name} ${i}`,
+
+                id:
+                    `${item.name}-${i}`,
+
+                name:
+                    item.name,
+
+                listing:
+                    `${item.name} ${i}`,
+
                 category,
+
                 price,
-                description: item.description || "",
-                size: item.size || "",
-                sizes: item.sizes || [],
-                colors: item.colors || [],
-                stock: 10
+
+                description:
+                    item.description || "",
+
+                size:
+                    item.size || "",
+
+                sizes:
+                    item.sizes || [],
+
+                colors:
+                    item.colors || [],
+
+                stock:
+                    10
+
             });
+
         }
+
     });
 
     return result;
 }
+
 
 /* ========================= PRODUCT CATALOG ========================= */
 
 const productCatalog = [
 
     ...makeProducts("Skincare", [
-        { name:"Men's Perfume", price:[12000,20000], size:"100 ml", description:"A masculine perfume." },
-        { name:"Body Butter", price:[5000,9500] },
-        { name:"Sunscreen", price:[4000,9000] },
-        { name:"Face Cleanser", price:[7500,10000] },
-        { name:"Body Scrub", price:[4000,8000] },
-        { name:"Face Serum", price:[1500,4500] },
-        { name:"Lip Mask", price:[1000,3000] },
-        { name:"Rhode Lip Gloss", price:[10000,15000], colors:["Clear","Pink","Brown"] },
-        { name:"SHEGLAM Lip Gloss", price:[10000,15000], colors:["Clear","Pink","Nude","Brown"] },
-        { name:"USHAS Lip Gloss", price:[10000,15000], colors:["Clear","Pink","Nude","Brown"] },
-        { name:"Clear Normal Lip Gloss", price:[1000,2000], colors:["Clear"] },
-        { name:"Lip Balm", price:[1000,2000] },
-        { name:"Shower Gel", price:12000 },
-        { name:"Men's Fragrance Perfume", price:[9000,10000], size:"50 ml" },
-        { name:"Women's Fragrance Perfume", price:[9000,10000], size:"50 ml" },
-        { name:"Body Lotion", price:[8000,12000] },
-        { name:"Face Moisturizer", price:[3000,7000] },
-        { name:"Face Toner", price:[6500,10000] },
-        { name:"Body Oil", price:[6000,10000] },
-        { name:"Face Mask", price:[1000,4500] },
-        { name:"Lip Oil", price:[1000,2000] },
-        { name:"Pimple Patch", price:[500,1800] }
+
+        {
+            name:"Men's Perfume",
+            price:[12000,20000],
+            size:"100 ml",
+            description:"A masculine perfume."
+        },
+
+        {
+            name:"Body Butter",
+            price:[5000,9500]
+        },
+
+        {
+            name:"Sunscreen",
+            price:[4000,9000]
+        },
+
+        {
+            name:"Face Cleanser",
+            price:[7500,10000]
+        },
+
+        {
+            name:"Body Scrub",
+            price:[4000,8000]
+        },
+
+        {
+            name:"Face Serum",
+            price:[1500,4500]
+        },
+
+        {
+            name:"Lip Mask",
+            price:[1000,3000]
+        },
+
+        {
+            name:"Rhode Lip Gloss",
+            price:[10000,15000],
+            colors:["Clear","Pink","Brown"]
+        },
+
+        {
+            name:"SHEGLAM Lip Gloss",
+            price:[10000,15000],
+            colors:["Clear","Pink","Nude","Brown"]
+        },
+
+        {
+            name:"USHAS Lip Gloss",
+            price:[10000,15000],
+            colors:["Clear","Pink","Nude","Brown"]
+        },
+
+        {
+            name:"Clear Normal Lip Gloss",
+            price:[1000,2000],
+            colors:["Clear"]
+        },
+
+        {
+            name:"Lip Balm",
+            price:[1000,2000]
+        },
+
+        {
+            name:"Shower Gel",
+            price:12000
+        },
+
+        {
+            name:"Men's Fragrance Perfume",
+            price:[9000,10000],
+            size:"50 ml"
+        },
+
+        {
+            name:"Women's Fragrance Perfume",
+            price:[9000,10000],
+            size:"50 ml"
+        },
+
+        {
+            name:"Body Lotion",
+            price:[8000,12000]
+        },
+
+        {
+            name:"Face Moisturizer",
+            price:[3000,7000]
+        },
+
+        {
+            name:"Face Toner",
+            price:[6500,10000]
+        },
+
+        {
+            name:"Body Oil",
+            price:[6000,10000]
+        },
+
+        {
+            name:"Face Mask",
+            price:[1000,4500]
+        },
+
+        {
+            name:"Lip Oil",
+            price:[1000,2000]
+        },
+
+        {
+            name:"Pimple Patch",
+            price:[500,1800]
+        }
+
     ]),
 
     ...makeProducts("Accessories", [
-        { name:"Bead Bracelet Set", price:[3000,6000], colors:["Black","White","Pink","Brown","Blue"] },
-        { name:"Masculine Chain Bracelet", price:[1000,3500], colors:["Silver","Gold","Black"] },
-        { name:"Chrome Heart Glasses", price:[15000,20000], colors:["Black","White","Brown"] },
-        { name:"Glasses", price:[2000,5000], colors:["Black","Brown","Clear"] },
-        { name:"Glasses Set of 3", price:[4000,5000] },
-        { name:"Glasses Set of 5", price:[5000,10000] },
-        { name:"Scrunchies", price:1200, colors:["Black","White","Pink","Brown","Blue"] },
-        { name:"Stanley Cup", price:15000, colors:["White","Pink","Black","Blue"] },
-        { name:"Body Floral Stanley Cup", price:20000, colors:["Pink","White","Blue"] },
-        { name:"Headband", price:1600, colors:["Black","White","Pink","Brown"] },
-        { name:"Tote Bag", price:[10000,20000], colors:["Black","White","Brown","Pink"] },
-        { name:"Claw Clip", price:[2000,2500], colors:["Black","White","Brown","Pink"] },
-        { name:"Anklet", price:[1000,2000], colors:["Silver","Gold"] },
-        { name:"Necklace", price:[1000,3500], colors:["Silver","Gold"] },
-        { name:"Silver Bracelet", price:3500 },
-        { name:"Gold Bracelet", price:3500 },
-        { name:"Vacuum Cups", price:[10000,20000], colors:["White","Black","Pink","Blue"] }
+
+        {
+            name:"Bead Bracelet Set",
+            price:[3000,6000],
+            colors:[
+                "Black",
+                "White",
+                "Pink",
+                "Brown",
+                "Blue"
+            ]
+        },
+
+        {
+            name:"Masculine Chain Bracelet",
+            price:[1000,3500],
+            colors:[
+                "Silver",
+                "Gold",
+                "Black"
+            ]
+        },
+
+        {
+            name:"Chrome Heart Glasses",
+            price:[15000,20000],
+            colors:[
+                "Black",
+                "White",
+                "Brown"
+            ]
+        },
+
+        {
+            name:"Glasses",
+            price:[2000,5000],
+            colors:[
+                "Black",
+                "Brown",
+                "Clear"
+            ]
+        },
+
+        {
+            name:"Glasses Set of 3",
+            price:[4000,5000]
+        },
+
+        {
+            name:"Glasses Set of 5",
+            price:[5000,10000]
+        },
+
+        {
+            name:"Scrunchies",
+            price:1200,
+            colors:[
+                "Black",
+                "White",
+                "Pink",
+                "Brown",
+                "Blue"
+            ]
+        },
+
+        {
+            name:"Stanley Cup",
+            price:15000,
+            colors:[
+                "White",
+                "Pink",
+                "Black",
+                "Blue"
+            ]
+        },
+
+        {
+            name:"Body Floral Stanley Cup",
+            price:20000,
+            colors:[
+                "Pink",
+                "White",
+                "Blue"
+            ]
+        },
+
+        {
+            name:"Headband",
+            price:1600,
+            colors:[
+                "Black",
+                "White",
+                "Pink",
+                "Brown"
+            ]
+        },
+
+        {
+            name:"Tote Bag",
+            price:[10000,20000],
+            colors:[
+                "Black",
+                "White",
+                "Brown",
+                "Pink"
+            ]
+        },
+
+        {
+            name:"Claw Clip",
+            price:[2000,2500],
+            colors:[
+                "Black",
+                "White",
+                "Brown",
+                "Pink"
+            ]
+        },
+
+        {
+            name:"Anklet",
+            price:[1000,2000],
+            colors:[
+                "Silver",
+                "Gold"
+            ]
+        },
+
+        {
+            name:"Necklace",
+            price:[1000,3500],
+            colors:[
+                "Silver",
+                "Gold"
+            ]
+        },
+
+        {
+            name:"Silver Bracelet",
+            price:3500
+        },
+
+        {
+            name:"Gold Bracelet",
+            price:3500
+        },
+
+        {
+            name:"Vacuum Cups",
+            price:[10000,20000],
+            colors:[
+                "White",
+                "Black",
+                "Pink",
+                "Blue"
+            ]
+        }
+
     ]),
 
     ...makeProducts("Clothing", [
-        { name:"Plain Tops", price:[6500,8000], sizes:["S","M","L"], colors:["Black","White","Grey","Brown","Pink","Blue"] },
-        { name:"Graphic Tops", price:[8000,10000], sizes:["S","M","L"], colors:["Black","White","Grey","Brown","Pink","Blue"] },
-        { name:"Tube Tops", price:[5000,15000], sizes:["S","M","L"], colors:["Black","White","Grey","Brown","Pink","Blue"] },
-        { name:"Jersey Tops", price:8500, sizes:["S","M","L"], colors:["Black","White","Grey","Blue"] },
-        { name:"Hoodies", price:[9500,10000], sizes:["S","M","L"], colors:["Black","White","Grey","Brown","Pink","Blue"] },
-        { name:"Zip-Up Hoodies", price:[9000,15000], sizes:["S","M","L"], colors:["Black","White","Grey","Brown","Pink","Blue"] },
-        { name:"Plain Sweatpants", price:10000, sizes:["S","M","L"], colors:["Black","White","Grey","Brown"] },
-        { name:"Leopard Sweatpants", price:15000, sizes:["S","M","L"], colors:["Brown","Black"] },
-        { name:"Designer Sweatpants", price:20000, sizes:["S","M","L"], colors:["Black","White","Grey","Brown"] },
-        { name:"Shorts", price:10000, sizes:["S","M","L"], colors:["Black","White","Grey","Brown","Blue"] },
-        { name:"Jean Bum Shorts", price:5000, sizes:["S","M","L"], colors:["Blue","Black","Grey"] },
-        { name:"Jeans", price:10000, sizes:["S","M","L"], colors:["Blue","Black","Grey"] },
-        { name:"Designed Jeans", price:20000, sizes:["S","M","L"], colors:["Blue","Black","Grey"] },
-        { name:"Bootcut Jeans", price:10000, sizes:["S","M","L"], colors:["Blue","Black","Grey"] },
-        { name:"Jeans Skirt", price:6500, sizes:["S","M","L"], colors:["Blue","Black","Grey"] },
-        { name:"Pleated Jeans Skirt", price:6000, sizes:["S","M","L"], colors:["Blue","Black","Grey"] },
-        { name:"Normal Shorts", price:4000, sizes:["S","M","L"], colors:["Black","White","Grey","Brown","Pink","Blue"] }
+
+        {
+            name:"Plain Tops",
+            price:[6500,8000],
+            sizes:["S","M","L"],
+            colors:[
+                "Black",
+                "White",
+                "Grey",
+                "Brown",
+                "Pink",
+                "Blue"
+            ]
+        },
+
+        {
+            name:"Graphic Tops",
+            price:[8000,10000],
+            sizes:["S","M","L"],
+            colors:[
+                "Black",
+                "White",
+                "Grey",
+                "Brown",
+                "Pink",
+                "Blue"
+            ]
+        },
+
+        {
+            name:"Tube Tops",
+            price:[5000,15000],
+            sizes:["S","M","L"],
+            colors:[
+                "Black",
+                "White",
+                "Grey",
+                "Brown",
+                "Pink",
+                "Blue"
+            ]
+        },
+
+        {
+            name:"Jersey Tops",
+            price:8500,
+            sizes:["S","M","L"],
+            colors:[
+                "Black",
+                "White",
+                "Grey",
+                "Blue"
+            ]
+        },
+
+        {
+            name:"Hoodies",
+            price:[9500,10000],
+            sizes:["S","M","L"],
+            colors:[
+                "Black",
+                "White",
+                "Grey",
+                "Brown",
+                "Pink",
+                "Blue"
+            ]
+        },
+
+        {
+            name:"Zip-Up Hoodies",
+            price:[9000,15000],
+            sizes:["S","M","L"],
+            colors:[
+                "Black",
+                "White",
+                "Grey",
+                "Brown",
+                "Pink",
+                "Blue"
+            ]
+        },
+
+        {
+            name:"Plain Sweatpants",
+            price:10000,
+            sizes:["S","M","L"],
+            colors:[
+                "Black",
+                "White",
+                "Grey",
+                "Brown"
+            ]
+        },
+
+        {
+            name:"Leopard Sweatpants",
+            price:15000,
+            sizes:["S","M","L"],
+            colors:[
+                "Brown",
+                "Black"
+            ]
+        },
+
+        {
+            name:"Designer Sweatpants",
+            price:20000,
+            sizes:["S","M","L"],
+            colors:[
+                "Black",
+                "White",
+                "Grey",
+                "Brown"
+            ]
+        },
+
+        {
+            name:"Shorts",
+            price:10000,
+            sizes:["S","M","L"],
+            colors:[
+                "Black",
+                "White",
+                "Grey",
+                "Brown",
+                "Blue"
+            ]
+        },
+
+        {
+            name:"Jean Bum Shorts",
+            price:5000,
+            sizes:["S","M","L"],
+            colors:[
+                "Blue",
+                "Black",
+                "Grey"
+            ]
+        },
+
+        {
+            name:"Jeans",
+            price:10000,
+            sizes:["S","M","L"],
+            colors:[
+                "Blue",
+                "Black",
+                "Grey"
+            ]
+        },
+
+        {
+            name:"Designed Jeans",
+            price:20000,
+            sizes:["S","M","L"],
+            colors:[
+                "Blue",
+                "Black",
+                "Grey"
+            ]
+        },
+
+        {
+            name:"Bootcut Jeans",
+            price:10000,
+            sizes:["S","M","L"],
+            colors:[
+                "Blue",
+                "Black",
+                "Grey"
+            ]
+        },
+
+        {
+            name:"Jeans Skirt",
+            price:6500,
+            sizes:["S","M","L"],
+            colors:[
+                "Blue",
+                "Black",
+                "Grey"
+            ]
+        },
+
+        {
+            name:"Pleated Jeans Skirt",
+            price:6000,
+            sizes:["S","M","L"],
+            colors:[
+                "Blue",
+                "Black",
+                "Grey"
+            ]
+        },
+
+        {
+            name:"Normal Shorts",
+            price:4000,
+            sizes:["S","M","L"],
+            colors:[
+                "Black",
+                "White",
+                "Grey",
+                "Brown",
+                "Pink",
+                "Blue"
+            ]
+        }
+
     ]),
 
     ...makeProducts("Shoes", [
-        { name:"Shoes", price:[15000,30000], sizes:["36","37","38","39","40","41","42","43","44","45"], colors:["Black","White","Brown","Grey"] },
-        { name:"Adidas Sambas", price:[30000,50000], sizes:["36","37","38","39","40","41","42","43","44","45"], colors:["Black","White","Brown"] },
-        { name:"Adidas Campus", price:[30000,50000], sizes:["36","37","38","39","40","41","42","43","44","45"], colors:["Black","White","Grey","Brown"] },
-        { name:"Slides", price:9000, sizes:["36","37","38","39","40","41","42","43","44","45"], colors:["Black","White","Brown"] },
-        { name:"Crocs", price:10000, sizes:["36","37","38","39","40","41","42","43","44","45"], colors:["Black","White","Brown","Pink","Blue"] },
-        { name:"Loafers", price:[15000,30000], sizes:["36","37","38","39","40","41","42","43","44","45"], colors:["Black","Brown"] },
-        { name:"Clogs", price:[35000,70000], sizes:["36","37","38","39","40","41","42","43","44","45"], colors:["Black","White","Brown","Grey"] },
-        { name:"Timberland", price:[5000,40000], sizes:["36","37","38","39","40","41","42","43","44","45"], colors:["Black","Brown","Wheat"] },
-        { name:"Vans", price:[5000,40000], sizes:["36","37","38","39","40","41","42","43","44","45"], colors:["Black","White","Grey"] },
-        { name:"Puma", price:[25000,50000], sizes:["36","37","38","39","40","41","42","43","44","45"], colors:["Black","White","Grey","Pink"] }
+
+        {
+            name:"Shoes",
+            price:[15000,30000],
+            sizes:[
+                "36","37","38","39","40",
+                "41","42","43","44","45"
+            ],
+            colors:[
+                "Black",
+                "White",
+                "Brown",
+                "Grey"
+            ]
+        },
+
+        {
+            name:"Adidas Sambas",
+            price:[30000,50000],
+            sizes:[
+                "36","37","38","39","40",
+                "41","42","43","44","45"
+            ],
+            colors:[
+                "Black",
+                "White",
+                "Brown"
+            ]
+        },
+
+        {
+            name:"Adidas Campus",
+            price:[30000,50000],
+            sizes:[
+                "36","37","38","39","40",
+                "41","42","43","44","45"
+            ],
+            colors:[
+                "Black",
+                "White",
+                "Grey",
+                "Brown"
+            ]
+        },
+
+        {
+            name:"Slides",
+            price:9000,
+            sizes:[
+                "36","37","38","39","40",
+                "41","42","43","44","45"
+            ],
+            colors:[
+                "Black",
+                "White",
+                "Brown"
+            ]
+        },
+
+        {
+            name:"Crocs",
+            price:10000,
+            sizes:[
+                "36","37","38","39","40",
+                "41","42","43","44","45"
+            ],
+            colors:[
+                "Black",
+                "White",
+                "Brown",
+                "Pink",
+                "Blue"
+            ]
+        },
+
+        {
+            name:"Loafers",
+            price:[15000,30000],
+            sizes:[
+                "36","37","38","39","40",
+                "41","42","43","44","45"
+            ],
+            colors:[
+                "Black",
+                "Brown"
+            ]
+        },
+
+        {
+            name:"Clogs",
+            price:[35000,70000],
+            sizes:[
+                "36","37","38","39","40",
+                "41","42","43","44","45"
+            ],
+            colors:[
+                "Black",
+                "White",
+                "Brown",
+                "Grey"
+            ]
+        },
+
+        {
+            name:"Timberland",
+            price:[5000,40000],
+            sizes:[
+                "36","37","38","39","40",
+                "41","42","43","44","45"
+            ],
+            colors:[
+                "Black",
+                "Brown",
+                "Wheat"
+            ]
+        },
+
+        {
+            name:"Vans",
+            price:[5000,40000],
+            sizes:[
+                "36","37","38","39","40",
+                "41","42","43","44","45"
+            ],
+            colors:[
+                "Black",
+                "White",
+                "Grey"
+            ]
+        },
+
+        {
+            name:"Puma",
+            price:[25000,50000],
+            sizes:[
+                "36","37","38","39","40",
+                "41","42","43","44","45"
+            ],
+            colors:[
+                "Black",
+                "White",
+                "Grey",
+                "Pink"
+            ]
+        }
+
     ]),
 
     ...makeProducts("Bags", [
-        { name:"Hermes Bags", price:[35000,50000], colors:["Black","White","Brown"] },
-        { name:"Mini Gucci Bags", price:[20000,50000], colors:["Black","White","Brown","Pink"] },
-        { name:"Gucci Bags", price:[35000,60000], colors:["Black","White","Brown"] },
-        { name:"Prada Bags", price:[35000,60000], colors:["Black","White","Brown"] },
-        { name:"Dior Bags", price:[35000,70000], colors:["Black","White","Brown"] },
-        { name:"Chanel Bags", price:[45000,70000], colors:["Black","White","Brown","Pink"] },
-        { name:"Louis Vuitton Bags", price:[25000,70000], colors:["Black","White","Brown"] },
-        { name:"Cartier Watches", price:[20000,35000], colors:["Gold","Silver"] },
-        { name:"Cartier Glasses", price:[15000,25000], colors:["Black","Brown","Clear"] }
+
+        {
+            name:"Hermes Bags",
+            price:[35000,50000],
+            colors:[
+                "Black",
+                "White",
+                "Brown"
+            ]
+        },
+
+        {
+            name:"Mini Gucci Bags",
+            price:[20000,50000],
+            colors:[
+                "Black",
+                "White",
+                "Brown",
+                "Pink"
+            ]
+        },
+
+        {
+            name:"Gucci Bags",
+            price:[35000,60000],
+            colors:[
+                "Black",
+                "White",
+                "Brown"
+            ]
+        },
+
+        {
+            name:"Prada Bags",
+            price:[35000,60000],
+            colors:[
+                "Black",
+                "White",
+                "Brown"
+            ]
+        },
+
+        {
+            name:"Dior Bags",
+            price:[35000,70000],
+            colors:[
+                "Black",
+                "White",
+                "Brown"
+            ]
+        },
+
+        {
+            name:"Chanel Bags",
+            price:[45000,70000],
+            colors:[
+                "Black",
+                "White",
+                "Brown",
+                "Pink"
+            ]
+        },
+
+        {
+            name:"Louis Vuitton Bags",
+            price:[25000,70000],
+            colors:[
+                "Black",
+                "White",
+                "Brown"
+            ]
+        },
+
+        {
+            name:"Cartier Watches",
+            price:[20000,35000],
+            colors:[
+                "Gold",
+                "Silver"
+            ]
+        },
+
+        {
+            name:"Cartier Glasses",
+            price:[15000,25000],
+            colors:[
+                "Black",
+                "Brown",
+                "Clear"
+            ]
+        }
+
     ])
+
 ];
+
+
+/* =========================================================
+   ADMIN PRODUCT OVERRIDES
+   ========================================================= */
+
+const ADMIN_PRODUCTS_KEY =
+    "collectiveAdminProductOverrides";
+
+let adminProductOverrides = {};
+
+
+/*
+   Admin can save an edited version of an existing product
+   in Firestore.
+
+   The shop then applies that edited information to the
+   existing product instead of creating a separate catalog.
+*/
+
+async function loadAdminProductChanges() {
+
+    if (!firebaseDB?.db) {
+        return;
+    }
+
+    try {
+
+        const snapshot =
+            await firebaseDB.getDocs(
+                firebaseDB.collection(
+                    firebaseDB.db,
+                    "products"
+                )
+            );
+
+        adminProductOverrides = {};
+
+        snapshot.forEach(docSnap => {
+
+            const data =
+                docSnap.data();
+
+            const id =
+                data.id || docSnap.id;
+
+            if (id) {
+
+                adminProductOverrides[id] = {
+                    ...data,
+                    id
+                };
+
+            }
+
+        });
+
+        localStorage.setItem(
+            ADMIN_PRODUCTS_KEY,
+            JSON.stringify(
+                adminProductOverrides
+            )
+        );
+
+        applyAdminProductChanges();
+
+        renderProducts(
+            productCatalog
+        );
+
+        console.log(
+            "Admin product changes loaded."
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Could not load Admin product changes:",
+            error
+        );
+
+        /*
+           If Firebase is temporarily unavailable,
+           use previously cached changes.
+        */
+
+        try {
+
+            adminProductOverrides =
+                JSON.parse(
+                    localStorage.getItem(
+                        ADMIN_PRODUCTS_KEY
+                    ) || "{}"
+                );
+
+            applyAdminProductChanges();
+
+        } catch {
+
+            adminProductOverrides = {};
+
+        }
+
+    }
+}
+
+
+/*
+   Apply Admin edits to the SAME products used by the Shop.
+*/
+
+function applyAdminProductChanges() {
+
+    productCatalog.forEach(product => {
+
+        const edited =
+            adminProductOverrides[
+                product.id
+            ];
+
+        if (!edited) {
+            return;
+        }
+
+        if (
+            edited.name !== undefined
+        ) {
+            product.name =
+                edited.name;
+        }
+
+        if (
+            edited.listing !== undefined
+        ) {
+            product.listing =
+                edited.listing;
+        }
+
+        if (
+            edited.category !== undefined
+        ) {
+            product.category =
+                edited.category;
+        }
+
+        if (
+            edited.price !== undefined
+        ) {
+            product.price =
+                Number(
+                    edited.price
+                );
+        }
+
+        if (
+            edited.description !== undefined
+        ) {
+            product.description =
+                edited.description;
+        }
+
+        if (
+            edited.size !== undefined
+        ) {
+            product.size =
+                edited.size;
+        }
+
+        if (
+            Array.isArray(
+                edited.sizes
+            )
+        ) {
+            product.sizes =
+                edited.sizes;
+        }
+
+        if (
+            Array.isArray(
+                edited.colors
+            )
+        ) {
+            product.colors =
+                edited.colors;
+        }
+
+        if (
+            edited.stock !== undefined
+        ) {
+            product.stock =
+                Number(
+                    edited.stock
+                );
+        }
+
+        if (
+            edited.image !== undefined
+        ) {
+            product.image =
+                edited.image;
+        }
+
+        if (
+            edited.imageUrl !== undefined
+        ) {
+            product.imageUrl =
+                edited.imageUrl;
+        }
+
+    });
+
+}
+
 
 /* ========================= STORAGE ========================= */
 
-const CART_KEY = "collectiveCart";
-const POINTS_KEY = "collectivePoints";
-const TOTAL_SPENT_KEY = "collectiveTotalSpent";
-const GIFT_KEY = "collectiveSelectedFreeGifts";
-const OLD_GIFT_KEY = "collectiveFreeGifts";
-const GIFT_FLOW_KEY = "collectiveGiftFlowActive";
-const GIFT_POPUP_KEY = "collectiveGiftPopupShown";
+const CART_KEY =
+    "collectiveCart";
 
-let automaticGiftCheckoutStarted = false;
+const POINTS_KEY =
+    "collectivePoints";
+
+const TOTAL_SPENT_KEY =
+    "collectiveTotalSpent";
+
+const GIFT_KEY =
+    "collectiveSelectedFreeGifts";
+
+const OLD_GIFT_KEY =
+    "collectiveFreeGifts";
+
+const GIFT_FLOW_KEY =
+    "collectiveGiftFlowActive";
+
+const GIFT_POPUP_KEY =
+    "collectiveGiftPopupShown";
+
+const ORDER_KEY =
+    "collectiveCurrentOrder";
+
+const ORDER_NUMBER_KEY =
+    "collectiveCurrentOrderNumber";
+
+let automaticGiftCheckoutStarted =
+    false;
+
 
 /* ========================= HELPERS ========================= */
 
 function getCart() {
-    try {
-        const cart = JSON.parse(
-            localStorage.getItem(CART_KEY) || "[]"
-        );
 
-        return Array.isArray(cart) ? cart : [];
+    try {
+
+        const cart =
+            JSON.parse(
+                localStorage.getItem(
+                    CART_KEY
+                ) || "[]"
+            );
+
+        return Array.isArray(cart)
+            ? cart
+            : [];
 
     } catch {
+
         return [];
+
     }
+
 }
 
+
 function saveCart(cart) {
+
     localStorage.setItem(
         CART_KEY,
         JSON.stringify(cart)
     );
 
     updateCartDisplay();
+
 }
 
+
 function getTotalSpent() {
+
     return Number(
         localStorage.getItem(
             TOTAL_SPENT_KEY
         ) || "0"
     );
+
 }
 
+
 function getCartTotal() {
+
     return getCart().reduce(
-        (total, item) =>
-            total +
-            Number(item.price || 0) *
-            Number(item.quantity || 1),
+        (
+            total,
+            item
+        ) => {
+
+            return total +
+                Number(
+                    item.price || 0
+                ) *
+                Number(
+                    item.quantity || 1
+                );
+
+        },
         0
     );
+
 }
+
+
+/* ========================= ORDER NUMBER ========================= */
+
+function generateOrderNumber() {
+
+    const now =
+        new Date();
+
+    const date =
+        now.getFullYear()
+        .toString()
+        .slice(-2) +
+        String(
+            now.getMonth() + 1
+        ).padStart(2, "0") +
+        String(
+            now.getDate()
+        ).padStart(2, "0");
+
+    const random =
+        Math.floor(
+            100000 +
+            Math.random() *
+            900000
+        );
+
+    return `TC-${date}-${random}`;
+
+}
+
 
 /* ========================= FREE GIFTS ========================= */
 
@@ -240,28 +1280,40 @@ function getSelectedFreeGiftProducts() {
     let gifts = [];
 
     try {
-        gifts = JSON.parse(
-            localStorage.getItem(
-                GIFT_KEY
-            ) || "[]"
-        );
+
+        gifts =
+            JSON.parse(
+                localStorage.getItem(
+                    GIFT_KEY
+                ) || "[]"
+            );
+
     } catch {
+
         gifts = [];
+
     }
 
     if (
         !Array.isArray(gifts) ||
         !gifts.length
     ) {
+
         try {
-            gifts = JSON.parse(
-                localStorage.getItem(
-                    OLD_GIFT_KEY
-                ) || "[]"
-            );
+
+            gifts =
+                JSON.parse(
+                    localStorage.getItem(
+                        OLD_GIFT_KEY
+                    ) || "[]"
+                );
+
         } catch {
+
             gifts = [];
+
         }
+
     }
 
     if (!Array.isArray(gifts)) {
@@ -276,29 +1328,42 @@ function getSelectedFreeGiftProducts() {
                 typeof gift === "object" &&
                 gift.id
             ) {
+
                 return (
                     productCatalog.find(
                         product =>
                             product.id ===
                             gift.id
-                    ) || gift
+                    ) ||
+                    gift
                 );
+
             }
 
-            if (typeof gift === "string") {
+            if (
+                typeof gift ===
+                "string"
+            ) {
+
                 return productCatalog.find(
                     product =>
-                        product.id === gift
+                        product.id ===
+                        gift
                 );
+
             }
 
             return null;
 
         })
         .filter(Boolean);
+
 }
 
-function saveSelectedFreeGiftProducts(gifts) {
+
+function saveSelectedFreeGiftProducts(
+    gifts
+) {
 
     localStorage.setItem(
         GIFT_KEY,
@@ -312,16 +1377,30 @@ function saveSelectedFreeGiftProducts(gifts) {
 
     updateGiftProgress();
     updateCartDisplay();
+
 }
+
 
 function clearSelectedFreeGiftProducts() {
 
-    localStorage.removeItem(GIFT_KEY);
-    localStorage.removeItem(OLD_GIFT_KEY);
-    localStorage.removeItem(GIFT_FLOW_KEY);
-    localStorage.removeItem(GIFT_POPUP_KEY);
+    localStorage.removeItem(
+        GIFT_KEY
+    );
 
-    automaticGiftCheckoutStarted = false;
+    localStorage.removeItem(
+        OLD_GIFT_KEY
+    );
+
+    localStorage.removeItem(
+        GIFT_FLOW_KEY
+    );
+
+    localStorage.removeItem(
+        GIFT_POPUP_KEY
+    );
+
+    automaticGiftCheckoutStarted =
+        false;
 
     const bar =
         document.getElementById(
@@ -329,29 +1408,38 @@ function clearSelectedFreeGiftProducts() {
         );
 
     if (bar) {
-        bar.style.display = "none";
+        bar.style.display =
+            "none";
     }
 
     document.body.classList.remove(
         "gift-shopping-active"
     );
+
 }
+
 
 function getFreeGiftLevel() {
 
     const spent =
         getTotalSpent();
 
-    if (spent >= 100000) {
+    if (
+        spent >= 100000
+    ) {
         return 10;
     }
 
-    if (spent >= 50000) {
+    if (
+        spent >= 50000
+    ) {
         return 5;
     }
 
     return 0;
+
 }
+
 
 /* ========================= GIFT PROGRESS ========================= */
 
@@ -388,14 +1476,16 @@ function updateGiftProgress() {
     if (!giftFlow) {
 
         if (bar) {
-            bar.style.display = "none";
+            bar.style.display =
+                "none";
         }
 
         document.body.classList.remove(
             "gift-shopping-active"
         );
 
-        automaticGiftCheckoutStarted = false;
+        automaticGiftCheckoutStarted =
+            false;
 
         return;
     }
@@ -406,7 +1496,8 @@ function updateGiftProgress() {
     ) {
 
         if (bar) {
-            bar.style.display = "none";
+            bar.style.display =
+                "none";
         }
 
         return;
@@ -422,12 +1513,16 @@ function updateGiftProgress() {
 
     const percentage =
         Math.min(
-            (total / target) * 100,
+            (
+                total /
+                target
+            ) * 100,
             100
         );
 
     if (bar) {
-        bar.style.display = "block";
+        bar.style.display =
+            "block";
     }
 
     document.body.classList.add(
@@ -435,18 +1530,24 @@ function updateGiftProgress() {
     );
 
     if (amount) {
+
         amount.textContent =
             `₦${total.toLocaleString()} / ₦${target.toLocaleString()}`;
+
     }
 
     if (fill) {
+
         fill.style.width =
             `${percentage}%`;
+
     }
 
     if (message) {
 
-        if (total >= target) {
+        if (
+            total >= target
+        ) {
 
             message.textContent =
                 `✓ ₦${target.toLocaleString()} reached!`;
@@ -455,10 +1556,12 @@ function updateGiftProgress() {
 
             message.textContent =
                 `Spend ₦${(
-                    target - total
+                    target -
+                    total
                 ).toLocaleString()} more to take away your ${selected.length} gifts.`;
 
         }
+
     }
 
     if (
@@ -466,21 +1569,29 @@ function updateGiftProgress() {
         !automaticGiftCheckoutStarted
     ) {
 
-        automaticGiftCheckoutStarted = true;
+        automaticGiftCheckoutStarted =
+            true;
 
         if (bar) {
-            bar.style.display = "none";
+            bar.style.display =
+                "none";
         }
 
         document.body.classList.remove(
             "gift-shopping-active"
         );
 
-        setTimeout(() => {
-            checkout();
-        }, 500);
+        setTimeout(
+            () => {
+                checkout();
+            },
+            500
+        );
+
     }
+
 }
+
 
 /* ========================= GIFT POPUP ========================= */
 
@@ -502,7 +1613,9 @@ function showGiftPickedPopup(
             : 50000;
 
     const popup =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
     popup.id =
         "giftPickedPopup";
@@ -589,14 +1702,21 @@ function showGiftPickedPopup(
             () => popup.remove()
         );
 
-    setTimeout(() => {
+    setTimeout(
+        () => {
 
-        if (popup.parentNode) {
-            popup.remove();
-        }
+            if (
+                popup.parentNode
+            ) {
+                popup.remove();
+            }
 
-    }, 5000);
+        },
+        5000
+    );
+
 }
+
 
 /* ========================= GIFT OPTIONS ========================= */
 
@@ -614,9 +1734,12 @@ function renderGiftOptions() {
     const unlocked =
         getFreeGiftLevel();
 
-    container.innerHTML = "";
+    container.innerHTML =
+        "";
 
-    if (unlocked === 0) {
+    if (
+        unlocked === 0
+    ) {
 
         container.innerHTML = `
             <p style="
@@ -635,143 +1758,161 @@ function renderGiftOptions() {
         productCatalog
             .filter(
                 product =>
-                    product.category === "Accessories" ||
-                    product.category === "Skincare"
+                    product.category ===
+                        "Accessories" ||
+                    product.category ===
+                        "Skincare"
             )
-            .slice(0, unlocked);
+            .slice(
+                0,
+                unlocked
+            );
 
     const selected =
         getSelectedFreeGiftProducts();
 
-    giftProducts.forEach(product => {
+    giftProducts.forEach(
+        product => {
 
-        const label =
-            document.createElement(
-                "label"
-            );
-
-        label.style.cssText = `
-            display:flex;
-            align-items:center;
-            gap:10px;
-            margin:10px 0;
-            cursor:pointer;
-            color:#304B52;
-        `;
-
-        const checkbox =
-            document.createElement(
-                "input"
-            );
-
-        checkbox.type =
-            "checkbox";
-
-        checkbox.checked =
-            selected.some(
-                gift =>
-                    gift.id ===
-                    product.id
-            );
-
-        checkbox.addEventListener(
-            "change",
-            function () {
-
-                let gifts =
-                    getSelectedFreeGiftProducts();
-
-                if (this.checked) {
-
-                    if (
-                        !gifts.some(
-                            gift =>
-                                gift.id ===
-                                product.id
-                        )
-                    ) {
-
-                        gifts.push(product);
-
-                    }
-
-                } else {
-
-                    gifts =
-                        gifts.filter(
-                            gift =>
-                                gift.id !==
-                                product.id
-                        );
-
-                }
-
-                saveSelectedFreeGiftProducts(
-                    gifts
+            const label =
+                document.createElement(
+                    "label"
                 );
 
-                if (
-                    gifts.length ===
-                    unlocked
-                ) {
+            label.style.cssText = `
+                display:flex;
+                align-items:center;
+                gap:10px;
+                margin:10px 0;
+                cursor:pointer;
+                color:#304B52;
+            `;
 
-                    localStorage.setItem(
-                        GIFT_FLOW_KEY,
-                        "true"
-                    );
+            const checkbox =
+                document.createElement(
+                    "input"
+                );
 
-                    localStorage.removeItem(
-                        GIFT_POPUP_KEY
-                    );
+            checkbox.type =
+                "checkbox";
 
-                    automaticGiftCheckoutStarted =
-                        false;
+            checkbox.checked =
+                selected.some(
+                    gift =>
+                        gift.id ===
+                        product.id
+                );
 
-                    showGiftPickedPopup(
-                        gifts.length,
-                        unlocked
-                    );
+            checkbox.addEventListener(
+                "change",
+                function () {
 
-                    updateGiftProgress();
+                    let gifts =
+                        getSelectedFreeGiftProducts();
 
-                } else {
+                    if (
+                        this.checked
+                    ) {
 
-                    localStorage.removeItem(
-                        GIFT_FLOW_KEY
-                    );
+                        if (
+                            !gifts.some(
+                                gift =>
+                                    gift.id ===
+                                    product.id
+                            )
+                        ) {
 
-                    const bar =
-                        document.getElementById(
-                            "giftSpendBar"
-                        );
+                            gifts.push(
+                                product
+                            );
 
-                    if (bar) {
-                        bar.style.display =
-                            "none";
+                        }
+
+                    } else {
+
+                        gifts =
+                            gifts.filter(
+                                gift =>
+                                    gift.id !==
+                                    product.id
+                            );
+
                     }
 
-                    document.body.classList.remove(
-                        "gift-shopping-active"
+                    saveSelectedFreeGiftProducts(
+                        gifts
                     );
+
+                    if (
+                        gifts.length ===
+                        unlocked
+                    ) {
+
+                        localStorage.setItem(
+                            GIFT_FLOW_KEY,
+                            "true"
+                        );
+
+                        localStorage.removeItem(
+                            GIFT_POPUP_KEY
+                        );
+
+                        automaticGiftCheckoutStarted =
+                            false;
+
+                        showGiftPickedPopup(
+                            gifts.length,
+                            unlocked
+                        );
+
+                        updateGiftProgress();
+
+                    } else {
+
+                        localStorage.removeItem(
+                            GIFT_FLOW_KEY
+                        );
+
+                        const bar =
+                            document.getElementById(
+                                "giftSpendBar"
+                            );
+
+                        if (bar) {
+
+                            bar.style.display =
+                                "none";
+
+                        }
+
+                        document.body.classList.remove(
+                            "gift-shopping-active"
+                        );
+
+                    }
+
                 }
-            }
-        );
+            );
 
-        label.appendChild(
-            checkbox
-        );
+            label.appendChild(
+                checkbox
+            );
 
-        label.appendChild(
-            document.createTextNode(
-                product.name
-            )
-        );
+            label.appendChild(
+                document.createTextNode(
+                    product.name
+                )
+            );
 
-        container.appendChild(
-            label
-        );
-    });
+            container.appendChild(
+                label
+            );
+
+        }
+    );
+
 }
+
 
 /* ========================= CART ========================= */
 
@@ -802,10 +1943,14 @@ function updateCartDisplay() {
 
         count.textContent =
             cart.reduce(
-                (total, item) =>
+                (
+                    total,
+                    item
+                ) =>
                     total +
                     Number(
-                        item.quantity || 1
+                        item.quantity ||
+                        1
                     ),
                 0
             );
@@ -814,7 +1959,8 @@ function updateCartDisplay() {
 
     if (items) {
 
-        items.innerHTML = "";
+        items.innerHTML =
+            "";
 
         if (
             cart.length === 0 &&
@@ -829,16 +1975,21 @@ function updateCartDisplay() {
         }
 
         cart.forEach(
-            (item, index) => {
+            (
+                item,
+                index
+            ) => {
 
                 const quantity =
                     Number(
-                        item.quantity || 1
+                        item.quantity ||
+                        1
                     );
 
                 const itemTotal =
                     Number(
-                        item.price || 0
+                        item.price ||
+                        0
                     ) *
                     quantity;
 
@@ -925,47 +2076,52 @@ function updateCartDisplay() {
                 items.appendChild(
                     div
                 );
+
             }
         );
 
-        gifts.forEach(gift => {
+        gifts.forEach(
+            gift => {
 
-            const div =
-                document.createElement(
-                    "div"
+                const div =
+                    document.createElement(
+                        "div"
+                    );
+
+                div.className =
+                    "cart-item";
+
+                div.innerHTML = `
+                    <div class="cart-item-info">
+
+                        <h3>
+                            🎁 ${gift.name || "Free Gift"}
+                        </h3>
+
+                        <small>
+                            FREE GIFT
+                        </small>
+
+                        <strong>
+                            ₦0
+                        </strong>
+
+                    </div>
+
+                    <div>
+                        <strong>
+                            FREE
+                        </strong>
+                    </div>
+                `;
+
+                items.appendChild(
+                    div
                 );
 
-            div.className =
-                "cart-item";
+            }
+        );
 
-            div.innerHTML = `
-                <div class="cart-item-info">
-
-                    <h3>
-                        🎁 ${gift.name || "Free Gift"}
-                    </h3>
-
-                    <small>
-                        FREE GIFT
-                    </small>
-
-                    <strong>
-                        ₦0
-                    </strong>
-
-                </div>
-
-                <div>
-                    <strong>
-                        FREE
-                    </strong>
-                </div>
-            `;
-
-            items.appendChild(
-                div
-            );
-        });
     }
 
     if (totalElement) {
@@ -976,7 +2132,9 @@ function updateCartDisplay() {
     }
 
     updateGiftProgress();
+
 }
+
 
 function changeCartQuantity(
     index,
@@ -992,10 +2150,13 @@ function changeCartQuantity(
 
     const next =
         Number(
-            cart[index].quantity || 1
+            cart[index].quantity ||
+            1
         ) + amount;
 
-    if (next <= 0) {
+    if (
+        next <= 0
+    ) {
 
         cart.splice(
             index,
@@ -1012,10 +2173,16 @@ function changeCartQuantity(
 
     }
 
-    saveCart(cart);
+    saveCart(
+        cart
+    );
+
 }
 
-function removeCartItem(index) {
+
+function removeCartItem(
+    index
+) {
 
     const cart =
         getCart();
@@ -1025,8 +2192,12 @@ function removeCartItem(index) {
         1
     );
 
-    saveCart(cart);
+    saveCart(
+        cart
+    );
+
 }
+
 
 /* ========================= ADD TO CART ========================= */
 
@@ -1043,11 +2214,11 @@ function addToCart(
         cart.find(
             item =>
                 item.id ===
-                product.id &&
+                    product.id &&
                 item.color ===
-                color &&
+                    color &&
                 item.size ===
-                size
+                    size
         );
 
     if (existing) {
@@ -1055,7 +2226,8 @@ function addToCart(
         existing.quantity =
             Math.min(
                 Number(
-                    existing.quantity || 1
+                    existing.quantity ||
+                    1
                 ) + 1,
                 10
             );
@@ -1082,22 +2254,29 @@ function addToCart(
             size,
             color,
 
-            quantity: 1
+            quantity:
+                1
 
         });
 
     }
 
-    saveCart(cart);
+    saveCart(
+        cart
+    );
 
     showSmallMessage(
         `${product.name} added to cart.`
     );
+
 }
+
 
 /* ========================= MESSAGE ========================= */
 
-function showSmallMessage(message) {
+function showSmallMessage(
+    message
+) {
 
     const old =
         document.getElementById(
@@ -1137,24 +2316,34 @@ function showSmallMessage(message) {
         box
     );
 
-    setTimeout(() => {
+    setTimeout(
+        () => {
 
-        if (box.parentNode) {
-            box.remove();
-        }
+            if (
+                box.parentNode
+            ) {
+                box.remove();
+            }
 
-    }, 2200);
+        },
+        2200
+    );
+
 }
+
 
 /* ========================= MIX PRODUCTS ========================= */
 
-function shuffleProducts(products) {
+function shuffleProducts(
+    products
+) {
 
     const array =
         [...products];
 
     for (
-        let i = array.length - 1;
+        let i =
+            array.length - 1;
         i > 0;
         i--
     ) {
@@ -1173,10 +2362,13 @@ function shuffleProducts(products) {
             array[j],
             array[i]
         ];
+
     }
 
     return array;
+
 }
+
 
 /* ========================= PRODUCT DISPLAY ========================= */
 
@@ -1212,7 +2404,8 @@ function renderProducts(
         return;
     }
 
-    grid.innerHTML = "";
+    grid.innerHTML =
+        "";
 
     if (
         !products ||
@@ -1220,210 +2413,263 @@ function renderProducts(
     ) {
 
         if (noProducts) {
+
             noProducts.style.display =
                 "block";
+
         }
 
         return;
     }
 
     if (noProducts) {
+
         noProducts.style.display =
             "none";
+
     }
 
     const displayProducts =
         products === productCatalog
-            ? shuffleProducts(products)
+            ? shuffleProducts(
+                products
+            )
             : products;
 
     displayProducts
-        .slice(0, 60)
-        .forEach(product => {
+        .slice(
+            0,
+            60
+        )
+        .forEach(
+            product => {
 
-            const card =
-                document.createElement(
-                    "div"
-                );
+                const card =
+                    document.createElement(
+                        "div"
+                    );
 
-            card.className =
-                "product-card";
+                card.className =
+                    "product-card";
 
-            let colorHTML = "";
+                let colorHTML =
+                    "";
 
-            if (
-                Array.isArray(
-                    product.colors
-                ) &&
-                product.colors.length
-            ) {
+                if (
+                    Array.isArray(
+                        product.colors
+                    ) &&
+                    product.colors.length
+                ) {
 
-                colorHTML = `
-                    <select
-                        class="product-color"
-                        data-product-id="${product.id}"
-                    >
-                        <option value="">
-                            Select color
-                        </option>
+                    colorHTML = `
+                        <select
+                            class="product-color"
+                            data-product-id="${product.id}"
+                        >
 
-                        ${product.colors
-                            .map(
-                                color =>
-                                    `<option value="${color}">
-                                        ${color}
-                                    </option>`
-                            )
-                            .join("")}
-                    </select>
-                `;
-            }
+                            <option value="">
+                                Select color
+                            </option>
 
-            let sizeHTML = "";
+                            ${product.colors
+                                .map(
+                                    color =>
+                                        `<option value="${color}">
+                                            ${color}
+                                        </option>`
+                                )
+                                .join("")}
 
-            if (
-                Array.isArray(
-                    product.sizes
-                ) &&
-                product.sizes.length
-            ) {
+                        </select>
+                    `;
 
-                sizeHTML = `
-                    <select
-                        class="product-size"
-                        data-product-id="${product.id}"
-                    >
-                        <option value="">
-                            Select size
-                        </option>
+                }
 
-                        ${product.sizes
-                            .map(
-                                size =>
-                                    `<option value="${size}">
-                                        ${size}
-                                    </option>`
-                            )
-                            .join("")}
-                    </select>
-                `;
+                let sizeHTML =
+                    "";
 
-            } else if (product.size) {
+                if (
+                    Array.isArray(
+                        product.sizes
+                    ) &&
+                    product.sizes.length
+                ) {
 
-                sizeHTML =
-                    `<p>Size: ${product.size}</p>`;
+                    sizeHTML = `
+                        <select
+                            class="product-size"
+                            data-product-id="${product.id}"
+                        >
 
-            }
+                            <option value="">
+                                Select size
+                            </option>
 
-            card.innerHTML = `
-                <div class="product-image">
-                    🛍️
-                </div>
+                            ${product.sizes
+                                .map(
+                                    size =>
+                                        `<option value="${size}">
+                                            ${size}
+                                        </option>`
+                                )
+                                .join("")}
 
-                <div class="product-information">
+                        </select>
+                    `;
 
-                    <small>
-                        ${product.category}
-                    </small>
+                } else if (
+                    product.size
+                ) {
 
-                    <h3>
-                        ${product.name}
-                    </h3>
+                    sizeHTML =
+                        `<p>Size: ${product.size}</p>`;
 
-                    <p>
-                        ${product.description}
-                    </p>
+                }
 
-                    ${sizeHTML}
+                const stock =
+                    Number(
+                        product.stock ??
+                        10
+                    );
 
-                    <strong class="product-price">
-                        ₦${Number(
-                            product.price
-                        ).toLocaleString()}
-                    </strong>
-
-                    <div class="stock-status">
-                        In stock
+                card.innerHTML = `
+                    <div class="product-image">
+                        ${
+                            product.image ||
+                            product.imageUrl
+                                ? `<img
+                                    src="${product.image || product.imageUrl}"
+                                    alt="${product.name}"
+                                    style="width:100%;height:100%;object-fit:cover;border-radius:inherit;"
+                                >`
+                                : `🛍️`
+                        }
                     </div>
 
-                    ${colorHTML}
+                    <div class="product-information">
 
-                    <button
-                        type="button"
-                        class="add-to-cart"
-                        data-product-id="${product.id}"
-                    >
-                        ADD TO CART
-                    </button>
+                        <small>
+                            ${product.category}
+                        </small>
 
-                </div>
-            `;
+                        <h3>
+                            ${product.name}
+                        </h3>
 
-            card
-                .querySelector(
-                    ".add-to-cart"
-                )
-                ?.addEventListener(
-                    "click",
-                    () => {
+                        <p>
+                            ${product.description}
+                        </p>
 
-                        const colorSelect =
-                            card.querySelector(
-                                ".product-color"
+                        ${sizeHTML}
+
+                        <strong class="product-price">
+                            ₦${Number(
+                                product.price
+                            ).toLocaleString()}
+                        </strong>
+
+                        <div class="stock-status">
+                            ${
+                                stock > 0
+                                    ? "In stock"
+                                    : "Out of stock"
+                            }
+                        </div>
+
+                        ${colorHTML}
+
+                        <button
+                            type="button"
+                            class="add-to-cart"
+                            data-product-id="${product.id}"
+                            ${
+                                stock <= 0
+                                    ? "disabled"
+                                    : ""
+                            }
+                        >
+                            ${
+                                stock > 0
+                                    ? "ADD TO CART"
+                                    : "OUT OF STOCK"
+                            }
+                        </button>
+
+                    </div>
+                `;
+
+                card
+                    .querySelector(
+                        ".add-to-cart"
+                    )
+                    ?.addEventListener(
+                        "click",
+                        () => {
+
+                            const colorSelect =
+                                card.querySelector(
+                                    ".product-color"
+                                );
+
+                            const sizeSelect =
+                                card.querySelector(
+                                    ".product-size"
+                                );
+
+                            const color =
+                                colorSelect
+                                    ? colorSelect.value
+                                    : "";
+
+                            const size =
+                                sizeSelect
+                                    ? sizeSelect.value
+                                    : product.size ||
+                                      "";
+
+                            if (
+                                product.sizes?.length &&
+                                !size
+                            ) {
+
+                                showSmallMessage(
+                                    "Please select a size."
+                                );
+
+                                return;
+                            }
+
+                            if (
+                                product.colors?.length &&
+                                !color
+                            ) {
+
+                                showSmallMessage(
+                                    "Please select a color."
+                                );
+
+                                return;
+                            }
+
+                            addToCart(
+                                product,
+                                color,
+                                size
                             );
 
-                        const sizeSelect =
-                            card.querySelector(
-                                ".product-size"
-                            );
-
-                        const color =
-                            colorSelect
-                                ? colorSelect.value
-                                : "";
-
-                        const size =
-                            sizeSelect
-                                ? sizeSelect.value
-                                : product.size || "";
-
-                        if (
-                            product.sizes?.length &&
-                            !size
-                        ) {
-
-                            showSmallMessage(
-                                "Please select a size."
-                            );
-
-                            return;
                         }
+                    );
 
-                        if (
-                            product.colors?.length &&
-                            !color
-                        ) {
-
-                            showSmallMessage(
-                                "Please select a color."
-                            );
-
-                            return;
-                        }
-
-                        addToCart(
-                            product,
-                            color,
-                            size
-                        );
-                    }
+                grid.appendChild(
+                    card
                 );
 
-            grid.appendChild(
-                card
-            );
-        });
+            }
+        );
+
 }
+
 
 /* ========================= SEARCH ========================= */
 
@@ -1455,10 +2701,14 @@ function setupSearch() {
                 product =>
                     product.name
                         .toLowerCase()
-                        .includes(term) ||
+                        .includes(
+                            term
+                        ) ||
                     product.category
                         .toLowerCase()
-                        .includes(term)
+                        .includes(
+                            term
+                        )
             );
 
         renderProducts(
@@ -1466,6 +2716,7 @@ function setupSearch() {
                 ? results
                 : productCatalog
         );
+
     }
 
     input.addEventListener(
@@ -1477,7 +2728,9 @@ function setupSearch() {
         "click",
         search
     );
+
 }
+
 
 /* ========================= CATEGORY ========================= */
 
@@ -1498,15 +2751,18 @@ function setupCategories() {
     }
 
     const categories = [
+
         "All Products",
         "Skincare",
         "Accessories",
         "Clothing",
         "Shoes",
         "Bags"
+
     ];
 
-    menu.innerHTML = "";
+    menu.innerHTML =
+        "";
 
     categories.forEach(
         category => {
@@ -1527,6 +2783,7 @@ function setupCategories() {
                 btn.classList.add(
                     "selected"
                 );
+
             }
 
             btn.textContent =
@@ -1569,13 +2826,16 @@ function setupCategories() {
                                     category
                             )
                         );
+
                     }
+
                 }
             );
 
             menu.appendChild(
                 btn
             );
+
         }
     );
 
@@ -1586,12 +2846,16 @@ function setupCategories() {
             event.preventDefault();
 
             menu.style.display =
-                menu.style.display === "flex"
+                menu.style.display ===
+                "flex"
                     ? "none"
                     : "flex";
+
         }
     );
+
 }
+
 
 /* ========================= CART POPUP ========================= */
 
@@ -1604,7 +2868,9 @@ function openCart() {
         ?.classList.add(
             "open"
         );
+
 }
+
 
 function closeCart() {
 
@@ -1615,7 +2881,9 @@ function closeCart() {
         ?.classList.remove(
             "open"
         );
+
 }
+
 
 function setupCart() {
 
@@ -1668,6 +2936,7 @@ function setupCart() {
                         index,
                         1
                     );
+
                 }
 
                 if (
@@ -1679,6 +2948,7 @@ function setupCart() {
                         index,
                         -1
                     );
+
                 }
 
                 if (
@@ -1690,26 +2960,38 @@ function setupCart() {
                     removeCartItem(
                         index
                     );
+
                 }
+
             }
         );
+
 }
+
 
 /* ========================= CHECKOUT ========================= */
 
-let checkoutOpening = false;
+let checkoutOpening =
+    false;
 
 function checkout() {
 
-    if (checkoutOpening) {
+    if (
+        checkoutOpening
+    ) {
         return;
     }
 
-    checkoutOpening = true;
+    checkoutOpening =
+        true;
 
-    setTimeout(() => {
-        checkoutOpening = false;
-    }, 700);
+    setTimeout(
+        () => {
+            checkoutOpening =
+                false;
+        },
+        700
+    );
 
     const cart =
         getCart();
@@ -1744,7 +3026,9 @@ function checkout() {
     }
 
     createCheckoutModal();
+
 }
+
 
 window.checkout =
     checkout;
@@ -1754,6 +3038,7 @@ window.getCartTotal =
 
 window.updateCartDisplay =
     updateCartDisplay;
+
 
 /* ========================= CHECKOUT MODAL ========================= */
 
@@ -1776,6 +3061,13 @@ function createCheckoutModal() {
 
     const paidTotal =
         getCartTotal();
+
+    const shippingFee =
+        0;
+
+    const finalTotal =
+        paidTotal +
+        shippingFee;
 
     const modal =
         document.createElement(
@@ -1935,7 +3227,9 @@ function createCheckoutModal() {
                     Your order
                 </h3>
 
-                ${cart.map(item => `
+                ${cart.map(
+                    item => `
+
                     <div style="
                         display:flex;
                         justify-content:space-between;
@@ -1946,7 +3240,9 @@ function createCheckoutModal() {
                     ">
 
                         <span>
+
                             ${item.name}
+
                             × ${item.quantity || 1}
 
                             ${
@@ -1960,66 +3256,124 @@ function createCheckoutModal() {
                                     ? ` • ${item.color}`
                                     : ""
                             }
+
                         </span>
 
                         <strong>
                             ₦${(
-                                Number(item.price || 0) *
-                                Number(item.quantity || 1)
+                                Number(
+                                    item.price ||
+                                    0
+                                ) *
+                                Number(
+                                    item.quantity ||
+                                    1
+                                )
                             ).toLocaleString()}
                         </strong>
 
                     </div>
-                `).join("")}
+
+                `
+                ).join("")}
 
                 ${
                     gifts.length
                         ? `
+
+                    <div style="
+                        margin-top:18px;
+                        padding:15px;
+                        border-radius:15px;
+                        background:#E8F1F2;
+                    ">
+
+                        <strong>
+                            🎁 Your Free Gifts
+                        </strong>
+
+                        ${gifts.map(
+                            gift => `
+
                             <div style="
-                                margin-top:18px;
-                                padding:15px;
-                                border-radius:15px;
-                                background:#E8F1F2;
+                                margin-top:8px;
+                                color:#6F858A;
                             ">
 
-                                <strong>
-                                    🎁 Your Free Gifts
-                                </strong>
-
-                                ${gifts.map(
-                                    gift => `
-                                        <div style="
-                                            margin-top:8px;
-                                            color:#6F858A;
-                                        ">
-                                            ${gift.name}
-                                            — FREE
-                                        </div>
-                                    `
-                                ).join("")}
+                                ${gift.name}
+                                — FREE
 
                             </div>
+
                         `
+                        ).join("")}
+
+                    </div>
+
+                `
                         : ""
                 }
 
                 <div style="
-                    display:flex;
-                    justify-content:space-between;
                     margin-top:25px;
                     padding-top:20px;
                     border-top:1px solid #DCEFF2;
                     color:#304B52;
-                    font-size:19px;
                 ">
 
-                    <strong>
-                        Total to pay
-                    </strong>
+                    <div style="
+                        display:flex;
+                        justify-content:space-between;
+                        margin-bottom:10px;
+                    ">
 
-                    <strong>
-                        ₦${paidTotal.toLocaleString()}
-                    </strong>
+                        <span>
+                            Subtotal
+                        </span>
+
+                        <strong>
+                            ₦${paidTotal.toLocaleString()}
+                        </strong>
+
+                    </div>
+
+                    <div style="
+                        display:flex;
+                        justify-content:space-between;
+                        margin-bottom:12px;
+                    ">
+
+                        <span>
+                            Shipping fee
+                        </span>
+
+                        <strong>
+                            ${
+                                shippingFee === 0
+                                    ? "FREE"
+                                    : `₦${shippingFee.toLocaleString()}`
+                            }
+                        </strong>
+
+                    </div>
+
+                    <div style="
+                        display:flex;
+                        justify-content:space-between;
+                        padding-top:12px;
+                        border-top:1px solid #DCEFF2;
+                        font-size:19px;
+                    ">
+
+                        <strong>
+                            Total to pay
+                        </strong>
+
+                        <strong>
+                            ₦${finalTotal.toLocaleString()}
+                        </strong>
+
+                    </div>
 
                 </div>
 
@@ -2084,21 +3438,24 @@ function createCheckoutModal() {
                         .getElementById(
                             "checkoutFullName"
                         )
-                        .value.trim();
+                        .value
+                        .trim();
 
                 const phone =
                     document
                         .getElementById(
                             "checkoutPhone"
                         )
-                        .value.trim();
+                        .value
+                        .trim();
 
                 const address =
                     document
                         .getElementById(
                             "checkoutAddress"
                         )
-                        .value.trim();
+                        .value
+                        .trim();
 
                 const validation =
                     document.getElementById(
@@ -2123,18 +3480,30 @@ function createCheckoutModal() {
                 localStorage.setItem(
                     "collectiveCheckoutCustomer",
                     JSON.stringify({
+
                         fullName,
                         phone,
                         address
+
                     })
+                );
+
+                localStorage.setItem(
+                    "collectiveCheckoutShippingFee",
+                    String(
+                        shippingFee
+                    )
                 );
 
                 modal.remove();
 
                 showPaymentModal();
+
             }
         );
+
 }
+
 
 /* ========================= PAYMENT ========================= */
 
@@ -2159,6 +3528,17 @@ function showPaymentModal() {
 
     const total =
         getCartTotal();
+
+    const shippingFee =
+        Number(
+            localStorage.getItem(
+                "collectiveCheckoutShippingFee"
+            ) || "0"
+        );
+
+    const finalTotal =
+        total +
+        shippingFee;
 
     modal.style.cssText = `
         position:fixed;
@@ -2191,7 +3571,7 @@ function showPaymentModal() {
             <p style="color:#6F858A;">
                 Amount to pay:
                 <strong style="color:#304B52;">
-                    ₦${total.toLocaleString()}
+                    ₦${finalTotal.toLocaleString()}
                 </strong>
             </p>
 
@@ -2341,12 +3721,18 @@ function showPaymentModal() {
                     alert(
                         "The order could not be submitted. Please try again."
                     );
+
                 }
+
             }
         );
+
 }
 
-/* ========================= FIREBASE ORDER ========================= */
+
+/* =========================================================
+   FIREBASE ORDER
+========================================================= */
 
 async function createPendingOrder() {
 
@@ -2356,10 +3742,22 @@ async function createPendingOrder() {
     const gifts =
         getSelectedFreeGiftProducts();
 
-    const paidTotal =
+    const subtotal =
         getCartTotal();
 
-    let checkoutCustomer = {};
+    const shippingFee =
+        Number(
+            localStorage.getItem(
+                "collectiveCheckoutShippingFee"
+            ) || "0"
+        );
+
+    const total =
+        subtotal +
+        shippingFee;
+
+    let checkoutCustomer =
+        {};
 
     try {
 
@@ -2372,7 +3770,8 @@ async function createPendingOrder() {
 
     } catch {
 
-        checkoutCustomer = {};
+        checkoutCustomer =
+            {};
 
     }
 
@@ -2385,65 +3784,261 @@ async function createPendingOrder() {
         ) ||
         "";
 
+    const fullName =
+        checkoutCustomer.fullName ||
+        storedUser ||
+        "Customer";
+
+    const phone =
+        checkoutCustomer.phone ||
+        "";
+
+    const address =
+        checkoutCustomer.address ||
+        "";
+
+    /*
+       Split full name so Admin can show
+       first and last name if needed.
+    */
+
+    const nameParts =
+        fullName
+            .trim()
+            .split(/\s+/);
+
+    const firstName =
+        nameParts.shift() ||
+        "";
+
+    const lastName =
+        nameParts.join(" ") ||
+        "";
+
+    const orderNumber =
+        generateOrderNumber();
+
+    const createdAt =
+        new Date().toISOString();
+
+    /*
+       Every item gets its own snapshot of:
+       name
+       price
+       quantity
+       size
+       color
+       line total
+    */
+
+    const orderItems =
+        cart.map(
+            item => {
+
+                const quantity =
+                    Number(
+                        item.quantity ||
+                        1
+                    );
+
+                const unitPrice =
+                    Number(
+                        item.price ||
+                        0
+                    );
+
+                return {
+
+                    id:
+                        item.id ||
+                        "",
+
+                    name:
+                        item.name ||
+                        item.listing ||
+                        "Product",
+
+                    listing:
+                        item.listing ||
+                        item.name ||
+                        "",
+
+                    category:
+                        item.category ||
+                        "",
+
+                    quantity,
+
+                    unitPrice,
+
+                    price:
+                        unitPrice,
+
+                    size:
+                        item.size ||
+                        "",
+
+                    color:
+                        item.color ||
+                        "",
+
+                    lineTotal:
+                        unitPrice *
+                        quantity
+
+                };
+
+            }
+        );
+
+    const giftItems =
+        gifts.map(
+            gift => ({
+
+                id:
+                    gift.id ||
+                    "",
+
+                name:
+                    gift.name ||
+                    "Free Gift",
+
+                quantity:
+                    1,
+
+                unitPrice:
+                    0,
+
+                price:
+                    0,
+
+                lineTotal:
+                    0,
+
+                isFreeGift:
+                    true
+
+            })
+        );
+
     const customer = {
 
-        fullName:
-            checkoutCustomer.fullName ||
-            storedUser ||
-            "Customer",
+        fullName,
 
-        phone:
-            checkoutCustomer.phone ||
-            "",
+        firstName,
 
-        address:
-            checkoutCustomer.address ||
-            ""
+        lastName,
+
+        phone,
+
+        address
 
     };
 
+    /*
+       THIS is the order that gets sent to Firebase.
+       Admin can use every field below.
+    */
+
     const order = {
+
+        orderNumber,
 
         customer,
 
+        firstName,
+
+        lastName,
+
+        fullName,
+
+        phone,
+
+        address,
+
+        shippingAddress:
+            address,
+
+        deliveryAddress:
+            address,
+
         items:
-            cart,
+            orderItems,
 
         freeGifts:
-            gifts,
+            giftItems,
+
+        subtotal,
 
         originalTotal:
-            paidTotal,
+            subtotal,
 
-        pointsUsed:
-            0,
-
-        total:
-            paidTotal,
-
-        paidTotal:
-            paidTotal,
-
-        qualifyingSpend:
-            paidTotal,
+        shippingFee,
 
         shipping: {
 
-            address:
-                customer.address,
+            fee:
+                shippingFee,
+
+            address,
 
             status:
                 "processing"
 
         },
 
+        total,
+
+        paidTotal:
+            total,
+
+        pointsUsed:
+            0,
+
+        qualifyingSpend:
+            subtotal,
+
+        paymentMethod:
+            "Bank Transfer",
+
+        paymentStatus:
+            "payment-checking",
+
         status:
             "payment-checking",
 
-        createdAt:
-            new Date().toISOString()
+        deliveryStatus:
+            "processing",
+
+        createdAt,
+
+        orderDate:
+            createdAt,
+
+        updatedAt:
+            createdAt
 
     };
+
+
+    /*
+       Save the current order number locally.
+       This lets the Shop check Firebase later and
+       show the customer when Admin changes the status.
+    */
+
+    localStorage.setItem(
+        ORDER_NUMBER_KEY,
+        orderNumber
+    );
+
+    localStorage.setItem(
+        ORDER_KEY,
+        JSON.stringify(
+            order
+        )
+    );
+
 
     if (
         !firebaseDB?.db
@@ -2451,20 +4046,33 @@ async function createPendingOrder() {
 
         localStorage.setItem(
             "collectivePendingOrder",
-            JSON.stringify(order)
+            JSON.stringify(
+                order
+            )
         );
 
         return true;
     }
 
+
     try {
 
-        await firebaseDB.addDoc(
-            firebaseDB.collection(
-                firebaseDB.db,
-                "orders"
-            ),
-            order
+        const orderRef =
+            await firebaseDB.addDoc(
+                firebaseDB.collection(
+                    firebaseDB.db,
+                    "orders"
+                ),
+                order
+            );
+
+        /*
+           Save the Firebase document ID too.
+        */
+
+        localStorage.setItem(
+            "collectiveFirebaseOrderId",
+            orderRef.id
         );
 
         localStorage.removeItem(
@@ -2475,9 +4083,19 @@ async function createPendingOrder() {
             "collectiveCheckoutCustomer"
         );
 
+        localStorage.removeItem(
+            "collectiveCheckoutShippingFee"
+        );
+
         clearSelectedFreeGiftProducts();
 
         updateCartDisplay();
+
+        /*
+           Start watching this order for Admin changes.
+        */
+
+        startOrderStatusSync();
 
         return true;
 
@@ -2488,14 +4106,187 @@ async function createPendingOrder() {
             error
         );
 
+        /*
+           Keep the complete order locally so it isn't lost.
+        */
+
         localStorage.setItem(
             "collectivePendingOrder",
-            JSON.stringify(order)
+            JSON.stringify(
+                order
+            )
         );
 
         return false;
+
     }
+
 }
+
+
+/* =========================================================
+   ORDER STATUS SYNC
+========================================================= */
+
+/*
+   The customer Shop checks Firebase for the order number
+   saved after checkout.
+
+   When Admin changes:
+
+   Payment Checking
+   Payment Seen
+   Packed
+   Shipped
+   Delivered
+
+   the Shop receives the new status.
+*/
+
+let orderStatusSyncStarted =
+    false;
+
+async function checkCurrentOrderStatus() {
+
+    if (
+        !firebaseDB?.db
+    ) {
+        return;
+    }
+
+    const orderNumber =
+        localStorage.getItem(
+            ORDER_NUMBER_KEY
+        );
+
+    if (!orderNumber) {
+        return;
+    }
+
+    try {
+
+        const ordersRef =
+            firebaseDB.collection(
+                firebaseDB.db,
+                "orders"
+            );
+
+        const q =
+            firebaseDB.query(
+                ordersRef,
+                firebaseDB.where(
+                    "orderNumber",
+                    "==",
+                    orderNumber
+                )
+            );
+
+        const snapshot =
+            await firebaseDB.getDocs(
+                q
+            );
+
+        if (
+            snapshot.empty
+        ) {
+            return;
+        }
+
+        const orderDoc =
+            snapshot.docs[0];
+
+        const latestOrder =
+            orderDoc.data();
+
+        localStorage.setItem(
+            ORDER_KEY,
+            JSON.stringify(
+                latestOrder
+            )
+        );
+
+        /*
+           Keep a simple status value available
+           for profile/order pages.
+        */
+
+        localStorage.setItem(
+            "collectiveOrderStatus",
+            latestOrder.status ||
+            "payment-checking"
+        );
+
+        localStorage.setItem(
+            "collectivePaymentStatus",
+            latestOrder.paymentStatus ||
+            latestOrder.status ||
+            "payment-checking"
+        );
+
+        localStorage.setItem(
+            "collectiveDeliveryStatus",
+            latestOrder.deliveryStatus ||
+            latestOrder.status ||
+            "processing"
+        );
+
+        /*
+           Also expose the full current order.
+        */
+
+        window.collectiveCurrentOrder =
+            latestOrder;
+
+    } catch (error) {
+
+        console.error(
+            "Could not check order status:",
+            error
+        );
+
+    }
+
+}
+
+
+function startOrderStatusSync() {
+
+    if (
+        orderStatusSyncStarted
+    ) {
+        return;
+    }
+
+    orderStatusSyncStarted =
+        true;
+
+    /*
+       Check immediately.
+    */
+
+    setTimeout(
+        () => {
+            checkCurrentOrderStatus();
+        },
+        1000
+    );
+
+    /*
+       Then keep checking so an Admin change
+       can reach the Shop.
+    */
+
+    setInterval(
+        () => {
+
+            checkCurrentOrderStatus();
+
+        },
+        5000
+    );
+
+}
+
 
 /* ========================= CHECKOUT BUTTON ========================= */
 
@@ -2515,12 +4306,16 @@ function setupCheckout() {
         event => {
 
             event.preventDefault();
+
             event.stopPropagation();
 
             checkout();
+
         }
     );
+
 }
+
 
 /* ========================= STORAGE SYNC ========================= */
 
@@ -2537,16 +4332,21 @@ function setupStorageSync() {
                     OLD_GIFT_KEY,
                     POINTS_KEY,
                     TOTAL_SPENT_KEY,
-                    GIFT_FLOW_KEY
+                    GIFT_FLOW_KEY,
+                    ORDER_KEY
                 ].includes(
                     event.key
                 )
             ) {
 
                 updateCartDisplay();
+
                 renderGiftOptions();
+
                 updateGiftProgress();
+
             }
+
         }
     );
 
@@ -2554,12 +4354,15 @@ function setupStorageSync() {
         () => {
 
             updateCartDisplay();
+
             updateGiftProgress();
 
         },
         1000
     );
+
 }
+
 
 /* ========================= INITIALISE ========================= */
 
@@ -2571,19 +4374,34 @@ document.addEventListener(
             "THE COLLECTIVE.CO shop loaded."
         );
 
+        /*
+           Show the original catalog immediately.
+           This means products do NOT have to wait
+           for Firebase before appearing.
+        */
+
         renderProducts(
             productCatalog
         );
 
         setupSearch();
+
         setupCategories();
+
         setupCart();
+
         setupCheckout();
 
         updateCartDisplay();
+
         renderGiftOptions();
+
         updateGiftProgress();
 
         setupStorageSync();
+
+        startOrderStatusSync();
+
     }
 );
+```
