@@ -10,62 +10,6 @@
     <link rel="stylesheet" href="style.css">
 
     <style>
-        .free-gifts-section {
-            width: 90%;
-            max-width: 1200px;
-            margin: 30px auto;
-            padding: 28px;
-            box-sizing: border-box;
-            background: #faf7f2;
-            border-radius: 24px;
-            display: none;
-        }
-
-        .free-gifts-section h2,
-        .free-gifts-section p {
-            text-align: center;
-        }
-
-        .free-gifts-section p {
-            margin-bottom: 24px;
-            opacity: 0.7;
-        }
-
-        .free-gifts-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-            gap: 24px;
-        }
-
-        .free-gift-card {
-            background: #ffffff;
-            border-radius: 20px;
-            padding: 20px;
-            text-align: center;
-            box-sizing: border-box;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
-        }
-
-        .free-gift-card img {
-            width: 100%;
-            max-height: 190px;
-            object-fit: contain;
-            border-radius: 15px;
-        }
-
-        .free-gift-card h3 {
-            margin: 14px 0 7px;
-        }
-
-        .free-gift-badge {
-            display: inline-block;
-            padding: 7px 13px;
-            border-radius: 20px;
-            background: #f2ebe2;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
         #cartPopup {
             padding: 25px;
             box-sizing: border-box;
@@ -114,15 +58,6 @@
         }
 
         @media (max-width: 600px) {
-            .free-gifts-section {
-                width: 94%;
-                padding: 22px 16px;
-            }
-
-            .free-gifts-grid {
-                grid-template-columns: 1fr;
-            }
-
             #cartPopup {
                 padding: 12px;
             }
@@ -138,22 +73,13 @@
 <body>
 
     <!-- NAVIGATION -->
-
     <nav>
-
         <a href="index.html">Home</a>
-
         <a href="shop.html">Shop</a>
-
         <a href="index.html">About</a>
-
         <a href="contact.html">Contact</a>
-
         <a href="#" id="categoryBtn">Category</a>
-
         <a href="profile.html">Profile</a>
-
-        <!-- MY ORDERS -->
         <a href="orders.html" id="myOrdersBtn">My Orders</a>
 
         <button
@@ -163,136 +89,52 @@
         >
             🛒 Cart <span id="cartCount">0</span>
         </button>
-
     </nav>
 
-    <!-- CATEGORY MENU -->
-
+    <!-- CATEGORY MENU (Will include "Others" dynamically or via CSS) -->
     <div
         id="categoryMenu"
         class="collective-categories"
     ></div>
 
     <!-- SHOP HEADER -->
-
     <div class="shop-header">
-
         <h1>SHOP</h1>
-
         <div class="bear">🧸</div>
-
         <p>Find something you love.</p>
 
         <div class="search-bar">
-
             <input
                 type="text"
                 id="productSearch"
                 placeholder="Search products..."
             >
-
             <button
                 id="searchButton"
                 type="button"
             >
                 🔍
             </button>
-
         </div>
-
     </div>
-
-    <!-- GIFT SPENDING PROGRESS -->
-
-    <div
-        id="giftSpendBar"
-        style="
-            display:none;
-            width:90%;
-            max-width:700px;
-            margin:20px auto;
-            padding:18px;
-            box-sizing:border-box;
-            background:#f8f3ed;
-            border-radius:18px;
-            text-align:center;
-        "
-    >
-
-        <div
-            id="giftSpendMessage"
-            style="font-weight:600; margin-bottom:10px;"
-        ></div>
-
-        <div
-            style="
-                width:100%;
-                height:10px;
-                background:#e5e5e5;
-                border-radius:20px;
-                overflow:hidden;
-            "
-        >
-            <div
-                id="giftSpendFill"
-                style="
-                    width:0%;
-                    height:100%;
-                    border-radius:20px;
-                    transition:width 0.3s ease;
-                "
-            ></div>
-        </div>
-
-        <div
-            id="giftSpendAmount"
-            style="margin-top:10px; font-size:14px;"
-        >
-            ₦0
-        </div>
-
-    </div>
-
-    <!-- FREE GIFTS -->
-
-    <section
-        id="freeGiftsSection"
-        class="free-gifts-section"
-    >
-
-        <h2>FREE GIFTS 🎁</h2>
-
-        <p>Your unlocked gifts will appear here.</p>
-
-        <div
-            id="freeGiftsGrid"
-            class="free-gifts-grid"
-        ></div>
-
-    </section>
 
     <!-- NO PRODUCTS MESSAGE -->
-
     <p class="no-products">
         No products found.
     </p>
 
     <!-- PRODUCTS -->
-
     <div
         class="product-grid"
         id="productGrid"
     ></div>
 
     <!-- CART POPUP -->
-
     <div
         id="cartPopup"
         class="cart-popup"
     >
-
         <div class="cart-box">
-
             <button
                 id="closeCart"
                 class="close-cart"
@@ -308,11 +150,8 @@
             </div>
 
             <div class="cart-total">
-
                 <strong>Total:</strong>
-
                 <strong id="cartTotal">₦0</strong>
-
             </div>
 
             <button
@@ -322,13 +161,10 @@
             >
                 CHECKOUT
             </button>
-
         </div>
-
     </div>
 
     <!-- JAVASCRIPT -->
-
     <script src="script.js"></script>
 
 </body>
