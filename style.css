@@ -188,12 +188,6 @@ p {
    PRODUCTS
 ========================= */
 
-/*
-   IMPORTANT:
-   Both .product-grid and .products-grid are supported
-   because the shop script may use either name.
-*/
-
 .product-grid,
 .products-grid,
 #productsGrid {
@@ -206,8 +200,6 @@ p {
     align-items: start !important;
     box-sizing: border-box !important;
 }
-
-/* Individual product cards */
 
 .product-card {
     display: flex !important;
@@ -222,8 +214,6 @@ p {
     text-align: center;
     overflow: hidden;
 }
-
-/* Product image */
 
 .product-image {
     width: 100%;
@@ -245,8 +235,6 @@ p {
     object-fit: cover;
     display: block;
 }
-
-/* Product information */
 
 .product-information,
 .product-info {
@@ -360,107 +348,6 @@ p {
 
 .add-to-cart:hover {
     opacity: 0.85;
-}
-
-/* =========================
-   OLD CATEGORY CAROUSEL
-========================= */
-
-.category-section {
-    width: 100%;
-    overflow: hidden;
-    padding: 25px 0;
-    background: white;
-}
-
-.category-section h2 {
-    margin: 0 20px 20px;
-    font-size: 24px;
-    font-weight: 600;
-}
-
-.category-slider {
-    display: flex;
-    flex-direction: row;
-    overflow-x: auto;
-    overflow-y: hidden;
-    scroll-snap-type: x mandatory;
-    scroll-behavior: smooth;
-    width: 100%;
-    scrollbar-width: none;
-}
-
-.category-slider::-webkit-scrollbar {
-    display: none;
-}
-
-.category-page {
-    flex: 0 0 100%;
-    min-width: 100%;
-    scroll-snap-align: start;
-    box-sizing: border-box;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 20px;
-    margin-bottom: 20px;
-}
-
-.category-page h3 {
-    text-align: center;
-    margin-bottom: 20px;
-    text-transform: uppercase;
-}
-
-.category-items {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 25px;
-    overflow-x: auto;
-    scrollbar-width: none;
-}
-
-.category-items::-webkit-scrollbar {
-    display: none;
-}
-
-.category-item {
-    flex: 0 0 auto;
-    width: 120px;
-    border: none;
-    outline: none;
-    background: none;
-    padding: 0;
-    text-align: center;
-    cursor: pointer;
-}
-
-.category-circle {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    overflow: hidden;
-    margin: auto;
-    border: 2px solid #ddd;
-    background: #f2f2f2;
-}
-
-.category-circle img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-}
-
-.category-item span {
-    display: block;
-    margin-top: 10px;
-    text-align: center;
-    font-weight: 600;
-}
-
-.category-item:active .category-circle {
-    transform: scale(0.94);
 }
 
 /* =========================
@@ -617,10 +504,6 @@ p {
     padding-bottom: 70px;
 }
 
-/* =========================
-   PROFILE HERO
-========================= */
-
 .profile-hero {
     padding: 75px 20px 45px;
 }
@@ -641,10 +524,6 @@ p {
 .profile-hero p:last-child {
     font-size: 17px;
 }
-
-/* =========================
-   ACCOUNT CARD
-========================= */
 
 .profile-card {
     background: #FFFDF8;
@@ -716,311 +595,6 @@ p {
 .logout-button:hover {
     background: #304B52;
     color: #FFFFFF;
-}
-
-/* =========================
-   REWARDS SECTION
-========================= */
-
-.rewards-section {
-    margin-top: 65px;
-}
-
-.section-heading {
-    text-align: left;
-    margin-bottom: 25px;
-}
-
-.section-heading h2 {
-    color: #304B52;
-    font-size: 28px;
-    letter-spacing: 2px;
-    margin: 5px 0 0;
-}
-
-/* =========================
-   REWARD GRID
-========================= */
-
-.reward-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 18px;
-    text-align: left;
-}
-
-.reward-card {
-    min-height: 220px;
-    padding: 28px 24px;
-    border-radius: 25px;
-    box-sizing: border-box;
-    border: 1px solid #DCEFF2;
-    background: #FFFDF8;
-    box-shadow: 0 10px 30px rgba(48, 75, 82, 0.06);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.reward-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 35px rgba(48, 75, 82, 0.1);
-}
-
-.reward-icon {
-    display: flex;
-    width: 43px;
-    height: 43px;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    background: #E8F1F2;
-    color: #304B52;
-    font-size: 20px;
-    margin-bottom: 25px;
-}
-
-.card-label {
-    color: #6F858A;
-    font-size: 11px;
-    font-weight: bold;
-    letter-spacing: 2px;
-    margin-bottom: 8px;
-}
-
-.reward-card h3 {
-    color: #304B52;
-    font-size: 24px;
-    letter-spacing: 1px;
-    margin: 0 0 8px;
-}
-
-.reward-card p:not(.card-label) {
-    color: #6F858A;
-    font-size: 14px;
-    letter-spacing: 0.5px;
-}
-
-/* =========================
-   POINTS CARD
-========================= */
-
-.points-card {
-    background: #304B52;
-}
-
-.points-card .reward-icon {
-    background: rgba(255, 255, 255, 0.15);
-    color: #FFFFFF;
-}
-
-.points-card .card-label,
-.points-card h3,
-.points-card p:not(.card-label) {
-    color: #FFFFFF;
-}
-
-.points-card h3 {
-    font-size: 38px;
-}
-
-/* =========================
-   EARN POINTS
-========================= */
-
-.earn-card {
-    background: #E8F1F2;
-}
-
-.earn-card .reward-icon {
-    background: #FFFFFF;
-}
-
-/* =========================
-   FREE GIFTS
-========================= */
-
-.gift-card {
-    position: relative;
-    overflow: hidden;
-}
-
-.gift-card::after {
-    content: "";
-    position: absolute;
-    width: 90px;
-    height: 90px;
-    right: -35px;
-    bottom: -35px;
-    border-radius: 50%;
-    background: #E8F1F2;
-}
-
-.gift-status {
-    display: inline-block;
-    margin-top: 22px;
-    padding: 7px 11px;
-    border-radius: 20px;
-    background: #F2F2F2;
-    color: #6F858A;
-    font-size: 10px;
-    font-weight: bold;
-    letter-spacing: 1px;
-}
-
-/* =========================
-   PROFILE BOTTOM
-========================= */
-
-.profile-bottom {
-    margin-top: 35px;
-    padding: 28px 30px;
-    border-radius: 25px;
-    background: #E8F1F2;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    text-align: left;
-    box-sizing: border-box;
-}
-
-.profile-bottom .shop-button {
-    margin-top: 0;
-    white-space: nowrap;
-}
-
-.profile-bottom p:last-child {
-    font-size: 14px;
-}
-
-/* =========================
-   MOBILE
-========================= */
-
-@media (max-width: 1100px) {
-
-    .product-grid,
-    .products-grid,
-    #productsGrid {
-        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-    }
-}
-
-@media (max-width: 900px) {
-
-    .reward-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    nav {
-        gap: 30px;
-    }
-
-    .product-grid,
-    .products-grid,
-    #productsGrid {
-        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    }
-}
-
-@media (max-width: 700px) {
-
-    nav {
-        gap: 18px;
-        padding: 18px 10px;
-        flex-wrap: wrap;
-    }
-
-    nav a,
-    .account-button {
-        font-size: 13px;
-    }
-
-    h1 {
-        font-size: 38px;
-    }
-
-    .product-grid,
-    .products-grid,
-    #productsGrid {
-        grid-template-columns: 1fr !important;
-        width: 90% !important;
-    }
-
-    .search-bar {
-        width: 90%;
-    }
-
-    .collective-categories {
-        gap: 8px;
-        padding: 15px 10px;
-    }
-
-    .category-button {
-        padding: 10px 14px;
-        font-size: 12px;
-    }
-
-    /* PROFILE MOBILE */
-
-    .profile-page {
-        width: 94%;
-    }
-
-    .profile-hero {
-        padding: 55px 10px 35px;
-    }
-
-    .profile-hero h1 {
-        font-size: 35px;
-        letter-spacing: 3px;
-    }
-
-    .account-card {
-        padding: 24px 20px;
-        flex-wrap: wrap;
-    }
-
-    .profile-avatar {
-        width: 58px;
-        height: 58px;
-        min-width: 58px;
-        font-size: 22px;
-    }
-
-    .account-info h2 {
-        font-size: 19px;
-    }
-
-    .logout-button {
-        width: 100%;
-        margin-top: 8px;
-    }
-
-    .rewards-section {
-        margin-top: 45px;
-    }
-
-    .section-heading h2 {
-        font-size: 23px;
-    }
-
-    .reward-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .reward-card {
-        min-height: 190px;
-    }
-
-    .profile-bottom {
-        flex-direction: column;
-        gap: 20px;
-        align-items: flex-start;
-    }
-
-    .profile-bottom .shop-button {
-        width: 100%;
-        text-align: center;
-    }
 }
 
 /* =========================
@@ -1102,139 +676,6 @@ p {
 
 .checkout-button:hover {
     opacity: 0.85;
-}
-
-/* =========================
-   GIFT SPEND POPUP
-========================= */
-
-#giftSpendPopup {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.25);
-    align-items: center;
-    justify-content: center;
-    z-index: 9000;
-    padding: 20px;
-    box-sizing: border-box;
-}
-
-#giftSpendPopup .gift-popup-box {
-    background: #FFFDF8;
-    width: 90%;
-    max-width: 500px;
-    padding: 40px 30px;
-    border-radius: 25px;
-    box-sizing: border-box;
-    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
-}
-
-#giftSpendPopup h2 {
-    color: #304B52;
-    margin: 10px 0 15px;
-}
-
-#giftSpendPopup p {
-    font-size: 15px;
-    margin-bottom: 12px;
-}
-
-.gift-popup-icon {
-    font-size: 45px;
-}
-
-/* =========================
-   GIFT SPEND PROGRESS
-========================= */
-
-#giftSpendBar {
-    display: none;
-    width: 90%;
-    max-width: 900px;
-    margin: 25px auto;
-    background: #FFFDF8;
-    border: 1px solid #DCEFF2;
-    border-radius: 20px;
-    padding: 20px;
-    box-sizing: border-box;
-}
-
-#giftSpendBar.active {
-    display: block;
-}
-
-.gift-spend-content {
-    width: 100%;
-}
-
-.gift-spend-heading {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 15px;
-    color: #304B52;
-    font-size: 13px;
-    font-weight: bold;
-    letter-spacing: 1px;
-    margin-bottom: 12px;
-}
-
-.gift-spend-track {
-    width: 100%;
-    height: 12px;
-    background: #E8F1F2;
-    border-radius: 20px;
-    overflow: hidden;
-}
-
-.gift-spend-fill {
-    width: 0%;
-    height: 100%;
-    background: #A8C9CE;
-    border-radius: 20px;
-    transition: width 0.3s ease;
-}
-
-.gift-spend-message {
-    margin-top: 10px;
-    color: #6F858A;
-    font-size: 13px;
-}
-
-/* =========================
-   GIFT PICKED POPUP
-========================= */
-
-#giftPickedPopup {
-    position: fixed !important;
-    inset: 0 !important;
-    z-index: 10000 !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    background: rgba(0, 0, 0, 0.25) !important;
-    padding: 20px;
-    box-sizing: border-box;
-}
-
-#giftPickedPopup > div {
-    background: #FFFDF8;
-    width: 90%;
-    max-width: 500px;
-    padding: 40px 30px;
-    border-radius: 25px;
-    box-sizing: border-box;
-    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
-}
-
-#giftPickedPopup h2 {
-    color: #304B52;
-}
-
-#giftPickedPopup p {
-    color: #6F858A;
-    font-size: 15px;
 }
 
 /* =========================
