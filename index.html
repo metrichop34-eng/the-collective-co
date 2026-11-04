@@ -20,20 +20,19 @@
 <nav>
     <a href="index.html">Home</a>
     <a href="shop.html">Shop</a>
-
     <a href="#" id="aboutBtn">About</a>
-
     <a href="contact.html">Contact</a>
+    <a href="shop.html">Category</a>
     <a href="profile.html">Profile</a>
 
-    <button id="accountBtn" class="account-button">
+    <button id="accountBtn" class="account-button" type="button">
         Account
     </button>
 </nav>
 
 
 <!-- =========================
-     HOME
+     HOME HERO
 ========================= -->
 
 <main class="hero">
@@ -42,7 +41,7 @@
 
     <p>Everything you love, all in one place.</p>
 
-    <button class="shop-button" id="shopNowBtn">
+    <button class="shop-button" id="shopNowBtn" type="button">
         SHOP NOW
     </button>
 
@@ -57,7 +56,7 @@
 
     <div class="about-box">
 
-        <button id="aboutClose" class="about-close">
+        <button id="aboutClose" class="about-close" type="button">
             ×
         </button>
 
@@ -85,7 +84,7 @@
 
     <div class="account-box">
 
-        <button id="closeAccount" class="close-account">
+        <button id="closeAccount" class="close-account" type="button">
             ×
         </button>
 
@@ -93,11 +92,11 @@
 
         <p>Would you like to:</p>
 
-        <button id="signupTab" class="account-choice">
+        <button id="signupTab" class="account-choice" type="button">
             SIGN UP
         </button>
 
-        <button id="loginTab" class="account-choice">
+        <button id="loginTab" class="account-choice" type="button">
             LOGIN
         </button>
 
@@ -111,131 +110,83 @@
 ========================= -->
 
 <script>
+    document.addEventListener("DOMContentLoaded", () => {
 
-    /* SHOP NOW */
+        /* SHOP NOW */
+        const shopNowBtn = document.getElementById("shopNowBtn");
+        if (shopNowBtn) {
+            shopNowBtn.addEventListener("click", () => {
+                window.location.href = "shop.html";
+            });
+        }
 
-    const shopNowBtn = document.getElementById("shopNowBtn");
+        /* ABOUT POPUP */
+        const aboutBtn = document.getElementById("aboutBtn");
+        const aboutPopup = document.getElementById("aboutPopup");
+        const aboutClose = document.getElementById("aboutClose");
 
-    if (shopNowBtn) {
-        shopNowBtn.addEventListener("click", function () {
-            window.location.href = "shop.html";
-        });
-    }
+        if (aboutBtn && aboutPopup) {
+            aboutBtn.addEventListener("click", (event) => {
+                event.preventDefault();
+                aboutPopup.style.display = "flex";
+            });
+        }
 
-
-    /* ABOUT */
-
-    const aboutBtn = document.getElementById("aboutBtn");
-    const aboutPopup = document.getElementById("aboutPopup");
-    const aboutClose = document.getElementById("aboutClose");
-
-    if (aboutBtn && aboutPopup) {
-
-        aboutBtn.addEventListener("click", function (event) {
-
-            event.preventDefault();
-
-            aboutPopup.style.display = "flex";
-
-        });
-
-    }
-
-    if (aboutClose && aboutPopup) {
-
-        aboutClose.addEventListener("click", function () {
-
-            aboutPopup.style.display = "none";
-
-        });
-
-    }
-
-    if (aboutPopup) {
-
-        aboutPopup.addEventListener("click", function (event) {
-
-            if (event.target === aboutPopup) {
-
+        if (aboutClose && aboutPopup) {
+            aboutClose.addEventListener("click", () => {
                 aboutPopup.style.display = "none";
+            });
+        }
 
-            }
+        if (aboutPopup) {
+            aboutPopup.addEventListener("click", (event) => {
+                if (event.target === aboutPopup) {
+                    aboutPopup.style.display = "none";
+                }
+            });
+        }
 
-        });
+        /* ACCOUNT POPUP */
+        const accountBtn = document.getElementById("accountBtn");
+        const accountPopup = document.getElementById("accountPopup");
+        const closeAccount = document.getElementById("closeAccount");
 
-    }
+        if (accountBtn && accountPopup) {
+            accountBtn.addEventListener("click", () => {
+                accountPopup.style.display = "flex";
+            });
+        }
 
-
-    /* ACCOUNT */
-
-    const accountBtn = document.getElementById("accountBtn");
-    const accountPopup = document.getElementById("accountPopup");
-    const closeAccount = document.getElementById("closeAccount");
-
-    if (accountBtn && accountPopup) {
-
-        accountBtn.addEventListener("click", function () {
-
-            accountPopup.style.display = "flex";
-
-        });
-
-    }
-
-    if (closeAccount && accountPopup) {
-
-        closeAccount.addEventListener("click", function () {
-
-            accountPopup.style.display = "none";
-
-        });
-
-    }
-
-    if (accountPopup) {
-
-        accountPopup.addEventListener("click", function (event) {
-
-            if (event.target === accountPopup) {
-
+        if (closeAccount && accountPopup) {
+            closeAccount.addEventListener("click", () => {
                 accountPopup.style.display = "none";
+            });
+        }
 
-            }
+        if (accountPopup) {
+            accountPopup.addEventListener("click", (event) => {
+                if (event.target === accountPopup) {
+                    accountPopup.style.display = "none";
+                }
+            });
+        }
 
-        });
+        /* SIGN UP & LOGIN REDIRECTS */
+        const signupTab = document.getElementById("signupTab");
+        if (signupTab) {
+            signupTab.addEventListener("click", () => {
+                window.location.href = "signup.html";
+            });
+        }
 
-    }
+        const loginTab = document.getElementById("loginTab");
+        if (loginTab) {
+            loginTab.addEventListener("click", () => {
+                window.location.href = "login.html";
+            });
+        }
 
-
-    /* SIGN UP */
-
-    const signupTab = document.getElementById("signupTab");
-
-    if (signupTab) {
-
-        signupTab.addEventListener("click", function () {
-
-            window.location.href = "signup.html";
-
-        });
-
-    }
-
-
-    /* LOGIN */
-
-    const loginTab = document.getElementById("loginTab");
-
-    if (loginTab) {
-
-        loginTab.addEventListener("click", function () {
-
-            window.location.href = "login.html";
-
-        });
-
-    }
-
+    });
 </script>
 
 </body>
