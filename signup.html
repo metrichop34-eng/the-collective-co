@@ -10,6 +10,7 @@
 
 <body>
 
+<!-- NAVIGATION -->
 <nav>
     <a href="index.html">Home</a>
     <a href="shop.html">Shop</a>
@@ -19,13 +20,14 @@
     <a href="profile.html">Profile</a>
 </nav>
 
+<!-- SIGNUP CONTAINER -->
 <div class="shop-header">
 
     <h1>SIGN UP</h1>
 
     <p>Create your THE COLLECTIVE.CO account.</p>
 
-    <div class="product">
+    <div class="product" style="margin-top: 30px;">
 
         <h2>Create Account</h2>
 
@@ -53,6 +55,11 @@
 
         <br><br>
 
+        <p
+            id="signupError"
+            style="display: none; color: #B23A48; font-size: 13px; margin-bottom: 15px;"
+        ></p>
+
         <button
             class="shop-button"
             id="createAccountBtn"
@@ -61,18 +68,57 @@
             CREATE ACCOUNT
         </button>
 
-        <p>
+        <p style="margin-top: 20px;">
             Already have an account?
-            <a href="login.html">LOGIN</a>
+            <a href="login.html" style="color: #304B52; font-weight: bold;">LOGIN</a>
         </p>
 
     </div>
 
     <br>
 
-    <a href="index.html">BACK HOME</a>
+    <a href="index.html" style="color: #6F858A; text-decoration: none; font-size: 14px;">BACK HOME</a>
 
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const nameInput = document.getElementById("signupName");
+        const emailInput = document.getElementById("signupEmail");
+        const passwordInput = document.getElementById("signupPassword");
+        const errorMsg = document.getElementById("signupError");
+        const signupBtn = document.getElementById("createAccountBtn");
+
+        signupBtn?.addEventListener("click", () => {
+            const name = nameInput.value.trim();
+            const email = emailInput.value.trim();
+            const password = passwordInput.value.trim();
+
+            if (!name || !email || !password) {
+                errorMsg.textContent = "Please fill in all fields.";
+                errorMsg.style.display = "block";
+                return;
+            }
+
+            if (password.length < 6) {
+                errorMsg.textContent = "Password must be at least 6 characters long.";
+                errorMsg.style.display = "block";
+                return;
+            }
+
+            // Save user session
+            localStorage.setItem("collectiveLoggedIn", "true");
+            localStorage.setItem("loggedIn", "true");
+            localStorage.setItem("collectiveUser", name);
+            localStorage.setItem("user", name);
+            localStorage.setItem("collectiveEmail", email);
+            localStorage.setItem("email", email);
+
+            // Redirect to Profile Page
+            window.location.href = "profile.html";
+        });
+    });
+</script>
 
 <script src="script.js"></script>
 
