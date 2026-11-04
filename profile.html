@@ -27,8 +27,8 @@
         <p id="profileGreeting">Welcome back.</p>
     </section>
 
+    <!-- ACCOUNT INFO -->
     <section class="profile-card account-card">
-
         <div class="profile-avatar" id="profileInitial">U</div>
 
         <div class="account-info">
@@ -40,81 +40,50 @@
         <button class="logout-button" id="logoutBtn" type="button">
             LOG OUT
         </button>
-
     </section>
 
+    <!-- ORDER HISTORY -->
     <section class="rewards-section">
-
         <div class="section-heading">
-            <p class="small-label">YOUR REWARDS</p>
-            <h2>POINTS & FREE GIFTS</h2>
+            <p class="small-label">ACTIVITY</p>
+            <h2>ORDER HISTORY</h2>
         </div>
 
-        <div class="reward-grid">
-
-            <div class="reward-card points-card">
-                <span class="reward-icon">✦</span>
-
-                <p class="card-label">MY POINTS</p>
-
-                <h3 id="profilePoints">0</h3>
-
-                <p>points available</p>
-            </div>
-
-
-            <a href="shop.html" class="reward-card earn-card reward-link">
-
-                <span class="reward-icon">＋</span>
-
-                <p class="card-label">EARN POINTS</p>
-
-                <h3>1 POINT</h3>
-
-                <p>for every ₦1,000 spent</p>
-
-            </a>
-
-
-            <a href="free-gifts.html?gift=1" class="reward-card gift-card reward-link">
-
-                <span class="reward-icon">🎁</span>
-
-                <p class="card-label">FREE GIFT 1</p>
-
-                <h3>5 FREE ITEMS</h3>
-
-                <p>Spend ₦50,000</p>
-
-                <span class="gift-status" id="gift1Status">
-                    NOT UNLOCKED
-                </span>
-
-            </a>
-
-
-            <a href="free-gifts.html?gift=2" class="reward-card gift-card reward-link">
-
-                <span class="reward-icon">🎁</span>
-
-                <p class="card-label">FREE GIFT 2</p>
-
-                <h3>10 FREE ITEMS</h3>
-
-                <p>Spend ₦100,000</p>
-
-                <span class="gift-status" id="gift2Status">
-                    NOT UNLOCKED
-                </span>
-
-            </a>
-
+        <div id="orderHistoryContainer" style="background: #FFFDF8; border: 1px solid #DCEFF2; border-radius: 25px; padding: 30px; text-align: left; box-sizing: border-box;">
+            <p style="color: #6F858A;">Loading your orders...</p>
         </div>
-
     </section>
 
-    <section class="profile-bottom">
+    <!-- SETTINGS (Switch Account & Help) -->
+    <section class="rewards-section" style="margin-top: 40px;">
+        <div class="section-heading">
+            <p class="small-label">PREFERENCES</p>
+            <h2>SETTINGS</h2>
+        </div>
 
+        <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+            <button
+                type="button"
+                id="switchAccountBtn"
+                class="shop-button"
+                style="margin-top: 0; background-color: #304B52; flex: 1; min-width: 200px; cursor: pointer;"
+            >
+                SWITCH ACCOUNT
+            </button>
+
+            <button
+                type="button"
+                id="helpBtn"
+                class="shop-button"
+                style="margin-top: 0; background-color: #A8C9CE; color: #304B52; flex: 1; min-width: 200px; cursor: pointer;"
+            >
+                HELP
+            </button>
+        </div>
+    </section>
+
+    <!-- PROFILE BOTTOM -->
+    <section class="profile-bottom">
         <div>
             <p class="small-label">THE COLLECTIVE.CO</p>
             <p>Shop more. Earn more. Get rewarded.</p>
@@ -123,11 +92,83 @@
         <a href="shop.html" class="shop-button">
             SHOP NOW
         </a>
-
     </section>
 
 </main>
 
+<script>
+    // Profile Initialization & Order History / Settings Logic
+    document.addEventListener("DOMContentLoaded", () => {
+        // Load User Info from localStorage
+        const userName = localStorage.getItem("collectiveUser") || localStorage.getItem("user") || "Valued Customer";
+        const userEmail = localStorage.getItem("collectiveEmail") || localStorage.getItem("email") || "customer@thecollective.co";
+
+        document.getElementById("profileName").textContent = userName;
+        document.getElementById("profileEmail").textContent = userEmail;
+        document.getElementById("profileInitial").textContent = userName.charAt(0).toUpperCase();
+
+        // Load Order History
+        const orderContainer = document.getElementById("orderHistoryContainer");
+        let currentOrder = null;
+        try {
+            currentOrder = JSON.parse(localStorage.getItem("collectiveCurrentOrder") || "null");
+        } catch (e) {
+            currentOrder = null;
+        }
+
+        if (!currentOrder) {
+            orderContainer.innerHTML = `<p style="color: #6F858A;">You have no recent orders.</p>`;
+        } else {
+            const statusText = currentOrder.status === "payment-checking" ? "Payment Checking" :
+                               currentOrder.status === "paid" ? "Payment Succeeded" :
+                               currentOrder.status === "packing" ? "Order Being Packed" :
+                               currentOrder.status === "delivery" ? "In Delivery" :
+                               currentOrder.status === "delivered" ? "Delivered" : currentOrder.status;
+
+            orderContainer.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #E8F1F2; padding-bottom: 15px; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
+                    <div>
+                        <strong style="color: #304B52; font-size: 18px;">Order #${currentOrder.orderNumber}</strong>
+                        <p style="font-size: 13px; color: #6F858A; margin-top: 4px;">Date: ${new Date(currentOrder.createdAt || Date.now()).toLocaleDateString()}</p>
+                    </div>
+                    <div style="background: #E8F1F2; padding: 8px 16px; border-radius: 20px; font-weight: bold; font-size: 13px; color: #304B52;">
+                        Status: <span style="color: #2E6F40;">${statusText}</span>
+                    </div>
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <strong style="color: #304B52; font-size: 14px;">Items:</strong>
+                    <ul style="margin: 5px 0 0 20px; color: #6F858A; font-size: 14px;">
+                        ${(currentOrder.items || []).map(item => `<li>${item.name || item.listing} (x${item.quantity || 1}) - ₦${Number(item.price || 0).toLocaleString()}</li>`).join("")}
+                    </ul>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #E8F1F2; padding-top: 15px;">
+                    <span style="color: #304B52; font-weight: bold;">Total Amount:</span>
+                    <strong style="color: #304B52; font-size: 18px;">₦${Number(currentOrder.total || currentOrder.paidTotal || 0).toLocaleString()}</strong>
+                </div>
+            `;
+        }
+
+        // Logout / Switch Account button
+        const handleLogout = () => {
+            localStorage.removeItem("collectiveLoggedIn");
+            localStorage.removeItem("loggedIn");
+            localStorage.removeItem("collectiveUser");
+            localStorage.removeItem("user");
+            window.location.href = "login.html";
+        };
+
+        document.getElementById("logoutBtn")?.addEventListener("click", handleLogout);
+        document.getElementById("switchAccountBtn")?.addEventListener("click", handleLogout);
+
+        // Help button
+        document.getElementById("helpBtn")?.addEventListener("click", () => {
+            const needHelp = confirm("Do you need help / Are you trying to contact someone?");
+            if (needHelp) {
+                window.location.href = "contact.html";
+            }
+        });
+    });
+</script>
 <script src="script.js"></script>
 
 </body>
