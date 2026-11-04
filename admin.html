@@ -200,14 +200,15 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-    // Insert your actual Firebase configuration credentials here
+    // Your actual Firebase configuration credentials
     const firebaseConfig = {
-        apiKey: "YOUR_API_KEY",
-        authDomain: "YOUR_AUTH_DOMAIN",
-        projectId: "YOUR_PROJECT_ID",
-        storageBucket: "YOUR_STORAGE_BUCKET",
-        messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-        appId: "YOUR_APP_ID"
+        apiKey: "AIzaSyCkavvOeD4GEtUsq4S-QuTU4ejedf8CiL8",
+        authDomain: "the-collectiveco-orders.firebaseapp.com",
+        projectId: "the-collectiveco-orders",
+        storageBucket: "the-collectiveco-orders.firebasestorage.app",
+        messagingSenderId: "543435699346",
+        appId: "1:543435699346:web:886ff03c71fb546dc7a24b",
+        measurementId: "G-7GP25TW6JH"
     };
 
     const app = initializeApp(firebaseConfig);
@@ -285,7 +286,7 @@
             loadAdminInventory();
         } catch (error) {
             console.error("Error adding product:", error);
-            alert("Failed to save product to database.");
+            alert("Failed to save product to database. Check console/security rules.");
         }
     });
 
