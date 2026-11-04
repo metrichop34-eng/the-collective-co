@@ -37,19 +37,33 @@
             letter-spacing: 2px;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 40px auto;
-            padding: 0 20px;
-            display: grid;
-            grid-template-columns: 350px 1fr;
-            gap: 40px;
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
         }
 
-        @media (max-width: 900px) {
-            .container {
-                grid-template-columns: 1fr;
-            }
+        /* HEADER ADD PRODUCT BUTTON */
+        .btn-add-trigger {
+            background: var(--accent);
+            color: #ffffff;
+            border: none;
+            padding: 10px 18px;
+            font-size: 14px;
+            font-weight: 700;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .btn-add-trigger:hover {
+            opacity: 0.85;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
         }
 
         .card {
@@ -64,6 +78,49 @@
             font-size: 18px;
             margin-top: 0;
             margin-bottom: 20px;
+        }
+
+        /* MODAL STYLES */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #ffffff;
+            width: 100%;
+            max-width: 450px;
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            position: relative;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-close {
+            background: transparent;
+            border: none;
+            font-size: 22px;
+            cursor: pointer;
+            color: #666;
         }
 
         .form-group {
@@ -95,13 +152,10 @@
             font-weight: 600;
             border-radius: 4px;
             cursor: pointer;
-            transition: opacity 0.2s;
+            margin-top: 10px;
         }
 
-        button.btn-primary:hover {
-            opacity: 0.85;
-        }
-
+        /* TABLE STYLES */
         .product-table {
             width: 100%;
             border-collapse: collapse;
@@ -128,23 +182,50 @@
             cursor: pointer;
             font-size: 12px;
         }
-
-        .btn-delete:hover {
-            opacity: 0.85;
-        }
     </style>
 </head>
 <body>
 
 <header>
     <div class="logo">THE COLLECTIVE.CO // ADMIN</div>
-    <div><a href="shop.html" target="_blank" style="color: inherit; text-decoration: none; font-weight: 600; font-size: 14px;">View Live Shop &rarr;</a></div>
+    <div class="header-actions">
+        <!-- Main Add Product Trigger Button -->
+        <button id="openModalBtn" class="btn-add-trigger">+ Add Product</button>
+        <a href="shop.html" target="_blank" style="color: inherit; text-decoration: none; font-weight: 600; font-size: 14px;">View Live Shop &rarr;</a>
+    </div>
 </header>
 
 <div class="container">
-    <!-- Add Product Form -->
+    <!-- Live Inventory List -->
     <div class="card">
-        <h2>Add New Product</h2>
+        <h2>Live Inventory</h2>
+        <div style="overflow-x: auto;">
+            <table class="product-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th>Price</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="adminProductTable">
+                    <tr>
+                        <td colspan="4" style="text-align: center; color: #666;">Loading inventory...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Popup Form -->
+<div id="productModal" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 style="margin: 0;">Add New Product</h2>
+            <button id="closeModalBtn" class="modal-close">&times;</button>
+        </div>
         <form id="productForm">
             <div class="form-group">
                 <label for="productName">Product Name / Listing</label>
@@ -172,35 +253,12 @@
             <button type="submit" class="btn-primary">Save Product</button>
         </form>
     </div>
-
-    <!-- Inventory Management List -->
-    <div class="card">
-        <h2>Live Inventory</h2>
-        <div style="overflow-x: auto;">
-            <table class="product-table">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Category</th>
-                        <th>Price</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody id="adminProductTable">
-                    <tr>
-                        <td colspan="4" style="text-align: center; color: #666;">Loading inventory...</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
 </div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-    // Your actual Firebase configuration credentials
     const firebaseConfig = {
         apiKey: "AIzaSyCkavvOeD4GEtUsq4S-QuTU4ejedf8CiL8",
         authDomain: "the-collectiveco-orders.firebaseapp.com",
@@ -216,8 +274,18 @@
 
     const productForm = document.getElementById("productForm");
     const adminProductTable = document.getElementById("adminProductTable");
+    const modal = document.getElementById("productModal");
+    const openModalBtn = document.getElementById("openModalBtn");
+    const closeModalBtn = document.getElementById("closeModalBtn");
 
-    // Fetch and display existing products in admin table
+    // Modal Controls
+    openModalBtn.addEventListener("click", () => modal.classList.add("active"));
+    closeModalBtn.addEventListener("click", () => modal.classList.remove("active"));
+    modal.addEventListener("click", (e) => {
+        if (e.target === modal) modal.classList.remove("active");
+    });
+
+    // Load Inventory Table
     async function loadAdminInventory() {
         try {
             const querySnapshot = await getDocs(collection(db, "products"));
@@ -242,7 +310,6 @@
                 adminProductTable.appendChild(row);
             });
 
-            // Attach delete event listeners
             document.querySelectorAll(".btn-delete").forEach(btn => {
                 btn.addEventListener("click", async (e) => {
                     const id = e.target.getAttribute("data-id");
@@ -264,7 +331,7 @@
         }
     }
 
-    // Handle adding new products
+    // Handle Form Submit
     productForm.addEventListener("submit", async (e) => {
         e.preventDefault();
 
@@ -283,14 +350,14 @@
 
             alert("Product successfully added!");
             productForm.reset();
+            modal.classList.remove("active");
             loadAdminInventory();
         } catch (error) {
             console.error("Error adding product:", error);
-            alert("Failed to save product to database. Check console/security rules.");
+            alert("Firebase Error: " + error.code + " - " + error.message);
         }
     });
 
-    // Load inventory on page startup
     loadAdminInventory();
 </script>
 
