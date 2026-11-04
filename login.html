@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +9,7 @@
 
 <body>
 
+<!-- NAVIGATION -->
 <nav>
     <a href="index.html">Home</a>
     <a href="shop.html">Shop</a>
@@ -18,13 +19,14 @@
     <a href="profile.html">Profile</a>
 </nav>
 
+<!-- LOGIN CONTAINER -->
 <div class="shop-header">
 
     <h1>LOGIN</h1>
 
     <p>Welcome back to THE COLLECTIVE.CO.</p>
 
-    <div class="product">
+    <div class="product" style="margin-top: 30px;">
 
         <h2>Login</h2>
 
@@ -36,22 +38,64 @@
 
         <br><br>
 
-        <button class="shop-button" id="loginBtn">
+        <p id="loginError" style="display: none; color: #B23A48; font-size: 13px; margin-bottom: 15px;"></p>
+
+        <button class="shop-button" id="loginBtn" type="button">
             LOGIN
         </button>
 
-        <p>
+        <p style="margin-top: 20px;">
             Don't have an account?
-            <a href="signup.html">SIGN UP</a>
+            <a href="signup.html" style="color: #304B52; font-weight: bold;">SIGN UP</a>
         </p>
 
     </div>
 
     <br>
 
-    <a href="index.html">BACK HOME</a>
+    <a href="index.html" style="color: #6F858A; text-decoration: none; font-size: 14px;">BACK HOME</a>
 
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const emailInput = document.getElementById("loginEmail");
+        const passwordInput = document.getElementById("loginPassword");
+        const errorMsg = document.getElementById("loginError");
+        const loginBtn = document.getElementById("loginBtn");
+
+        loginBtn?.addEventListener("click", () => {
+            const email = emailInput.value.trim();
+            const password = passwordInput.value.trim();
+
+            if (!email || !password) {
+                errorMsg.textContent = "Please enter both email and password.";
+                errorMsg.style.display = "block";
+                return;
+            }
+
+            // Derive user name from email if no existing account name is found
+            const storedEmail = localStorage.getItem("collectiveEmail") || localStorage.getItem("email");
+            let userName = localStorage.getItem("collectiveUser") || localStorage.getItem("user");
+
+            if (!userName || storedEmail !== email) {
+                userName = email.split("@")[0];
+                userName = userName.charAt(0).toUpperCase() + userName.slice(1);
+            }
+
+            // Save user session
+            localStorage.setItem("collectiveLoggedIn", "true");
+            localStorage.setItem("loggedIn", "true");
+            localStorage.setItem("collectiveUser", userName);
+            localStorage.setItem("user", userName);
+            localStorage.setItem("collectiveEmail", email);
+            localStorage.setItem("email", email);
+
+            // Redirect to Profile Page
+            window.location.href = "profile.html";
+        });
+    });
+</script>
 
 <script src="script.js"></script>
 
