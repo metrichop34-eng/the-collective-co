@@ -65,11 +65,6 @@ let firebaseDB = null;
 
 /* ========================= FIRESTORE PRODUCTS ========================= */
 
-/*
-   Products are created and managed in admin.html.
-   The shop loads products from the Firestore products collection.
-*/
-
 let productCatalog = [];
 
 window.collectiveProductCatalog = productCatalog;
@@ -113,9 +108,7 @@ async function loadProductsFromFirebase() {
 /* ========================= STORAGE ========================= */
 
 const CART_KEY = "collectiveCart";
-
 const ORDER_KEY = "collectiveCurrentOrder";
-
 const ORDER_NUMBER_KEY = "collectiveCurrentOrderNumber";
 
 
@@ -811,9 +804,7 @@ function checkout() {
 
 
 window.checkout = checkout;
-
 window.getCartTotal = getCartTotal;
-
 window.updateCartDisplay = updateCartDisplay;
 
 
@@ -1258,9 +1249,7 @@ function showPaymentModal() {
                 font-size:13px;
                 line-height:1.6;
             ">
-                After making your payment, click
-                the button below so your order can
-                be sent for approval.
+                After making your payment, click the button below so your order can be sent for approval.
             </p>
 
             <button
