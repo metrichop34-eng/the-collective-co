@@ -1,76 +1,1478 @@
-<section id="productsSection" class="admin-section">
-    <div class="product-toolbar" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
-        <div>
-            <h2>Products</h2>
-            <p>Manage and add products connected to your Shop.</p>
-        </div>
-        <button id="addNewProductBtn" class="shop-button" type="button" style="background: #304b52; color: white; border: 0; border-radius: 12px; padding: 12px 20px; font-weight: bold; cursor: pointer;">
-            + ADD NEW PRODUCT
-        </button>
-    </div>
+<!DOCTYPE html><html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>THE COLLECTIVE.CO — Admin</title>
+<style>
+* {
+    box-sizing: border-box;
+}
+body {
+    margin: 0;
+    background: #f7f4ee;
+    color: #304b52;
+    font-family: Arial, Helvetica, sans-serif;
+}
+button,input,textarea,select {
+    font-family: inherit;
+}
+header {
+    background: white;
+    padding: 22px 30px;
+    border-bottom: 1px solid #e6e1d8;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+header h1 {
+    margin: 0;
+    font-size: 25px;
+    letter-spacing: 1px;
+}
+header p {
+    margin: 5px 0 0;
+    color: #71858a;
+    font-size: 13px;
+}
+.logout-btn {
+    border: 1px solid #304b52;
+    background: white;
+    color: #304b52;
+    border-radius: 10px;
+    padding: 8px 13px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 11px;
+}
+.page {
+    max-width: 1200px;
+    margin: auto;
+    padding: 25px;
+}
+/* LOGIN */
+#loginScreen {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 25px;
+}
+.login-box {
+    width: 100%;
+    max-width: 430px;
+    background: white;
+    border-radius: 22px;
+    padding: 30px;
+    border: 1px solid #e6e1d8;
+    box-shadow: 0 8px 30px rgba(48,75,82,.06);
+}
+.login-box h1 {
+    margin: 0;
+    font-size: 25px;
+}
+.login-box p {
+    color: #71858a;
+    font-size: 13px;
+    margin: 8px 0 25px;
+}
+.login-label {
+    display: block;
+    font-size: 11px;
+    font-weight: bold;
+    color: #71858a;
+    margin-bottom: 6px;
+}
+.login-input {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #e6e1d8;
+    border-radius: 12px;
+    background: #f7f4ee;
+    color: #304b52;
+    outline: none;
+    margin-bottom: 16px;
+}
+#loginButton {
+    width: 100%;
+    border: 0;
+    border-radius: 12px;
+    padding: 14px;
+    background: #304b52;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+}
+#loginError {
+    display: none;
+    margin-top: 14px;
+    background: #fbe5e5;
+    color: #9b2c2c;
+    border-radius: 12px;
+    padding: 12px;
+    font-size: 12px;
+    white-space: pre-line;
+}
+#adminApp {
+    display: none;
+}
+/* TABS */
+.admin-tabs {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 25px;
+}
+.admin-tab {
+    border: 1px solid #304b52;
+    background: white;
+    color: #304b52;
+    padding: 11px 18px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 12px;
+}
+.admin-tab.active {
+    background: #304b52;
+    color: white;
+}
+.admin-section {
+    display: none;
+}
+.admin-section.active {
+    display: block;
+}
+/* STATS */
+.stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 15px;
+    margin-bottom: 25px;
+}
+.stat {
+    background: white;
+    border-radius: 18px;
+    padding: 20px;
+    border: 1px solid #e6e1d8;
+}
+.stat span {
+    display: block;
+    color: #71858a;
+    font-size: 12px;
+    margin-bottom: 8px;
+}
+.stat strong {
+    font-size: 25px;
+}
+/* FILTERS */
+.filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 25px;
+}
+.filter-btn {
+    border: 1px solid #304b52;
+    background: white;
+    color: #304b52;
+    padding: 10px 15px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 12px;
+}
+.filter-btn.active {
+    background: #304b52;
+    color: white;
+}
+/* ORDERS */
+#ordersContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+.empty {
+    background: white;
+    border-radius: 18px;
+    padding: 45px 25px;
+    text-align: center;
+    color: #71858a;
+    border: 1px solid #e6e1d8;
+}
+.order-card {
+    background: white;
+    border-radius: 20px;
+    padding: 22px;
+    border: 1px solid #e6e1d8;
+    box-shadow: 0 5px 18px rgba(48,75,82,.05);
+}
+.order-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 18px;
+}
+.order-id {
+    font-size: 13px;
+    color: #71858a;
+    word-break: break-all;
+}
+.order-date {
+    font-size: 12px;
+    color: #71858a;
+    margin-top: 5px;
+}
+.status {
+    padding: 8px 12px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: bold;
+    height: fit-content;
+}
+.status-payment-checking {
+    background: #fff4d6;
+    color: #856404;
+}
+.status-payment-seen {
+    background: #e5efff;
+    color: #315c9b;
+}
+.status-packed {
+    background: #eee8ff;
+    color: #6849a5;
+}
+.status-shipped {
+    background: #e7f3ff;
+    color: #24658f;
+}
+.status-driver-on-way {
+    background: #fff0df;
+    color: #a45b16;
+}
+.status-delivered {
+    background: #e4f5e8;
+    color: #26733b;
+}
+.section {
+    margin-top: 18px;
+    padding-top: 18px;
+    border-top: 1px solid #eee9e0;
+}
+.section-title {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #71858a;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+.customer-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+}
+.customer-item {
+    background: #f7f4ee;
+    border-radius: 12px;
+    padding: 12px;
+}
+.customer-item small {
+    display: block;
+    color: #71858a;
+    font-size: 10px;
+    margin-bottom: 4px;
+}
+.customer-item strong {
+    font-size: 13px;
+    word-break: break-word;
+}
+.items {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.item {
+    background: #f7f4ee;
+    border-radius: 12px;
+    padding: 12px;
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+}
+.item-name {
+    font-weight: bold;
+    font-size: 13px;
+}
+.item-details {
+    color: #71858a;
+    font-size: 11px;
+    margin-top: 4px;
+}
+.item-price {
+    font-weight: bold;
+    font-size: 13px;
+    white-space: nowrap;
+}
+.gift {
+    background: #eef7f5;
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 8px;
+}
+.gift strong {
+    font-size: 13px;
+}
+.gift small {
+    display: block;
+    margin-top: 4px;
+    color: #71858a;
+}
+.totals {
+    background: #f7f4ee;
+    border-radius: 15px;
+    padding: 16px;
+}
+.total-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+    font-size: 13px;
+}
+.total-row.final {
+    border-top: 1px solid #ddd7cc;
+    margin-top: 8px;
+    padding-top: 12px;
+    font-size: 17px;
+    font-weight: bold;
+}
+/* ORDER STATUS CHECKLIST */
+.actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-top: 20px;
+    padding-top: 18px;
+    border-top: 1px solid #eee9e0;
+    background: #f7f4ee;
+    border-radius: 16px;
+    padding: 14px;
+}
+.order-status-option {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    min-height: 52px;
+    padding: 9px 8px;
+    background: transparent;
+    cursor: pointer;
+}
+.order-status-option:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    left: 17px;
+    top: 39px;
+    width: 2px;
+    height: 25px;
+    background: #d8d2c8;
+}
+.order-status-option.completed:not(:last-child)::after {
+    background: #304b52;
+}
+.order-status-option input {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 24px;
+    height: 24px;
+    min-width: 24px;
+    border: 2px solid #aab5b7;
+    border-radius: 50%;
+    background: white;
+    cursor: pointer;
+    position: relative;
+    margin: 0;
+    z-index: 2;
+}
+.order-status-option input:checked {
+    border-color: #304b52;
+    background: #304b52;
+}
+.order-status-option input:checked::after {
+    content: "✓";
+    position: absolute;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    left: 4px;
+    top: 1px;
+}
+.order-status-option input:not(:disabled):hover {
+    border-color: #304b52;
+}
+.order-status-option input:disabled {
+    cursor: default;
+    opacity: 1;
+}
+.order-status-label {
+    font-size: 12px;
+    font-weight: bold;
+    color: #304b52;
+}
+.order-status-note {
+    margin-left: auto;
+    color: #71858a;
+    font-size: 10px;
+    font-weight: bold;
+}
+.order-status-option.completed {
+    background: #eef7f5;
+    border-radius: 10px;
+}
+.order-status-option.next {
+    background: white;
+    border-radius: 10px;
+}
+.order-update-box {
+    margin-top: 14px;
+    padding: 16px;
+    background: white;
+    border: 1px solid #e6e1d8;
+    border-radius: 14px;
+}
+.order-update-box label {
+    display: block;
+    margin-bottom: 8px;
+    color: #71858a;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+.order-update-box textarea {
+    width: 100%;
+    min-height: 85px;
+    padding: 12px;
+    border: 1px solid #e6e1d8;
+    border-radius: 10px;
+    background: #f7f4ee;
+    color: #304b52;
+    resize: vertical;
+}
+.save-order-update {
+    margin-top: 10px;
+    padding: 11px 16px;
+    border: 0;
+    border-radius: 10px;
+    background: #304b52;
+    color: white;
+    font-weight: bold;
+    font-size: 11px;
+    cursor: pointer;
+}
+.save-order-update:disabled {
+    opacity: 0.6;
+    cursor: wait;
+}
+/* PRODUCTS */
+.product-toolbar {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+.product-toolbar h2 {
+    margin: 0;
+}
+.product-toolbar p {
+    color: #71858a;
+    font-size: 13px;
+    margin: 4px 0 0;
+}
+.add-product-btn {
+    border: 0;
+    background: #304b52;
+    color: white;
+    border-radius: 12px;
+    padding: 12px 20px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 12px;
+}
+.product-grid-admin {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0,1fr));
+    gap: 18px;
+}
+.product-admin-card {
+    background: white;
+    border: 1px solid #e6e1d8;
+    border-radius: 18px;
+    overflow: hidden;
+}
+.product-admin-image {
+    width: 100%;
+    height: 190px;
+    object-fit: cover;
+    background: #f7f4ee;
+    display: block;
+}
+.product-admin-content {
+    padding: 16px;
+}
+.product-admin-content h3 {
+    margin: 0 0 7px;
+    font-size: 16px;
+}
+.product-admin-content p {
+    margin: 5px 0;
+    color: #71858a;
+    font-size: 12px;
+}
+.product-admin-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 14px;
+}
+.edit-btn {
+    border: 0;
+    border-radius: 10px;
+    padding: 9px 12px;
+    cursor: pointer;
+    font-size: 11px;
+    font-weight: bold;
+    background: #e5efff;
+    color: #315c9b;
+}
+/* PRODUCT FORM */
+.product-form-box {
+    background: white;
+    border: 1px solid #e6e1d8;
+    border-radius: 20px;
+    padding: 22px;
+    margin-bottom: 25px;
+    display: none;
+}
+.product-form-box.active {
+    display: block;
+}
+.product-form-box h2 {
+    margin-top: 0;
+}
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0,1fr));
+    gap: 14px;
+}
+.form-field.full {
+    grid-column: 1 / -1;
+}
+.form-field label {
+    display: block;
+    font-size: 11px;
+    font-weight: bold;
+    color: #71858a;
+    margin-bottom: 6px;
+}
+.form-field input, .form-field textarea, .form-field select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #e6e1d8;
+    border-radius: 11px;
+    background: #f7f4ee;
+    color: #304b52;
+    outline: none;
+}
+.form-field textarea {
+    min-height: 90px;
+    resize: vertical;
+}
+.image-preview {
+    width: 140px;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 14px;
+    background: #f7f4ee;
+    display: none;
+    margin-top: 10px;
+}
+.form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 18px;
+}
+.save-product {
+    border: 0;
+    background: #304b52;
+    color: white;
+    border-radius: 11px;
+    padding: 12px 18px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.cancel-product {
+    border: 1px solid #304b52;
+    background: white;
+    color: #304b52;
+    border-radius: 11px;
+    padding: 12px 18px;
+    cursor: pointer;
+    font-weight: bold;
+}
+/* FIREBASE */
+.firebase-status {
+    position: fixed;
+    right: 18px;
+    bottom: 18px;
+    background: white;
+    border: 1px solid #e6e1d8;
+    border-radius: 12px;
+    padding: 10px 14px;
+    font-size: 11px;
+    box-shadow: 0 5px 20px rgba(0,0,0,.08);
+    z-index: 100;
+}
+.firebase-status.connected {
+    color: #26733b;
+}
+.firebase-status.error {
+    color: #9b2c2c;
+}
+@media(max-width:850px) {
+    .stats {
+        grid-template-columns: repeat(2,1fr);
+    }
+    .product-grid-admin {
+        grid-template-columns: repeat(2,1fr);
+    }
+}
+@media(max-width:550px) {
+    .page {
+        padding: 15px;
+    }
+    .stats {
+        grid-template-columns: 1fr 1fr;
+    }
+    .customer-grid, .form-grid, .product-grid-admin {
+        grid-template-columns: 1fr;
+    }
+    .form-field.full {
+        grid-column: auto;
+    }
+    .order-top {
+        flex-direction: column;
+    }
+}
+</style>
+</head>
+<body>
 
-    <div id="productFormBox" class="product-form-box">
-        <h2 id="productFormTitle">Edit Product</h2>
-        <form id="productForm">
-            <input id="productId" type="hidden">
-            <div class="form-grid">
-                <div class="form-field">
-                    <label>PRODUCT NAME</label>
-                    <input id="productName" type="text" required>
-                </div>
+<div id="loginScreen">
+<div class="login-box">
+<h1>THE COLLECTIVE.CO</h1>
+<p>Admin login</p>
+<form id="loginForm">
+<label class="login-label">EMAIL</label>
+<input id="adminEmail" class="login-input" type="email" placeholder="Admin email" required>
+<label class="login-label">PASSWORD</label>
+<input id="adminPassword" class="login-input" type="password" placeholder="Admin password" required>
+<button id="loginButton" type="submit">LOGIN</button>
+<div id="loginError"></div>
+</form>
+</div>
+</div>
 
-                <div class="form-field">
-                    <label>CATEGORY</label>
-                    <select id="productCategory">
-                        <option value="Skincare">Skincare</option>
-                        <option value="Accessories">Accessories</option>
-                        <option value="Clothing">Clothing</option>
-                        <option value="Shoes">Shoes</option>
-                        <option value="Bags">Bags</option>
-                        <option value="Others">Others</option>
-                    </select>
-                </div>
+<div id="adminApp">
+<header>
+<div>
+<h1>THE COLLECTIVE.CO</h1>
+<p>Admin Dashboard</p>
+</div>
+<button id="logoutButton" class="logout-btn" type="button">LOG OUT</button>
+</header>
 
-                <div class="form-field">
-                    <label>PRICE (₦)</label>
-                    <input id="productPrice" type="number" min="0" required>
-                </div>
+<main class="page">
+<div class="admin-tabs">
+<button class="admin-tab active" data-tab="orders" type="button">ORDERS</button>
+<button class="admin-tab" data-tab="products" type="button">PRODUCTS</button>
+</div>
 
-                <div class="form-field">
-                    <label>STOCK</label>
-                    <input id="productStock" type="number" min="0" value="10" required>
-                </div>
+<section id="ordersSection" class="admin-section active">
+<div class="stats">
+<div class="stat"><span>TOTAL ORDERS</span><strong id="totalOrders">0</strong></div>
+<div class="stat"><span>PAYMENT CHECKING</span><strong id="checkingOrders">0</strong></div>
+<div class="stat"><span>APPROVED</span><strong id="approvedOrders">0</strong></div>
+<div class="stat"><span>TOTAL SALES</span><strong id="totalSales">₦0</strong></div>
+</div>
 
-                <div class="form-field">
-                    <label>SIZE</label>
-                    <input id="productSize" type="text" placeholder="e.g. Medium, 50ml">
-                </div>
+<div class="filters">
+<button class="filter-btn active" data-filter="all" type="button">ALL</button>
+<button class="filter-btn" data-filter="payment-checking" type="button">PAYMENT CHECKING</button>
+<button class="filter-btn" data-filter="payment-seen" type="button">PAYMENT SEEN</button>
+<button class="filter-btn" data-filter="packed" type="button">PACKED</button>
+<button class="filter-btn" data-filter="shipped" type="button">SHIPPED</button>
+<button class="filter-btn" data-filter="driver-on-way" type="button">DRIVER ON HIS WAY</button>
+<button class="filter-btn" data-filter="delivered" type="button">DELIVERED</button>
+</div>
 
-                <div class="form-field">
-                    <label>COLOURS</label>
-                    <input id="productColors" type="text" placeholder="Pink, Brown, Clear">
-                </div>
-
-                <div class="form-field full">
-                    <label>DESCRIPTION</label>
-                    <textarea id="productDescription" placeholder="Enter product details..."></textarea>
-                </div>
-
-                <div class="form-field full">
-                    <label>PRODUCT IMAGE URL</label>
-                    <input id="productImage" type="url" placeholder="https://example.com/image.jpg">
-                    <img id="productImagePreview" class="image-preview" alt="Product preview">
-                </div>
-            </div>
-
-            <div class="form-actions">
-                <button class="save-product" type="submit">SAVE PRODUCT</button>
-                <button id="cancelProduct" class="cancel-product" type="button">CANCEL</button>
-            </div>
-        </form>
-    </div>
-
-    <div id="productsContainer" class="product-grid-admin">
-        <div class="empty">Loading products...</div>
-    </div>
+<div id="ordersContainer">
+<div class="empty">Loading orders...</div>
+</div>
 </section>
+
+<section id="productsSection" class="admin-section">
+<div class="product-toolbar">
+<div>
+<h2>Products</h2>
+<p>Manage and add products connected to your Shop.</p>
+</div>
+<button id="addNewProductBtn" class="add-product-btn" type="button">
++ ADD NEW PRODUCT
+</button>
+</div>
+
+<div id="productFormBox" class="product-form-box">
+<h2 id="productFormTitle">Add New Product</h2>
+<form id="productForm">
+<input id="productId" type="hidden">
+<div class="form-grid">
+<div class="form-field">
+<label>PRODUCT NAME</label>
+<input id="productName" type="text" placeholder="Product name" required>
+</div>
+
+<div class="form-field">
+<label>CATEGORY</label>
+<select id="productCategory">
+<option value="Skincare">Skincare</option>
+<option value="Accessories">Accessories</option>
+<option value="Clothing">Clothing</option>
+<option value="Shoes">Shoes</option>
+<option value="Bags">Bags</option>
+<option value="Others">Others</option>
+</select>
+</div>
+
+<div class="form-field">
+<label>PRICE (₦)</label>
+<input id="productPrice" type="number" min="0" placeholder="e.g. 5000" required>
+</div>
+
+<div class="form-field">
+<label>STOCK</label>
+<input id="productStock" type="number" min="0" value="10" required>
+</div>
+
+<div class="form-field">
+<label>SIZE</label>
+<input id="productSize" type="text" placeholder="e.g. Medium, 50ml">
+</div>
+
+<div class="form-field">
+<label>COLOURS</label>
+<input id="productColors" type="text" placeholder="Pink, Brown, Clear">
+</div>
+
+<div class="form-field full">
+<label>DESCRIPTION</label>
+<textarea id="productDescription" placeholder="Product details..."></textarea>
+</div>
+
+<div class="form-field full">
+<label>PRODUCT IMAGE URL</label>
+<input id="productImage" type="url" placeholder="https://example.com/image.jpg">
+<img id="productImagePreview" class="image-preview" alt="Product preview">
+</div>
+</div>
+
+<div class="form-actions">
+<button class="save-product" type="submit">SAVE PRODUCT</button>
+<button id="cancelProduct" class="cancel-product" type="button">CANCEL</button>
+</div>
+</form>
+</div>
+
+<div id="productsContainer" class="product-grid-admin">
+<div class="empty">Loading products...</div>
+</div>
+</section>
+</main>
+
+<div id="firebaseStatus" class="firebase-status">Connecting to Firebase...</div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+import { getFirestore, collection, getDocs, addDoc, updateDoc, doc } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyAiFa8h-LM0tKlfLZ9OyqlsgkMtDU5oj1s",
+    authDomain: "the-collectiveco-orders.firebaseapp.com",
+    projectId: "the-collectiveco-orders",
+    storageBucket: "the-collectiveco-orders.firebasestorage.app",
+    messagingSenderId: "543435699346",
+    appId: "1:543435699346:web:886ff03c71fb546dc7a24b",
+    measurementId: "G-7GP25TW6JH"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+
+let orders = [];
+let products = [];
+let currentFilter = "all";
+
+function money(value) {
+    return `₦${Number(value || 0).toLocaleString()}`;
+}
+
+function safe(value) {
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+/* =====================================================
+   TABS
+===================================================== */
+document.querySelectorAll(".admin-tab").forEach(button => {
+    button.addEventListener("click", () => {
+        document.querySelectorAll(".admin-tab").forEach(tab => tab.classList.remove("active"));
+        document.querySelectorAll(".admin-section").forEach(section => section.classList.remove("active"));
+        button.classList.add("active");
+        if (button.dataset.tab === "orders") {
+            document.getElementById("ordersSection").classList.add("active");
+            loadOrders();
+        }
+        if (button.dataset.tab === "products") {
+            document.getElementById("productsSection").classList.add("active");
+            loadProducts();
+        }
+    });
+});
+
+/* =====================================================
+   ORDERS
+===================================================== */
+async function loadOrders() {
+    try {
+        const snapshot = await getDocs(collection(db, "orders"));
+        orders = snapshot.docs.map(item => ({
+            firestoreId: item.id,
+            ...item.data()
+        }));
+        orders.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+        renderStats();
+        renderOrders();
+        setFirebaseStatus("Connected to Firebase", "connected");
+    } catch(error) {
+        console.error("ORDER LOAD ERROR:", error);
+        setFirebaseStatus("Firebase connection error", "error");
+        document.getElementById("ordersContainer").innerHTML = `
+            <div class="empty">
+                Orders could not be loaded.
+                <br><br>
+                ${safe(error.message)}
+            </div>
+        `;
+    }
+}
+
+function renderStats() {
+    const checking = orders.filter(order => order.status === "payment-checking").length;
+    const approved = orders.filter(order => ["payment-seen", "packed", "shipped", "driver-on-way", "delivered"].includes(order.status)).length;
+    const sales = orders
+        .filter(order => ["payment-seen", "packed", "shipped", "driver-on-way", "delivered"].includes(order.status))
+        .reduce((sum, order) => sum + Number(order.total || 0), 0);
+
+    document.getElementById("totalOrders").textContent = orders.length;
+    document.getElementById("checkingOrders").textContent = checking;
+    document.getElementById("approvedOrders").textContent = approved;
+    document.getElementById("totalSales").textContent = money(sales);
+}
+
+/* =====================================================
+   STATUS FLOW
+===================================================== */
+const statusFlow = ["payment-checking", "payment-seen", "packed", "shipped", "driver-on-way", "delivered"];
+const statusLabels = {
+    "payment-seen": "PAYMENT SEEN",
+    "packed": "PACKED",
+    "shipped": "SHIPPED",
+    "driver-on-way": "DRIVER ON HIS WAY",
+    "delivered": "DELIVERED"
+};
+
+function statusIndex(status) {
+    const index = statusFlow.indexOf(status);
+    return index === -1 ? 0 : index;
+}
+
+function isCompleted(step, currentStatus) {
+    return (statusIndex(step) > 0 && statusIndex(step) <= statusIndex(currentStatus));
+}
+
+function isNext(step, currentStatus) {
+    return (statusIndex(step) === statusIndex(currentStatus) + 1);
+}
+
+/* =====================================================
+   RENDER ORDERS
+===================================================== */
+function renderOrders() {
+    const container = document.getElementById("ordersContainer");
+    let visible = orders;
+
+    if (currentFilter !== "all") {
+        visible = orders.filter(order => order.status === currentFilter);
+    }
+
+    if (visible.length === 0) {
+        container.innerHTML = `<div class="empty">No orders here.</div>`;
+        return;
+    }
+
+    container.innerHTML = visible.map(renderOrder).join("");
+}
+
+function renderOrder(order) {
+    const customer = order.customer || {};
+    const fullName = customer.fullName || order.fullName || `${customer.firstName || ""} ${customer.lastName || ""}`.trim() || "Not provided";
+    const phone = customer.phone || order.phone || "Not provided";
+    const address = customer.address || order.deliveryAddress || order.shippingAddress || order.shipping?.address || "Not provided";
+    const items = Array.isArray(order.items) ? order.items : [];
+    const gifts = Array.isArray(order.freeGifts) ? order.freeGifts : [];
+    const status = order.status || "payment-checking";
+    const created = order.createdAt ? new Date(order.createdAt).toLocaleString() : "Unknown";
+    const orderNumber = order.orderNumber || order.id || order.firestoreId;
+    const subtotal = Number(order.subtotal ?? order.originalTotal ?? order.total ?? 0);
+    const shippingFee = Number(order.shippingFee ?? order.shipping?.fee ?? 0);
+    const total = Number(order.total ?? order.paidTotal ?? 0);
+    const paymentMethod = order.paymentMethod || "Not provided";
+    const paymentStatus = order.paymentStatus || (status === "payment-checking" ? "Payment checking" : status);
+
+    const itemHTML = items.length ? items.map(item => {
+        const quantity = Number(item.quantity || 1);
+        const unitPrice = Number(item.unitPrice ?? item.price ?? 0);
+        const lineTotal = Number(item.lineTotal ?? unitPrice * quantity);
+        return `
+            <div class="item">
+                <div>
+                    <div class="item-name">${safe(item.name || "Product")}</div>
+                    <div class="item-details">
+                        Quantity: ${quantity}
+                        ${item.color ? ` · Shade: ${safe(item.color)}` : ""}
+                        ${item.size ? ` · Size: ${safe(item.size)}` : ""}
+                        · Unit price: ${money(unitPrice)}
+                    </div>
+                </div>
+                <div class="item-price">${money(lineTotal)}</div>
+            </div>
+        `;
+    }).join("") : `<div class="item">No paid products listed.</div>`;
+
+    const giftHTML = gifts.length ? gifts.map(gift => `
+        <div class="gift">
+            <strong>${safe(gift.name || "Free item")}</strong>
+            <small>FREE</small>
+        </div>
+    `).join("") : `<div class="item">No free gifts.</div>`;
+
+    const statusText = {
+        "payment-checking": "PAYMENT CHECKING",
+        "payment-seen": "PAYMENT SEEN",
+        "packed": "PACKED",
+        "shipped": "SHIPPED",
+        "driver-on-way": "DRIVER ON HIS WAY",
+        "delivered": "DELIVERED"
+    }[status] || status.toUpperCase();
+
+    const statusClass = status.replace(/[^a-z0-9]+/g, "-");
+
+    const statusOptions = ["payment-seen", "packed", "shipped", "driver-on-way", "delivered"].map(step => {
+        const completed = isCompleted(step, status);
+        const next = isNext(step, status);
+        let note = "";
+        if (completed) {
+            note = "DONE";
+        } else if (next) {
+            note = "NEXT";
+        }
+        return `
+            <label class="order-status-option ${completed ? "completed" : ""} ${next ? "next" : ""}">
+                <input type="checkbox" data-order-status="${safe(step)}" data-id="${safe(order.firestoreId)}" ${completed ? "checked" : ""} ${!next ? "disabled" : ""}>
+                <span class="order-status-label">${safe(statusLabels[step])}</span>
+                ${note ? `<span class="order-status-note">${note}</span>` : ""}
+            </label>
+        `;
+    }).join("");
+
+    return `
+    <article class="order-card">
+        <div class="order-top">
+            <div>
+                <div class="order-id">ORDER: ${safe(orderNumber)}</div>
+                <div class="order-date">${safe(created)}</div>
+            </div>
+            <div class="status status-${safe(statusClass)}">${safe(statusText)}</div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Customer & Delivery</div>
+            <div class="customer-grid">
+                <div class="customer-item">
+                    <small>CUSTOMER NAME</small>
+                    <strong>${safe(fullName)}</strong>
+                </div>
+
+                <div class="customer-item">
+                    <small>PHONE NUMBER</small>
+                    <strong>${safe(phone)}</strong>
+                </div>
+
+                <div class="customer-item" style="grid-column:1/-1;">
+                    <small>DELIVERY ADDRESS</small>
+                    <strong>${safe(address)}</strong>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Products</div>
+            <div class="items">${itemHTML}</div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Free Gifts</div>
+            ${giftHTML}
+        </div>
+
+        <div class="section">
+            <div class="section-title">Payment & Shipping</div>
+            <div class="totals">
+                <div class="total-row">
+                    <span>Subtotal</span>
+                    <strong>${money(subtotal)}</strong>
+                </div>
+
+                <div class="total-row">
+                    <span>Shipping</span>
+                    <strong>${money(shippingFee)}</strong>
+                </div>
+
+                <div class="total-row">
+                    <span>Payment method</span>
+                    <strong>${safe(paymentMethod)}</strong>
+                </div>
+
+                <div class="total-row">
+                    <span>Payment status</span>
+                    <strong>${safe(paymentStatus)}</strong>
+                </div>
+
+                <div class="total-row final">
+                    <span>TOTAL PAID</span>
+                    <strong>${money(total)}</strong>
+                </div>
+            </div>
+        </div>
+
+        <div class="actions">
+            ${statusOptions}
+        </div>
+
+        <div class="order-update-box">
+            <label for="order-update-${safe(order.firestoreId)}">ORDER UPDATE / NOTE</label>
+            <textarea id="order-update-${safe(order.firestoreId)}" data-order-update="${safe(order.firestoreId)}" placeholder="Example: Package has arrived at GIG Logistics...">${safe(order.orderUpdate || "")}</textarea>
+            <button class="save-order-update" data-save-order-update="${safe(order.firestoreId)}" type="button">SAVE UPDATE</button>
+        </div>
+    </article>
+    `;
+}
+
+/* =====================================================
+   ORDER STATUS UPDATE
+===================================================== */
+document.addEventListener("change", async event => {
+    const checkbox = event.target.closest("[data-order-status]");
+    if (!checkbox) return;
+
+    const id = checkbox.dataset.id;
+    const newStatus = checkbox.dataset.orderStatus;
+
+    if (!id || !newStatus) return;
+
+    const order = orders.find(item => item.firestoreId === id);
+    if (!order) return;
+
+    const currentStatus = order.status || "payment-checking";
+
+    if (!isNext(newStatus, currentStatus)) {
+        checkbox.checked = isCompleted(newStatus, currentStatus);
+        return;
+    }
+
+    checkbox.disabled = true;
+
+    try {
+        const orderRef = doc(db, "orders", id);
+
+        const updateData = {
+            status: newStatus,
+            deliveryStatus: newStatus,
+            updatedAt: new Date().toISOString()
+        };
+
+        if (newStatus === "payment-seen") {
+            updateData.paymentStatus = "payment-seen";
+        }
+
+        await updateDoc(orderRef, updateData);
+
+        order.status = newStatus;
+        order.deliveryStatus = newStatus;
+        order.updatedAt = updateData.updatedAt;
+
+        if (newStatus === "payment-seen") {
+            order.paymentStatus = "payment-seen";
+        }
+
+        renderStats();
+        renderOrders();
+
+        setFirebaseStatus("Order status updated", "connected");
+    } catch(error) {
+        console.error("STATUS UPDATE ERROR:", error);
+
+        checkbox.checked = false;
+        checkbox.disabled = false;
+
+        setFirebaseStatus("Could not update order", "error");
+
+        alert("The order status could not be updated.\n\n" + error.message);
+    }
+});
+
+/* =====================================================
+   SAVE CUSTOM ORDER UPDATE
+===================================================== */
+document.addEventListener("click", async event => {
+    const button = event.target.closest("[data-save-order-update]");
+    if (!button) return;
+    const id = button.dataset.saveOrderUpdate;
+    const textarea = document.querySelector(`[data-order-update="${id}"]`);
+    if (!id || !textarea) return;
+    const order = orders.find(item => item.firestoreId === id);
+    if (!order) return;
+    const noteText = textarea.value.trim();
+    button.disabled = true;
+    button.textContent = "SAVING...";
+    try {
+        const updatedAt = new Date().toISOString();
+        await updateDoc(
+            doc(db, "orders", id),
+            {
+                orderUpdate: noteText,
+                updatedAt
+            }
+        );
+        order.orderUpdate = noteText;
+        order.updatedAt = updatedAt;
+
+        renderOrders();
+        setFirebaseStatus("Order update saved", "connected");
+    } catch (error) {
+        console.error("ORDER UPDATE ERROR:", error);
+        button.disabled = false;
+        button.textContent = "SAVE UPDATE";
+        setFirebaseStatus("Could not save order update", "error");
+        alert("The order update could not be saved.\n\n" + error.message);
+    }
+});
+
+/* =====================================================
+   FILTERS
+===================================================== */
+document.querySelectorAll(".filter-btn").forEach(button => {
+    button.addEventListener("click", () => {
+        document.querySelectorAll(".filter-btn").forEach(item => item.classList.remove("active"));
+        button.classList.add("active");
+        currentFilter = button.dataset.filter;
+        renderOrders();
+    });
+});
+
+/* =====================================================
+   PRODUCTS
+===================================================== */
+async function loadProducts() {
+    const container = document.getElementById("productsContainer");
+
+    try {
+        const snapshot = await getDocs(collection(db, "products"));
+
+        products = snapshot.docs.map(item => ({
+            firestoreId: item.id,
+            ...item.data()
+        }));
+
+        renderProducts();
+    } catch(error) {
+        console.error("PRODUCT LOAD ERROR:", error);
+
+        container.innerHTML = `
+            <div class="empty">
+                Products could not be loaded.
+                <br><br>
+                ${safe(error.message)}
+            </div>
+        `;
+    }
+}
+
+function renderProducts() {
+    const container = document.getElementById("productsContainer");
+
+    if (products.length === 0) {
+        container.innerHTML = `
+            <div class="empty" style="grid-column:1/-1;">
+                No products found in Firebase. Click <strong>+ ADD NEW PRODUCT</strong> above to create one!
+            </div>
+        `;
+        return;
+    }
+
+    container.innerHTML = products.map(product => `
+        <div class="product-admin-card">
+            ${product.image || product.imageUrl ? `
+                <img class="product-admin-image" src="${safe(product.image || product.imageUrl)}" alt="${safe(product.name)}" onerror="this.style.display='none'">
+            ` : `
+                <div class="product-admin-image" style="display:flex;align-items:center;justify-content:center;color:#71858a;">
+                    No image
+                </div>
+            `}
+
+            <div class="product-admin-content">
+                <h3>${safe(product.name || "Product")}</h3>
+                <p>${safe(product.description || "No description")}</p>
+                <p><strong>${money(product.price)}</strong></p>
+                <p>Category: ${safe(product.category || "General")}</p>
+                <p>Stock: ${safe(product.stock ?? 0)}</p>
+                <p>Size: ${safe(product.size || "Not specified")}</p>
+                <p>Colours: ${safe(Array.isArray(product.colors) ? product.colors.join(", ") : product.colors || "None")}</p>
+
+                <div class="product-admin-actions">
+                    <button class="edit-btn" data-edit-product="${safe(product.firestoreId)}" type="button">
+                        EDIT
+                    </button>
+                </div>
+            </div>
+        </div>
+    `).join("");
+}
+
+/* =====================================================
+   ADD / EDIT PRODUCT FORM CONTROLS
+===================================================== */
+document.getElementById("addNewProductBtn").addEventListener("click", () => {
+    document.getElementById("productId").value = ""; // Empty ID = New Product
+    document.getElementById("productFormTitle").textContent = "Add New Product";
+    document.getElementById("productForm").reset();
+    document.getElementById("productImagePreview").style.display = "none";
+    document.getElementById("productFormBox").classList.add("active");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+function openProductForm(product) {
+    if (!product) return;
+
+    const box = document.getElementById("productFormBox");
+    box.classList.add("active");
+
+    document.getElementById("productFormTitle").textContent = "Edit Product";
+    document.getElementById("productId").value = product.firestoreId;
+    document.getElementById("productName").value = product.name || "";
+    document.getElementById("productCategory").value = product.category || "Skincare";
+    document.getElementById("productPrice").value = product.price || 0;
+    document.getElementById("productStock").value = product.stock ?? 10;
+    document.getElementById("productSize").value = product.size || "";
+    document.getElementById("productColors").value = Array.isArray(product.colors) ? product.colors.join(", ") : product.colors || "";
+    document.getElementById("productDescription").value = product.description || "";
+    document.getElementById("productImage").value = product.image || product.imageUrl || "";
+
+    updateImagePreview();
+    box.scrollIntoView({ behavior: "smooth" });
+}
+
+document.addEventListener("click", event => {
+    const button = event.target.closest("[data-edit-product]");
+    if (!button) return;
+
+    const product = products.find(item => item.firestoreId === button.dataset.editProduct);
+    if (product) {
+        openProductForm(product);
+    }
+});
+
+document.getElementById("productImage").addEventListener("input", updateImagePreview);
+
+function updateImagePreview() {
+    const url = document.getElementById("productImage").value.trim();
+    const preview = document.getElementById("productImagePreview");
+
+    if (url) {
+        preview.src = url;
+        preview.style.display = "block";
+    } else {
+        preview.removeAttribute("src");
+        preview.style.display = "none";
+    }
+}
+
+/* =====================================================
+   SAVE PRODUCT (HANDLES BOTH ADD NEW & EDIT)
+===================================================== */
+document.getElementById("productForm").addEventListener("submit", async event => {
+    event.preventDefault();
+
+    const id = document.getElementById("productId").value;
+    const name = document.getElementById("productName").value.trim();
+    const category = document.getElementById("productCategory").value;
+    const price = Number(document.getElementById("productPrice").value);
+    const stock = Number(document.getElementById("productStock").value);
+    const size = document.getElementById("productSize").value.trim();
+    const colorsStr = document.getElementById("productColors").value.trim();
+    const description = document.getElementById("productDescription").value.trim();
+    const image = document.getElementById("productImage").value.trim();
+
+    const colors = colorsStr ? colorsStr.split(",").map(item => item.trim()).filter(Boolean) : [];
+
+    const productData = {
+        name,
+        category,
+        price,
+        stock,
+        size,
+        colors,
+        description,
+        image,
+        imageUrl: image,
+        updatedAt: new Date().toISOString()
+    };
+
+    try {
+        if (id) {
+            // Update existing product
+            await updateDoc(doc(db, "products", id), productData);
+            alert("Product updated successfully!");
+        } else {
+            // Add brand-new product to Firebase
+            productData.createdAt = new Date().toISOString();
+            await addDoc(collection(db, "products"), productData);
+            alert("New product added successfully to your main store!");
+        }
+
+        closeProductForm();
+        await loadProducts();
+    } catch(error) {
+        console.error("PRODUCT SAVE ERROR:", error);
+        alert("The product could not be saved: " + error.message);
+    }
+});
+
+document.getElementById("cancelProduct").addEventListener("click", closeProductForm);
+
+function closeProductForm() {
+    document.getElementById("productFormBox").classList.remove("active");
+    document.getElementById("productForm").reset();
+    document.getElementById("productId").value = "";
+    document.getElementById("productImagePreview").style.display = "none";
+}
+
+/* =====================================================
+   LOGIN / LOGOUT / AUTH
+===================================================== */
+document.getElementById("loginForm").addEventListener("submit", async event => {
+    event.preventDefault();
+
+    const email = document.getElementById("adminEmail").value.trim();
+    const password = document.getElementById("adminPassword").value;
+    const button = document.getElementById("loginButton");
+    const error = document.getElementById("loginError");
+
+    button.disabled = true;
+    button.textContent = "LOGGING IN...";
+    error.style.display = "none";
+
+    try {
+        await signInWithEmailAndPassword(auth, email, password);
+    } catch(err) {
+        console.error("LOGIN ERROR:", err);
+
+        let message = "";
+        if (err.code === "auth/invalid-credential") {
+            message = "Firebase rejected the email or password. Check the exact admin email and password.";
+        } else if (err.code === "auth/user-not-found") {
+            message = "Firebase cannot find an account with this email.";
+        } else if (err.code === "auth/wrong-password") {
+            message = "Firebase says the password is incorrect.";
+        } else if (err.code === "auth/invalid-email") {
+            message = "The email address is not valid.";
+        } else if (err.code === "auth/user-disabled") {
+            message = "This Firebase admin account has been disabled.";
+        } else if (err.code === "auth/too-many-requests") {
+            message = "Firebase temporarily blocked login attempts. Wait a little before trying again.";
+        } else if (err.code === "auth/network-request-failed") {
+            message = "Firebase could not connect. Check your internet connection.";
+        } else {
+            message = "Firebase error: " + (err.code || "unknown-error");
+        }
+
+        error.textContent = message;
+        error.style.display = "block";
+        button.disabled = false;
+        button.textContent = "LOGIN";
+    }
+});
+
+document.getElementById("logoutButton").addEventListener("click", async () => {
+    await signOut(auth);
+});
+
+onAuthStateChanged(auth, user => {
+    const login = document.getElementById("loginScreen");
+    const admin = document.getElementById("adminApp");
+
+    if (user) {
+        login.style.display = "none";
+        admin.style.display = "block";
+        loadOrders();
+    } else {
+        login.style.display = "flex";
+        admin.style.display = "none";
+    }
+});
+
+function setFirebaseStatus(text, type) {
+    const status = document.getElementById("firebaseStatus");
+    if (!status) return;
+    status.textContent = text;
+    status.className = `firebase-status ${type}`;
+}
+
+setInterval(() => {
+    if (auth.currentUser) {
+        loadOrders();
+    }
+}, 5000);
+</script>
+</body></html>
