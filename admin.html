@@ -43,7 +43,7 @@
             padding: 0 20px;
             display: grid;
             grid-template-columns: 350px 1fr;
-            gap: 30px;
+            gap: 40px;
         }
 
         @media (max-width: 900px) {
@@ -86,8 +86,9 @@
             box-sizing: border-box;
         }
 
-        /* THE ADD PRODUCT BUTTON */
         button.btn-primary {
+            display: block !important;
+            visibility: visible !important;
             background: var(--accent);
             color: white;
             border: none;
@@ -96,7 +97,7 @@
             font-weight: 600;
             border-radius: 4px;
             cursor: pointer;
-            margin-top: 10px;
+            margin-top: 15px;
         }
 
         button.btn-primary:hover {
@@ -129,6 +130,10 @@
             cursor: pointer;
             font-size: 12px;
         }
+
+        .btn-delete:hover {
+            opacity: 0.85;
+        }
     </style>
 </head>
 <body>
@@ -139,13 +144,13 @@
 </header>
 
 <div class="container">
-    <!-- PERMANENT ADD PRODUCT FORM & BUTTON -->
+    <!-- Add Product Form -->
     <div class="card">
         <h2>Add New Product</h2>
         <form id="productForm">
             <div class="form-group">
-                <label for="productName">Product Name</label>
-                <input type="text" id="productName" required placeholder="e.g. Leather Bag">
+                <label for="productName">Product Name / Listing</label>
+                <input type="text" id="productName" required placeholder="e.g. Minimalist Leather Bag">
             </div>
 
             <div class="form-group">
@@ -166,11 +171,11 @@
                 </select>
             </div>
 
-            <button type="submit" class="btn-primary">Add Product</button>
+            <button type="submit" class="btn-primary">Save Product</button>
         </form>
     </div>
 
-    <!-- Live Inventory List -->
+    <!-- Inventory Management List -->
     <div class="card">
         <h2>Live Inventory</h2>
         <div style="overflow-x: auto;">
@@ -213,7 +218,6 @@
     const productForm = document.getElementById("productForm");
     const adminProductTable = document.getElementById("adminProductTable");
 
-    // Load Inventory Table
     async function loadAdminInventory() {
         try {
             const querySnapshot = await getDocs(collection(db, "products"));
@@ -259,7 +263,6 @@
         }
     }
 
-    // Handle Form Submit
     productForm.addEventListener("submit", async (e) => {
         e.preventDefault();
 
