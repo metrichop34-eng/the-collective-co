@@ -4,25 +4,69 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>THE COLLECTIVE.CO - Admin Dashboard</title>
+    <link rel="stylesheet" href="style.css">
     <style>
-        body { font-family: sans-serif; background: #FFFDF8; color: #304B52; margin: 0; padding: 0; }
-        nav { background: #304B52; padding: 15px 30px; text-align: right; }
-        nav a { color: #FFFDF8; text-decoration: none; font-weight: bold; }
-        .admin-container { max-width: 900px; margin: 50px auto; padding: 0 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
-        .admin-card { background: #FFFDF8; border: 1px solid #DCEFF2; border-radius: 20px; padding: 30px; box-sizing: border-box; }
-        .admin-card h2 { color: #304B52; margin-top: 0; margin-bottom: 20px; font-size: 22px; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; font-size: 13px; color: #6F858A; margin-bottom: 5px; font-weight: bold; }
-        input, select { width: 100%; padding: 12px; border: 1px solid #A8C9CE; border-radius: 10px; background-color: #FFFDF8; color: #304B52; box-sizing: border-box; outline: none; }
-        table { width: 100%; border-collapse: collapse; font-size: 14px; }
-        th, td { padding: 10px; border-bottom: 1px solid #DCEFF2; color: #304B52; text-align: left; }
-        th { background: #E8F1F2; }
+        .admin-container {
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            text-align: left;
+        }
+        .admin-card {
+            background: #FFFDF8;
+            border: 1px solid #DCEFF2;
+            border-radius: 20px;
+            padding: 30px;
+            box-sizing: border-box;
+        }
+        .admin-card h2 {
+            color: #304B52;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 22px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            font-size: 13px;
+            color: #6F858A;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #A8C9CE;
+            border-radius: 10px;
+            background-color: #FFFDF8;
+            color: #304B52;
+            box-sizing: border-box;
+            outline: none;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #DCEFF2;
+            color: #304B52;
+        }
+        th {
+            background: #E8F1F2;
+        }
     </style>
 </head>
 <body>
 
     <nav>
-        <a href="index.html">View Live Shop</a>
+        <a href="shop.html">View Live Shop</a>
     </nav>
 
     <div class="admin-container">
@@ -44,21 +88,22 @@
                     <label for="category">Category</label>
                     <select id="category" required>
                         <option value="">Select Category</option>
-                        <option value="Skincare">Skincare</option>
-                        <option value="Accessories">Accessories</option>
-                        <option value="Clothing">Clothing</option>
-                        <option value="Shoes">Shoes</option>
-                        <option value="Bags">Bags</option>
-                        <option value="Others">Others</option>
+                        <option value="skincare">Skincare</option>
+                        <option value="accesories">Accessories</option>
+                        <option value="clothing">Clothing</option>
+                        <option value="shoes">Shoes</option>
+                        <option value="bags">Bags</option>
+                        <option value="others">Others</option>
                     </select>
                 </div>
 
                 <div class="form-group">
-                    <label for="productImage">Product Image File</label>
+                    <label for="productImage">Product Image</label>
                     <input type="file" id="productImage" accept="image/*" required>
                 </div>
 
-                <button id="submitBtn" type="submit" style="display: block; width: 100%; padding: 14px; background-color: #304B52; color: #FFFDF8; border: none; border-radius: 25px; font-size: 15px; font-weight: bold; cursor: pointer; margin-top: 20px;">
+                <!-- SAVE BUTTON -->
+                <button id="submitBtn" type="submit" style="display: block !important; width: 100% !important; padding: 14px !important; background-color: #304B52 !important; color: #FFFDF8 !important; border: none !important; border-radius: 25px !important; font-size: 15px !important; font-weight: bold !important; cursor: pointer !important; margin-top: 20px !important;">
                     Save Product
                 </button>
             </form>
@@ -89,7 +134,7 @@
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
         const firebaseConfig = {
-            apiKey: "AIzaSyAiFa8h-LM0tKlfLZ9OyqlsgkMtDU5oj1s",
+            apiKey: "AIzaSyCkavvOeD4GEtUsq4S-QuTU4ejedf8CiL8",
             authDomain: "the-collectiveco-orders.firebaseapp.com",
             projectId: "the-collectiveco-orders",
             storageBucket: "the-collectiveco-orders.firebasestorage.app",
@@ -158,10 +203,12 @@
                 submitBtn.disabled = true;
                 submitBtn.textContent = "Uploading Image & Saving...";
 
+                // Upload image to Firebase Storage
                 const storageRef = ref(storage, `products/${Date.now()}_${file.name}`);
                 const snapshot = await uploadBytes(storageRef, file);
                 const downloadURL = await getDownloadURL(snapshot.ref);
 
+                // Save product to Firestore
                 await addDoc(collection(db, "products"), {
                     name: name,
                     listing: name,
