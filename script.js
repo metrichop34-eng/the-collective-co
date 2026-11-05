@@ -1212,27 +1212,11 @@ function showPaymentModal() {
                 line-height:1.8;
             ">
 
-                <strong>GTBank</strong><br>
+                <strong>OPAY</strong><br>
 
                 Account Name:
                 <strong>
-                    ADESANYA EYINJU CAYLA
-                </strong>
-
-                <br>
-
-                Account Number:
-                <strong>
-                    0708648701
-                </strong>
-
-                <br><br>
-
-                <strong>SmartCash PSB</strong><br>
-
-                Account Name:
-                <strong>
-                    Ololade Adesanya
+                    EYINJUOUWA CAYLA ADESANYA
                 </strong>
 
                 <br>
