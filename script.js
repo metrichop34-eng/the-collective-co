@@ -1,6 +1,5 @@
 /* =========================================================
-   THE COLLECTIVE.CO — COMPLETE SHOP SYSTEM
-   Connected to Firebase Firestore with Full Interactivity
+   THE COLLECTIVE.CO — SHOP SYSTEM (Design-Safe & Interactive)
 ========================================================= */
 
 const firebaseConfig = {
@@ -31,7 +30,6 @@ let activeCategory = "all";
         const db = getFirestore(app);
         firebaseDB = { db, collection, getDocs };
 
-        console.log("Shop connected to Firebase.");
         await loadProductsFromFirebase();
     } catch (error) {
         console.error("Firebase connection error:", error);
@@ -62,22 +60,21 @@ async function loadProductsFromFirebase() {
         setupCategoryMenu();
         filterAndRenderProducts();
     } catch (error) {
-        console.error("Could not load products from Firebase:", error);
+        console.error("Could not load products:", error);
         renderProducts([]);
     }
 }
 
-// --- CATEGORY SETUP & FILTERING ---
+// --- CATEGORY SETUP ---
 function setupCategoryMenu() {
     const categoryMenu = document.getElementById("categoryMenu");
     if (!categoryMenu) return;
 
-    // Get unique categories from catalog
     const rawCategories = [...new Set(productCatalog.map(p => p.category))];
     const categories = ["all", ...rawCategories.filter(Boolean)];
 
     categoryMenu.innerHTML = categories.map(cat => `
-        <button type="button" class="category-chip ${cat === activeCategory ? 'active' : ''}" data-category="${cat}" style="padding:8px 16px; margin:4px; border:1px solid #304B52; border-radius:20px; background:${cat === activeCategory ? '#304B52' : 'transparent'}; color:${cat === activeCategory ? '#FFFDF8' : '#304B52'}; font-weight:bold; cursor:pointer; text-transform:capitalize;">
+        <button type="button" class="category-chip ${cat === activeCategory ? 'active' : ''}" data-category="${cat}">
             ${cat === "all" ? "All Items" : cat}
         </button>
     `).join("");
@@ -85,7 +82,7 @@ function setupCategoryMenu() {
     categoryMenu.querySelectorAll(".category-chip").forEach(chip => {
         chip.addEventListener("click", (e) => {
             activeCategory = e.target.getAttribute("data-category");
-            setupCategoryMenu(); // Refresh chip active states
+            setupCategoryMenu();
             filterAndRenderProducts();
         });
     });
@@ -98,8 +95,7 @@ function filterAndRenderProducts() {
     const filtered = productCatalog.filter(product => {
         const matchesCategory = activeCategory === "all" || product.category === activeCategory;
         const matchesSearch = product.name.toLowerCase().includes(searchQuery) || 
-                              product.category.toLowerCase().includes(searchQuery) ||
-                              product.description.toLowerCase().includes(searchQuery);
+                              product.category.toLowerCase().includes(searchQuery);
         return matchesCategory && matchesSearch;
     });
 
@@ -124,40 +120,31 @@ function renderProducts(products = productCatalog) {
     products.forEach(product => {
         const card = document.createElement("div");
         card.className = "product-card";
-        card.style.cssText = "background:#FFFDF8; border:1px solid #DCEFF2; border-radius:18px; padding:15px; box-sizing:border-box; cursor:pointer;";
 
         card.innerHTML = `
-            <div class="product-img-wrap" style="width:100%; height:220px; background:#E8F1F2; border-radius:12px; overflow:hidden; display:flex; align-items:center; justify-content:center;">
+            <div class="product-image">
                 ${
                     product.image
-                        ? `<img src="${product.image}" alt="${product.name}" style="width:100%; height:100%; object-fit:cover;">`
-                        : `<span style="font-size:40px;">🛍️</span>`
+                        ? `<img src="${product.image}" alt="${product.name}">`
+                        : `<span>🛍️</span>`
                 }
             </div>
-
-            <div style="padding: 12px 0 5px 0;">
-                <small style="color:#6F858A; text-transform:uppercase; font-size:11px; font-weight:bold;">${product.category || ""}</small>
-                <h3 style="color:#304B52; margin: 6px 0; font-size: 15px;">${product.name}</h3>
-                <strong style="color:#304B52; font-size:15px;">₦${product.price.toLocaleString()}</strong>
-                
-                <button
-                    type="button"
-                    class="add-to-cart-btn"
-                    style="display:block; width:100%; margin-top:12px; padding:10px; background:#304B52; color:white; border:none; border-radius:15px; font-weight:bold; cursor:pointer;"
-                >
-                    ADD TO CART
-                </button>
+            <div class="product-info">
+                <small class="product-category">${product.category || ""}</small>
+                <h3 class="product-title">${product.name}</h3>
+                <strong class="product-price">₦${product.price.toLocaleString()}</strong>
+                <button type="button" class="add-to-cart-btn">ADD TO CART</button>
             </div>
         `;
 
-        // Click on product card (except button) opens product detail description modal
+        // Click card to open description/detail view
         card.addEventListener("click", (e) => {
             if (!e.target.classList.contains("add-to-cart-btn")) {
                 openProductModal(product);
             }
         });
 
-        // Add to Cart button
+        // Add to cart button
         card.querySelector(".add-to-cart-btn").addEventListener("click", (e) => {
             e.stopPropagation();
             addToCart(product);
@@ -167,34 +154,26 @@ function renderProducts(products = productCatalog) {
     });
 }
 
-// --- PRODUCT DESCRIPTION MODAL ---
+// --- PRODUCT DETAIL MODAL ---
 function openProductModal(product) {
     const existing = document.getElementById("productDetailModal");
     if (existing) existing.remove();
 
     const modal = document.createElement("div");
     modal.id = "productDetailModal";
-    modal.style.cssText = `
-        position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-        background: rgba(0,0,0,0.6); display: flex; align-items: center;
-        justify-content: center; z-index: 10000; padding: 20px; box-sizing: border-box;
-    `;
+    modal.className = "modal-overlay";
 
     modal.innerHTML = `
-        <div style="background: #FFFDF8; border-radius: 24px; padding: 30px; max-width: 450px; width: 100%; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
-            <button id="closeProductModal" style="position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 24px; cursor: pointer; color: #304B52;">×</button>
-            <div style="width: 100%; height: 260px; background: #E8F1F2; border-radius: 16px; overflow: hidden; display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
-                ${
-                    product.image
-                        ? `<img src="${product.image}" alt="${product.name}" style="width:100%; height:100%; object-fit:cover;">`
-                        : `<span style="font-size:50px;">🛍️</span>`
-                }
+        <div class="modal-content">
+            <button id="closeProductModal" class="modal-close">&times;</button>
+            <div class="modal-image">
+                ${product.image ? `<img src="${product.image}" alt="${product.name}">` : `<span>🛍️</span>`}
             </div>
-            <small style="color:#6F858A; text-transform:uppercase; font-size:12px; font-weight:bold;">${product.category}</small>
-            <h2 style="color:#304B52; margin: 6px 0 10px 0; font-size: 20px;">${product.name}</h2>
-            <strong style="color:#304B52; font-size: 18px;">₦${product.price.toLocaleString()}</strong>
-            <p style="color:#6F858A; margin: 15px 0; font-size: 14px; line-height: 1.5;">${product.description}</p>
-            <button id="modalAddToCart" style="width: 100%; padding: 14px; background: #304B52; color: white; border: none; border-radius: 20px; font-weight: bold; font-size: 15px; cursor: pointer;">ADD TO CART</button>
+            <small>${product.category}</small>
+            <h2>${product.name}</h2>
+            <strong>₦${product.price.toLocaleString()}</strong>
+            <p>${product.description}</p>
+            <button id="modalAddToCart" class="checkout-button">ADD TO CART</button>
         </div>
     `;
 
@@ -210,7 +189,7 @@ function openProductModal(product) {
     });
 }
 
-// --- CART FUNCTIONS ---
+// --- CART MANAGEMENT ---
 function getCart() {
     try {
         return JSON.parse(localStorage.getItem("collectiveCart") || "[]");
@@ -265,7 +244,7 @@ function renderCartPopup() {
     if (!cartItems || !cartTotal) return;
 
     if (cart.length === 0) {
-        cartItems.innerHTML = `<p style="text-align:center; color:#6F858A;">Your cart is empty.</p>`;
+        cartItems.innerHTML = `<p style="text-align:center;">Your cart is empty.</p>`;
         cartTotal.textContent = "₦0";
         return;
     }
@@ -275,14 +254,14 @@ function renderCartPopup() {
         const itemTotal = item.price * item.quantity;
         total += itemTotal;
         return `
-            <div style="display:flex; align-items:center; gap:12px; background:#FFFDF8; padding:12px; border:1px solid #DCEFF2; border-radius:14px;">
-                <img src="${item.image || ''}" style="width:50px; height:50px; object-fit:cover; border-radius:8px; background:#E8F1F2;" alt="${item.name}">
-                <div style="flex:1;">
-                    <h4 style="margin:0; font-size:14px; color:#304B52;">${item.name}</h4>
-                    <small style="color:#6F858A;">₦${item.price.toLocaleString()} x ${item.quantity}</small>
+            <div class="cart-item-row">
+                <img src="${item.image || ''}" alt="${item.name}">
+                <div class="cart-item-info">
+                    <h4>${item.name}</h4>
+                    <span>₦${item.price.toLocaleString()} x ${item.quantity}</span>
                 </div>
-                <strong style="color:#304B52; font-size:14px;">₦${itemTotal.toLocaleString()}</strong>
-                <button type="button" class="remove-cart-item" data-id="${item.id}" style="background:none; border:none; color:#dc3545; font-weight:bold; cursor:pointer; font-size:18px;">×</button>
+                <strong>₦${itemTotal.toLocaleString()}</strong>
+                <button type="button" class="remove-cart-item" data-id="${item.id}">&times;</button>
             </div>
         `;
     }).join("");
@@ -291,8 +270,7 @@ function renderCartPopup() {
 
     cartItems.querySelectorAll(".remove-cart-item").forEach(btn => {
         btn.addEventListener("click", (e) => {
-            const id = e.target.getAttribute("data-id");
-            removeFromCart(id);
+            removeFromCart(e.target.getAttribute("data-id"));
         });
     });
 }
@@ -303,22 +281,18 @@ function showSmallMessage(message) {
 
     const box = document.createElement("div");
     box.id = "collectiveSmallMessage";
-    box.style.cssText = `
-        position:fixed; bottom:25px; left:50%; transform:translateX(-50%);
-        z-index:20000; background:#304B52; color:white; padding:12px 22px;
-        border-radius:25px; font-size:13px; box-shadow:0 8px 25px rgba(0,0,0,.15);
-    `;
+    box.className = "toast-message";
     box.textContent = message;
     document.body.appendChild(box);
 
     setTimeout(() => { if (box.parentNode) box.remove(); }, 2200);
 }
 
-// --- INITIAL EVENT LISTENERS ---
+// --- EVENT LISTENERS ---
 document.addEventListener("DOMContentLoaded", () => {
     updateCartDisplay();
 
-    // Cart Popup Listeners
+    // Cart Popup Toggles (uses active class for your CSS)
     const cartBtn = document.getElementById("cartBtn");
     const cartPopup = document.getElementById("cartPopup");
     const closeCart = document.getElementById("closeCart");
@@ -326,35 +300,32 @@ document.addEventListener("DOMContentLoaded", () => {
     if (cartBtn && cartPopup) {
         cartBtn.addEventListener("click", () => {
             renderCartPopup();
-            cartPopup.style.display = "flex";
+            cartPopup.classList.add("active");
+            cartPopup.style.display = "block"; // Fallback
         });
     }
 
     if (closeCart && cartPopup) {
         closeCart.addEventListener("click", () => {
+            cartPopup.classList.remove("active");
             cartPopup.style.display = "none";
         });
     }
 
-    // Category Button Toggle Listener
+    // Category Menu Toggle
     const categoryBtn = document.getElementById("categoryBtn");
     const categoryMenu = document.getElementById("categoryMenu");
     if (categoryBtn && categoryMenu) {
         categoryBtn.addEventListener("click", (e) => {
             e.preventDefault();
-            const currentDisplay = window.getComputedStyle(categoryMenu).display;
-            categoryMenu.style.display = currentDisplay === "none" ? "flex" : "none";
+            categoryMenu.classList.toggle("active");
+            categoryMenu.style.display = categoryMenu.style.display === "flex" ? "none" : "flex";
         });
     }
 
-    // Search Input & Button Listeners
+    // Search
     const searchInput = document.getElementById("productSearch");
-    const searchBtn = document.getElementById("searchButton");
-
     if (searchInput) {
         searchInput.addEventListener("input", filterAndRenderProducts);
-    }
-    if (searchBtn) {
-        searchBtn.addEventListener("click", filterAndRenderProducts);
     }
 });
