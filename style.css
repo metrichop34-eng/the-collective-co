@@ -725,3 +725,58 @@ p {
 .payment-details strong {
     color: #304B52;
 }
+ /* =========================================================
+   THE COLLECTIVE.CO — MOBILE & TABLET RESPONSIVE FIXES
+========================================================= */
+
+/* Ensure the whole page fits comfortably without horizontal squishing */
+body {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    box-sizing: border-box;
+    overflow-x: hidden;
+}
+
+/* Make product grids auto-fit screens of any size (Phone, Tab, Desktop) */
+.product-grid, 
+#productGrid {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)) !important;
+    gap: 15px !important;
+    padding: 10px !important;
+    box-sizing: border-box;
+}
+
+/* Tablet adjustments */
+@media (min-width: 600px) {
+    .product-grid, 
+    #productGrid {
+        grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)) !important;
+        gap: 20px !important;
+        padding: 20px !important;
+    }
+}
+
+/* Desktop adjustments */
+@media (min-width: 1024px) {
+    .product-grid, 
+    #productGrid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)) !important;
+        gap: 25px !important;
+    }
+}
+
+/* Ensure product images and cards scale fluidly */
+.product-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+}
+
+.product-card img, 
+.product-image img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+}
