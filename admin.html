@@ -8,10 +8,9 @@
         body { font-family: sans-serif; background: #FFFDF8; color: #304B52; margin: 0; padding: 0; }
         nav { background: #304B52; padding: 15px 30px; text-align: right; }
         nav a { color: #FFFDF8; text-decoration: none; font-weight: bold; }
-        .admin-container { max-width: 1000px; margin: 40px auto; padding: 0 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
-        .orders-wrapper { max-width: 1000px; margin: 0 auto 50px auto; padding: 0 20px; }
-        @media (max-width: 768px) { .admin-container { grid-template-columns: 1fr; margin: 20px auto; } }
-        .admin-card { background: #FFFDF8; border: 1px solid #DCEFF2; border-radius: 20px; padding: 25px; box-sizing: border-box; }
+        .admin-container { max-width: 900px; margin: 50px auto; padding: 0 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        @media (max-width: 768px) { .admin-container { grid-template-columns: 1fr; margin: 25px auto; } }
+        .admin-card { background: #FFFDF8; border: 1px solid #DCEFF2; border-radius: 20px; padding: 30px; box-sizing: border-box; }
         .admin-card h2 { color: #304B52; margin-top: 0; margin-bottom: 20px; font-size: 22px; }
         .form-group { margin-bottom: 15px; }
         label { display: block; font-size: 13px; color: #6F858A; margin-bottom: 5px; font-weight: bold; }
@@ -21,9 +20,6 @@
         th, td { padding: 10px; border-bottom: 1px solid #DCEFF2; color: #304B52; text-align: left; vertical-align: top; }
         th { background: #E8F1F2; }
         .stock-pill { display: inline-block; background: #E8F1F2; color: #304B52; padding: 2px 8px; border-radius: 10px; font-size: 12px; margin: 2px 2px 0 0; }
-        .btn-edit { background: #304B52; color: #FFFDF8; border: none; padding: 5px 9px; border-radius: 5px; cursor: pointer; margin-right: 4px; margin-bottom: 4px; }
-        .btn-delete { background: #dc3545; color: #FFFDF8; border: none; padding: 5px 9px; border-radius: 5px; cursor: pointer; }
-        .error-box { color: #b02a37; background: #f8d7da; padding: 10px; border-radius: 8px; font-size: 13px; }
     </style>
 </head>
 <body>
@@ -95,29 +91,9 @@
         </div>
     </div>
 
-    <!-- Orders Section -->
-    <div class="orders-wrapper">
-        <div class="admin-card">
-            <h2>Recent Orders</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Customer &amp; Location</th>
-                        <th>Items</th>
-                        <th>Total</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody id="adminOrdersTable">
-                    <tr><td colspan="4" style="text-align: center;">Loading orders...</td></tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, updateDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAiFa8h-LM0tKlfLZ9OyqlsgkMtDU5oj1s",
@@ -134,10 +110,7 @@
 
         const productForm = document.getElementById("productForm");
         const adminProductTable = document.getElementById("adminProductTable");
-        const adminOrdersTable = document.getElementById("adminOrdersTable");
         const submitBtn = document.getElementById("submitBtn");
-
-        let cachedProducts = {};
 
         function convertImageToBase64(file) {
             return new Promise((resolve, reject) => {
@@ -148,6 +121,7 @@
             });
         }
 
+        // Turns "Pink: 1, Black: 4" into { Pink: 1, Black: 4 } and totals the stock
         function parseColorStock(rawText) {
             const colorStock = {};
             let totalStock = 0;
@@ -171,13 +145,6 @@
             return { colorStock, totalStock };
         }
 
-        function colorStockToText(colorStock) {
-            if (!colorStock || typeof colorStock !== "object") return "";
-            return Object.entries(colorStock)
-                .map(([color, qty]) => `${color}: ${qty}`)
-                .join(", ");
-        }
-
         function formatColorBadges(colorStock) {
             if (!colorStock || typeof colorStock !== "object") return "";
             const entries = Object.entries(colorStock);
@@ -193,17 +160,12 @@
             try {
                 const querySnapshot = await getDocs(collection(db, "products"));
                 adminProductTable.innerHTML = "";
-                cachedProducts = {};
-
                 if (querySnapshot.empty) {
-                    adminProductTable.innerHTML = `<tr><td colspan="4" style="text-align: center;">No products found in Firestore.</td></tr>`;
+                    adminProductTable.innerHTML = `<tr><td colspan="4" style="text-align: center;">No products found.</td></tr>`;
                     return;
                 }
-
                 querySnapshot.forEach((docSnapshot) => {
                     const product = docSnapshot.data();
-                    cachedProducts[docSnapshot.id] = product;
-
                     const imgUrl = product.imageUrl || product.image || '';
                     const colorBadges = formatColorBadges(product.colorStock);
                     const row = document.createElement("tr");
@@ -215,36 +177,9 @@
                             ${colorBadges}
                         </td>
                         <td>₦${Number(product.price || 0).toLocaleString()}</td>
-                        <td>
-                            <button class="btn-edit" data-id="${docSnapshot.id}">Edit</button>
-                            <button class="btn-delete" data-id="${docSnapshot.id}">Delete</button>
-                        </td>
+                        <td><button class="btn-delete" data-id="${docSnapshot.id}" style="background:#dc3545; color:white; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;">Delete</button></td>
                     `;
                     adminProductTable.appendChild(row);
-                });
-
-                document.querySelectorAll(".btn-edit").forEach(btn => {
-                    btn.addEventListener("click", async (e) => {
-                        const id = e.target.getAttribute("data-id");
-                        const current = cachedProducts[id] || {};
-                        const nextCategory = prompt("Category (accessories, clothing, shoes, bags, skincare, others):", current.category || "others");
-                        if (nextCategory === null) return;
-
-                        const nextPriceInput = prompt("Price (₦):", current.price || 0);
-                        if (nextPriceInput === null) return;
-
-                        const nextStockText = prompt("Stock Per Color (e.g. Pink: 1, Black: 4):", colorStockToText(current.colorStock));
-                        if (nextStockText === null) return;
-
-                        const { colorStock, totalStock } = parseColorStock(nextStockText);
-                        await updateDoc(doc(db, "products", id), {
-                            category: (nextCategory || "others").trim().toLowerCase(),
-                            price: Math.max(0, Number(nextPriceInput) || 0),
-                            colorStock: colorStock,
-                            stock: totalStock
-                        });
-                        loadAdminInventory();
-                    });
                 });
 
                 document.querySelectorAll(".btn-delete").forEach(btn => {
@@ -258,45 +193,6 @@
                 });
             } catch (err) {
                 console.error("Error loading inventory:", err);
-                adminProductTable.innerHTML = `<tr><td colspan="4"><div class="error-box">Could not load products: ${err.message}</div></td></tr>`;
-            }
-        }
-
-        async function loadAdminOrders() {
-            try {
-                const querySnapshot = await getDocs(collection(db, "orders"));
-                adminOrdersTable.innerHTML = "";
-
-                if (querySnapshot.empty) {
-                    adminOrdersTable.innerHTML = `<tr><td colspan="4" style="text-align: center;">No orders found yet.</td></tr>`;
-                    return;
-                }
-
-                querySnapshot.forEach((docSnapshot) => {
-                    const order = docSnapshot.data();
-                    const customer = order.customerName || order.name || order.customer || "Customer";
-                    const location = order.location || order.zone || order.address || "";
-                    const itemsText = Array.isArray(order.items)
-                        ? order.items.map(i => `${i.name || i.title || "Item"} (${i.color || "Standard"} x${i.qty || i.quantity || 1})`).join(", ")
-                        : (order.itemsSummary || order.item || "Order items");
-                    const total = Number(order.total || order.totalAmount || 0).toLocaleString();
-                    const status = order.status || "Pending";
-
-                    const row = document.createElement("tr");
-                    row.innerHTML = `
-                        <td>
-                            <strong>${customer}</strong>
-                            ${location ? `<div style="font-size:12px; color:#6F858A;">${location}</div>` : ""}
-                        </td>
-                        <td>${itemsText}</td>
-                        <td>₦${total}</td>
-                        <td><span class="stock-pill">${status}</span></td>
-                    `;
-                    adminOrdersTable.appendChild(row);
-                });
-            } catch (err) {
-                console.error("Error loading orders:", err);
-                adminOrdersTable.innerHTML = `<tr><td colspan="4"><div class="error-box">Could not load orders: ${err.message}</div></td></tr>`;
             }
         }
 
@@ -347,7 +243,6 @@
         });
 
         loadAdminInventory();
-        loadAdminOrders();
     </script>
 </body>
 </html>
