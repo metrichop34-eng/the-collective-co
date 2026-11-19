@@ -5,314 +5,115 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>THE COLLECTIVE.CO - Admin Dashboard</title>
     <style>
-        body {
-            font-family: sans-serif;
-            background: #FFFDF8;
-            color: #304B52;
-            margin: 0;
-            padding: 0;
-        }
-
-        /* Big top header banner */
-        .admin-header {
-            background: #304B52;
-            color: #FFFDF8;
-            padding: 28px 24px;
-        }
-        .header-inner {
-            max-width: 1050px;
-            margin: 0 auto;
-        }
-        .admin-header h1 {
-            margin: 0;
-            font-size: 28px;
-            letter-spacing: 0.3px;
-        }
-
-        /* Two tab buttons underneath */
-        .tab-bar {
-            max-width: 1050px;
-            margin: 24px auto 0 auto;
-            padding: 0 20px;
-            display: flex;
-            gap: 12px;
-        }
-        .tab-btn {
-            padding: 12px 26px;
-            border-radius: 25px;
-            border: 1px solid #304B52;
-            background: #FFFDF8;
-            color: #304B52;
-            font-size: 15px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .tab-btn.active {
-            background: #304B52;
-            color: #FFFDF8;
-        }
-
-        .main-content {
-            max-width: 1050px;
-            margin: 22px auto 50px auto;
-            padding: 0 20px;
-        }
-        .tab-panel {
-            display: none;
-        }
-        .tab-panel.active {
-            display: block;
-        }
-
-        /* Total sales summary box on Orders tab */
-        .sales-summary {
-            background: #E8F1F2;
-            border: 1px solid #A8C9CE;
-            border-radius: 16px;
-            padding: 18px 22px;
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        .sales-label {
-            font-size: 13px;
-            font-weight: bold;
-            color: #6F858A;
-            text-transform: uppercase;
-        }
-        .sales-amount {
-            font-size: 26px;
-            font-weight: bold;
-            color: #304B52;
-            margin-top: 4px;
-        }
-        .sales-count {
-            font-size: 14px;
-            color: #304B52;
-            font-weight: bold;
-        }
-
-        /* Products layout */
-        .products-grid {
-            display: grid;
-            grid-template-columns: 1fr 1.3fr;
-            gap: 25px;
-        }
-        @media (max-width: 820px) {
-            .products-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .admin-card {
-            background: #FFFDF8;
-            border: 1px solid #DCEFF2;
-            border-radius: 20px;
-            padding: 25px;
-            box-sizing: border-box;
-        }
-        .admin-card h2 {
-            color: #304B52;
-            margin-top: 0;
-            margin-bottom: 18px;
-            font-size: 20px;
-        }
-
-        .form-group {
-            margin-bottom: 14px;
-        }
-        label {
-            display: block;
-            font-size: 13px;
-            color: #6F858A;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        input, select {
-            width: 100%;
-            padding: 11px;
-            border: 1px solid #A8C9CE;
-            border-radius: 10px;
-            background-color: #FFFDF8;
-            color: #304B52;
-            box-sizing: border-box;
-            outline: none;
-        }
-        .help-text {
-            font-size: 12px;
-            color: #6F858A;
-            margin-top: 4px;
-            display: block;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 14px;
-        }
-        th, td {
-            padding: 10px;
-            border-bottom: 1px solid #DCEFF2;
-            color: #304B52;
-            text-align: left;
-            vertical-align: top;
-        }
-        th {
-            background: #E8F1F2;
-        }
-        .stock-pill {
-            display: inline-block;
-            background: #E8F1F2;
-            color: #304B52;
-            padding: 2px 8px;
-            border-radius: 10px;
-            font-size: 12px;
-            margin: 2px 2px 0 0;
-        }
-        .btn-edit {
-            background: #304B52;
-            color: #FFFDF8;
-            border: none;
-            padding: 6px 10px;
-            border-radius: 6px;
-            cursor: pointer;
-            margin-right: 4px;
-            margin-bottom: 4px;
-            font-size: 12px;
-        }
-        .btn-delete {
-            background: #dc3545;
-            color: #FFFDF8;
-            border: none;
-            padding: 6px 10px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 12px;
-        }
-        .status-select {
-            padding: 6px 8px;
-            border-radius: 8px;
-            font-size: 12px;
-            width: auto;
-        }
-        .error-box {
-            color: #b02a37;
-            background: #f8d7da;
-            padding: 10px;
-            border-radius: 8px;
-            font-size: 13px;
-        }
+        body { font-family: sans-serif; background: #FFFDF8; color: #304B52; margin: 0; padding: 0; }
+        nav { background: #304B52; padding: 15px 30px; text-align: right; }
+        nav a { color: #FFFDF8; text-decoration: none; font-weight: bold; }
+        .admin-container { max-width: 1000px; margin: 40px auto; padding: 0 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        .orders-wrapper { max-width: 1000px; margin: 0 auto 50px auto; padding: 0 20px; }
+        @media (max-width: 768px) { .admin-container { grid-template-columns: 1fr; margin: 20px auto; } }
+        .admin-card { background: #FFFDF8; border: 1px solid #DCEFF2; border-radius: 20px; padding: 25px; box-sizing: border-box; }
+        .admin-card h2 { color: #304B52; margin-top: 0; margin-bottom: 20px; font-size: 22px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-size: 13px; color: #6F858A; margin-bottom: 5px; font-weight: bold; }
+        input, select { width: 100%; padding: 12px; border: 1px solid #A8C9CE; border-radius: 10px; background-color: #FFFDF8; color: #304B52; box-sizing: border-box; outline: none; }
+        .help-text { font-size: 12px; color: #6F858A; margin-top: 4px; display: block; }
+        table { width: 100%; border-collapse: collapse; font-size: 14px; }
+        th, td { padding: 10px; border-bottom: 1px solid #DCEFF2; color: #304B52; text-align: left; vertical-align: top; }
+        th { background: #E8F1F2; }
+        .stock-pill { display: inline-block; background: #E8F1F2; color: #304B52; padding: 2px 8px; border-radius: 10px; font-size: 12px; margin: 2px 2px 0 0; }
+        .btn-edit { background: #304B52; color: #FFFDF8; border: none; padding: 5px 9px; border-radius: 5px; cursor: pointer; margin-right: 4px; margin-bottom: 4px; }
+        .btn-delete { background: #dc3545; color: #FFFDF8; border: none; padding: 5px 9px; border-radius: 5px; cursor: pointer; }
+        .error-box { color: #b02a37; background: #f8d7da; padding: 10px; border-radius: 8px; font-size: 13px; }
     </style>
 </head>
 <body>
 
-    <header class="admin-header">
-        <div class="header-inner">
-            <h1>Admin Dashboard</h1>
-        </div>
-    </header>
+    <nav>
+        <a href="shop.html">View Live Shop</a>
+    </nav>
 
-    <div class="tab-bar">
-        <button id="ordersTabBtn" class="tab-btn active" type="button">Orders</button>
-        <button id="productsTabBtn" class="tab-btn" type="button">Products</button>
+    <div class="admin-container">
+        <!-- Add Product Form -->
+        <div class="admin-card">
+            <h2>Add New Product</h2>
+            <form id="productForm">
+                <div class="form-group">
+                    <label for="productName">Product Name</label>
+                    <input type="text" id="productName" required placeholder="e.g. Polka Dot Scrunchie">
+                </div>
+
+                <div class="form-group">
+                    <label for="productPrice">Price (₦)</label>
+                    <input type="number" id="productPrice" required placeholder="e.g. 5000">
+                </div>
+
+                <div class="form-group">
+                    <label for="productCategory">Category</label>
+                    <select id="productCategory">
+                        <option value="accessories">Accessories</option>
+                        <option value="clothing">Clothing</option>
+                        <option value="shoes">Shoes</option>
+                        <option value="bags">Bags</option>
+                        <option value="skincare">Skincare</option>
+                        <option value="others">Others</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="colorStockInput">Stock Per Color</label>
+                    <input type="text" id="colorStockInput" placeholder="e.g. Pink: 1, Black: 4, White: 0">
+                    <span class="help-text">Separate colors with commas using <strong>Color: Quantity</strong>.</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="productImage">Product Image File</label>
+                    <input type="file" id="productImage" accept="image/*" required>
+                </div>
+
+                <button id="submitBtn" type="submit" style="display: block; width: 100%; padding: 14px; background-color: #304B52; color: #FFFDF8; border: none; border-radius: 25px; font-size: 15px; font-weight: bold; cursor: pointer; margin-top: 20px;">
+                    Save Product
+                </button>
+            </form>
+        </div>
+
+        <!-- Inventory Table -->
+        <div class="admin-card">
+            <h2>Live Inventory</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Item &amp; Color Stock</th>
+                        <th>Price</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="adminProductTable">
+                    <tr><td colspan="4" style="text-align: center;">Loading...</td></tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 
-    <main class="main-content">
-        <!-- Default Tab: Orders -->
-        <section id="ordersPanel" class="tab-panel active">
-            <div class="sales-summary">
-                <div>
-                    <div class="sales-label">Total Sales</div>
-                    <div id="totalSalesAmount" class="sales-amount">₦0</div>
-                </div>
-                <div id="totalOrdersCount" class="sales-count">0 Orders</div>
-            </div>
-
-            <div class="admin-card">
-                <h2>Customer Orders</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Customer Details</th>
-                            <th>Items</th>
-                            <th>Total</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody id="adminOrdersTable">
-                        <tr><td colspan="4" style="text-align: center;">Loading orders...</td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </section>
-
-        <!-- Second Tab: Products -->
-        <section id="productsPanel" class="tab-panel">
-            <div class="products-grid">
-                <div class="admin-card">
-                    <h2>Add New Product</h2>
-                    <form id="productForm">
-                        <div class="form-group">
-                            <label for="productName">Product Name</label>
-                            <input type="text" id="productName" required placeholder="e.g. Polka Dot Scrunchie">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="productPrice">Price (₦)</label>
-                            <input type="number" id="productPrice" required placeholder="e.g. 5000">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="productCategory">Category</label>
-                            <select id="productCategory">
-                                <option value="accessories">Accessories</option>
-                                <option value="clothing">Clothing</option>
-                                <option value="shoes">Shoes</option>
-                                <option value="bags">Bags</option>
-                                <option value="skincare">Skincare</option>
-                                <option value="others">Others</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="colorStockInput">Stock Per Color</label>
-                            <input type="text" id="colorStockInput" placeholder="e.g. Pink: 1, Black: 4, White: 0">
-                            <span class="help-text">Separate colors with commas using <strong>Color: Quantity</strong>.</span>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="productImage">Product Image File</label>
-                            <input type="file" id="productImage" accept="image/*" required>
-                        </div>
-
-                        <button id="submitBtn" type="submit" style="display: block; width: 100%; padding: 14px; background-color: #304B52; color: #FFFDF8; border: none; border-radius: 25px; font-size: 15px; font-weight: bold; cursor: pointer; margin-top: 20px;">
-                            Save Product
-                        </button>
-                    </form>
-                </div>
-
-                <div class="admin-card">
-                    <h2>All Products</h2>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Image</th>
-                                <th>Item &amp; Color Stock</th>
-                                <th>Price</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="adminProductTable">
-                            <tr><td colspan="4" style="text-align: center;">Loading...</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-    </main>
+    <!-- Orders Section -->
+    <div class="orders-wrapper">
+        <div class="admin-card">
+            <h2>Recent Orders</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Customer &amp; Location</th>
+                        <th>Items</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="adminOrdersTable">
+                    <tr><td colspan="4" style="text-align: center;">Loading orders...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
@@ -331,30 +132,9 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        const ordersTabBtn = document.getElementById("ordersTabBtn");
-        const productsTabBtn = document.getElementById("productsTabBtn");
-        const ordersPanel = document.getElementById("ordersPanel");
-        const productsPanel = document.getElementById("productsPanel");
-
-        ordersTabBtn.addEventListener("click", () => {
-            ordersTabBtn.classList.add("active");
-            productsTabBtn.classList.remove("active");
-            ordersPanel.classList.add("active");
-            productsPanel.classList.remove("active");
-        });
-
-        productsTabBtn.addEventListener("click", () => {
-            productsTabBtn.classList.add("active");
-            ordersTabBtn.classList.remove("active");
-            productsPanel.classList.add("active");
-            ordersPanel.classList.remove("active");
-        });
-
         const productForm = document.getElementById("productForm");
         const adminProductTable = document.getElementById("adminProductTable");
         const adminOrdersTable = document.getElementById("adminOrdersTable");
-        const totalSalesAmount = document.getElementById("totalSalesAmount");
-        const totalOrdersCount = document.getElementById("totalOrdersCount");
         const submitBtn = document.getElementById("submitBtn");
 
         let cachedProducts = {};
@@ -416,7 +196,7 @@
                 cachedProducts = {};
 
                 if (querySnapshot.empty) {
-                    adminProductTable.innerHTML = `<tr><td colspan="4" style="text-align: center;">No products found.</td></tr>`;
+                    adminProductTable.innerHTML = `<tr><td colspan="4" style="text-align: center;">No products found in Firestore.</td></tr>`;
                     return;
                 }
 
@@ -447,10 +227,6 @@
                     btn.addEventListener("click", async (e) => {
                         const id = e.target.getAttribute("data-id");
                         const current = cachedProducts[id] || {};
-
-                        const nextName = prompt("Product Name:", current.name || current.listing || "");
-                        if (nextName === null) return;
-
                         const nextCategory = prompt("Category (accessories, clothing, shoes, bags, skincare, others):", current.category || "others");
                         if (nextCategory === null) return;
 
@@ -461,11 +237,7 @@
                         if (nextStockText === null) return;
 
                         const { colorStock, totalStock } = parseColorStock(nextStockText);
-                        const cleanName = (nextName || current.name || current.listing || "Unnamed").trim();
-
                         await updateDoc(doc(db, "products", id), {
-                            name: cleanName,
-                            listing: cleanName,
                             category: (nextCategory || "others").trim().toLowerCase(),
                             price: Math.max(0, Number(nextPriceInput) || 0),
                             colorStock: colorStock,
@@ -486,7 +258,7 @@
                 });
             } catch (err) {
                 console.error("Error loading inventory:", err);
-                adminProductTable.innerHTML = `<tr><td colspan="4"><div class="error-box">Could not load inventory: ${err.message}</div></td></tr>`;
+                adminProductTable.innerHTML = `<tr><td colspan="4"><div class="error-box">Could not load products: ${err.message}</div></td></tr>`;
             }
         }
 
@@ -496,66 +268,31 @@
                 adminOrdersTable.innerHTML = "";
 
                 if (querySnapshot.empty) {
-                    totalSalesAmount.textContent = "₦0";
-                    totalOrdersCount.textContent = "0 Orders";
-                    adminOrdersTable.innerHTML = `<tr><td colspan="4" style="text-align: center;">No orders found.</td></tr>`;
+                    adminOrdersTable.innerHTML = `<tr><td colspan="4" style="text-align: center;">No orders found yet.</td></tr>`;
                     return;
                 }
 
-                let totalSales = 0;
-                let count = 0;
-
                 querySnapshot.forEach((docSnapshot) => {
                     const order = docSnapshot.data();
-                    const numericTotal = Number(order.total || order.totalAmount || 0) || 0;
-                    const status = order.status || "Pending";
-
-                    if (status.toLowerCase() !== "cancelled") {
-                        totalSales += numericTotal;
-                    }
-                    count += 1;
-
                     const customer = order.customerName || order.name || order.customer || "Customer";
-                    const contactLines = [
-                        order.phone,
-                        order.email,
-                        order.address || order.location || order.deliveryZone
-                    ].filter(Boolean);
-
+                    const location = order.location || order.zone || order.address || "";
                     const itemsText = Array.isArray(order.items)
-                        ? order.items.map(i => `${i.name || i.title || "Item"}${i.color ? ` (${i.color})` : ""} x${i.qty || i.quantity || 1}`).join(", ")
+                        ? order.items.map(i => `${i.name || i.title || "Item"} (${i.color || "Standard"} x${i.qty || i.quantity || 1})`).join(", ")
                         : (order.itemsSummary || order.item || "Order items");
+                    const total = Number(order.total || order.totalAmount || 0).toLocaleString();
+                    const status = order.status || "Pending";
 
                     const row = document.createElement("tr");
                     row.innerHTML = `
                         <td>
                             <strong>${customer}</strong>
-                            ${contactLines.map(line => `<div style="font-size:12px; color:#6F858A;">${line}</div>`).join("")}
+                            ${location ? `<div style="font-size:12px; color:#6F858A;">${location}</div>` : ""}
                         </td>
                         <td>${itemsText}</td>
-                        <td>₦${numericTotal.toLocaleString()}</td>
-                        <td>
-                            <select class="status-select" data-id="${docSnapshot.id}">
-                                <option value="Pending" ${status === "Pending" ? "selected" : ""}>Pending</option>
-                                <option value="Confirmed" ${status === "Confirmed" ? "selected" : ""}>Confirmed</option>
-                                <option value="Delivered" ${status === "Delivered" ? "selected" : ""}>Delivered</option>
-                                <option value="Cancelled" ${status === "Cancelled" ? "selected" : ""}>Cancelled</option>
-                            </select>
-                        </td>
+                        <td>₦${total}</td>
+                        <td><span class="stock-pill">${status}</span></td>
                     `;
                     adminOrdersTable.appendChild(row);
-                });
-
-                totalSalesAmount.textContent = `₦${totalSales.toLocaleString()}`;
-                totalOrdersCount.textContent = `${count} ${count === 1 ? "Order" : "Orders"}`;
-
-                document.querySelectorAll(".status-select").forEach(select => {
-                    select.addEventListener("change", async (e) => {
-                        const orderId = e.target.getAttribute("data-id");
-                        const nextStatus = e.target.value;
-                        await updateDoc(doc(db, "orders", orderId), { status: nextStatus });
-                        loadAdminOrders();
-                    });
                 });
             } catch (err) {
                 console.error("Error loading orders:", err);
