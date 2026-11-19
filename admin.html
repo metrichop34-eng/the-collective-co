@@ -9,14 +9,17 @@
         nav { background: #304B52; padding: 15px 30px; text-align: right; }
         nav a { color: #FFFDF8; text-decoration: none; font-weight: bold; }
         .admin-container { max-width: 900px; margin: 50px auto; padding: 0 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        @media (max-width: 768px) { .admin-container { grid-template-columns: 1fr; margin: 25px auto; } }
         .admin-card { background: #FFFDF8; border: 1px solid #DCEFF2; border-radius: 20px; padding: 30px; box-sizing: border-box; }
         .admin-card h2 { color: #304B52; margin-top: 0; margin-bottom: 20px; font-size: 22px; }
         .form-group { margin-bottom: 15px; }
         label { display: block; font-size: 13px; color: #6F858A; margin-bottom: 5px; font-weight: bold; }
         input, select { width: 100%; padding: 12px; border: 1px solid #A8C9CE; border-radius: 10px; background-color: #FFFDF8; color: #304B52; box-sizing: border-box; outline: none; }
+        .help-text { font-size: 12px; color: #6F858A; margin-top: 4px; display: block; }
         table { width: 100%; border-collapse: collapse; font-size: 14px; }
-        th, td { padding: 10px; border-bottom: 1px solid #DCEFF2; color: #304B52; text-align: left; }
+        th, td { padding: 10px; border-bottom: 1px solid #DCEFF2; color: #304B52; text-align: left; vertical-align: top; }
         th { background: #E8F1F2; }
+        .stock-pill { display: inline-block; background: #E8F1F2; color: #304B52; padding: 2px 8px; border-radius: 10px; font-size: 12px; margin: 2px 2px 0 0; }
     </style>
 </head>
 <body>
@@ -41,15 +44,21 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="category">Category</label>
-                    <select id="editProductCategory">
-    <option value="accessories">Accessories</option>
-    <option value="clothing">Clothing</option>
-    <option value="shoes">Shoes</option>
-    <option value="bags">Bags</option>
-    <option value="skincare">Skincare</option>
-    <option value="others">Others</option>
-</select>
+                    <label for="productCategory">Category</label>
+                    <select id="productCategory">
+                        <option value="accessories">Accessories</option>
+                        <option value="clothing">Clothing</option>
+                        <option value="shoes">Shoes</option>
+                        <option value="bags">Bags</option>
+                        <option value="skincare">Skincare</option>
+                        <option value="others">Others</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="colorStockInput">Stock Per Color</label>
+                    <input type="text" id="colorStockInput" placeholder="e.g. Pink: 1, Black: 4, White: 0">
+                    <span class="help-text">Separate colors with commas using <strong>Color: Quantity</strong>.</span>
                 </div>
 
                 <div class="form-group">
@@ -70,7 +79,7 @@
                 <thead>
                     <tr>
                         <th>Image</th>
-                        <th>Name</th>
+                        <th>Item &amp; Color Stock</th>
                         <th>Price</th>
                         <th>Action</th>
                     </tr>
@@ -103,7 +112,6 @@
         const adminProductTable = document.getElementById("adminProductTable");
         const submitBtn = document.getElementById("submitBtn");
 
-        // Helper function to convert uploaded image file into a local Base64 string
         function convertImageToBase64(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -111,6 +119,41 @@
                 reader.onload = () => resolve(reader.result);
                 reader.onerror = error => reject(error);
             });
+        }
+
+        // Turns "Pink: 1, Black: 4" into { Pink: 1, Black: 4 } and totals the stock
+        function parseColorStock(rawText) {
+            const colorStock = {};
+            let totalStock = 0;
+
+            if (!rawText || !rawText.trim()) {
+                return { colorStock, totalStock };
+            }
+
+            rawText.split(",").forEach(part => {
+                const [rawColor, rawQty] = part.split(":");
+                const colorName = (rawColor || "").trim();
+                const qty = Math.max(0, Number((rawQty || "").trim()) || 0);
+
+                if (colorName) {
+                    const formattedColor = colorName.charAt(0).toUpperCase() + colorName.slice(1);
+                    colorStock[formattedColor] = qty;
+                    totalStock += qty;
+                }
+            });
+
+            return { colorStock, totalStock };
+        }
+
+        function formatColorBadges(colorStock) {
+            if (!colorStock || typeof colorStock !== "object") return "";
+            const entries = Object.entries(colorStock);
+            if (entries.length === 0) return "";
+
+            return `<div style="margin-top:4px;">` + entries.map(([color, qty]) => {
+                const label = qty > 0 ? `${color}: ${qty}` : `${color}: Out`;
+                return `<span class="stock-pill">${label}</span>`;
+            }).join("") + `</div>`;
         }
 
         async function loadAdminInventory() {
@@ -124,10 +167,15 @@
                 querySnapshot.forEach((docSnapshot) => {
                     const product = docSnapshot.data();
                     const imgUrl = product.imageUrl || product.image || '';
+                    const colorBadges = formatColorBadges(product.colorStock);
                     const row = document.createElement("tr");
                     row.innerHTML = `
                         <td>${imgUrl ? `<img src="${imgUrl}" style="width:40px; height:40px; object-fit:cover; border-radius:6px;">` : '🛍️'}</td>
-                        <td>${product.name || product.listing || 'Unnamed'}</td>
+                        <td>
+                            <strong>${product.name || product.listing || 'Unnamed'}</strong>
+                            <div style="font-size:12px; color:#6F858A; text-transform:capitalize;">${product.category || 'others'}</div>
+                            ${colorBadges}
+                        </td>
                         <td>₦${Number(product.price || 0).toLocaleString()}</td>
                         <td><button class="btn-delete" data-id="${docSnapshot.id}" style="background:#dc3545; color:white; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;">Delete</button></td>
                     `;
@@ -152,7 +200,8 @@
             e.preventDefault();
             const name = document.getElementById("productName").value.trim();
             const price = Number(document.getElementById("productPrice").value);
-            const category = document.getElementById("category").value;
+            const category = document.getElementById("productCategory").value;
+            const rawColorStock = document.getElementById("colorStockInput").value;
             const fileInput = document.getElementById("productImage");
             const file = fileInput.files[0];
 
@@ -161,19 +210,21 @@
                 return;
             }
 
+            const { colorStock, totalStock } = parseColorStock(rawColorStock);
+
             try {
                 submitBtn.disabled = true;
                 submitBtn.textContent = "Processing Image & Saving...";
 
-                // Convert image to Base64 so it bypasses Firebase Storage CORS and permission issues entirely
                 const base64Image = await convertImageToBase64(file);
 
-                // Save product document directly to Firestore
                 await addDoc(collection(db, "products"), {
                     name: name,
                     listing: name,
                     price: price,
                     category: category,
+                    colorStock: colorStock,
+                    stock: totalStock,
                     imageUrl: base64Image,
                     image: base64Image,
                     createdAt: new Date()
