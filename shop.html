@@ -252,14 +252,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Exact Fee Rules
         if (loc === "ikeja") {
-            serviceFee = 100;
-            deliveryFee = 300;
+            serviceFee = 50;
+            deliveryFee = 100;
         } else if (loc === "lagos_other") {
-            serviceFee = 250;
-            deliveryFee = 500;
+            serviceFee = 100;
+            deliveryFee = 200;
         } else {
-            serviceFee = 500;
-            deliveryFee = 1000;
+            serviceFee = 200;
+            deliveryFee = 500;
         }
 
         const grandTotal = productSubtotal + serviceFee + deliveryFee;
