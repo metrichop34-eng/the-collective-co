@@ -807,7 +807,6 @@ window.checkout = checkout;
 window.getCartTotal = getCartTotal;
 window.updateCartDisplay = updateCartDisplay;
 
-
 /* ========================= CHECKOUT MODAL ========================= */
 
 function createCheckoutModal() {
@@ -821,9 +820,27 @@ function createCheckoutModal() {
 
     const paidTotal = getCartTotal();
 
-    const shippingFee = 0;
+    const nigerianStates = [
+        "Abia", "Adamawa", "Akwa Ibom", "Anambra", "Bauchi", "Bayelsa",
+        "Benue", "Borno", "Cross River", "Delta", "Ebonyi", "Edo",
+        "Ekiti", "Enugu", "FCT - Abuja", "Gombe", "Imo", "Jigawa",
+        "Kaduna", "Kano", "Katsina", "Kebbi", "Kogi", "Kwara",
+        "Lagos", "Nasarawa", "Niger", "Ogun", "Ondo", "Osun",
+        "Oyo", "Plateau", "Rivers", "Sokoto", "Taraba", "Yobe",
+        "Zamfara"
+    ];
 
-    const finalTotal = paidTotal + shippingFee;
+    function getFeesForState(stateName) {
+        if (stateName === "Lagos") {
+            return { serviceFee: 50, deliveryFee: 250 };
+        }
+        return { serviceFee: 100, deliveryFee: 500 };
+    }
+
+    const defaultState = "Lagos";
+    const initialFees = getFeesForState(defaultState);
+    const initialFinalTotal =
+        paidTotal + initialFees.serviceFee + initialFees.deliveryFee;
 
     const modal = document.createElement("div");
 
@@ -949,6 +966,40 @@ function createCheckoutModal() {
                     font-weight:bold;
                     margin-bottom:6px;
                 ">
+                    STATE
+                </label>
+
+                <select
+                    id="checkoutState"
+                    style="
+                        width:100%;
+                        padding:13px;
+                        border:1px solid #E6E1D8;
+                        border-radius:12px;
+                        background:#F7F4EE;
+                        color:#304B52;
+                        outline:none;
+                        margin-bottom:15px;
+                        box-sizing:border-box;
+                    "
+                >
+                    ${nigerianStates.map(state => `
+                        <option
+                            value="${state}"
+                            ${state === defaultState ? "selected" : ""}
+                        >
+                            ${state}
+                        </option>
+                    `).join("")}
+                </select>
+
+                <label style="
+                    display:block;
+                    color:#71858A;
+                    font-size:12px;
+                    font-weight:bold;
+                    margin-bottom:6px;
+                ">
                     DELIVERY ADDRESS
                 </label>
 
@@ -1035,9 +1086,20 @@ function createCheckoutModal() {
                         justify-content:space-between;
                         margin-bottom:10px;
                     ">
-                        <span>Delivery</span>
-                        <strong>
-                            ₦${shippingFee.toLocaleString()}
+                        <span>Service Fee</span>
+                        <strong id="checkoutServiceFeeText">
+                            ₦${initialFees.serviceFee.toLocaleString()}
+                        </strong>
+                    </div>
+
+                    <div style="
+                        display:flex;
+                        justify-content:space-between;
+                        margin-bottom:10px;
+                    ">
+                        <span>Delivery Fee</span>
+                        <strong id="checkoutDeliveryFeeText">
+                            ₦${initialFees.deliveryFee.toLocaleString()}
                         </strong>
                     </div>
 
@@ -1048,8 +1110,8 @@ function createCheckoutModal() {
                         margin-top:15px;
                     ">
                         <strong>Total</strong>
-                        <strong>
-                            ₦${finalTotal.toLocaleString()}
+                        <strong id="checkoutFinalTotalText">
+                            ₦${initialFinalTotal.toLocaleString()}
                         </strong>
                     </div>
 
@@ -1089,6 +1151,29 @@ function createCheckoutModal() {
 
     document.body.appendChild(modal);
 
+    const stateSelect = document.getElementById("checkoutState");
+    const serviceEl = document.getElementById("checkoutServiceFeeText");
+    const deliveryEl = document.getElementById("checkoutDeliveryFeeText");
+    const totalEl = document.getElementById("checkoutFinalTotalText");
+
+    function refreshFeeBreakdown() {
+        const selectedState = stateSelect?.value || defaultState;
+        const fees = getFeesForState(selectedState);
+        const finalTotal = paidTotal + fees.serviceFee + fees.deliveryFee;
+
+        if (serviceEl) {
+            serviceEl.textContent = `₦${fees.serviceFee.toLocaleString()}`;
+        }
+        if (deliveryEl) {
+            deliveryEl.textContent = `₦${fees.deliveryFee.toLocaleString()}`;
+        }
+        if (totalEl) {
+            totalEl.textContent = `₦${finalTotal.toLocaleString()}`;
+        }
+    }
+
+    stateSelect?.addEventListener("change", refreshFeeBreakdown);
+
     document
         .getElementById("closeCheckoutModal")
         ?.addEventListener("click", () => modal.remove());
@@ -1105,6 +1190,8 @@ function createCheckoutModal() {
                 .getElementById("checkoutPhone")
                 .value
                 .trim();
+
+            const state = stateSelect?.value || defaultState;
 
             const address = document
                 .getElementById("checkoutAddress")
@@ -1124,18 +1211,26 @@ function createCheckoutModal() {
                 return;
             }
 
+            const fees = getFeesForState(state);
+
             localStorage.setItem(
                 "collectiveCheckoutCustomer",
                 JSON.stringify({
                     fullName,
                     phone,
+                    state,
                     address
                 })
             );
 
             localStorage.setItem(
+                "collectiveCheckoutServiceFee",
+                String(fees.serviceFee)
+            );
+
+            localStorage.setItem(
                 "collectiveCheckoutShippingFee",
-                String(shippingFee)
+                String(fees.deliveryFee)
             );
 
             modal.remove();
@@ -1160,13 +1255,19 @@ function showPaymentModal() {
 
     const total = getCartTotal();
 
+    const serviceFee = Number(
+        localStorage.getItem(
+            "collectiveCheckoutServiceFee"
+        ) || "0"
+    );
+
     const shippingFee = Number(
         localStorage.getItem(
             "collectiveCheckoutShippingFee"
         ) || "0"
     );
 
-    const finalTotal = total + shippingFee;
+    const finalTotal = total + serviceFee + shippingFee;
 
     modal.style.cssText = `
         position:fixed;
@@ -1323,13 +1424,19 @@ async function createPendingOrder() {
 
     const subtotal = getCartTotal();
 
+    const serviceFee = Number(
+        localStorage.getItem(
+            "collectiveCheckoutServiceFee"
+        ) || "0"
+    );
+
     const shippingFee = Number(
         localStorage.getItem(
             "collectiveCheckoutShippingFee"
         ) || "0"
     );
 
-    const total = subtotal + shippingFee;
+    const total = subtotal + serviceFee + shippingFee;
 
     let checkoutCustomer = {};
 
@@ -1355,6 +1462,8 @@ async function createPendingOrder() {
         "Customer";
 
     const phone = checkoutCustomer.phone || "";
+
+    const state = checkoutCustomer.state || "";
 
     const address = checkoutCustomer.address || "";
 
@@ -1409,6 +1518,7 @@ async function createPendingOrder() {
         firstName,
         lastName,
         phone,
+        state,
         address
     };
 
@@ -1425,6 +1535,8 @@ async function createPendingOrder() {
 
         phone,
 
+        state,
+
         address,
 
         shippingAddress: address,
@@ -1437,10 +1549,14 @@ async function createPendingOrder() {
 
         originalTotal: subtotal,
 
+        serviceFee,
+
         shippingFee,
 
         shipping: {
             fee: shippingFee,
+            serviceFee,
+            state,
             address,
             status: "processing"
         },
@@ -1504,6 +1620,10 @@ async function createPendingOrder() {
         );
 
         localStorage.removeItem(
+            "collectiveCheckoutServiceFee"
+        );
+
+        localStorage.removeItem(
             "collectiveCheckoutShippingFee"
         );
 
@@ -1527,8 +1647,6 @@ async function createPendingOrder() {
         return false;
     }
 }
-
-
 /* =========================================================
    ORDER STATUS SYNC
 ========================================================= */
