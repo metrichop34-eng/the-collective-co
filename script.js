@@ -1317,7 +1317,7 @@ function showPaymentModal() {
 
                 Account Name:
                 <strong>
-                    Eyinjuoluwa Cayla Adesanya
+                    EyinjuoluwaCaylaAdesanya
                 </strong>
 
                 <br>
