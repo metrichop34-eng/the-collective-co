@@ -1313,18 +1313,18 @@ function showPaymentModal() {
                 line-height:1.8;
             ">
 
-                <strong>YOUR BANK NAME</strong><br>
+                <strong>OPAY</strong><br>
 
                 Account Name:
                 <strong>
-                    YOUR ACCOUNT NAME
+                    Eyinjuoluwa Cayla Adesanya
                 </strong>
 
                 <br>
 
                 Account Number:
                 <strong>
-                    0123456789
+                    9123930679
                 </strong>
 
             </div>
